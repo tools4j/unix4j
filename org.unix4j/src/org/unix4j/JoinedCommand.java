@@ -64,7 +64,7 @@ public class JoinedCommand<O2 extends Enum<O2>> implements Command<O2> {
 
 	@Override
 	public <O3 extends Enum<O3>> JoinedCommand<O3> join(Command<O3> next) {
-		return new JoinedCommand<O3>(this, second.join(next));
+		return new JoinedCommand<O3>(this, next);
 	}
 
 	@Override
