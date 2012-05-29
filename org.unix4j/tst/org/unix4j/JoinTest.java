@@ -1,7 +1,6 @@
 package org.unix4j;
 
 import org.junit.Test;
-import org.unix4j.Command;
 import org.unix4j.cmd.Echo;
 import org.unix4j.cmd.Grep;
 import org.unix4j.cmd.Ls;
