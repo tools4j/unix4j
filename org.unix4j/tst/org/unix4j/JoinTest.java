@@ -9,7 +9,7 @@ import org.unix4j.cmd.Xargs;
 import org.unix4j.io.FileInput;
 
 public class JoinTest {
-	
+
 	@Test
 	public void testEcho() {
 		runTest(new Echo().withArg("hello world"));
@@ -62,9 +62,9 @@ public class JoinTest {
 	}
 	@Test
 	public void testLsXargsEcho() {
-		runTest(new Ls().join(new Xargs().withOpt(Xargs.Option.L, 1).withTarget(new Echo().withArg("OUTPUT FILE: "))));
+		runTest(new Ls().join(new Xargs().withArg(Xargs.Option.L, "1").withTarget(new Echo().withArg(Echo.Option.string, "OUTPUT FILE: "))));
 	}
-	
+
 	private void runTest(Command<?> command) {
 		System.out.println("*** running: " + command);
 		command.execute();

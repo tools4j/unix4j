@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Join implements Input, Output {
-	
+
 	private final Command<?> first;
 	private final Command<?> second;
 	private final List<String> lines = new LinkedList<String>();
@@ -15,13 +15,13 @@ public class Join implements Input, Output {
 		first.writeTo(this);
 		second.readFrom(this);
 	}
-	
+
 	public void execute() {
 		first.execute();
 	}
-	
+
 	//--- input ---\\
-	
+
 	@Override
 	public boolean hasMoreLines() {
 		return !lines.isEmpty();
@@ -40,7 +40,7 @@ public class Join implements Input, Output {
 			second.execute();
 		}
 	}
-	
+
 	@Override
 	public void finish() {
 		if (!second.isBatchable()) {

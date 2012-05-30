@@ -4,20 +4,20 @@ import org.unix4j.AbstractCommand;
 import org.unix4j.Input;
 
 public class Grep extends AbstractCommand<Grep.Option> {
-	
+
 	public static final String NAME = "grep";
+
 	public static enum Option {
-		i, ignoreCase,
-		v, invert
+		i, ignoreCase, v, invert, expression, file;
 	}
-	
+
 	public Grep() {
 		super(NAME, true);
 	}
 
 	@Override
 	public void executeBatch() {
-		final String matchString = getArgsAsString();
+		final String matchString = getArgs().getArgumentValue(Option.expression);
 		final Input input = getInput();
 		while (input.hasMoreLines()) {
 			final String line = input.readLine();
@@ -36,4 +36,8 @@ public class Grep extends AbstractCommand<Grep.Option> {
 		}
 	}
 
+	@Override
+	public Option getDefaultArgumentOption() {
+		return Option.expression;
+	}
 }

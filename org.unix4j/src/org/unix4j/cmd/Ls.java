@@ -5,25 +5,31 @@ import java.io.File;
 import org.unix4j.AbstractCommand;
 
 public class Ls extends AbstractCommand<Ls.Option> {
-	
+
 	public static final String NAME = "ls";
-	public static enum Option {
-		l, a, r, t
+
+	public enum Option{
+		l, a, r, t, file;
 	}
-	
+
 	public Ls() {
 		super(NAME, true);
 	}
 
 	@Override
 	public void executeBatch() {
-		if (getArgCount() == 0) {
+		if (!getArgs().isOptSet(Option.file)) {
 			listFiles(new File(System.getProperty("user.dir")));
 		} else {
-			for (final String arg : getArgs()) {
+			for (final String arg : getArgs().getArgumentOfOption(Option.file).getValues()) {
 				listFiles(new File(arg));
 			}
 		}
+	}
+
+	@Override
+	public Option getDefaultArgumentOption() {
+		return Option.file;
 	}
 
 	private void listFiles(File dir) {
@@ -31,5 +37,5 @@ public class Ls extends AbstractCommand<Ls.Option> {
 			getOutput().writeLine(file.toString());
 		}
 	}
-	
+
 }

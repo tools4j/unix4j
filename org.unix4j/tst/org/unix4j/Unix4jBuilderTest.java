@@ -5,12 +5,12 @@ import org.unix4j.cmd.Grep;
 import org.unix4j.cmd.Sort;
 
 public class Unix4jBuilderTest {
-	
+
 	@Test
 	public void testEcho() {
 		runTest(Unix4jBuilder.echo("hello world"));
 	}
-	
+
 	@Test
 	public void testEchoGrep() {
 		runTest(Unix4jBuilder.echo("hello world").grep("world"));
@@ -42,8 +42,9 @@ public class Unix4jBuilderTest {
 		runTest(Unix4jBuilder.ls().xargs(1).echo("OUTPUT FILE: "));
 	}
 
-	private void runTest(Unix4jBuilder jnailBuilder) {
-		System.out.println("*** running: " + jnailBuilder);
-		jnailBuilder.execute();
+
+	private void runTest(Unix4jBuilder unix4jBuilder) {
+		System.out.println("*** running: " + unix4jBuilder);
+		unix4jBuilder.execute();
 	}
 }

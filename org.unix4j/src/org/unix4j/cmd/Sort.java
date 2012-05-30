@@ -8,13 +8,13 @@ import org.unix4j.AbstractCommand;
 import org.unix4j.Output;
 
 public class Sort extends AbstractCommand<Sort.Option> {
-	
+
 	public static final String NAME = "sort";
-	
+
 	public static enum Option {
-		desc
+		desc, byColumn;
 	}
-	
+
 	public Sort() {
 		super(NAME, false);
 	}
@@ -36,5 +36,10 @@ public class Sort extends AbstractCommand<Sort.Option> {
 				output.writeLine(line);
 			}
 		}
+	}
+
+	@Override
+	public Option getDefaultArgumentOption() {
+		return Option.byColumn;
 	}
 }
