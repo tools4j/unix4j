@@ -60,7 +60,7 @@ public class OptMap<E extends Enum<E>> implements Cloneable {
 	public OptMap<E> clone() {
 		final OptMap<E> clone = new OptMap<E>();
 		for (final Map.Entry<Arg<E,?>, ArgList<E, ?>> e : opts.entrySet()) {
-			clone.opts.put(e.getKey(), e.getValue().clone());
+			clone.opts.put(e.getKey(), e.getValue() == null ? null : e.getValue().clone());
 		}
 		return clone;
 	}
