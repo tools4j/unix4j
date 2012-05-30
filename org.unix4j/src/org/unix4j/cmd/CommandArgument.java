@@ -1,6 +1,7 @@
 package org.unix4j.cmd;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -8,11 +9,11 @@ public class CommandArgument<O extends Enum<O>> implements Cloneable  {
 	private O option;
 	private List<String> values;
 
-	public CommandArgument(O option, String value) {
+	public CommandArgument(O option, String ... values) {
 		super();
 		this.option = option;
 		this.values = new ArrayList<String>();
-		values.add(value);
+		this.values.addAll(Arrays.<String>asList(values));
 	}
 
 	public List<String> getValues() {

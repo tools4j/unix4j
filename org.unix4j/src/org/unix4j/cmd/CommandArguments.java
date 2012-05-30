@@ -1,5 +1,7 @@
 package org.unix4j.cmd;
 
+import org.unix4j.Command;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,8 +15,39 @@ public class CommandArguments<O extends Enum<O>> implements Cloneable {
 		this.arguments = new HashMap<O, CommandArgument<O>>();
 	}
 
-	public void addArgument(final CommandArgument<O> arg) {
+	public void addArg(final CommandArgument<O> arg) {
 		arguments.put(arg.getOption(), arg);
+	}
+
+	public void addArgs(O option, String ... values) {
+		if (option == null) {
+			throw new NullPointerException("option cannot be null");
+		}
+		addArg(new CommandArgument<O>(option, values));
+	}
+
+	public void addArg(O option) {
+		addArg(option, new String[0]);
+	}
+
+	public void addArg(O option, String value) {
+		addArgs(option, value);
+	}
+
+	public void addArg(O option, String ... values) {
+		addArgs(option, values);
+	}
+
+	public void addArgs(O ... options) {
+		if (options == null) {
+			throw new NullPointerException("options cannot be null");
+		}
+		for (int i = 0; i < options.length; i++) {
+			if (options[i] == null) {
+				throw new NullPointerException("options[" + i + "] cannot be null");
+			}
+			addArg(options[i]);
+		}
 	}
 
 	public boolean isOptSet(O option) {

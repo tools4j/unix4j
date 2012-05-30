@@ -1,6 +1,5 @@
 package org.unix4j;
 
-import org.unix4j.cmd.CommandArgument;
 import org.unix4j.cmd.CommandArguments;
 import org.unix4j.io.NullInput;
 import org.unix4j.io.StdOutput;
@@ -57,55 +56,54 @@ abstract public class AbstractCommand<O extends Enum<O>> implements Command<O> {
 
 	@Override
 	public Command<O> withOpt(O option) {
-		return withArg(option, null);
-	}
-
-	@Override
-	public Command<O> withArg(O option, String value) {
-		if (option == null) { throw new NullPointerException("option cannot be null"); }
-		args.addArgument(new CommandArgument<O>(option, value));
+		args.addArg(option);
 		return this;
 	}
 
 	@Override
-	public Command<O> withArgs(O option, String... values) {
-		if (option == null || values == null || values.length == 0) { throw new NullPointerException("option cannot be null"); }
-		for (final String value : values) {
-			withArg(option, value);
-		}
+	public Command<O> withArg(O option, String value) {
+		args.addArg(option, value);
+		return this;
+	}
+
+	@Override
+	public Command<O> withArgs(O option, String ... values) {
+		args.addArg(option, values);
 		return this;
 	}
 
 	@Override
 	public Command<O> withArgs(String... values) {
-		return withArgs(getDefaultArgumentOption(), values);
+		args.addArg(getDefaultArgumentOption(), values);
+		return this;
 	}
 
 	@Override
 	public Command<O> withArg(String value) {
-		return withArg(getDefaultArgumentOption(), value);
+		args.addArg(getDefaultArgumentOption(), value);
+		return this;
 	}
 
 	@Override
 	public Command<O> withOpts(O... options) {
-		if (options == null) { throw new NullPointerException("option cannot be null"); }
-		for (int i = 0; i < options.length; i++) {
-			if (options[i] == null) { throw new NullPointerException("options[" + i + "] cannot be null"); }
-			withArg(options[i], null);
-		}
+		args.addArgs(options);
 		return this;
 	}
 
 	@Override
 	public Command<O> readFrom(Input input) {
-		if (input == null) { throw new NullPointerException("input cannot be null"); }
+		if (input == null) {
+			throw new NullPointerException("input cannot be null");
+		}
 		this.input = input;
 		return this;
 	}
 
 	@Override
 	public Command<O> writeTo(Output output) {
-		if (output == null) { throw new NullPointerException("output cannot be null"); }
+		if (output == null) {
+			throw new NullPointerException("output cannot be null");
+		}
 		this.output = output;
 		return this;
 	}
