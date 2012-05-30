@@ -1,11 +1,7 @@
 package org.unix4j.cmd;
 
-import org.unix4j.Command;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 public class CommandArguments<O extends Enum<O>> implements Cloneable {
@@ -27,15 +23,11 @@ public class CommandArguments<O extends Enum<O>> implements Cloneable {
 	}
 
 	public void addArg(O option) {
-		addArg(option, new String[0]);
+		addArgs(option, new String[0]);
 	}
 
 	public void addArg(O option, String value) {
 		addArgs(option, value);
-	}
-
-	public void addArg(O option, String ... values) {
-		addArgs(option, values);
 	}
 
 	public void addArgs(O ... options) {

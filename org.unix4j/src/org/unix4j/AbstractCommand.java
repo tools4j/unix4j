@@ -68,13 +68,13 @@ abstract public class AbstractCommand<O extends Enum<O>> implements Command<O> {
 
 	@Override
 	public Command<O> withArgs(O option, String ... values) {
-		args.addArg(option, values);
+		args.addArgs(option, values);
 		return this;
 	}
 
 	@Override
 	public Command<O> withArgs(String... values) {
-		args.addArg(getDefaultArgumentOption(), values);
+		args.addArgs(getDefaultArgumentOption(), values);
 		return this;
 	}
 
