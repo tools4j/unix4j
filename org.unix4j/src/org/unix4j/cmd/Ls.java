@@ -3,12 +3,19 @@ package org.unix4j.cmd;
 import java.io.File;
 
 import org.unix4j.AbstractCommand;
+import org.unix4j.arg.Arg;
+import org.unix4j.arg.ArgList;
+import org.unix4j.arg.DefaultArg;
 
-public class Ls extends AbstractCommand<Ls.Option> {
+public class Ls extends AbstractCommand<Ls.E> {
 	
 	public static final String NAME = "ls";
-	public static enum Option {
-		l, a, r, t
+	
+	public static interface Argument {
+		Arg<E,File> files = new DefaultArg<E,File>(E.files, File.class, 0, 1);
+	}
+	protected static enum E {
+		l, a, r, t, files
 	}
 	
 	public Ls() {
@@ -17,11 +24,12 @@ public class Ls extends AbstractCommand<Ls.Option> {
 
 	@Override
 	public void executeBatch() {
-		if (getArgCount() == 0) {
+		final ArgList<E,File> args = getArgs(Argument.files);
+		if (args.isEmpty()) {
 			listFiles(new File(System.getProperty("user.dir")));
 		} else {
-			for (final String arg : getArgs()) {
-				listFiles(new File(arg));
+			for (final File arg : args) {
+				listFiles(arg);
 			}
 		}
 	}

@@ -1,5 +1,11 @@
 package org.unix4j;
 
+import java.util.List;
+
+import org.unix4j.arg.Arg;
+import org.unix4j.arg.ArgList;
+import org.unix4j.arg.Opt;
+
 public class JoinedCommand<O2 extends Enum<O2>> implements Command<O2> {
 	
 	private final Command<?> first;
@@ -28,34 +34,37 @@ public class JoinedCommand<O2 extends Enum<O2>> implements Command<O2> {
 	}
 
 	@Override
-	public Command<O2> withArg(String arg) {
-		second.withArg(arg);
+	public <V> Command<O2> withArg(Arg<O2,V> arg, V value) {
+		second.withArg(arg, value);
 		return this;
 	}
-
 	@Override
-	public Command<O2> withArgs(String... args) {
-		second.withArgs(args);
+	public <V> Command<O2> withArgs(Arg<O2,V> arg, V... values) {
+		second.withArgs(arg, values);
 		return this;
 	}
-
 	@Override
-	public Command<O2> withOpt(O2 option) {
-		second.withOpt(option);
+	public <V> Command<O2> withArgs(Arg<O2,V> arg, List<? extends V> values) {
+		second.withArgs(arg, values);
 		return this;
 	}
 	
-	public Command<O2> withOpt(O2 option, Object optionValue) {
-		second.withOpt(option, optionValue);
-		return this;
+	@Override
+	public <V> ArgList<O2, V> getArgs(Arg<O2, V> arg) {
+		return second.getArgs(arg);
 	}
 
 	@Override
-	public Command<O2> withOpts(O2... options) {
-		second.withOpts(options);
+	public Command<O2> withOpt(Opt<O2> opt) {
+		second.withOpt(opt);
 		return this;
 	}
 	
+	@Override
+	public boolean isOptSet(Opt<O2> opt) {
+		return second.isOptSet(opt);
+	}
+
 	@Override
 	public Command<O2> writeTo(Output output) {
 		second.writeTo(output);
