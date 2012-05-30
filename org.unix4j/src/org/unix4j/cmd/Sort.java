@@ -6,12 +6,17 @@ import java.util.List;
 
 import org.unix4j.AbstractCommand;
 import org.unix4j.Output;
+import org.unix4j.arg.DefaultOpt;
+import org.unix4j.arg.Opt;
 
-public class Sort extends AbstractCommand<Sort.Option> {
+public class Sort extends AbstractCommand<Sort.E> {
 	
 	public static final String NAME = "sort";
 	
-	public static enum Option {
+	public static interface Option {
+		Opt<E> desc = new DefaultOpt<E>(E.desc);
+	}
+	protected static enum E {
 		desc
 	}
 	

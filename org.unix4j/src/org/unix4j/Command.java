@@ -1,16 +1,25 @@
 package org.unix4j;
 
-public interface Command<O extends Enum<O>> extends Cloneable {
+import java.util.List;
+
+import org.unix4j.arg.Arg;
+import org.unix4j.arg.ArgList;
+import org.unix4j.arg.Opt;
+
+public interface Command<E extends Enum<E>> extends Cloneable {
 	String getName();
 	boolean isBatchable();
-	Command<O> withArg(String arg);
-	Command<O> withArgs(String... args);
-	Command<O> withOpt(O option);
-	Command<O> withOpt(O option, Object optionValue);
-	Command<O> withOpts(O... options);
-	Command<O> writeTo(Output output);
+	Command<E> clone();
+	
+	<V> Command<E> withArg(Arg<E,V> arg, V value);
+	<V> Command<E> withArgs(Arg<E,V> arg, V... values);
+	<V> Command<E> withArgs(Arg<E,V> arg, List<? extends V> values);
+	<V> ArgList<E,V> getArgs(Arg<E,V> arg);
+	Command<E> withOpt(Opt<E> opt);
+	boolean isOptSet(Opt<E> opt);
+	
 	<O2 extends Enum<O2>> JoinedCommand<O2> join(Command<O2> next);
-	Command<O> clone();
-	Command<O> readFrom(Input input);
+	Command<E> readFrom(Input input);
+	Command<E> writeTo(Output output);
 	void execute();
 }

@@ -1,20 +1,19 @@
 package org.unix4j;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
+import org.unix4j.arg.Arg;
+import org.unix4j.arg.ArgList;
+import org.unix4j.arg.Opt;
+import org.unix4j.arg.OptMap;
 import org.unix4j.io.NullInput;
 import org.unix4j.io.StdOutput;
 
-abstract public class AbstractCommand<O extends Enum<O>> implements Command<O> {
+abstract public class AbstractCommand<E extends Enum<E>> implements Command<E> {
 
 	private final String name;
 	private final boolean batchable;
-	private List<String> args = new ArrayList<String>();
-	private Map<O,Object> opts = new LinkedHashMap<O,Object>();
+	private OptMap<E> opts = new OptMap<E>();
 	private Input input = new NullInput();
 	private Output output = new StdOutput();
 
@@ -33,40 +32,6 @@ abstract public class AbstractCommand<O extends Enum<O>> implements Command<O> {
 		getOutput().finish();
 	}
 	
-	protected int getArgCount() {
-		return args.size();
-	}
-
-	protected String getArg(int index) {
-		return args.get(index);
-	}
-
-	protected Iterable<String> getArgs() {
-		return Collections.unmodifiableList(args);
-	}
-	
-	protected String getArgsAsString() {
-		final StringBuilder sb = new StringBuilder();
-		for (final String arg : args) {
-			if (sb.length() > 0)
-				sb.append(' ');
-			sb.append(arg);
-		}
-		return sb.toString();
-	}
-
-	protected boolean isOptSet(O option) {
-		return opts.containsKey(option);
-	}
-	
-	protected Object getOpt(O option) {
-		return opts.get(option);
-	}
-
-	protected Map<O,Object> getOptions() {
-		return Collections.unmodifiableMap(opts);
-	}
-
 	protected Input getInput() {
 		return input;
 	}
@@ -85,58 +50,39 @@ abstract public class AbstractCommand<O extends Enum<O>> implements Command<O> {
 		return batchable;
 	}
 
-	@Override
-	public Command<O> withArg(String arg) {
-		if (arg == null) {
-			throw new NullPointerException("arg cannot be null");
-		}
-		args.add(arg);
+	public <V> Command<E> withArg(Arg<E,V> arg, V value) {
+		opts.addArg(arg, value);
+		return this;
+	}
+	
+	public <V> Command<E> withArgs(Arg<E,V> arg, V... values) {
+		opts.addArgs(arg, values);
 		return this;
 	}
 
-	@Override
-	public Command<O> withArgs(String... args) {
-		if (args == null) {
-			throw new NullPointerException("args cannot be null");
-		}
-		for (int i = 0; i < args.length; i++) {
-			if (args[i] == null) {
-				throw new NullPointerException("args[" + i + "] cannot be null");
-			}
-			this.args.add(args[i]);
-		}
-		return this;
-	}
-
-	@Override
-	public Command<O> withOpt(O option) {
-		return withOpt(option, null);
-	}
-	@Override
-	public Command<O> withOpt(O option, Object value) {
-		if (option == null) {
-			throw new NullPointerException("option cannot be null");
-		}
-		opts.put(option, value);
-		return this;
-	}
-
-	@Override
-	public Command<O> withOpts(O... options) {
-		if (options == null) {
-			throw new NullPointerException("option cannot be null");
-		}
-		for (int i = 0; i < options.length; i++) {
-			if (options[i] == null) {
-				throw new NullPointerException("options[" + i + "] cannot be null");
-			}
-			opts.put(options[i], null);
-		}
+	public <V> Command<E> withArgs(Arg<E,V> arg, List<? extends V> values) {
+		opts.addArgs(arg, values);
 		return this;
 	}
 	
 	@Override
-	public Command<O> readFrom(Input input) {
+	public Command<E> withOpt(Opt<E> opt) {
+		opts.setOpt(opt);
+		return this;
+	}
+
+	@Override
+	public <V> ArgList<E,V> getArgs(Arg<E, V> arg) {
+		return opts.getArgList(arg, true);
+	}
+	
+	@Override
+	public boolean isOptSet(Opt<E> opt) {
+		return opts.isOptSet(opt);
+	}
+
+	@Override
+	public Command<E> readFrom(Input input) {
 		if (input == null) {
 			throw new NullPointerException("input cannot be null");
 		}
@@ -145,7 +91,7 @@ abstract public class AbstractCommand<O extends Enum<O>> implements Command<O> {
 	}
 
 	@Override
-	public Command<O> writeTo(Output output) {
+	public Command<E> writeTo(Output output) {
 		if (output == null) {
 			throw new NullPointerException("output cannot be null");
 		}
@@ -159,12 +105,11 @@ abstract public class AbstractCommand<O extends Enum<O>> implements Command<O> {
 	}
 	
 	@Override
-	public AbstractCommand<O> clone() {
+	public AbstractCommand<E> clone() {
 		try {
 			@SuppressWarnings("unchecked")
-			final AbstractCommand<O> clone = (AbstractCommand<O>)super.clone();
-			clone.args = new ArrayList<String>(this.args);
-			clone.opts= new LinkedHashMap<O,Object>(this.opts);
+			final AbstractCommand<E> clone = (AbstractCommand<E>)super.clone();
+			clone.opts= this.opts.clone();
 			return clone;
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException("should be cloneable: " + getClass().getName());
@@ -173,17 +118,7 @@ abstract public class AbstractCommand<O extends Enum<O>> implements Command<O> {
 	
 	@Override
 	public String toString() {
-		final StringBuilder sb = new StringBuilder(getName());
-		for (final Map.Entry<O,Object> option : opts.entrySet()) {
-			sb.append(' ').append('-').append(option.getKey());
-			if (option.getValue() != null) {
-				sb.append(' ').append(option.getValue());
-			}
-		}
-		for (final String arg : args) {
-			sb.append(' ').append(arg);
-		}
-		return sb.toString();
+		return getName() + " " + opts;
 	}
 
 }
