@@ -50,6 +50,9 @@ public class OptMap<E extends Enum<E>> implements Cloneable {
 		return argList == null ? 0 : argList.size();
 	}
 	public void setOpt(Opt<E> opt) {
+		if (opt == null) {
+			throw new NullPointerException("opt cannot be null");
+		}
 		opts.put(opt, null);
 	}
 	

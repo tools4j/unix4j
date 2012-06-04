@@ -10,9 +10,10 @@ import org.unix4j.arg.Opt;
  * A command is a basic unix-like program or tool that can be {@link #execute()
  * executed}.
  * <p>
- * A command can have arguments and options and can redirect input and output to
- * files or other streams. A command can be joined to another command, meaning
- * that its output becomes the input of the next command.
+ * A command can have arguments and options and can redirect
+ * {@link #readFrom(Input) input} and {@link #writeTo(Output) output} to files
+ * or other streams. A command can be {@link #join(Command) joined} to another
+ * command, meaning that its output becomes the input of the next command.
  * 
  * @param <E>
  *            enum defining argument and option keywords for this command
@@ -28,7 +29,7 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 	String getName();
 
 	/**
-	 * Returns true if this command execute input in batches. If true is
+	 * Returns true if this command can execute input in batches. If true is
 	 * returned, the command might be called once per line if it is part of a
 	 * command join. Returning false indicates that the program needs to operate
 	 * on the complete input.
@@ -44,18 +45,6 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 	boolean isBatchable();
 
 	/**
-	 * Returns a deep clone of this command. Argument lists and option map are
-	 * also clone, but not the arguments and options themselves since they are
-	 * usually not modified during the execution.
-	 * <p>
-	 * Clones are for instance used when commands are executed as parts of a
-	 * join.
-	 * 
-	 * @return a deep clone of this command
-	 */
-	Command<E> clone();
-
-	/**
 	 * Appends the given argument value to this command and returns {@code this}
 	 * command for further processing.
 	 * 
@@ -66,6 +55,8 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 	 * @param value
 	 *            the argument value
 	 * @return {@code this} command for further chained processing
+	 * @throws NullPointerException
+	 *             if {@code arg} or {@code value} is {@code null}
 	 */
 	<V> Command<E> withArg(Arg<E, V> arg, V value);
 
@@ -80,6 +71,9 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 	 * @param values
 	 *            the argument values
 	 * @return {@code this} command for further chained processing
+	 * @throws NullPointerException
+	 *             if {@code arg} or {@code values} or any of the values are
+	 *             {@code null}
 	 */
 	<V> Command<E> withArgs(Arg<E, V> arg, V... values);
 
@@ -94,19 +88,24 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 	 * @param values
 	 *            the argument values
 	 * @return {@code this} command for further chained processing
+	 * @throws NullPointerException
+	 *             if {@code arg} or {@code values} or any of the values in the
+	 *             list are {@code null}
 	 */
 	<V> Command<E> withArgs(Arg<E, V> arg, List<? extends V> values);
 
 	/**
 	 * Returns the argument list currently set for this command and the given
-	 * argument key.
+	 * argument key. Possibly returns an empty arg list, but never null.
 	 * 
 	 * @param <V>
 	 *            the argument value type
 	 * @param arg
 	 *            the argument key
 	 * @return the argument list with the values currently set for this command
-	 *         and the given {@code arg} keyword
+	 *         and the given {@code arg} keyword, never null
+	 * @throws NullPointerException
+	 *             if {@code arg} is {@code null}
 	 */
 	<V> ArgList<E, V> getArgs(Arg<E, V> arg);
 
@@ -116,11 +115,14 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 	 * @param opt
 	 *            the option to set
 	 * @return {@code this} command for further chained processing
+	 * @throws NullPointerException
+	 *             if {@code opt} is {@code null}
 	 */
 	Command<E> withOpt(Opt<E> opt);
 
 	/**
 	 * Returns true if the specified option is currently set for this command.
+	 * Returns false if the option is not set or if {@code opt} is null.
 	 * 
 	 * @param opt
 	 *            the option to check
@@ -146,6 +148,8 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 	 * @param next
 	 *            the command to be joined with {@code this}
 	 * @return the joined command {@code "this | next"}
+	 * @throws NullPointerException
+	 *             if {@code next} is null
 	 */
 	<E2 extends Enum<E2>> JoinedCommand<E2> join(Command<E2> next);
 
@@ -160,6 +164,8 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 	 * @throws IllegalStateException
 	 *             if this command does not support input redirection, for
 	 *             instance because it requires no input
+	 * @throws NullPointerException
+	 *             if {@code input} is null
 	 */
 	Command<E> readFrom(Input input);
 
@@ -174,6 +180,8 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 	 * @throws IllegalStateException
 	 *             if this command does not support output redirection, for
 	 *             instance because it produces no output
+	 * @throws NullPointerException
+	 *             if {@code output} is null
 	 */
 	Command<E> writeTo(Output output);
 
@@ -184,12 +192,25 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 	void execute();
 
 	/**
+	 * Returns a deep clone of this command. Argument lists and option map are
+	 * also clone, but not the arguments and options themselves since they are
+	 * usually not modified during the execution.
+	 * <p>
+	 * Clones are for instance used when commands are executed as parts of a
+	 * join.
+	 * 
+	 * @return a deep clone of this command
+	 */
+	Command<E> clone();
+
+	/**
 	 * Returns the string representation of this command including arguments and
-	 * options. 
+	 * options.
 	 * <p>
 	 * An example string returned by a command is
+	 * 
 	 * <pre>
-	 * "grep -i -expression hello world"
+	 * &quot;grep -i -expression hello world&quot;
 	 * </pre>
 	 * 
 	 * @return the string representation of this command, such as
