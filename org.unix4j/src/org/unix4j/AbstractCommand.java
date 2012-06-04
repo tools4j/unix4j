@@ -9,6 +9,14 @@ import org.unix4j.arg.OptMap;
 import org.unix4j.io.NullInput;
 import org.unix4j.io.StdOutput;
 
+/**
+ * Abstract base implementation suitable for most common commands. Command
+ * implementations usually only define arguments and options and implement the
+ * {@link #executeBatch()} method.
+ * 
+ * @param <E>
+ *            enum defining argument and option keywords for this command
+ */
 abstract public class AbstractCommand<E extends Enum<E>> implements Command<E> {
 
 	private final String name;
@@ -17,11 +25,32 @@ abstract public class AbstractCommand<E extends Enum<E>> implements Command<E> {
 	private Input input = new NullInput();
 	private Output output = new StdOutput();
 
+	/**
+	 * Constructor with command name and batchable flag.
+	 * 
+	 * @param name
+	 *            the name of the command, usually a lower case word such as
+	 *            "echo", "ls" or "grep"
+	 * @param batchable
+	 *            true if the command supports execution in batches, as defined
+	 *            by {@link Command#isBatchable()}
+	 */
 	public AbstractCommand(String name, boolean batchable) {
 		this.name = name;
 		this.batchable = batchable;
 	}
 
+	/**
+	 * Executes a single batch. For non-batchable commands, this method is
+	 * called only once with the complete input. For batchable commands, the
+	 * method might be called once or multiple times, possibly with a single
+	 * line in the input.
+	 * <p>
+	 * In either case, implementors should read to the end of the input and
+	 * process the input. If a command expects no input at all, it is not
+	 * required to read the input (such commands may throw an exception in the
+	 * {@link #readFrom(Input)} method instead).
+	 */
 	abstract protected void executeBatch();
 
 	@Override
@@ -31,7 +60,7 @@ abstract public class AbstractCommand<E extends Enum<E>> implements Command<E> {
 		} while (getInput().hasMoreLines());
 		getOutput().finish();
 	}
-	
+
 	protected Input getInput() {
 		return input;
 	}
@@ -44,27 +73,27 @@ abstract public class AbstractCommand<E extends Enum<E>> implements Command<E> {
 	public String getName() {
 		return name;
 	}
-	
+
 	@Override
 	public boolean isBatchable() {
 		return batchable;
 	}
 
-	public <V> Command<E> withArg(Arg<E,V> arg, V value) {
+	public <V> Command<E> withArg(Arg<E, V> arg, V value) {
 		opts.addArg(arg, value);
 		return this;
 	}
-	
-	public <V> Command<E> withArgs(Arg<E,V> arg, V... values) {
+
+	public <V> Command<E> withArgs(Arg<E, V> arg, V... values) {
 		opts.addArgs(arg, values);
 		return this;
 	}
 
-	public <V> Command<E> withArgs(Arg<E,V> arg, List<? extends V> values) {
+	public <V> Command<E> withArgs(Arg<E, V> arg, List<? extends V> values) {
 		opts.addArgs(arg, values);
 		return this;
 	}
-	
+
 	@Override
 	public Command<E> withOpt(Opt<E> opt) {
 		opts.setOpt(opt);
@@ -72,10 +101,10 @@ abstract public class AbstractCommand<E extends Enum<E>> implements Command<E> {
 	}
 
 	@Override
-	public <V> ArgList<E,V> getArgs(Arg<E, V> arg) {
+	public <V> ArgList<E, V> getArgs(Arg<E, V> arg) {
 		return opts.getArgList(arg, true);
 	}
-	
+
 	@Override
 	public boolean isOptSet(Opt<E> opt) {
 		return opts.isOptSet(opt);
@@ -103,19 +132,19 @@ abstract public class AbstractCommand<E extends Enum<E>> implements Command<E> {
 	public <O2 extends Enum<O2>> JoinedCommand<O2> join(Command<O2> next) {
 		return new JoinedCommand<O2>(this, next);
 	}
-	
+
 	@Override
 	public AbstractCommand<E> clone() {
 		try {
 			@SuppressWarnings("unchecked")
-			final AbstractCommand<E> clone = (AbstractCommand<E>)super.clone();
-			clone.opts= this.opts.clone();
+			final AbstractCommand<E> clone = (AbstractCommand<E>) super.clone();
+			clone.opts = this.opts.clone();
 			return clone;
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException("should be cloneable: " + getClass().getName());
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		return getName() + " " + opts;

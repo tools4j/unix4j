@@ -37,6 +37,9 @@ public class JoinedCommand<E2 extends Enum<E2>> implements Command<E2> {
 	 * @param second
 	 *            the second command in the join, whose input is joined from the
 	 *            output of the first command
+	 * @throws NullPointerException
+	 *             if any of the command arguments is null
+	 * 
 	 */
 	public JoinedCommand(Command<?> first, Command<E2> second) {
 		this.first = first;
