@@ -64,13 +64,22 @@ public class ArgList<E extends Enum<E>, V> implements Iterable<V>, Cloneable {
 		}
 	}
 	public V getFirst() {
+		if (isEmpty()) {
+			throw new IllegalStateException("no argument value found for key " + arg.getKey());
+		}
 		return get(0);
 	}
 	public V getLast() {
+		if (isEmpty()) {
+			throw new IllegalStateException("no argument value found for key " + arg.getKey());
+		}
 		return get(values.size() - 1);
 	}
 	
 	public V get(int index) {
+		if (index < 0 || index >= size()) {
+			throw new IndexOutOfBoundsException("no argument value[" + index + "] found for key " + arg.getKey());
+		}
 		return values.get(index);
 	}
 	
