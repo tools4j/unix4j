@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.unix4j.arg.Arg;
 import org.unix4j.arg.ArgList;
+import org.unix4j.arg.ArgVals;
 import org.unix4j.arg.Opt;
 
 /**
@@ -132,6 +133,42 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 	boolean isOptSet(Opt<E> opt);
 
 	/**
+	 * Adds the given ArgVals value to this command and returns {@code this}
+	 * command for further processing.
+	 * <p>
+	 * An ArgVals object is either an argument value or an option, that is, this
+	 * method usually delegates to {@link #withArg(Arg, Object)} if
+	 * {@code argVals} represents an argument and to {@link #withOpt(Opt)} if it
+	 * is an option.
+	 * 
+	 * @param <V>
+	 *            the argument value type
+	 * @param argVals
+	 *            the argument or option value
+	 * @return {@code this} command for further chained processing
+	 * @throws NullPointerException
+	 *             if {@code argVals} is {@code null}
+	 */
+	<V> Command<E> withArgVals(ArgVals<E, V> argVals);
+
+	/**
+	 * Adds the given ArgVals values to this command and returns {@code this}
+	 * command for further processing.
+	 * <p>
+	 * An ArgVals object is either an argument value or an option, that is, this
+	 * method usually delegates to {@link #withArg(Arg, Object)} for every value
+	 * in {@code argVals} if it represents an argument and to 
+	 * {@link #withOpt(Opt)} if it is an option.
+	 * 
+	 * @param argVals
+	 *            the argument and/or option values
+	 * @return {@code this} command for further chained processing
+	 * @throws NullPointerException
+	 *             if {@code argVals} or any of its components is {@code null}
+	 */
+	Command<E> withArgVals(ArgVals<E, ?>... argVals);
+
+	/**
 	 * Joins {@code this} command with {@code next} and returns a new command
 	 * representing the joined command.
 	 * <p>
@@ -151,7 +188,7 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 	 * @throws NullPointerException
 	 *             if {@code next} is null
 	 */
-	<E2 extends Enum<E2>> JoinedCommand<E2> join(Command<E2> next);
+	<E2 extends Enum<E2>> Command<E2> join(Command<E2> next);
 
 	/**
 	 * Redirects the given {@code input} to this command. It is good practice to

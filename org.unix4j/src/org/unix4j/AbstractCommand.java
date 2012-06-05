@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.unix4j.arg.Arg;
 import org.unix4j.arg.ArgList;
+import org.unix4j.arg.ArgVals;
 import org.unix4j.arg.Opt;
 import org.unix4j.arg.OptMap;
 import org.unix4j.io.NullInput;
@@ -18,7 +19,7 @@ import org.unix4j.io.StdOutput;
  *            enum defining argument and option keywords for this command
  */
 abstract public class AbstractCommand<E extends Enum<E>> implements Command<E> {
-
+	
 	private final String name;
 	private final boolean batchable;
 	private OptMap<E> opts = new OptMap<E>();
@@ -109,6 +110,44 @@ abstract public class AbstractCommand<E extends Enum<E>> implements Command<E> {
 	public boolean isOptSet(Opt<E> opt) {
 		return opts.isOptSet(opt);
 	}
+	
+	@Override
+	public <V> Command<E> withArgVals(ArgVals<E,V> argVals) {
+		if (argVals.getArg() instanceof Opt) {
+			@SuppressWarnings("unchecked")
+			final Opt<E> opt = (Opt<E>)argVals.getArg();
+			return withOpt(opt);
+		} else {
+			return withArgs(argVals.getArg(), argVals.getValues());
+		}
+	}
+	//avoid generic array warning when using withArgVals(ArgVals<E,?>... argVals) in command builder
+	@SuppressWarnings("unchecked")
+	public Command<E> withArgVals(ArgVals<E,?> argVals1, ArgVals<E,?> argVals2) {
+		return withArgVals(new ArgVals[]{argVals1, argVals2});
+	}
+	//avoid generic array warning when using withArgVals(ArgVals<E,?>... argVals) in command builder
+	@SuppressWarnings("unchecked")
+	public Command<E> withArgVals(ArgVals<E,?> argVals1, ArgVals<E,?> argVals2, ArgVals<E,?> argVals3) {
+		return withArgVals(new ArgVals[]{argVals1, argVals2, argVals3});
+	}
+	//avoid generic array warning when using withArgVals(ArgVals<E,?>... argVals) in command builder
+	@SuppressWarnings("unchecked")
+	public Command<E> withArgVals(ArgVals<E,?> argVals1, ArgVals<E,?> argVals2, ArgVals<E,?> argVals3, ArgVals<E,?> argVals4) {
+		return withArgVals(new ArgVals[]{argVals1, argVals2, argVals3, argVals4});
+	}
+	//avoid generic array warning when using withArgVals(ArgVals<E,?>... argVals) in command builder
+	@SuppressWarnings("unchecked")
+	public Command<E> withArgVals(ArgVals<E,?> argVals1, ArgVals<E,?> argVals2, ArgVals<E,?> argVals3, ArgVals<E,?> argVals4, ArgVals<E,?> argVals5) {
+		return withArgVals(new ArgVals[]{argVals1, argVals2, argVals3, argVals4, argVals5});
+	}
+	@Override
+	public Command<E> withArgVals(ArgVals<E,?>... argVals) {
+		for (ArgVals<E, ?> argVal : argVals) {
+			withArgVals(argVal);
+		}
+		return this;
+	}
 
 	@Override
 	public Command<E> readFrom(Input input) {
@@ -129,7 +168,7 @@ abstract public class AbstractCommand<E extends Enum<E>> implements Command<E> {
 	}
 
 	@Override
-	public <O2 extends Enum<O2>> JoinedCommand<O2> join(Command<O2> next) {
+	public <O2 extends Enum<O2>> Command<O2> join(Command<O2> next) {
 		return new JoinedCommand<O2>(this, next);
 	}
 

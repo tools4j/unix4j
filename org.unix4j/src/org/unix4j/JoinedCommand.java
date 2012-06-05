@@ -4,13 +4,15 @@ import java.util.List;
 
 import org.unix4j.arg.Arg;
 import org.unix4j.arg.ArgList;
+import org.unix4j.arg.ArgVals;
 import org.unix4j.arg.Opt;
 
 /**
  * A composite command joining two commands. The output of the
  * {@link #getFirst() first} command is joined to the input of the
- * {@link #getSecond() second} command. An instance of this class is returned by
- * the {@link Command#join(Command) join(..)} method of a {@link Command}.
+ * {@link #getSecond() second} command. An instance of this class is usually
+ * returned by the {@link Command#join(Command) join(..)} method of a
+ * {@link Command}.
  * <p>
  * If arguments or options are added or set on a joined command, they are
  * applied to the second command in the join. Redirecting the output also
@@ -179,6 +181,39 @@ public class JoinedCommand<E2 extends Enum<E2>> implements Command<E2> {
 	@Override
 	public boolean isOptSet(Opt<E2> opt) {
 		return second.isOptSet(opt);
+	}
+
+	/**
+	 * Appends the given ArgVals value to the second command in the join and
+	 * returns {@code this} joined command for further processing.
+	 * 
+	 * @param <V>
+	 *            the argument value type
+	 * @param argVals
+	 *            the argument or option value
+	 * @return {@code this} joined command for further chained processing
+	 * @throws NullPointerException
+	 *             if {@code argVals} is {@code null}
+	 */
+	@Override
+	public <V> Command<E2> withArgVals(ArgVals<E2, V> argVals) {
+		second.withArgVals(argVals);
+		return this;
+	}
+
+	/**
+	 * Appends the given ArgVals values to the second command in the join and
+	 * returns {@code this} joined command for further processing.
+	 * 
+	 * @param argVals
+	 *            the argument and/or option values
+	 * @return {@code this} joined command for further chained processing
+	 * @throws NullPointerException
+	 *             if {@code argVals} or any of its components is {@code null}
+	 */
+	public JoinedCommand<E2> withArgVals(ArgVals<E2, ?>... argVals) {
+		second.withArgVals(argVals);
+		return this;
 	}
 
 	/**

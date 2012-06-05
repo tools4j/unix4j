@@ -9,14 +9,14 @@ import org.unix4j.Output;
 import org.unix4j.arg.DefaultOpt;
 import org.unix4j.arg.Opt;
 
-public class Sort extends AbstractCommand<Sort.E> {
+public class Sort extends AbstractCommand<Sort.ArgName> {
 	
 	public static final String NAME = "sort";
 	
 	public static interface Option {
-		Opt<E> desc = new DefaultOpt<E>(E.desc);
+		Opt<ArgName> desc = new DefaultOpt<ArgName>(ArgName.desc);
 	}
-	protected static enum E {
+	public static enum ArgName {
 		desc
 	}
 	
