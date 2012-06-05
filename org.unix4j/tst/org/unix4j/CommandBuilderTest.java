@@ -65,6 +65,11 @@ public class CommandBuilderTest {
 		builder.ls().xargs(Xargs.Argument.L(1), Xargs.Argument.target(new Echo().withArg(Echo.Argument.message, "OUTPUT FILE: "), Echo.Argument.message));
 		runTest();
 	}
+	@Test
+	public void testLsXargsEchoGrep() {
+		builder.ls().xargs(Xargs.Argument.L(1), Xargs.Argument.target(new Echo().withArg(Echo.Argument.message, "OUTPUT FILE: "), Echo.Argument.message)).grep(Grep.Argument.expression("src"));
+		runTest();
+	}
 	
 	private void runTest() {
 		final Command<?> command = builder.build();
