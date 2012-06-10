@@ -1,12 +1,13 @@
 package org.unix4j;
 
 import org.junit.Test;
-import org.unix4j.cmd.Echo;
-import org.unix4j.cmd.Grep;
-import org.unix4j.cmd.Ls;
-import org.unix4j.cmd.Sort;
-import org.unix4j.cmd.Xargs;
-import org.unix4j.io.FileInput;
+import org.unix4j.old.Command;
+import org.unix4j.old.cmd.Echo;
+import org.unix4j.old.cmd.Grep;
+import org.unix4j.old.cmd.Ls;
+import org.unix4j.old.cmd.Sort;
+import org.unix4j.old.cmd.Xargs;
+import org.unix4j.old.io.FileInput;
 
 public class JoinTest {
 	
