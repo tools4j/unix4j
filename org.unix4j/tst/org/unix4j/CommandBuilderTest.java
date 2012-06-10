@@ -1,79 +1,56 @@
 package org.unix4j;
 
+import java.io.File;
+
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.unix4j.cmd.Echo;
-import org.unix4j.cmd.Grep;
-import org.unix4j.cmd.Sort;
-import org.unix4j.cmd.Xargs;
-import org.unix4j.io.FileInput;
+import org.unix4j.impl.Grep;
+import org.unix4j.io.NullInput;
+import org.unix4j.io.StdOutput;
 
 public class CommandBuilderTest {
-	
+
 	private CommandBuilder builder;
 	
 	@Before
 	public void beforeEach() {
-		builder = new CommandBuilder();
+		builder = new CommandBuilderImpl();
 	}
 	
-	@Test
-	public void testEcho() {
-		builder.echo(Echo.Argument.message("hello world"));
-		runTest();
+	@After
+	public void afterEach() {
+		Command<?, ?> cmd = builder.build();
+		System.out.println(">>> " + cmd);
+		cmd.execute(new NullInput(), new StdOutput());
 	}
-	@Test
-	public void testEcho3args() {
-		builder.echo(Echo.Argument.message("hello world", "hello world", "my world", "junk"));
-		runTest();
-	}
-	@Test
-	public void testEchoGrep() {
-		builder.echo(Echo.Argument.message("hello world")).grep(Grep.Argument.expression("world"));
-		runTest();
-		builder.clear();
-		builder.echo(Echo.Argument.message("hello world")).grep(Grep.Argument.expression("bla"));
-		runTest();
-	}
+	
 	@Test
 	public void testLs() {
 		builder.ls();
-		runTest();
 	}
 	@Test
-	public void testLsGrep() {
-		builder.ls().grep(Grep.Argument.expression("src"));
-		runTest();
+	public void testLsFile() {
+		builder.ls(new File("src"));
 	}
 	@Test
-	public void testLsSort() {
-		builder.ls().sort(Sort.Option.desc);
-		runTest();
+	public void testEcho() {
+		builder.echo("Hello world");
 	}
 	@Test
-	public void testLsGrepSort() {
-		builder.ls().grep(Grep.Option.ignoreCase, Grep.Argument.expression("SRC")).sort(Sort.Option.desc);
-		runTest();
+	public void testEcho2() {
+		builder.echo("Hello", "world");
 	}
 	@Test
-	public void testSortFileLines() {
-		builder.sort().readFrom(new FileInput(".classpath"));
-		runTest();
+	public void testEchoGrepMatch() {
+		builder.echo("Hello world").grep("world");
 	}
 	@Test
-	public void testLsXargsEcho() {
-		builder.ls().xargs(Xargs.Argument.L(1), Xargs.Argument.target(new Echo().withArg(Echo.Argument.message, "OUTPUT FILE: "), Echo.Argument.message));
-		runTest();
+	public void testEchoGrepNoMatch() {
+		builder.echo("Hello WORLD").grep("world");
 	}
 	@Test
-	public void testLsXargsEchoGrep() {
-		builder.ls().xargs(Xargs.Argument.L(1), Xargs.Argument.target(new Echo().withArg(Echo.Argument.message, "OUTPUT FILE: "), Echo.Argument.message)).grep(Grep.Argument.expression("src"));
-		runTest();
-	}
-	
-	private void runTest() {
-		final Command<?> command = builder.build();
-		System.out.println("*** running: " + command);
-		command.execute();
+	public void testEchoGrepMatchIgnoreCase() {
+		builder.echo("Hello WORLD").grep("world", Grep.Option.ignoreCase);
 	}
 }
