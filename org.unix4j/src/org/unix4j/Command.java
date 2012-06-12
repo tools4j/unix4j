@@ -7,5 +7,6 @@ public interface Command<I extends CommandInterface<? extends Command<I, A>>, A>
 	I getInterface();
 	A getArguments();
 	boolean isBatchable();
+	boolean joinsNext();
 	void execute(Input input, Output output);
 }
