@@ -4,6 +4,8 @@ import org.unix4j.Input;
 
 public class NullInput implements Input {
 	
+	public static final NullInput INSTANCE = new NullInput();
+	
 	@Override
 	public boolean hasMoreLines() {
 		return false;
