@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 public class OptMap<E extends Enum<E>> implements Cloneable {
-	
-	private final Map<Arg<E, ?>, ArgList<E,?>> opts = new LinkedHashMap<Arg<E,?>, ArgList<E,?>>(); 
-	
+
+	private final Map<Arg<E, ?>, ArgList<E,?>> opts = new LinkedHashMap<Arg<E,?>, ArgList<E,?>>();
+
 	public OptMap() {
 		super();
 	}
-	
+
 	public <V> void setArgList(ArgList<E,V> argList) {
 		if (argList == null) {
 			throw new NullPointerException("arg list cannot be null");
@@ -55,11 +55,19 @@ public class OptMap<E extends Enum<E>> implements Cloneable {
 		}
 		opts.put(opt, null);
 	}
-	
+	public void setOpts(Opt<E> ... opts) {
+		if (opts == null) {
+			throw new NullPointerException("opts cannot be null");
+		}
+		for(Opt<E> opt: opts){
+			this.opts.put(opt, null);
+		}
+	}
+
 	public boolean isOptSet(Opt<E> opt) {
 		return opts.containsKey(opt);
 	}
-	
+
 	public OptMap<E> clone() {
 		final OptMap<E> clone = new OptMap<E>();
 		for (final Map.Entry<Arg<E,?>, ArgList<E, ?>> e : opts.entrySet()) {
@@ -67,7 +75,7 @@ public class OptMap<E extends Enum<E>> implements Cloneable {
 		}
 		return clone;
 	}
-	
+
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();

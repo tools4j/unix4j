@@ -11,9 +11,9 @@ import org.unix4j.arg.DefaultArgVals;
 import org.unix4j.arg.Opt;
 
 public class Xargs extends AbstractCommand<Xargs.ArgName> {
-	
+
 	public static final String NAME = "xargs";
-	
+
 	public static class Argument {
 		public static final Arg<ArgName,Target<?>> target = new DefaultArg<ArgName,Target<?>>(ArgName.target, Target.genericClass(), 1, 1);
 		public static final Arg<ArgName,Integer> L = new DefaultArg<ArgName, Integer>(ArgName.linesToInvokeTarget, Integer.class, 1, 1);
@@ -34,10 +34,10 @@ public class Xargs extends AbstractCommand<Xargs.ArgName> {
 		/** -L n : call target every n lines*/
 		linesToInvokeTarget
 	}
-	
+
 	public static class Target<ET extends Enum<ET>> implements Cloneable {
 		@SuppressWarnings("unchecked")
-		private static final Class<Target<?>> genericClass() {
+		private static Class<Target<?>> genericClass() {
 			final Class<?> clazz = Target.class;
 			return (Class<Target<?>>) clazz;
 		}
@@ -70,11 +70,11 @@ public class Xargs extends AbstractCommand<Xargs.ArgName> {
 			return clone.executeCommand.toString();
 		}
 	}
-	
+
 	public Xargs() {
 		super(NAME, false);
 	}
-	
+
 	public <E2 extends Enum<E2>> Command<E2> withTarget(Command<E2> targetCommand, Arg<E2, String> targetArg) {
 		if (targetCommand == null) {
 			throw new NullPointerException("target cannot be null");
@@ -85,7 +85,7 @@ public class Xargs extends AbstractCommand<Xargs.ArgName> {
 		withArgVals(Argument.target(targetCommand, targetArg));
 		return new JoinedCommand<E2>(this, targetCommand);
 	}
-	
+
 	@Override
 	public <E2 extends Enum<E2>> Command<E2> join(Command<E2> next) {
 		final Target<?> targetArg = getArgs(Argument.target).getFirst();
@@ -93,28 +93,28 @@ public class Xargs extends AbstractCommand<Xargs.ArgName> {
 		targetArg.executeCommand = joinedCommand;
 		return new JoinedCommand<E2>(this, joinedCommand);
 	}
-	
+
 	@Override
 	public Command<ArgName> writeTo(Output output) {
 		final Target<?> targetArg = getArgs(Argument.target).getFirst();
 		targetArg.executeCommand.writeTo(output);
 		return this;
 	}
-	
+
 	public <V> Xargs withArg(Arg<ArgName,V> arg, V value) {
 		super.withArg(arg, value);
 		return this;
 	}
-	
+
 	@Override
 	public Xargs withOpt(Opt<ArgName> opt) {
 		super.withOpt(opt);
 		return this;
 	}
-	
+
 	@Override
 	protected void executeBatch() {
-		final Target<?> targetArg = getArgs(Argument.target).getFirst(); 
+		final Target<?> targetArg = getArgs(Argument.target).getFirst();
 		Target<?> target = targetArg.clone();
 		int linesOpt = getArgs(Argument.L).getFirst();
 		int lines = 0;

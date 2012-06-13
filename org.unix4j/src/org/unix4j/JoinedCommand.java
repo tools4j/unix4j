@@ -20,7 +20,7 @@ import org.unix4j.arg.Opt;
  * the join. Executing the joined command means executing the first command,
  * which usually triggers execution of the second command through the
  * input/output join.
- * 
+ *
  * @param <E2>
  *            the argument/options enum defining the keywords applicable to the
  *            second command in the join
@@ -32,7 +32,7 @@ public class JoinedCommand<E2 extends Enum<E2>> implements Command<E2> {
 
 	/**
 	 * Constructor with first and second command in the join.
-	 * 
+	 *
 	 * @param first
 	 *            the first command in the join, whose output is joined to the
 	 *            input of the second command
@@ -41,7 +41,7 @@ public class JoinedCommand<E2 extends Enum<E2>> implements Command<E2> {
 	 *            output of the first command
 	 * @throws NullPointerException
 	 *             if any of the command arguments is null
-	 * 
+	 *
 	 */
 	public JoinedCommand(Command<?> first, Command<E2> second) {
 		this.first = first;
@@ -50,7 +50,7 @@ public class JoinedCommand<E2 extends Enum<E2>> implements Command<E2> {
 
 	/**
 	 * Returns the first command of this joined command
-	 * 
+	 *
 	 * @return the first command in the join
 	 */
 	public Command<?> getFirst() {
@@ -59,7 +59,7 @@ public class JoinedCommand<E2 extends Enum<E2>> implements Command<E2> {
 
 	/**
 	 * Returns the second command of this joined command
-	 * 
+	 *
 	 * @return the second command in the join
 	 */
 	public Command<E2> getSecond() {
@@ -68,7 +68,7 @@ public class JoinedCommand<E2 extends Enum<E2>> implements Command<E2> {
 
 	/**
 	 * Returns the joined command names, a string like "echo | grep"
-	 * 
+	 *
 	 * @return the joined command names, a string like "echo | grep"
 	 */
 	@Override
@@ -78,7 +78,7 @@ public class JoinedCommand<E2 extends Enum<E2>> implements Command<E2> {
 
 	/**
 	 * Returns true if the first command is batchable.
-	 * 
+	 *
 	 * @return true if the first command supports batch execution.
 	 */
 	@Override
@@ -89,7 +89,7 @@ public class JoinedCommand<E2 extends Enum<E2>> implements Command<E2> {
 	/**
 	 * Appends the given argument value to the second command in the join and
 	 * returns {@code this} joined command for further processing.
-	 * 
+	 *
 	 * @param <V>
 	 *            the argument value type
 	 * @param arg
@@ -107,7 +107,7 @@ public class JoinedCommand<E2 extends Enum<E2>> implements Command<E2> {
 	/**
 	 * Appends the given argument values to the second command in the join and
 	 * returns {@code this} joined command for further processing.
-	 * 
+	 *
 	 * @param <V>
 	 *            the argument value type
 	 * @param arg
@@ -125,7 +125,7 @@ public class JoinedCommand<E2 extends Enum<E2>> implements Command<E2> {
 	/**
 	 * Appends the given argument values to the second command in the join and
 	 * returns {@code this} joined command for further processing.
-	 * 
+	 *
 	 * @param <V>
 	 *            the argument value type
 	 * @param arg
@@ -143,7 +143,7 @@ public class JoinedCommand<E2 extends Enum<E2>> implements Command<E2> {
 	/**
 	 * Returns the argument list currently set for the second command in the
 	 * join.
-	 * 
+	 *
 	 * @param <V>
 	 *            the argument value type
 	 * @param arg
@@ -158,7 +158,7 @@ public class JoinedCommand<E2 extends Enum<E2>> implements Command<E2> {
 
 	/**
 	 * Sets the given option for the second command in the join.
-	 * 
+	 *
 	 * @param opt
 	 *            the option to set
 	 * @return {@code this} joined command for further chained processing
@@ -170,9 +170,22 @@ public class JoinedCommand<E2 extends Enum<E2>> implements Command<E2> {
 	}
 
 	/**
+	 * Sets the given options for the second command in the join.
+	 *
+	 * @param opts
+	 *            the options to set
+	 * @return {@code this} joined command for further chained processing
+	 */
+	@Override
+	public Command<E2> withOpts(Opt<E2>... opts) {
+		second.withOpts(opts);
+		return this;
+	}
+
+	/**
 	 * Returns true if the specified option is currently set for the second
 	 * command in the join.
-	 * 
+	 *
 	 * @param opt
 	 *            the option to check
 	 * @return true if the given option is currently set for the second command,
@@ -186,7 +199,7 @@ public class JoinedCommand<E2 extends Enum<E2>> implements Command<E2> {
 	/**
 	 * Appends the given ArgVals value to the second command in the join and
 	 * returns {@code this} joined command for further processing.
-	 * 
+	 *
 	 * @param <V>
 	 *            the argument value type
 	 * @param argVals
@@ -204,7 +217,7 @@ public class JoinedCommand<E2 extends Enum<E2>> implements Command<E2> {
 	/**
 	 * Appends the given ArgVals values to the second command in the join and
 	 * returns {@code this} joined command for further processing.
-	 * 
+	 *
 	 * @param argVals
 	 *            the argument and/or option values
 	 * @return {@code this} joined command for further chained processing
@@ -219,7 +232,7 @@ public class JoinedCommand<E2 extends Enum<E2>> implements Command<E2> {
 	/**
 	 * Joins this command with another command, resulting in a join
 	 * {@code "first | second | next"}.
-	 * 
+	 *
 	 * @param <E3>
 	 *            the argument/options enum defining the keywords applicable to
 	 *            {@code next}
@@ -235,7 +248,7 @@ public class JoinedCommand<E2 extends Enum<E2>> implements Command<E2> {
 	/**
 	 * Redirects the given {@code input} to the first command of this joined
 	 * command.
-	 * 
+	 *
 	 * @param input
 	 *            the input for the first command in the join
 	 * @return {@code this} joined command for further chained processing
@@ -252,7 +265,7 @@ public class JoinedCommand<E2 extends Enum<E2>> implements Command<E2> {
 	/**
 	 * Redirects the output of the second command of the join to the given
 	 * {@code output}.
-	 * 
+	 *
 	 * @param output
 	 *            the output for the second command in the join
 	 * @return {@code this} joined command for further chained processing
@@ -280,7 +293,7 @@ public class JoinedCommand<E2 extends Enum<E2>> implements Command<E2> {
 	/**
 	 * Returns a deep clone of this joined command. The joined commands are
 	 * cloned and a new joined command instance is returned.
-	 * 
+	 *
 	 * @return a deep clone of this command
 	 */
 	public JoinedCommand<E2> clone() {
@@ -292,11 +305,11 @@ public class JoinedCommand<E2 extends Enum<E2>> implements Command<E2> {
 	 * first and second command including arguments and options.
 	 * <p>
 	 * An example string returned by a joined command is
-	 * 
+	 *
 	 * <pre>
 	 * &quot;echo -message Hello World | grep -i -expression hello world&quot;
 	 * </pre>
-	 * 
+	 *
 	 * @return the string representation of this joined command, such as
 	 *         "echo -message Hello World | grep -i -expression hello world"
 	 */
