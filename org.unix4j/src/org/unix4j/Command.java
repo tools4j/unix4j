@@ -15,7 +15,7 @@ import org.unix4j.arg.Opt;
  * {@link #readFrom(Input) input} and {@link #writeTo(Output) output} to files
  * or other streams. A command can be {@link #join(Command) joined} to another
  * command, meaning that its output becomes the input of the next command.
- * 
+ *
  * @param <E>
  *            enum defining argument and option keywords for this command
  */
@@ -24,7 +24,7 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 	/**
 	 * Returns the name of this command. The name is usually a lower case word
 	 * such as "echo", "ls" or "grep".
-	 * 
+	 *
 	 * @return the command name, usually one word in lower case
 	 */
 	String getName();
@@ -39,7 +39,7 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 	 * a given keyword or expression. Sort is a classic non-batchable command as
 	 * it requires the complete input before it can be sorted and written to the
 	 * output.
-	 * 
+	 *
 	 * @return true if the command can be executed in batchs, and false if it
 	 *         requires the complete input to operate
 	 */
@@ -48,7 +48,7 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 	/**
 	 * Appends the given argument value to this command and returns {@code this}
 	 * command for further processing.
-	 * 
+	 *
 	 * @param <V>
 	 *            the argument value type
 	 * @param arg
@@ -64,7 +64,7 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 	/**
 	 * Appends the given argument values to this command and returns
 	 * {@code this} command for further processing.
-	 * 
+	 *
 	 * @param <V>
 	 *            the argument value type
 	 * @param arg
@@ -81,7 +81,7 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 	/**
 	 * Appends the given argument values to this command and returns
 	 * {@code this} command for further processing.
-	 * 
+	 *
 	 * @param <V>
 	 *            the argument value type
 	 * @param arg
@@ -98,7 +98,7 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 	/**
 	 * Returns the argument list currently set for this command and the given
 	 * argument key. Possibly returns an empty arg list, but never null.
-	 * 
+	 *
 	 * @param <V>
 	 *            the argument value type
 	 * @param arg
@@ -112,7 +112,7 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 
 	/**
 	 * Sets the given command option
-	 * 
+	 *
 	 * @param opt
 	 *            the option to set
 	 * @return {@code this} command for further chained processing
@@ -122,9 +122,20 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 	Command<E> withOpt(Opt<E> opt);
 
 	/**
+	 * Sets the given command option
+	 *
+	 * @param opts
+	 *            the options to set
+	 * @return {@code this} command for further chained processing
+	 * @throws NullPointerException
+	 *             if {@code opts} is {@code null}
+	 */
+	Command<E> withOpts(Opt<E> ... opts);
+
+	/**
 	 * Returns true if the specified option is currently set for this command.
 	 * Returns false if the option is not set or if {@code opt} is null.
-	 * 
+	 *
 	 * @param opt
 	 *            the option to check
 	 * @return true if the given option is currently set for the command, and
@@ -178,7 +189,7 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 	 * first command in the join. Executing the joined command means executing
 	 * the first command, which usually triggers execution of the second command
 	 * through the input/output join between {@code this} and {@code next}.
-	 * 
+	 *
 	 * @param <E2>
 	 *            the argument/options enum defining the keywords applicable to
 	 *            {@code next}
@@ -194,7 +205,7 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 	 * Redirects the given {@code input} to this command. It is good practice to
 	 * throw an exception if a command does not support reading from an input
 	 * object, for instance because it requires no input.
-	 * 
+	 *
 	 * @param input
 	 *            the input for this command
 	 * @return {@code this} command for further chained processing
@@ -210,7 +221,7 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 	 * Redirects the output of this command to the given {@code output}. It is
 	 * good practice to throw an exception if a command does not support writing
 	 * to an output object, for instance because it produces no output.
-	 * 
+	 *
 	 * @param output
 	 *            the output for this command
 	 * @return {@code this} command for further chained processing
@@ -235,7 +246,7 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 	 * <p>
 	 * Clones are for instance used when commands are executed as parts of a
 	 * join.
-	 * 
+	 *
 	 * @return a deep clone of this command
 	 */
 	Command<E> clone();
@@ -245,11 +256,11 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 	 * options.
 	 * <p>
 	 * An example string returned by a command is
-	 * 
+	 *
 	 * <pre>
 	 * &quot;grep -i -expression hello world&quot;
 	 * </pre>
-	 * 
+	 *
 	 * @return the string representation of this command, such as
 	 *         "grep -i -expression hello world"
 	 */

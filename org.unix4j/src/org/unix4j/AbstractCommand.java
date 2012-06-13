@@ -14,12 +14,12 @@ import org.unix4j.io.StdOutput;
  * Abstract base implementation suitable for most common commands. Command
  * implementations usually only define arguments and options and implement the
  * {@link #executeBatch()} method.
- * 
+ *
  * @param <E>
  *            enum defining argument and option keywords for this command
  */
 abstract public class AbstractCommand<E extends Enum<E>> implements Command<E> {
-	
+
 	private final String name;
 	private final boolean batchable;
 	private OptMap<E> opts = new OptMap<E>();
@@ -28,7 +28,7 @@ abstract public class AbstractCommand<E extends Enum<E>> implements Command<E> {
 
 	/**
 	 * Constructor with command name and batchable flag.
-	 * 
+	 *
 	 * @param name
 	 *            the name of the command, usually a lower case word such as
 	 *            "echo", "ls" or "grep"
@@ -102,6 +102,12 @@ abstract public class AbstractCommand<E extends Enum<E>> implements Command<E> {
 	}
 
 	@Override
+	public Command<E> withOpts(Opt<E> ... opts){
+		this.opts.setOpts(opts);
+		return this;
+	}
+
+	@Override
 	public <V> ArgList<E, V> getArgs(Arg<E, V> arg) {
 		return opts.getArgList(arg, true);
 	}
@@ -110,7 +116,7 @@ abstract public class AbstractCommand<E extends Enum<E>> implements Command<E> {
 	public boolean isOptSet(Opt<E> opt) {
 		return opts.isOptSet(opt);
 	}
-	
+
 	@Override
 	public <V> Command<E> withArgVals(ArgVals<E,V> argVals) {
 		if (argVals.getArg() instanceof Opt) {
@@ -188,5 +194,4 @@ abstract public class AbstractCommand<E extends Enum<E>> implements Command<E> {
 	public String toString() {
 		return getName() + " " + opts;
 	}
-
 }
