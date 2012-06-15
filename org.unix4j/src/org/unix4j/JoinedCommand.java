@@ -5,7 +5,7 @@ package org.unix4j;
  * {@link #getFirst() first} command is joined to the input of the
  * {@link #getSecond() second} command.
  */
-public class JoinedCommand<A extends Arguments> implements Command<A> {
+public class JoinedCommand<A extends Arguments<A>> implements Command<A> {
 
 	private final Command<A> first;
 	private final Command<?> second;
@@ -34,7 +34,7 @@ public class JoinedCommand<A extends Arguments> implements Command<A> {
 		this.second = second;
 	}
 	
-	public static <A extends Arguments> JoinedCommand<A> join(Command<A> first, Command<?> second) {
+	public static <A extends Arguments<A>> JoinedCommand<A> join(Command<A> first, Command<?> second) {
 		return new JoinedCommand<A>(first, second);
 	}
 
@@ -81,9 +81,13 @@ public class JoinedCommand<A extends Arguments> implements Command<A> {
 		return first.getType();
 	}
 	
+	public Command<A> withArgs(A arguments) {
+		return new JoinedCommand<A>(first.withArgs(arguments), second);
+	}
+	
 	@Override
 	public Command<?> join(Command<?> next) {
-		return JoinedCommand.join(this, next);
+		return JoinedCommand.join(getFirst(), getSecond().join(next));
 	}
 
 	@Override

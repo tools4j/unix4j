@@ -1,9 +1,10 @@
 package org.unix4j;
 
-public interface Command<A extends Arguments> {
+public interface Command<A extends Arguments<A>> {
 	String getName();
 	A getArguments();
 	Type getType();
+	Command<A> withArgs(A arguments);
 	Command<?> join(Command<?> next);
 	void execute(Input input, Output output);
 	

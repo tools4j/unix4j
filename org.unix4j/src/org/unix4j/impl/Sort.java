@@ -20,7 +20,7 @@ public final class Sort {
 		ascending, descending
 	}
 
-	public static class Args extends AbstractArgs<Option> {
+	public static class Args extends AbstractArgs<Option, Args> {
 		public Args() {
 			super(Option.class);
 		}
@@ -42,6 +42,10 @@ public final class Sort {
 	public static class Command extends AbstractCommand<Args> {
 		public Command(Args arguments) {
 			super(NAME, Type.CompleteInput, arguments);
+		}
+		@Override
+		public Command withArgs(Args arguments) {
+			return new Command(arguments);
 		}
 		@Override
 		public void executeBatch(Input input, Output output) {

@@ -6,7 +6,7 @@ import org.unix4j.Input;
 import org.unix4j.JoinedCommand;
 import org.unix4j.Output;
 
-abstract public class AbstractCommand<A extends Arguments> implements Command<A> {
+abstract public class AbstractCommand<A extends Arguments<A>> implements Command<A> {
 	private final String name;
 	private final Type type;
 	private final A arguments;
