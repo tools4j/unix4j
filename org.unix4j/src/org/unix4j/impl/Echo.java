@@ -47,12 +47,12 @@ public final class Echo {
 			return new Command(new Args(messages));
 		}
 	};
-	public static class Command extends AbstractCommand<Interface<Command>, Args> {
+	public static class Command extends AbstractCommand<Args> {
 		public Command(Args arguments) {
-			super(NAME, true, false, FACTORY, arguments);
+			super(NAME, Type.NoInput, arguments);
 		}
 		@Override
-		public void execute(Input input, Output output) {
+		public void executeBatch(Input input, Output output) {
 			final List<String> messages = getArguments().getMessages();
 			final StringBuilder sb = new StringBuilder();
 			if (!messages.isEmpty()) {

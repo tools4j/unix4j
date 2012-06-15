@@ -46,12 +46,12 @@ public final class Grep {
 			return new Command(new Args(matchString, options));
 		}
 	};
-	public static class Command extends AbstractCommand<Interface<Command>, Args> {
+	public static class Command extends AbstractCommand<Args> {
 		public Command(Args arguments) {
-			super(NAME, true, false, FACTORY, arguments);
+			super(NAME, Type.LineByLine, arguments);
 		}
 		@Override
-		public void execute(Input input, Output output) {
+		public void executeBatch(Input input, Output output) {
 			while (input.hasMoreLines()) {
 				final Args args = getArguments();
 				final String matchString = args.getMatchString();

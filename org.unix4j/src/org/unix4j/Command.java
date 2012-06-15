@@ -1,12 +1,18 @@
 package org.unix4j;
 
-import org.unix4j.CommandInterface;
-
-public interface Command<I extends CommandInterface<? extends Command<I, A>>, A> {
+public interface Command<A extends Arguments> {
 	String getName();
-	I getInterface();
 	A getArguments();
-	boolean isBatchable();
-	boolean joinsNext();
+	Type getType();
+	Command<?> join(Command<?> next);
 	void execute(Input input, Output output);
+	
+	enum Type {
+		NoInput,
+		LineByLine,
+		CompleteInput;
+		public boolean isLineByLine() {
+			return LineByLine.equals(this);
+		}
+	}
 }

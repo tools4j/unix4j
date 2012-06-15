@@ -13,7 +13,7 @@ import org.unix4j.io.StdOutput;
 
 public class CommandBuilderTest {
 
-	private CommandBuilder builder;
+	private Unix4jCommandBuilder builder;
 	
 	@Before
 	public void beforeEach() {
@@ -22,7 +22,7 @@ public class CommandBuilderTest {
 	
 	@After
 	public void afterEach() {
-		Command<?, ?> cmd = builder.build();
+		Command<?> cmd = builder.build();
 		System.out.println(">>> " + cmd);
 		cmd.execute(new NullInput(), new StdOutput());
 	}
