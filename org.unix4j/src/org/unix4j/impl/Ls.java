@@ -26,7 +26,7 @@ public final class Ls {
 		l,a,r,t;
 	}
 
-	public static class Args extends AbstractArgs<Option> {
+	public static class Args extends AbstractArgs<Option, Args> {
 		public static final TypedMap.Key<List<File>> FILES = TypedMap.DefaultKey.keyForListOf("files", File.class);
 		public Args() {
 			this(new File(System.getProperty("user.dir")));
@@ -71,6 +71,10 @@ public final class Ls {
 	public static class Command extends AbstractCommand<Args> {
 		public Command(Args arguments) {
 			super(NAME, Type.NoInput, arguments);
+		}
+		@Override
+		public Command withArgs(Args arguments) {
+			return new Command(arguments);
 		}
 		@Override
 		public void executeBatch(Input input, Output output) {

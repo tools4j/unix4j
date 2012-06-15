@@ -17,7 +17,7 @@ import java.util.Set;
  * satisfactory implementation for keys based on an arbitrary object making up
  * the key identity together with the value type.
  */
-public class TypedMap {
+public class TypedMap implements Cloneable {
 	public static interface Key<T> {
 		Object getKey();
 
@@ -81,7 +81,7 @@ public class TypedMap {
 		}
 	}
 
-	private final Map<Key<?>, Object> map = createMap();
+	private Map<Key<?>, Object> map = createMap();
 
 	public <T> T put(Key<T> key, T value) {
 		final Object old = map.put(key, value);
@@ -122,6 +122,17 @@ public class TypedMap {
 
 	protected Map<Key<?>, Object> createMap() {
 		return new LinkedHashMap<TypedMap.Key<?>, Object>();
+	}
+	
+	@Override
+	public TypedMap clone() {
+		try {
+			final TypedMap clone = (TypedMap)super.clone();
+			clone.map = CloneUtil.cloneDeep(clone.map);
+			return clone;
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(getClass().getName() + " should be cloneable", e);
+		}
 	}
 
 	@Override

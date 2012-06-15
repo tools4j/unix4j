@@ -1,10 +1,15 @@
 package org.unix4j.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.unix4j.Arguments;
 import org.unix4j.CommandInterface;
 import org.unix4j.Input;
 import org.unix4j.JoinedCommand;
 import org.unix4j.Output;
+import org.unix4j.Variables;
+import org.unix4j.io.NullInput;
 
 public final class Xargs {
 
@@ -12,7 +17,7 @@ public final class Xargs {
 	public static final String XARG = xarg(0);
 	
 	public static final String xarg(int index) {
-		return Arguments.Variables.encode("xarg", index);
+		return Variables.encode("xarg", index);
 	}
 
 	public static interface Interface<S> extends CommandInterface<S> {
@@ -23,7 +28,7 @@ public final class Xargs {
 		//no options for now
 	}
 
-	public static class Args extends AbstractArgs<Option> {
+	public static class Args extends AbstractArgs<Option, Args> {
 		public Args() {
 			super(Option.class);
 		}
@@ -45,18 +50,34 @@ public final class Xargs {
 		public Command(Args arguments) {
 			super(NAME, Type.LineByLine, arguments);
 		}
-		
+		@Override
+		public Command withArgs(Args arguments) {
+			return new Command(arguments);
+		}
 		@Override
 		public org.unix4j.Command<?> join(org.unix4j.Command<?> next) {
-			return new JoinedCommand<Args>(this, next) {
+			return join(this, next);
+		}
+
+		private static <A1 extends Arguments<A1>,A2 extends Arguments<A2>> org.unix4j.Command<A1> join(org.unix4j.Command<A1> first, final org.unix4j.Command<A2> second) {
+			return new JoinedCommand<A1>(first, second) {
 				@Override
 				public void execute(Input input, Output output) {
-//					getSecond().getArguments().resolve(bla)
-					super.execute(input, output);
+					final Map<String,String> xargs = new HashMap<String, String>();
+					final A2 args = second.getArguments().clone();
+					while (input.hasMoreLines()) {
+						final String line = input.readLine();
+						final String[] words = line.split("\\s+");
+						for (int i = 0; i < words.length; i++) {
+							xargs.put(xarg(i), words[i]);
+						}
+						args.resolve(xargs);
+						second.withArgs(args).execute(NullInput.INSTANCE, output);
+						xargs.clear();
+					}
 				}
 			};
 		}
-
 		@Override
 		public void executeBatch(Input input, Output output) {
 			while (input.hasMoreLines()) {

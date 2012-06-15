@@ -19,7 +19,7 @@ public final class Echo {
 		//no options?
 	}
 	
-	public static class Args extends AbstractArgs<Option> {
+	public static class Args extends AbstractArgs<Option, Args> {
 		public static final TypedMap.Key<List<String>> MESSAGES = TypedMap.DefaultKey.keyForListOf("messages", String.class);
 		public Args(String message) {
 			this(Collections.singletonList(message));
@@ -50,6 +50,10 @@ public final class Echo {
 	public static class Command extends AbstractCommand<Args> {
 		public Command(Args arguments) {
 			super(NAME, Type.NoInput, arguments);
+		}
+		@Override
+		public Command withArgs(Args arguments) {
+			return new Command(arguments);
 		}
 		@Override
 		public void executeBatch(Input input, Output output) {

@@ -1,16 +1,18 @@
 package org.unix4j.impl;
 
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.unix4j.Arguments;
+import org.unix4j.Variables;
 import org.unix4j.util.TypedMap;
 import org.unix4j.util.TypedMap.Key;
 
-public class AbstractArgs<O extends Enum<O>> implements Arguments {
-	private final TypedMap args;
-	private final EnumSet<O> opts;
+abstract public class AbstractArgs<O extends Enum<O>, A extends AbstractArgs<O, A>> implements Arguments<A>, Cloneable {
+	private TypedMap args;
+	private EnumSet<O> opts;
 	
 	public AbstractArgs(Class<O> optClass) {
 		args = new TypedMap();
@@ -50,10 +52,33 @@ public class AbstractArgs<O extends Enum<O>> implements Arguments {
 				@SuppressWarnings("unchecked")
 				final Map.Entry<Key<String>,String> se = (Map.Entry<Key<String>,String>)(Object)e;
 				final String value = se.getValue();
-				if (Arguments.Variables.isVariable(value)) {
-					se.setValue(Arguments.Variables.resolve(value, variables));
+				if (Variables.isVariable(value)) {
+					se.setValue(Variables.resolve(value, variables));
+				}
+			} else if (List.class.equals(e.getKey().getValueType())) {
+				final List<?> list = (List<?>)e.getValue();
+				for (int i = 0; i < list.size(); i++) {
+					final Object value = list.get(i);
+					if (value instanceof String && Variables.isVariable(value.toString())) {
+						@SuppressWarnings("unchecked")
+						final List<String> stringList = (List<String>)list;
+						stringList.set(i, Variables.resolve(value.toString(), variables));
+					}
 				}
 			}
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public A clone() {
+		try {
+			final A clone = (A)super.clone();
+			clone.args = clone.args.clone();
+			clone.opts = clone.opts.clone();
+			return clone;
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(getClass().getName() + " should be cloneable", e);
 		}
 	}
 	

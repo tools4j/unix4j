@@ -19,7 +19,7 @@ public final class Grep {
 		v, invert;
 	}
 
-	public static class Args extends AbstractArgs<Option> {
+	public static class Args extends AbstractArgs<Option, Args> {
 		public static final TypedMap.Key<String> MATCH_STRING = TypedMap.DefaultKey.keyFor("matchString", String.class);
 		public Args(String matchString) {
 			super(Option.class);
@@ -49,6 +49,10 @@ public final class Grep {
 	public static class Command extends AbstractCommand<Args> {
 		public Command(Args arguments) {
 			super(NAME, Type.LineByLine, arguments);
+		}
+		@Override
+		public Command withArgs(Args arguments) {
+			return new Command(arguments);
 		}
 		@Override
 		public void executeBatch(Input input, Output output) {
