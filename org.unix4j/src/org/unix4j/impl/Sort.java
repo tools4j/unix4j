@@ -39,12 +39,12 @@ public final class Sort {
 			return new Command(new Args(options));
 		}
 	};
-	public static class Command extends AbstractCommand<Interface<Command>, Args> {
+	public static class Command extends AbstractCommand<Args> {
 		public Command(Args arguments) {
-			super(NAME, true, false, FACTORY, arguments);
+			super(NAME, Type.CompleteInput, arguments);
 		}
 		@Override
-		public void execute(Input input, Output output) {
+		public void executeBatch(Input input, Output output) {
 			final boolean isAsc = getArguments().hasOpt(Option.ascending);
 			final boolean isDesc = getArguments().hasOpt(Option.descending);
 			if (isAsc && isDesc) {

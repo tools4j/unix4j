@@ -68,12 +68,12 @@ public final class Ls {
 			return new Command(args);
 		}
 	};
-	public static class Command extends AbstractCommand<Interface<Command>, Args> {
+	public static class Command extends AbstractCommand<Args> {
 		public Command(Args arguments) {
-			super(NAME, false, false, FACTORY, arguments);
+			super(NAME, Type.NoInput, arguments);
 		}
 		@Override
-		public void execute(Input input, Output output) {
+		public void executeBatch(Input input, Output output) {
 			final List<File> files = getArguments().getFiles();
 			for (final File file : files) {
 				for (File f : file.listFiles()) {

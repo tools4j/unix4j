@@ -4,9 +4,11 @@ import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.unix4j.Arguments;
 import org.unix4j.util.TypedMap;
+import org.unix4j.util.TypedMap.Key;
 
-public class AbstractArgs<O extends Enum<O>> {
+public class AbstractArgs<O extends Enum<O>> implements Arguments {
 	private final TypedMap args;
 	private final EnumSet<O> opts;
 	
@@ -41,6 +43,20 @@ public class AbstractArgs<O extends Enum<O>> {
 	public Set<O> getOpts() {
 		return opts;
 	}
+	@Override
+	public void resolve(Map<String, String> variables) {
+		for (final Map.Entry<Key<?>,?> e : args.entrySet()) {
+			if (String.class.equals(e.getKey().getValueType())) {
+				@SuppressWarnings("unchecked")
+				final Map.Entry<Key<String>,String> se = (Map.Entry<Key<String>,String>)(Object)e;
+				final String value = se.getValue();
+				if (Arguments.Variables.isVariable(value)) {
+					se.setValue(Arguments.Variables.resolve(value, variables));
+				}
+			}
+		}
+	}
+	
 	@Override
 	public String toString() {
 		if (args.isEmpty() && opts.isEmpty()) {

@@ -1,19 +1,18 @@
 package org.unix4j.impl;
 
+import org.unix4j.Arguments;
 import org.unix4j.Command;
-import org.unix4j.CommandInterface;
+import org.unix4j.Input;
+import org.unix4j.JoinedCommand;
+import org.unix4j.Output;
 
-abstract public class AbstractCommand<I extends CommandInterface<? extends Command<I, A>>, A> implements Command<I, A> {
+abstract public class AbstractCommand<A extends Arguments> implements Command<A> {
 	private final String name;
-	private final boolean batchable;
-	private final boolean joinsNext;
-	private final I iface;
+	private final Type type;
 	private final A arguments;
-	public AbstractCommand(String name, boolean batchable, boolean joinsNext, I iface, A arguments) {
+	public AbstractCommand(String name, Type type, A arguments) {
 		this.name = name;
-		this.batchable = batchable;
-		this.joinsNext = joinsNext;
-		this.iface = iface;;
+		this.type = type;
 		this.arguments = arguments;
 	}
 	@Override
@@ -21,20 +20,34 @@ abstract public class AbstractCommand<I extends CommandInterface<? extends Comma
 		return name;
 	}
 	@Override
-	public boolean isBatchable() {
-		return batchable;
-	}
-	@Override
-	public boolean joinsNext() {
-		return joinsNext;
-	}
-	@Override
-	public I getInterface() {
-		return iface;
+	public Type getType() {
+		return type;
 	}
 	public A getArguments() {
 		return arguments;
 	}
+	@Override
+	public Command<?> join(Command<?> next) {
+		return JoinedCommand.join(this, next);
+	}
+	@Override
+	public final void execute(Input input, Output output) {
+		switch (getType()) {
+		case NoInput:
+			executeBatch(input, output);
+			break;
+		case CompleteInput:
+			executeBatch(input, output);
+			break;
+		default:
+			do {
+				executeBatch(input, output);
+			} while (input.hasMoreLines());
+			break;
+		}
+		output.finish();
+	}
+	abstract protected void executeBatch(Input input, Output output);
 	@Override
 	public String toString() {
 		final String args = getArguments().toString();

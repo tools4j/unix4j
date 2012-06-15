@@ -40,7 +40,8 @@ public class BufferedOutput implements Output {
 	public BufferedInput asInput() {
 		return new BufferedInput(new LinkedList<String>(lines));
 	}
-	public void clear() {
+	public BufferedOutput clear() {
 		lines.clear();
+		return this;
 	}
 }
