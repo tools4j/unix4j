@@ -9,24 +9,15 @@ import org.unix4j.command.impl.Grep;
 import org.unix4j.command.impl.Ls;
 import org.unix4j.command.impl.Sort;
 import org.unix4j.command.impl.Xargs;
-import org.unix4j.io.BufferedOutput;
-import org.unix4j.io.FileOutput;
 import org.unix4j.io.Input;
-import org.unix4j.io.NullInput;
-import org.unix4j.io.Output;
-import org.unix4j.io.StdOutput;
 
-public class Unix4jCommandBuilderImpl implements Unix4jCommandBuilder {
+public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements Unix4jCommandBuilder {
 	
-	private final Input input;
-	
-	private Command<?> command = null;
-
 	public Unix4jCommandBuilderImpl() {
-		this(NullInput.INSTANCE);
+		super();
 	}
 	public Unix4jCommandBuilderImpl(Input input) {
-		this.input = input;
+		super(input);
 	}
 
 	@Override
@@ -94,40 +85,10 @@ public class Unix4jCommandBuilderImpl implements Unix4jCommandBuilder {
 		join(Xargs.FACTORY.xargs());
 		return this;
 	}
-
-	public void join(Command<?> command) {
-		this.command = this.command == null ? command : this.command.join(command);
-	}
-	@Override
-	public Command<?> build() {
-		if (command == null) {
-			throw new IllegalStateException("no command has been built yet");
-		}
-		return command;
-	}
 	
 	@Override
-	public String toString() {
-		return command == null ? "null" : command.toString();
-	}
-
-	@Override
-	public void execute() {
-		execute(new StdOutput());
-	}
-	@Override
-	public void execute(Output output) {
-		build().execute(input, output);
-		output.finish();
-	}
-	@Override
-	public void execute(File file) {
-		execute(new FileOutput(file));
-	}
-	@Override
-	public String executeToString() {
-		final BufferedOutput out = new BufferedOutput();
-		execute(out);
-		return out.toMultiLineString();
+	public Unix4jCommandBuilder join(Command<?> command) {
+		super.join(command);
+		return this;
 	}
 }
