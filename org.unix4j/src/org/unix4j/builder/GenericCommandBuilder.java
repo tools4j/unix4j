@@ -13,26 +13,30 @@ import org.unix4j.command.CommandInterface;
 
 public class GenericCommandBuilder {
 	
-	@SuppressWarnings("unchecked")
 	public static <B extends CommandBuilder> B createCommandBuilder(Class<B> commandBuilderInterface, CommandInterface<? extends Command<?>>... commandFactories) {
+		return createCommandBuilder(commandBuilderInterface, new DefaultCommandBuilder(), commandFactories);
+	}
+	@SuppressWarnings("unchecked")
+	public static <B extends CommandBuilder> B createCommandBuilder(Class<B> commandBuilderInterface, DefaultCommandBuilder defaultCommandBuilder, CommandInterface<? extends Command<?>>... commandFactories) {
 		if (commandBuilderInterface.isInterface()) {
-			return (B) Proxy.newProxyInstance(GenericCommandBuilder.class.getClassLoader(), new Class[] {commandBuilderInterface}, new GenericCommandHandler<B>(commandBuilderInterface, commandFactories));
+			return (B) Proxy.newProxyInstance(GenericCommandBuilder.class.getClassLoader(), new Class[] {commandBuilderInterface}, new GenericCommandHandler<B>(commandBuilderInterface, defaultCommandBuilder, commandFactories));
 		}
 		throw new IllegalArgumentException(commandBuilderInterface.getName() + " must be an interface");
 	}
 
 	private static class GenericCommandHandler<B extends CommandBuilder> implements InvocationHandler {
-		private final DefaultCommandBuilder builder = new DefaultCommandBuilder();
+		private final DefaultCommandBuilder defaultCommandBuilder;
 		private final Map<MethodSignature, Object> signatureToTarget = new HashMap<GenericCommandBuilder.MethodSignature, Object>();
-		public GenericCommandHandler(Class<B> commandBuilderInterface, CommandInterface<? extends Command<?>>... commandFactories) {
+		public GenericCommandHandler(Class<B> commandBuilderInterface, DefaultCommandBuilder defaultCommandBuilder, CommandInterface<? extends Command<?>>... commandFactories) {
+			this.defaultCommandBuilder = defaultCommandBuilder;
 			final Map<MethodSignature, Object> factoryMethods = new HashMap<GenericCommandBuilder.MethodSignature, Object>();
-			addSignatures(factoryMethods, builder);
+			addSignatures(factoryMethods, defaultCommandBuilder);
 			for (int i = 0; i < commandFactories.length; i++) {
 				addSignatures(factoryMethods, commandFactories[i]);
 			}
-			for (final Method method : builder.getClass().getMethods()) {
+			for (final Method method : defaultCommandBuilder.getClass().getMethods()) {
 				final MethodSignature signature = new MethodSignature(method);
-				signatureToTarget.put(signature, builder);
+				signatureToTarget.put(signature, defaultCommandBuilder);
 			}
 			for (final Method method : commandBuilderInterface.getMethods()) {
 				final MethodSignature signature = new MethodSignature(method);
@@ -58,7 +62,7 @@ public class GenericCommandBuilder {
 			if (target != null) {
 				Object result = signature.invoke(target, args);
 				if (result instanceof Command) {
-					result = builder.join((Command<?>)result);
+					result = defaultCommandBuilder.join((Command<?>)result);
 				}
 				if (result instanceof DefaultCommandBuilder) {
 					result = proxy;
