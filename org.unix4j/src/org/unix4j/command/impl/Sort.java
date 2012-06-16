@@ -1,12 +1,14 @@
-package org.unix4j.impl;
+package org.unix4j.command.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.unix4j.CommandInterface;
-import org.unix4j.Input;
-import org.unix4j.Output;
+import org.unix4j.command.AbstractArgs;
+import org.unix4j.command.AbstractCommand;
+import org.unix4j.command.CommandInterface;
+import org.unix4j.io.Input;
+import org.unix4j.io.Output;
 
 public final class Sort {
 

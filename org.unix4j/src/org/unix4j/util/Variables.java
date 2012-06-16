@@ -1,4 +1,4 @@
-package org.unix4j;
+package org.unix4j.util;
 
 import java.util.Map;
 

@@ -1,28 +1,31 @@
-package org.unix4j;
+package org.unix4j.builder;
 
 import java.io.File;
 import java.util.List;
 
-import org.unix4j.impl.Echo;
-import org.unix4j.impl.Grep;
-import org.unix4j.impl.Ls;
-import org.unix4j.impl.Sort;
-import org.unix4j.impl.Xargs;
+import org.unix4j.command.Command;
+import org.unix4j.command.impl.Echo;
+import org.unix4j.command.impl.Grep;
+import org.unix4j.command.impl.Ls;
+import org.unix4j.command.impl.Sort;
+import org.unix4j.command.impl.Xargs;
 import org.unix4j.io.BufferedOutput;
 import org.unix4j.io.FileOutput;
+import org.unix4j.io.Input;
 import org.unix4j.io.NullInput;
+import org.unix4j.io.Output;
 import org.unix4j.io.StdOutput;
 
-public class CommandBuilderImpl implements Unix4jCommandBuilder {
+public class Unix4jCommandBuilderImpl implements Unix4jCommandBuilder {
 	
 	private final Input input;
 	
 	private Command<?> command = null;
 
-	public CommandBuilderImpl() {
+	public Unix4jCommandBuilderImpl() {
 		this(NullInput.INSTANCE);
 	}
-	public CommandBuilderImpl(Input input) {
+	public Unix4jCommandBuilderImpl(Input input) {
 		this.input = input;
 	}
 

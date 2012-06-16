@@ -1,4 +1,7 @@
-package org.unix4j;
+package org.unix4j.command;
+
+import org.unix4j.io.Input;
+import org.unix4j.io.Output;
 
 /**
  * A composite command joining two commands. The output of the

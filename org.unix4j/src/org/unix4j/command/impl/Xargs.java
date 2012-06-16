@@ -1,15 +1,17 @@
-package org.unix4j.impl;
+package org.unix4j.command.impl;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.unix4j.Arguments;
-import org.unix4j.CommandInterface;
-import org.unix4j.Input;
-import org.unix4j.JoinedCommand;
-import org.unix4j.Output;
-import org.unix4j.Variables;
+import org.unix4j.command.AbstractArgs;
+import org.unix4j.command.AbstractCommand;
+import org.unix4j.command.Arguments;
+import org.unix4j.command.CommandInterface;
+import org.unix4j.command.JoinedCommand;
+import org.unix4j.io.Input;
 import org.unix4j.io.NullInput;
+import org.unix4j.io.Output;
+import org.unix4j.util.Variables;
 
 public final class Xargs {
 
@@ -55,16 +57,16 @@ public final class Xargs {
 			return new Command(arguments);
 		}
 		@Override
-		public org.unix4j.Command<?> join(org.unix4j.Command<?> next) {
+		public org.unix4j.command.Command<?> join(org.unix4j.command.Command<?> next) {
 			return join(this, next);
 		}
 
-		private static <A1 extends Arguments<A1>,A2 extends Arguments<A2>> org.unix4j.Command<A1> join(org.unix4j.Command<A1> first, final org.unix4j.Command<A2> second) {
+		private static <A1 extends Arguments<A1>,A2 extends Arguments<A2>> org.unix4j.command.Command<A1> join(org.unix4j.command.Command<A1> first, final org.unix4j.command.Command<A2> second) {
 			return new JoinedCommand<A1>(first, second) {
 				@Override
 				public void execute(Input input, Output output) {
 					final Map<String,String> xargs = new HashMap<String, String>();
-					final A2 args = second.getArguments().clone();
+					final A2 args = second.getArguments().clone(true /*deep clone*/);
 					while (input.hasMoreLines()) {
 						final String line = input.readLine();
 						final String[] words = line.split("\\s+");

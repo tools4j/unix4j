@@ -1,4 +1,4 @@
-package org.unix4j;
+package org.unix4j.command;
 
 public interface CommandInterface<R> {
 	// interface defines no methods as they are all defined by the command

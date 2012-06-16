@@ -1,8 +1,9 @@
-package org.unix4j;
+package org.unix4j.command;
 
 import java.util.LinkedList;
 
 import org.unix4j.io.BufferedInput;
+import org.unix4j.io.Output;
 
 /**
  * 

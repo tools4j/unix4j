@@ -1,10 +1,7 @@
-package org.unix4j.impl;
+package org.unix4j.command;
 
-import org.unix4j.Arguments;
-import org.unix4j.Command;
-import org.unix4j.Input;
-import org.unix4j.JoinedCommand;
-import org.unix4j.Output;
+import org.unix4j.io.Input;
+import org.unix4j.io.Output;
 
 abstract public class AbstractCommand<A extends Arguments<A>> implements Command<A> {
 	private final String name;

@@ -1,4 +1,4 @@
-package org.unix4j;
+package org.unix4j.io;
 
 /**
  * Line-oriented output destination for a command.

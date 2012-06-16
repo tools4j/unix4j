@@ -1,13 +1,12 @@
-package org.unix4j.impl;
+package org.unix4j.command;
 
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.unix4j.Arguments;
-import org.unix4j.Variables;
 import org.unix4j.util.TypedMap;
+import org.unix4j.util.Variables;
 import org.unix4j.util.TypedMap.Key;
 
 abstract public class AbstractArgs<O extends Enum<O>, A extends AbstractArgs<O, A>> implements Arguments<A>, Cloneable {
@@ -71,10 +70,10 @@ abstract public class AbstractArgs<O extends Enum<O>, A extends AbstractArgs<O, 
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public A clone() {
+	public A clone(boolean cloneDeep) {
 		try {
 			final A clone = (A)super.clone();
-			clone.args = clone.args.clone();
+			clone.args = clone.args.clone(cloneDeep);
 			clone.opts = clone.opts.clone();
 			return clone;
 		} catch (CloneNotSupportedException e) {

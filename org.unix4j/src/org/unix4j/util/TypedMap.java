@@ -21,7 +21,7 @@ public class TypedMap implements Cloneable {
 	public static interface Key<T> {
 		Object getKey();
 
-		Class<T> getValueType();
+		Class<? extends T> getValueType();
 
 		boolean equals(Object value);
 
@@ -30,15 +30,19 @@ public class TypedMap implements Cloneable {
 
 	public static class DefaultKey<T> implements Key<T> {
 		private final Object key;
-		private final Class<T> valueType;
+		private final Class<? extends T> valueType;
 
-		public DefaultKey(Object key, Class<T> valueType) {
+		public DefaultKey(Object key, Class<? extends T> valueType) {
 			if (key == null)
 				throw new NullPointerException("key cannot be null");
 			if (valueType == null)
 				throw new NullPointerException("valueType cannot be null");
 			this.key = key;
 			this.valueType = valueType;
+		}
+		@SuppressWarnings("unchecked")
+		public DefaultKey(Object key, T valueTemplate) {
+			this(key, (Class<? extends T>)valueTemplate.getClass());
 		}
 
 		public static <E> DefaultKey<E> keyFor(Object key, Class<E> valueType) {
@@ -55,7 +59,7 @@ public class TypedMap implements Cloneable {
 		}
 
 		@Override
-		public Class<T> getValueType() {
+		public Class<? extends T> getValueType() {
 			return valueType;
 		}
 
@@ -79,6 +83,14 @@ public class TypedMap implements Cloneable {
 		public String toString() {
 			return "key[" + getKey() + ",valueType=" + getValueType() + "]";
 		}
+	}
+	
+	public TypedMap() {
+		super();
+	}
+	
+	public TypedMap(TypedMap toCopy) {
+		map.putAll(toCopy.map);
 	}
 
 	private Map<Key<?>, Object> map = createMap();
@@ -116,19 +128,31 @@ public class TypedMap implements Cloneable {
 		return map.values();
 	}
 
+	/**
+	 * Returns the underlying map made unmodifiable.
+	 * @return an unmodifiable version of the underlying map.
+	 */
 	public Map<Key<?>, Object> asMap() {
 		return Collections.unmodifiableMap(map);
 	}
 
-	protected Map<Key<?>, Object> createMap() {
+	/**
+	 * Returns a modifiable copy of the underlying map.
+	 * @return a modifiable copy of the underlying map.
+	 */
+	public Map<Key<?>, Object> createMap() {
 		return new LinkedHashMap<TypedMap.Key<?>, Object>();
 	}
 	
-	@Override
-	public TypedMap clone() {
+	public TypedMap clone(boolean cloneDeep) {
 		try {
 			final TypedMap clone = (TypedMap)super.clone();
-			clone.map = CloneUtil.cloneDeep(clone.map);
+			if (cloneDeep) {
+				clone.map = CloneUtil.cloneDeep(clone.map);
+			} else {
+				clone.map = createMap();
+				clone.map.putAll(this.map);
+			}
 			return clone;
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(getClass().getName() + " should be cloneable", e);
