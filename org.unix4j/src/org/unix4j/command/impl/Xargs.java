@@ -41,7 +41,8 @@ public final class Xargs {
 		}
 	}
 
-	public static Interface<Command> FACTORY = new Interface<Command>() {
+	public static final Factory FACTORY = new Factory();
+	public static final class Factory implements Interface<Command> {
 		@Override
 		public Command xargs() {
 			return new Command(new Args());

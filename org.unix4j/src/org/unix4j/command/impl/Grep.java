@@ -38,7 +38,9 @@ public final class Grep {
 			return getArg(MATCH_STRING);
 		}
 	}
-	public static Interface <Command> FACTORY = new Interface<Command>() {
+
+	public static final Factory FACTORY = new Factory();
+	public static final class Factory implements Interface<Command> {
 		@Override
 		public Command grep(String matchString) {
 			return new Command(new Args(matchString));
@@ -58,9 +60,9 @@ public final class Grep {
 		}
 		@Override
 		public void executeBatch(Input input, Output output) {
+			final Args args = getArguments();
+			final String matchString = args.getMatchString();
 			while (input.hasMoreLines()) {
-				final Args args = getArguments();
-				final String matchString = args.getMatchString();
 				final String line = input.readLine();
 				boolean matches;
 				if (args.hasOpt(Option.i) || args.hasOpt(Option.ignoreCase)) {

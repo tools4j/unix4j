@@ -48,7 +48,8 @@ public final class Ls {
 		}
 	}
 	
-	public static final Interface<Command> FACTORY = new Interface<Command>() {
+	public static final Factory FACTORY = new Factory();
+	public static final class Factory implements Interface<Command> {
 		@Override
 		public Command ls() {
 			return new Command(new Args());

@@ -38,7 +38,8 @@ public final class Echo {
 		}
 	}
 	
-	public static final Interface<Command> FACTORY = new Interface<Command>() {
+	public static final Factory FACTORY = new Factory();
+	public static final class Factory implements Interface<Command> {
 		@Override
 		public Command echo(String message) {
 			return new Command(new Args(message));

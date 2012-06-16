@@ -32,7 +32,8 @@ public final class Sort {
 		}
 	}
 	
-	public static Interface<Command> FACTORY = new Interface<Command>() {
+	public static final Factory FACTORY = new Factory();
+	public static final class Factory implements Interface<Command> {
 		public Command sort() {
 			return new Command(new Args());
 		}
