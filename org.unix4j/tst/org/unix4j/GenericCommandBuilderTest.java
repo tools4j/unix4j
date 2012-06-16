@@ -5,6 +5,7 @@ import java.io.File;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.unix4j.builder.DefaultCommandBuilder;
 import org.unix4j.builder.GenericCommandBuilder;
 import org.unix4j.builder.Unix4jCommandBuilder;
 import org.unix4j.command.impl.Echo;
@@ -12,6 +13,8 @@ import org.unix4j.command.impl.Grep;
 import org.unix4j.command.impl.Ls;
 import org.unix4j.command.impl.Sort;
 import org.unix4j.command.impl.Xargs;
+import org.unix4j.io.FileInput;
+import org.unix4j.io.Input;
 import org.unix4j.io.Output;
 import org.unix4j.io.StreamOutput;
 
@@ -19,11 +22,15 @@ public class GenericCommandBuilderTest {
 	
 	private Unix4jCommandBuilder unix4j;
 	private Output output;
-	 
+
 	@SuppressWarnings("unchecked")
+	private static Unix4jCommandBuilder createCommandBuilder(Input input) {
+		final DefaultCommandBuilder defaultCommandBuilder = input == null ? new DefaultCommandBuilder() : new DefaultCommandBuilder(input);
+		return GenericCommandBuilder.createCommandBuilder(Unix4jCommandBuilder.class, defaultCommandBuilder, Ls.FACTORY, Grep.FACTORY, Echo.FACTORY, Sort.FACTORY, Xargs.FACTORY);
+	}
 	@Before
 	public void beforeEach() {
-		unix4j = GenericCommandBuilder.createCommandBuilder(Unix4jCommandBuilder.class, Ls.FACTORY, Grep.FACTORY, Echo.FACTORY, Sort.FACTORY, Xargs.FACTORY);
+		unix4j = createCommandBuilder(null);
 		output = null;
 	}
 
@@ -79,7 +86,7 @@ public class GenericCommandBuilderTest {
 	}
 	@Test
 	public void testFromFile() {
-		unix4j = Unix4j.builder(new File(".classpath")).sort();
+		unix4j = createCommandBuilder(new FileInput(new File(".classpath"))).sort();
 	}
 	@Test
 	public void testToSystemError() {
