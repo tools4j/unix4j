@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.unix4j.Output;
 
 public class BufferedOutput implements Output {
 	private static final String NEW_LINE = System.getProperty("line.separator");

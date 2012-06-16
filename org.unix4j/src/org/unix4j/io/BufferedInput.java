@@ -2,7 +2,6 @@ package org.unix4j.io;
 
 import java.util.LinkedList;
 
-import org.unix4j.Input;
 
 public class BufferedInput implements Input {
 	private final LinkedList<String> lines;

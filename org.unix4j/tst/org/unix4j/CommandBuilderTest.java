@@ -5,66 +5,81 @@ import java.io.File;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.unix4j.impl.Grep;
-import org.unix4j.impl.Sort;
-import org.unix4j.impl.Xargs;
-import org.unix4j.io.NullInput;
-import org.unix4j.io.StdOutput;
+import org.unix4j.builder.Unix4jCommandBuilder;
+import org.unix4j.command.impl.Grep;
+import org.unix4j.command.impl.Sort;
+import org.unix4j.command.impl.Xargs;
+import org.unix4j.io.Output;
+import org.unix4j.io.StreamOutput;
 
 public class CommandBuilderTest {
-
-	private Unix4jCommandBuilder builder;
 	
+	private Unix4jCommandBuilder unix4j;
+	private Output output;
+	 
 	@Before
 	public void beforeEach() {
-		builder = new CommandBuilderImpl();
+		unix4j = Unix4j.builder();
+		output = null;
 	}
-	
+
 	@After
 	public void afterEach() {
-		Command<?> cmd = builder.build();
-		System.out.println(">>> " + cmd);
-		cmd.execute(new NullInput(), new StdOutput());
+		System.out.println(">>> " + unix4j);
+		if (output == null) {
+			unix4j.execute();
+		} else {
+			unix4j.execute(output);
+		}
 	}
 	
 	@Test
 	public void testLs() {
-		builder.ls();
+		unix4j.ls();
 	}
 	@Test
 	public void testLsFile() {
-		builder.ls(new File("src"));
+		unix4j.ls(new File("src"));
 	}
 	@Test
 	public void testLsSort() {
-		builder.ls().sort();
+		unix4j.ls().sort();
 	}
 	@Test
 	public void testLsSortDesc() {
-		builder.ls().sort(Sort.Option.descending);
+		unix4j.ls().sort(Sort.Option.descending);
 	}
 	@Test
 	public void testEcho() {
-		builder.echo("Hello world");
+		unix4j.echo("Hello world");
 	}
 	@Test
 	public void testEcho2() {
-		builder.echo("Hello", "world");
+		unix4j.echo("Hello", "world");
 	}
 	@Test
 	public void testEchoGrepMatch() {
-		builder.echo("Hello world").grep("world");
+		unix4j.echo("Hello world").grep("world");
 	}
 	@Test
 	public void testEchoGrepNoMatch() {
-		builder.echo("Hello WORLD").grep("world");
+		unix4j.echo("Hello WORLD").grep("world");
 	}
 	@Test
 	public void testEchoGrepMatchIgnoreCase() {
-		builder.echo("Hello WORLD").grep("world", Grep.Option.ignoreCase);
+		unix4j.echo("Hello WORLD").grep("world", Grep.Option.ignoreCase);
 	}
 	@Test
 	public void testLsXargsEcho() {
-		builder.ls().xargs().echo("XARGS OUTPUT:", Xargs.XARG);
+		unix4j.ls().xargs().echo("XARGS OUTPUT:", Xargs.XARG);
+	}
+	@Test
+	public void testFromFile() {
+		unix4j = Unix4j.builder(new File(".classpath")).sort();
+	}
+	@Test
+	public void testToSystemError() {
+		output = new StreamOutput(System.err);
+		unix4j.echo("Hello ERROR").grep("error", Grep.Option.ignoreCase);
 	}
 }

@@ -3,7 +3,6 @@ package org.unix4j.io;
 import java.io.PrintWriter;
 import java.io.Writer;
 
-import org.unix4j.Output;
 
 public class WriterOutput implements Output {
 	

@@ -1,6 +1,9 @@
-package org.unix4j;
+package org.unix4j.builder;
 
 import java.io.File;
+
+import org.unix4j.command.Command;
+import org.unix4j.io.Output;
 
 public interface CommandBuilder {
 	/**

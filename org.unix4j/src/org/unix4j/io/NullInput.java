@@ -1,6 +1,5 @@
 package org.unix4j.io;
 
-import org.unix4j.Input;
 
 public class NullInput implements Input {
 	
