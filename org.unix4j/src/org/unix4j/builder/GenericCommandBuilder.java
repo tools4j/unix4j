@@ -64,7 +64,7 @@ public class GenericCommandBuilder {
 				if (result instanceof Command) {
 					result = defaultCommandBuilder.join((Command<?>)result);
 				}
-				if (result instanceof DefaultCommandBuilder) {
+				if (result == defaultCommandBuilder) {
 					result = proxy;
 				}
 				return result;
