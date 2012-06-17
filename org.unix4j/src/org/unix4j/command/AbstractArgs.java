@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.unix4j.util.TypedMap;
-import org.unix4j.util.Variables;
 import org.unix4j.util.TypedMap.Key;
+import org.unix4j.util.Variables;
 
 abstract public class AbstractArgs<O extends Enum<O>, A extends AbstractArgs<O, A>> implements Arguments<A>, Cloneable {
 	private TypedMap args;
@@ -46,13 +46,13 @@ abstract public class AbstractArgs<O extends Enum<O>, A extends AbstractArgs<O, 
 	}
 	@Override
 	public void resolve(Map<String, String> variables) {
-		for (final Map.Entry<Key<?>,?> e : args.entrySet()) {
+		for (final Map.Entry<Key<?>,?> e : args.asMap().entrySet()) {
 			if (String.class.equals(e.getKey().getValueType())) {
 				@SuppressWarnings("unchecked")
 				final Map.Entry<Key<String>,String> se = (Map.Entry<Key<String>,String>)(Object)e;
 				final String value = se.getValue();
 				if (Variables.isVariable(value)) {
-					se.setValue(Variables.resolve(value, variables));
+					args.put(se.getKey(), Variables.resolve(value, variables));
 				}
 			} else if (List.class.equals(e.getKey().getValueType())) {
 				final List<?> list = (List<?>)e.getValue();
@@ -87,7 +87,7 @@ abstract public class AbstractArgs<O extends Enum<O>, A extends AbstractArgs<O, 
 			return "";
 		}
 		final StringBuilder sb = new StringBuilder();
-		for (Map.Entry<TypedMap.Key<?>, ?> e : args.entrySet()) {
+		for (Map.Entry<TypedMap.Key<?>, ?> e : args.asMap().entrySet()) {
 			if (sb.length() > 0) sb.append(' ');
 			sb.append("-").append(e.getKey().getKey());
 			sb.append(" ").append(e.getValue());

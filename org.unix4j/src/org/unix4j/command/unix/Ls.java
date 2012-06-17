@@ -1,4 +1,4 @@
-package org.unix4j.command.impl;
+package org.unix4j.command.unix;
 
 import java.io.File;
 import java.util.Arrays;

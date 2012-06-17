@@ -33,14 +33,16 @@ abstract public class AbstractCommand<A extends Arguments<A>> implements Command
 		case NoInput:
 			executeBatch(input, output);
 			break;
-		case CompleteInput:
-			executeBatch(input, output);
-			break;
-		default:
+		case LineByLine:
 			do {
 				executeBatch(input, output);
 			} while (input.hasMoreLines());
 			break;
+		case CompleteInput:
+			executeBatch(input, output);
+			break;
+		default:
+			throw new IllegalStateException("unknown command type: " + getType());
 		}
 		output.finish();
 	}

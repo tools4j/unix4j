@@ -4,11 +4,11 @@ import java.io.File;
 import java.util.List;
 
 import org.unix4j.command.Command;
-import org.unix4j.command.impl.Echo;
-import org.unix4j.command.impl.Grep;
-import org.unix4j.command.impl.Ls;
-import org.unix4j.command.impl.Sort;
-import org.unix4j.command.impl.Xargs;
+import org.unix4j.command.unix.Echo;
+import org.unix4j.command.unix.Grep;
+import org.unix4j.command.unix.Ls;
+import org.unix4j.command.unix.Sort;
+import org.unix4j.command.unix.Xargs;
 import org.unix4j.io.Input;
 
 public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements Unix4jCommandBuilder {
