@@ -15,8 +15,9 @@ import org.unix4j.util.Variables;
  */
 public interface Arguments<A extends Arguments<A>> {
 	/**
-	 * Returns a clone of this arguments object. If {@code deepClone} is true,
-	 * all values (such as list argument values) are also cloned, recursively.
+	 * Creates and returns a clone of this arguments object. If
+	 * {@code deepClone} is true, all values (such as list argument values) are
+	 * also cloned, recursively.
 	 * 
 	 * @param deepClone
 	 *            if all values should be recursively cloned

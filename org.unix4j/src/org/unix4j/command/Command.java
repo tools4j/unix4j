@@ -6,16 +6,17 @@ import org.unix4j.io.Input;
 import org.unix4j.io.Output;
 
 /**
- * A command is an executable unit defined by name and its arguments and
- * options. An input and output object are passed to the command's
- * {@link #execute(Input, Output) execute(..)} method. The {@link #getType()
- * type} of the command specifies how a command is processed, for instance line
- * by line or requiring the complete input as a prerequisite.
+ * A command is an executable unit defined by its {@link #getName() name} and
+ * {@link #getArguments() arguments}. A command can be
+ * {@link #execute(Input, Output) executed} providing and {@link Input} and
+ * {@link Output} object. The {@link #getType() type} of the command specifies
+ * how a command is processed, for instance line by line or requiring the
+ * complete input as a prerequisite.
  * <p>
- * Commands can be {@link #join(Command) joined} to another command meaning that
- * this command's output forms the input of the joined command. A new command
- * instance of the same type can be derived from an existing command by
- * {@link #withArgs(Arguments)}.
+ * Commands can be {@link #join(Command) joined} to another command usually
+ * meaning that this command's output forms the input of the joined command. A
+ * new command instance of the same type can be derived from an existing command
+ * by {@link #withArgs(Arguments)}.
  * 
  * @param <A>
  *            the type parameter defining the arguments and options of the
