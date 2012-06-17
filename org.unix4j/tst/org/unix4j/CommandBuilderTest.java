@@ -6,9 +6,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.unix4j.builder.Unix4jCommandBuilder;
-import org.unix4j.command.impl.Grep;
-import org.unix4j.command.impl.Sort;
-import org.unix4j.command.impl.Xargs;
+import org.unix4j.command.unix.Grep;
+import org.unix4j.command.unix.Sort;
+import org.unix4j.command.unix.Xargs;
 import org.unix4j.io.Output;
 import org.unix4j.io.StreamOutput;
 

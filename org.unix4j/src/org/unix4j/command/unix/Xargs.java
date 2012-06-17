@@ -1,4 +1,4 @@
-package org.unix4j.command.impl;
+package org.unix4j.command.unix;
 
 import java.util.HashMap;
 import java.util.Map;
