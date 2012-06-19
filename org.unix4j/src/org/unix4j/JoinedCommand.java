@@ -197,6 +197,20 @@ public class JoinedCommand<E2 extends Enum<E2>> implements Command<E2> {
 	}
 
 	/**
+	 * Returns true if the specified argument is currently set for this command.
+	 * Returns false if the argument is not set or if {@code opt} is null.
+	 *
+	 * @param arg
+	 *            the argument to check
+	 * @return true if the given argument is currently set for the command, and
+	 *         false otherwise
+	 */
+	@Override
+	public boolean isArgSet(Arg<E2, ?> arg) {
+		return second.isArgSet(arg);
+	}
+
+	/**
 	 * Appends the given ArgVals value to the second command in the join and
 	 * returns {@code this} joined command for further processing.
 	 *

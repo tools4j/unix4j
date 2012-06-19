@@ -143,6 +143,18 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 	 */
 	boolean isOptSet(Opt<E> opt);
 
+
+	/**
+	 * Returns true if the specified argument is currently set for this command.
+	 * Returns false if the argument is not set or if {@code opt} is null.
+	 *
+	 * @param arg
+	 *            the argument to check
+	 * @return true if the given argument is currently set for the command, and
+	 *         false otherwise
+	 */
+	boolean isArgSet(Arg<E, ?> arg);
+
 	/**
 	 * Adds the given ArgVals value to this command and returns {@code this}
 	 * command for further processing.
@@ -151,7 +163,7 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 	 * method usually delegates to {@link #withArg(Arg, Object)} if
 	 * {@code argVals} represents an argument and to {@link #withOpt(Opt)} if it
 	 * is an option.
-	 * 
+	 *
 	 * @param <V>
 	 *            the argument value type
 	 * @param argVals
@@ -168,9 +180,9 @@ public interface Command<E extends Enum<E>> extends Cloneable {
 	 * <p>
 	 * An ArgVals object is either an argument value or an option, that is, this
 	 * method usually delegates to {@link #withArg(Arg, Object)} for every value
-	 * in {@code argVals} if it represents an argument and to 
+	 * in {@code argVals} if it represents an argument and to
 	 * {@link #withOpt(Opt)} if it is an option.
-	 * 
+	 *
 	 * @param argVals
 	 *            the argument and/or option values
 	 * @return {@code this} command for further chained processing
