@@ -39,4 +39,13 @@ public interface Arguments<A extends Arguments<A>> {
 	 * @see Variables#resolve(String, Map)
 	 */
 	void resolve(Map<String, String> variables);
+
+	/**
+	 * Returns a string representation of the command arguments and options.
+	 * 
+	 * @return a string representation of the command arguments and options,
+	 *         such as "-matchString myString -ignoreCase"
+	 */
+	@Override
+	String toString();
 }

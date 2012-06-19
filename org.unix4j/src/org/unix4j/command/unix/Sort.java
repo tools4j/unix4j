@@ -10,46 +10,109 @@ import org.unix4j.command.CommandInterface;
 import org.unix4j.io.Input;
 import org.unix4j.io.Output;
 
+/**
+ * Non-instantiable module with inner types making up the sort command.
+ */
 public final class Sort {
 
+	/**
+	 * The "sort" command name.
+	 */
 	public static final String NAME = "sort";
 
-	public static interface Interface<S> extends CommandInterface<S> {
-		S sort();
-		S sort(Option... options);
-	}
-	public static enum Option {
-		ascending, descending
+	/**
+	 * Interface defining all method signatures for the sort command.
+	 * 
+	 * @param <R>
+	 *            the return type for all command signature methods, usually a
+	 *            new command instance or a command builder providing methods
+	 *            for chained invocation of following commands
+	 */
+	public static interface Interface<R> extends CommandInterface<R> {
+		/**
+		 * Sorts the input in ascending order. Equivalent to
+		 * <tt>sort(Sort.Option.ascending}</tt>.
+		 * 
+		 * @return the generic return type {@link R}, usually a new command
+		 *         signature or a builder with methods for chained invocation of
+		 *         following commands
+		 */
+		R sort();
+
+		/**
+		 * Sorts the input using the specified sort {@link Option option}.
+		 * 
+		 * @param options
+		 *            the sort options
+		 * @return the generic return type {@link R}, usually a new command
+		 *         signature or a builder with methods for chained invocation of
+		 *         following commands
+		 */
+		R sort(Option... options);
 	}
 
+	/**
+	 * Option flags for the sort command.
+	 */
+	public static enum Option {
+		/**
+		 * Sort in ascending order (the default).
+		 */
+		ascending,
+		/**
+		 * Sort in descending order.
+		 */
+		descending
+	}
+
+	/**
+	 * Arguments and options for the sort command.
+	 */
 	public static class Args extends AbstractArgs<Option, Args> {
 		public Args() {
 			super(Option.class);
 		}
+
 		public Args(Option... options) {
 			this();
 			setOpts(options);
 		}
 	}
-	
+
+	/**
+	 * Singleton {@link Factory} for the sort command.
+	 */
 	public static final Factory FACTORY = new Factory();
+
+	/**
+	 * Factory class returning a new {@link Command} instance from every
+	 * signature method.
+	 */
 	public static final class Factory implements Interface<Command> {
+		@Override
 		public Command sort() {
 			return new Command(new Args());
 		}
+
 		@Override
 		public Command sort(Option... options) {
 			return new Command(new Args(options));
 		}
 	};
+
+	/**
+	 * Sort command implementation.
+	 */
 	public static class Command extends AbstractCommand<Args> {
 		public Command(Args arguments) {
 			super(NAME, Type.CompleteInput, arguments);
 		}
+
 		@Override
 		public Command withArgs(Args arguments) {
 			return new Command(arguments);
 		}
+
 		@Override
 		public void executeBatch(Input input, Output output) {
 			final boolean isAsc = getArguments().hasOpt(Option.ascending);

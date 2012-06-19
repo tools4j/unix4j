@@ -5,8 +5,9 @@ import org.unix4j.builder.Unix4jCommandBuilder;
 import org.unix4j.command.unix.Ls;
 
 /**
- * A command interface defines the different ways how a certain {@link Command}
- * can be created. It consists of the different signatures for the command.
+ * A command interface defines the different ways a certain {@link Command} can
+ * be invoked (or instantiated). It consists of the different method signatures
+ * for the command.
  * <p>
  * Consider for instance the {@link Ls ls} command (simplified). It can be
  * called without options, with a file, with option flags or both a file and
@@ -34,17 +35,11 @@ import org.unix4j.command.unix.Ls;
  * interface.
  * 
  * @param <R>
- *            the return type for all command signature methods
+ *            the return type for all command signature methods, usually a new
+ *            command instance or a command builder providing methods for
+ *            chained invocation of following commands
  */
 public interface CommandInterface<R> {
 	// interface defines no methods as they are all defined by the command
 	// interfaces being sub-interfaces of this class
-	/**
-	 * Returns a string representation of the command instance including the
-	 * argument and option values defined for the command.
-	 * 
-	 * @return a string representation of the command including arguments and
-	 *         options, such as "grep -matchString myString -ignoreCase"
-	 */
-	String toString();
 }

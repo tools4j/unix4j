@@ -36,7 +36,7 @@ public class JoinedCommand<A extends Arguments<A>> implements Command<A> {
 		this.first = first;
 		this.second = second;
 	}
-	
+
 	public static <A extends Arguments<A>> JoinedCommand<A> join(Command<A> first, Command<?> second) {
 		return new JoinedCommand<A>(first, second);
 	}
@@ -83,16 +83,31 @@ public class JoinedCommand<A extends Arguments<A>> implements Command<A> {
 	public Type getType() {
 		return first.getType();
 	}
-	
+
+	@Override
 	public Command<A> withArgs(A arguments) {
 		return new JoinedCommand<A>(first.withArgs(arguments), second);
 	}
-	
+
 	@Override
 	public Command<?> join(Command<?> next) {
 		return JoinedCommand.join(getFirst(), getSecond().join(next));
 	}
 
+	/**
+	 * Executes this joined command. The first command reads from the given
+	 * {@code input} and writes to a new {@link JoinedOutput} instance buffering
+	 * the lines if necessary. The joined output object triggers the execution
+	 * of the second command. It depends on the type of the second command
+	 * whether it is called immediately for every line written by the first
+	 * command or only once at the end when the first command calls
+	 * {@link JoinedOutput#finish() finish()}.
+	 * 
+	 * @param input
+	 *            the input for the first command
+	 * @param output
+	 *            the output for the second command
+	 */
 	@Override
 	public void execute(Input input, Output output) {
 		final JoinedOutput joinedOutput = new JoinedOutput(getSecond(), output);
