@@ -56,6 +56,7 @@ public class TypedMap implements Cloneable {
 		 * @return true if the given value is a key (same class) and if key
 		 *         object and value type are the same
 		 */
+		@Override
 		boolean equals(Object value);
 
 		/**
@@ -64,6 +65,7 @@ public class TypedMap implements Cloneable {
 		 * 
 		 * @return the hash code for this key
 		 */
+		@Override
 		int hashCode();
 	}
 
@@ -107,6 +109,7 @@ public class TypedMap implements Cloneable {
 			return new DefaultKey<List<E>>(key, (Class<List<E>>) ((Object) List.class));
 		}
 
+		@Override
 		public Object getKey() {
 			return key;
 		}

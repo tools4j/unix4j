@@ -24,6 +24,47 @@ import org.unix4j.io.Output;
  */
 public interface Command<A extends Arguments<A>> {
 	/**
+	 * The command type defining how a command processes its input. The command
+	 * type returned by {@link Command#getType()} defines a contractual
+	 * obligation for a command. More details are available in the description
+	 * of the type constants and in {@link Command#execute(Input, Output)}.
+	 */
+	enum Type {
+		/**
+		 * The command processes no input at all. There is no obligation for the
+		 * command to read the input.
+		 */
+		NoInput,
+		/**
+		 * The command processes its input line by line. It is, however, a
+		 * contractual obligation for the command to read the complete input
+		 * passed to the execute method.
+		 * <p>
+		 * The command can process the input line-by-line and write to the
+		 * output when processing a single line, but it is a requirement that
+		 * all available input lines have been read when returning from
+		 * {@link Command#execute(Input, Output)}
+		 */
+		LineByLine,
+		/**
+		 * The command processes its input as a whole. It is at the same time a
+		 * contractual obligation for the command to read the complete input
+		 * passed to the {@link Command#execute(Input, Output) execute} method.
+		 */
+		CompleteInput;
+
+		/**
+		 * Convenience method returning true if this constant equals
+		 * {@link #LineByLine}.
+		 * 
+		 * @return true if {@code this==LineByLine}
+		 */
+		public boolean isLineByLine() {
+			return LineByLine.equals(this);
+		}
+	}
+
+	/**
 	 * Returns the name of this command, usually a lower-case string such as
 	 * "grep" or "ls".
 	 * 
@@ -102,49 +143,18 @@ public interface Command<A extends Arguments<A>> {
 	 * to comply with the contractual obligation implied by the return value of
 	 * {@link #getType()}.
 	 * 
-	 * @param input
-	 * @param output
+	 * @param input		the input for the command
+	 * @param output	the output to write to
 	 */
 	void execute(Input input, Output output);
 
 	/**
-	 * The command type defining how a command processes its input. The command
-	 * type returned by {@link Command#getType()} defines a contractual
-	 * obligation for a command. More details are available in the description
-	 * of the type constants and in {@link Command#execute(Input, Output)}.
+	 * Returns a string representation of the command instance including the
+	 * argument and option values defined for the command.
+	 * 
+	 * @return a string representation of the command including arguments and
+	 *         options, such as "grep -matchString myString -ignoreCase"
 	 */
-	enum Type {
-		/**
-		 * The command processes no input at all. There is no obligation for the
-		 * command to read the input.
-		 */
-		NoInput,
-		/**
-		 * The command processes its input line by line. It is, however, a
-		 * contractual obligation for the command to read the complete input
-		 * passed to the execute method.
-		 * <p>
-		 * The command can process the input line-by-line and write to the
-		 * output when processing a single line, but it is a requirement that
-		 * all available input lines have been read when returning from
-		 * {@link Command#execute(Input, Output)}
-		 */
-		LineByLine,
-		/**
-		 * The command processes its input as a whole. It is at the same time a
-		 * contractual obligation for the command to read the complete input
-		 * passed to the {@link Command#execute(Input, Output) execute} method.
-		 */
-		CompleteInput;
-
-		/**
-		 * Convenience method returning true if this constant equals
-		 * {@link #LineByLine}.
-		 * 
-		 * @return true if {@code this==LineByLine}
-		 */
-		public boolean isLineByLine() {
-			return LineByLine.equals(this);
-		}
-	}
+	@Override
+	String toString();
 }

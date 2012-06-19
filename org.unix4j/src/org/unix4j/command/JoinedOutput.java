@@ -2,11 +2,18 @@ package org.unix4j.command;
 
 import java.util.LinkedList;
 
+import org.unix4j.command.Command.Type;
 import org.unix4j.io.BufferedInput;
 import org.unix4j.io.Output;
 
 /**
+ * Output object used for joined commands. The first command in a join writes to
+ * this output. The data is buffered in and fed into the joined second command
+ * as input. Depending on the {@link Type type} of the second command, writing
+ * to the output triggers the second command for every written line or once at
+ * the end when {@link #finish()} is called.
  * 
+ * @see JoinedCommand
  */
 public class JoinedOutput implements Output {
 
@@ -30,6 +37,15 @@ public class JoinedOutput implements Output {
 
 	// --- output ---\\
 
+	/**
+	 * Writes a line to the output. If the second command in the joine is a
+	 * {@link Type#isLineByLine() line-by-line} command, it is invoked
+	 * immediately after writing the line. Otherwise, the line stored in the
+	 * internal line buffer of this joined output.
+	 * 
+	 * @param line
+	 *            the line to write to the output
+	 */
 	@Override
 	public void writeLine(String line) {
 		buffer.add(line);
@@ -38,6 +54,14 @@ public class JoinedOutput implements Output {
 		}
 	}
 
+	/**
+	 * Indicates that all output has been written. If the second command in the
+	 * joine is <b>not</b> {@link Type#isLineByLine() line-by-line} command,
+	 * execution of the second command is triggered now. The lines that have
+	 * been added to the internal line buffer with every
+	 * {@link #writeLine(String) writeLine(..)} call constitute the input for
+	 * the second command.
+	 */
 	@Override
 	public void finish() {
 		if (!joinedCommand.getType().isLineByLine()) {
