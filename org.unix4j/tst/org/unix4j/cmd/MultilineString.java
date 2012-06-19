@@ -43,7 +43,7 @@ public class MultilineString {
 				for(int i=0; i<expected.lines.size(); i++){
 					final String expectedLine = expected.lines.get(i);
 					final String actualLine = lines.get(i);
-					assertEquals(expectedLine, actualLine);
+					assertEquals("line index:" + i, expectedLine, actualLine);
 				}
 			}
 		}

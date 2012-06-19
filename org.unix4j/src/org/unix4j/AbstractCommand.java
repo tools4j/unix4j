@@ -118,6 +118,11 @@ abstract public class AbstractCommand<E extends Enum<E>> implements Command<E> {
 	}
 
 	@Override
+	public boolean isArgSet(Arg<E, ?> arg) {
+		return opts.isArgSet(arg);
+	}
+
+	@Override
 	public <V> Command<E> withArgVals(ArgVals<E,V> argVals) {
 		if (argVals.getArg() instanceof Opt) {
 			@SuppressWarnings("unchecked")
