@@ -25,7 +25,7 @@ public final class Grep {
 	 *            new command instance or a command builder providing methods
 	 *            for chained invocation of following commands
 	 */
-	public static interface Interface<S> extends CommandInterface<S> {
+	public static interface Interface<R> extends CommandInterface<R> {
 		/**
 		 * Filters the input lines and writes the matching lines to the output.
 		 * A line matches if it contains the given {@code matchString} using
@@ -37,7 +37,7 @@ public final class Grep {
 		 *         signature or a builder with methods for chained invocation of
 		 *         following commands
 		 */
-		S grep(String matchString);
+		R grep(String matchString);
 
 		/**
 		 * Filters the input lines and writes the matching lines to the output.
@@ -52,7 +52,7 @@ public final class Grep {
 		 *         signature or a builder with methods for chained invocation of
 		 *         following commands
 		 */
-		S grep(String matchString, Option... options);
+		R grep(String matchString, Option... options);
 	}
 
 	/**

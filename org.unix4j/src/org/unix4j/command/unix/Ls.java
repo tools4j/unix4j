@@ -30,7 +30,7 @@ public final class Ls {
 	 *            new command instance or a command builder providing methods
 	 *            for chained invocation of following commands
 	 */
-	public static interface Interface<S> extends CommandInterface<S> {
+	public static interface Interface<R> extends CommandInterface<R> {
 		/**
 		 * Lists all files and directories in the user's current working
 		 * directory and writes them to the output.
@@ -39,7 +39,7 @@ public final class Ls {
 		 *         signature or a builder with methods for chained invocation of
 		 *         following commands
 		 */
-		S ls();
+		R ls();
 
 		/**
 		 * Prints the name of the given files and lists all files contained in
@@ -52,20 +52,20 @@ public final class Ls {
 		 *         signature or a builder with methods for chained invocation of
 		 *         following commands
 		 */
-		S ls(File... files);
+		R ls(File... files);
 
 		/**
 		 * Lists all files and directories in the user's current working
 		 * directory and writes them to the output using the given options
 		 * specifying the details of the output format.
 		 * 
-		 * @param the
-		 *            options defining the output format
+		 * @param options
+		 *            the options defining the output format
 		 * @return the generic return type {@link R}, usually a new command
 		 *         signature or a builder with methods for chained invocation of
 		 *         following commands
 		 */
-		S ls(Option... options);
+		R ls(Option... options);
 
 		/**
 		 * Prints the name of the given files and lists all files contained in
@@ -75,13 +75,13 @@ public final class Ls {
 		 * @param files
 		 *            the files or directories used as starting point for the
 		 *            listing
-		 * @param the
-		 *            options defining the output format
+		 * @param options
+		 *            the options defining the output format
 		 * @return the generic return type {@link R}, usually a new command
 		 *         signature or a builder with methods for chained invocation of
 		 *         following commands
 		 */
-		S ls(List<File> files, Option... options);
+		R ls(List<File> files, Option... options);
 	}
 
 	/**

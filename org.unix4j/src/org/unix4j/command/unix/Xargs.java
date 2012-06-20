@@ -50,7 +50,7 @@ public final class Xargs {
 	 *            new command instance or a command builder providing methods
 	 *            for chained invocation of following commands
 	 */
-	public static interface Interface<S> extends CommandInterface<S> {
+	public static interface Interface<R> extends CommandInterface<R> {
 		/**
 		 * Converts lines from the input into arguments for the command
 		 * following the xargs command. Each word from the input line forms a
@@ -63,7 +63,7 @@ public final class Xargs {
 		 *         signature or a builder with methods for chained invocation of
 		 *         following commands
 		 */
-		S xargs();
+		R xargs();
 	}
 
 	/**

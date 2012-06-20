@@ -3,6 +3,7 @@ package org.unix4j.command;
 import org.unix4j.builder.GenericCommandBuilder;
 import org.unix4j.builder.Unix4jCommandBuilder;
 import org.unix4j.command.unix.Ls;
+import org.unix4j.command.unix.Ls.Factory;
 
 /**
  * A command interface defines the different ways a certain {@link Command} can
@@ -22,9 +23,9 @@ import org.unix4j.command.unix.Ls;
  * </pre>
  * 
  * Note that all command methods in the interface usually return the generic
- * type {@code R}. For a command factory (such as {@link Ls.Factory}), the
- * methods return a new command instance. A command builder providing methods
- * for different commands may instead return an instance of itself (see
+ * type {@code R}. For a command factory (such as {@link Factory Ls.Factory}),
+ * the methods return a new command instance. A command builder providing
+ * methods for different commands may instead return an instance of itself (see
  * {@link Unix4jCommandBuilder} for an example).
  * <p>
  * Note that this interface does not define any methods since all methods are

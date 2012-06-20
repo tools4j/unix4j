@@ -345,7 +345,7 @@ public class TypedMap implements Cloneable {
 	}
 
 	/**
-	 * Returns true if {@link obj} is a typed map and if the backing map of this
+	 * Returns true if {@code obj} is a typed map and if the backing map of this
 	 * and {@code obj} are equal. In other words, the method returns true for
 	 * another typed map containing equal key/value mappings as this map.
 	 * 
