@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="javadoc">
+    <target name="javadoc">
+        <javadoc access="public" author="true" classpath="/Applications/eclipse-3.6.2/plugins/org.hamcrest.core_1.1.0.v20090501071000.jar:/Applications/eclipse-3.6.2/plugins/org.junit_4.8.1.v4_8_1_v20100427-1100/junit.jar" destdir="doc" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="org.unix4j.builder,org.unix4j.io,org.unix4j.command.unix,org.unix4j.command,org.unix4j.util" source="1.6" sourcefiles="src/org/unix4j/package-info.java,src/org/unix4j/Unix4j.java" sourcepath="src:tst" splitindex="true" use="true" version="true"/>
+    </target>
+</project>

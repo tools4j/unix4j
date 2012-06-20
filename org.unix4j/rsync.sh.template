@@ -1,0 +1,1 @@
+rsync -vr -e "ssh -p <port>" doc/* <user>@unix4j.org:/www/unix4j.org/www/htdocs/javadoc
