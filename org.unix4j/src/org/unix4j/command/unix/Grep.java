@@ -1,5 +1,7 @@
 package org.unix4j.command.unix;
 
+import java.util.regex.Pattern;
+
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
@@ -63,24 +65,34 @@ public final class Grep {
 		 * Match lines ignoring the case when comparing the strings, equivalent
 		 * to option {@link #ignoreCase}.
 		 */
-		i, 
+		i,
 		/**
 		 * Match lines ignoring the case when comparing the strings, equivalent
 		 * to option {@link #i}.
 		 */
-		ignoreCase, 
+		ignoreCase,
 		/**
 		 * Invert the match result, that is, a non-matching line is writen to
 		 * the output and a matching line is not. This option is equivalent to
 		 * the {@link #invert} option.
 		 */
-		v, 
+		v,
 		/**
 		 * Invert the match result, that is, a non-matching line is writen to
 		 * the output and a matching line is not. This option is equivalent to
 		 * the {@link #v} option.
 		 */
-		invert;
+		invert,
+		/**
+		 * Uses fixed-strings matching instead of regular expressions. This
+		 * option is equivalent to the {@link #fixedStrings} option.
+		 */
+		f,
+		/**
+		 * Uses fixed-strings matching instead of regular expressions. This
+		 * option is equivalent to the {@link #f} option.
+		 */
+		fixedStrings;
 	}
 
 	/**
@@ -104,6 +116,20 @@ public final class Grep {
 
 		public String getMatchString() {
 			return getArg(MATCH_STRING);
+		}
+		
+		public boolean isIgnoreCase() {
+			return hasOpt(Option.i) || hasOpt(Option.ignoreCase);
+		}
+		public boolean isFixedStrings() {
+			return hasOpt(Option.f) || hasOpt(Option.fixedStrings);
+		}
+		public boolean isInvert() {
+			return hasOpt(Option.v) || hasOpt(Option.invert);
+		}
+
+		public String getRegexToRun() {
+			return ".*" + getMatchString() + ".*";
 		}
 	}
 
@@ -143,20 +169,41 @@ public final class Grep {
 
 		@Override
 		public void executeBatch(Input input, Output output) {
+			if (getArguments().isFixedStrings()) {
+				grepWithFixedStrings(input, output);
+			} else {
+				grepWithRegularExpression(input, output);
+			}
+		}
+
+		private void grepWithRegularExpression(Input input, Output output) {
 			final Args args = getArguments();
-			final String matchString = args.getMatchString();
+			final boolean invert = args.isInvert();
+			final String regex = getArguments().getRegexToRun();
+			final Pattern pattern = Pattern.compile(regex, args.isIgnoreCase() ? Pattern.CASE_INSENSITIVE : 0);
 			while (input.hasMoreLines()) {
 				final String line = input.readLine();
-				boolean matches;
-				if (args.hasOpt(Option.i) || args.hasOpt(Option.ignoreCase)) {
-					matches = line.toLowerCase().contains(matchString.toLowerCase());
-				} else {
-					matches = line.contains(matchString);
+				final boolean matches = pattern.matcher(line).matches(); 
+				if (invert ^ matches) {
+					output.writeLine(line);
 				}
-				if (args.hasOpt(Option.v) || args.hasOpt(Option.invert)) {
-					matches = !matches;
+			}
+		}
+		private void grepWithFixedStrings(Input input, Output output) {
+			final Args args = getArguments();
+			final boolean ignoreCase = args.isIgnoreCase();
+			final boolean invert = args.isInvert();
+			String matchString = getArguments().getMatchString();
+			if (ignoreCase) {
+				matchString = matchString.toLowerCase();
+			}
+			while (input.hasMoreLines()) {
+				String line = input.readLine();
+				if (ignoreCase) {
+					line = line.toLowerCase();
 				}
-				if (matches) {
+				final boolean matches = line.contains(matchString);
+				if (invert ^ matches) {
 					output.writeLine(line);
 				}
 			}
