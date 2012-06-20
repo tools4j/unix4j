@@ -66,8 +66,6 @@ abstract public class AbstractArgs<O extends Enum<O>, A extends AbstractArgs<O, 
 	/**
 	 * Returns true if an argument value for the specified key has been set.
 	 * 
-	 * @param <T>
-	 *            the argument value type
 	 * @param key
 	 *            the key (or name) for the queried argument value
 	 * @return true if a value for the given key has been set

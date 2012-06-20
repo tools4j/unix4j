@@ -1,4 +1,4 @@
 /**
- * Contains interfaces and classes for input and output of commands. 
+ * Contains interfaces and classes used to handle input and output of commands. 
  */
 package org.unix4j.io;
