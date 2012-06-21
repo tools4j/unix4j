@@ -1,2 +1,2 @@
-chmod.sh
-rsync.sh
+chmod-javadoc.sh
+rsync-javadoc.sh
