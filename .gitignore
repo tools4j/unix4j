@@ -1,2 +1,3 @@
 chmod-javadoc.sh
 rsync-javadoc.sh
+mvn-eclipse.sh
