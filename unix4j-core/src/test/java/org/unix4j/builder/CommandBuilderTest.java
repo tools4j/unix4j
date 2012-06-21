@@ -14,10 +14,10 @@ import org.unix4j.io.Output;
 import org.unix4j.io.StreamOutput;
 
 public class CommandBuilderTest {
-	
+
 	private Unix4jCommandBuilder unix4j;
 	private Output output;
-	 
+
 	@Before
 	public void beforeEach() {
 		unix4j = Unix4j.builder();
@@ -33,7 +33,7 @@ public class CommandBuilderTest {
 			unix4j.execute(output);
 		}
 	}
-	
+
 	@Test
 	public void testLs() {
 		unix4j.ls();
@@ -74,10 +74,11 @@ public class CommandBuilderTest {
 	public void testLsXargsEcho() {
 		unix4j.ls().xargs().echo("XARGS OUTPUT:", Xargs.XARG);
 	}
-	@Test
-	public void testFromFile() {
-		unix4j = Unix4j.builder(new File(".classpath")).sort();
-	}
+//TODO Need to load a file from the resources directory
+//	@Test
+//	public void testFromFile() {
+//		unix4j = Unix4j.builder(new File(".classpath")).sort();
+//	}
 	@Test
 	public void testToSystemError() {
 		output = new StreamOutput(System.err);
