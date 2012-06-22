@@ -2,6 +2,7 @@ package org.unix4j.command.unix;
 
 import java.util.regex.Pattern;
 
+import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
@@ -35,9 +36,15 @@ public final class Grep {
 		 * 
 		 * @param matchString
 		 *            the string to be matched by the lines
-		 * @return the generic return type {@link R}, usually a new command
-		 *         signature or a builder with methods for chained invocation of
-		 *         following commands
+		 * @return the generic type {@code <R>} defined by the implementing
+		 *         class, even if the command itself returns no value and writes
+		 *         its result to an {@link Output} object. This serves
+		 *         implementing classes like the command {@link Factory} to
+		 *         return a new {@link Command} instance for the argument values
+		 *         passed to this method. {@link CommandBuilder} extensions also
+		 *         implementing this this command interface usually return an
+		 *         instance to itself facilitating chained invocation of joined
+		 *         commands.
 		 */
 		R grep(String matchString);
 
@@ -50,9 +57,15 @@ public final class Grep {
 		 *            the string to be matched by the lines
 		 * @param options
 		 *            the grep options
-		 * @return the generic return type {@link R}, usually a new command
-		 *         signature or a builder with methods for chained invocation of
-		 *         following commands
+		 * @return the generic type {@code <R>} defined by the implementing
+		 *         class, even if the command itself returns no value and writes
+		 *         its result to an {@link Output} object. This serves
+		 *         implementing classes like the command {@link Factory} to
+		 *         return a new {@link Command} instance for the argument values
+		 *         passed to this method. {@link CommandBuilder} extensions also
+		 *         implementing this this command interface usually return an
+		 *         instance to itself facilitating chained invocation of joined
+		 *         commands.
 		 */
 		R grep(String matchString, Option... options);
 	}
@@ -117,13 +130,15 @@ public final class Grep {
 		public String getMatchString() {
 			return getArg(MATCH_STRING);
 		}
-		
+
 		public boolean isIgnoreCase() {
 			return hasOpt(Option.i) || hasOpt(Option.ignoreCase);
 		}
+
 		public boolean isFixedStrings() {
 			return hasOpt(Option.f) || hasOpt(Option.fixedStrings);
 		}
+
 		public boolean isInvert() {
 			return hasOpt(Option.v) || hasOpt(Option.invert);
 		}
@@ -183,12 +198,13 @@ public final class Grep {
 			final Pattern pattern = Pattern.compile(regex, args.isIgnoreCase() ? Pattern.CASE_INSENSITIVE : 0);
 			while (input.hasMoreLines()) {
 				final String line = input.readLine();
-				final boolean matches = pattern.matcher(line).matches(); 
+				final boolean matches = pattern.matcher(line).matches();
 				if (invert ^ matches) {
 					output.writeLine(line);
 				}
 			}
 		}
+
 		private void grepWithFixedStrings(Input input, Output output) {
 			final Args args = getArguments();
 			final boolean ignoreCase = args.isIgnoreCase();
