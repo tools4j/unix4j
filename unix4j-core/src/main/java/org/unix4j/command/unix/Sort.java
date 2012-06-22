@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
@@ -33,9 +34,15 @@ public final class Sort {
 		 * Sorts the input in ascending order. Equivalent to
 		 * <tt>sort(Sort.Option.ascending}</tt>.
 		 * 
-		 * @return the generic return type {@link R}, usually a new command
-		 *         signature or a builder with methods for chained invocation of
-		 *         following commands
+		 * @return the generic type {@code <R>} defined by the implementing
+		 *         class, even if the command itself returns no value and writes
+		 *         its result to an {@link Output} object. This serves
+		 *         implementing classes like the command {@link Factory} to
+		 *         return a new {@link Command} instance for the argument values
+		 *         passed to this method. {@link CommandBuilder} extensions also
+		 *         implementing this this command interface usually return an
+		 *         instance to itself facilitating chained invocation of joined
+		 *         commands.
 		 */
 		R sort();
 
@@ -44,9 +51,15 @@ public final class Sort {
 		 * 
 		 * @param options
 		 *            the sort options
-		 * @return the generic return type {@link R}, usually a new command
-		 *         signature or a builder with methods for chained invocation of
-		 *         following commands
+		 * @return the generic type {@code <R>} defined by the implementing
+		 *         class, even if the command itself returns no value and writes
+		 *         its result to an {@link Output} object. This serves
+		 *         implementing classes like the command {@link Factory} to
+		 *         return a new {@link Command} instance for the argument values
+		 *         passed to this method. {@link CommandBuilder} extensions also
+		 *         implementing this this command interface usually return an
+		 *         instance to itself facilitating chained invocation of joined
+		 *         commands.
 		 */
 		R sort(Option... options);
 	}

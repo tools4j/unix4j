@@ -1,5 +1,6 @@
 package org.unix4j.command.unix;
 
+import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
@@ -33,9 +34,15 @@ public final class Cut {
 		 * 
 		 * @param fieldIndex
 		 *            the one-based index of the word to cut out
-		 * @return the generic return type {@link R}, usually a new command
-		 *         signature or a builder with methods for chained invocation of
-		 *         following commands
+		 * @return the generic type {@code <R>} defined by the implementing
+		 *         class, even if the command itself returns no value and writes
+		 *         its result to an {@link Output} object. This serves
+		 *         implementing classes like the command {@link Factory} to
+		 *         return a new {@link Command} instance for the argument values
+		 *         passed to this method. {@link CommandBuilder} extensions also
+		 *         implementing this this command interface usually return an
+		 *         instance to itself facilitating chained invocation of joined
+		 *         commands.
 		 */
 		R cut(int fieldIndex);
 
@@ -49,9 +56,15 @@ public final class Cut {
 		 *            the delimiter separating the words on the the input line
 		 * @param fieldIndices
 		 *            the one-based indices of the words to cut out
-		 * @return the generic return type {@link R}, usually a new command
-		 *         signature or a builder with methods for chained invocation of
-		 *         following commands
+		 * @return the generic type {@code <R>} defined by the implementing
+		 *         class, even if the command itself returns no value and writes
+		 *         its result to an {@link Output} object. This serves
+		 *         implementing classes like the command {@link Factory} to
+		 *         return a new {@link Command} instance for the argument values
+		 *         passed to this method. {@link CommandBuilder} extensions also
+		 *         implementing this this command interface usually return an
+		 *         instance to itself facilitating chained invocation of joined
+		 *         commands.
 		 */
 		R cut(String delimiter, int... fieldIndices);
 
@@ -68,9 +81,15 @@ public final class Cut {
 		 *            line
 		 * @param fieldIndices
 		 *            the zero-based indices of the words to cut out
-		 * @return the generic return type {@link R}, usually a new command
-		 *         signature or a builder with methods for chained invocation of
-		 *         following commands
+		 * @return the generic type {@code <R>} defined by the implementing
+		 *         class, even if the command itself returns no value and writes
+		 *         its result to an {@link Output} object. This serves
+		 *         implementing classes like the command {@link Factory} to
+		 *         return a new {@link Command} instance for the argument values
+		 *         passed to this method. {@link CommandBuilder} extensions also
+		 *         implementing this this command interface usually return an
+		 *         instance to itself facilitating chained invocation of joined
+		 *         commands.
 		 */
 		R cut(String inputDelimiter, String outputDelimiter, int... fieldIndices);
 
@@ -83,9 +102,15 @@ public final class Cut {
 		 *            cut
 		 * @param length
 		 *            the number of characters in the cut
-		 * @return the generic return type {@link R}, usually a new command
-		 *         signature or a builder with methods for chained invocation of
-		 *         following commands
+		 * @return the generic type {@code <R>} defined by the implementing
+		 *         class, even if the command itself returns no value and writes
+		 *         its result to an {@link Output} object. This serves
+		 *         implementing classes like the command {@link Factory} to
+		 *         return a new {@link Command} instance for the argument values
+		 *         passed to this method. {@link CommandBuilder} extensions also
+		 *         implementing this this command interface usually return an
+		 *         instance to itself facilitating chained invocation of joined
+		 *         commands.
 		 */
 		R cut(int start, int length);
 
@@ -95,9 +120,15 @@ public final class Cut {
 		 * 
 		 * @param charIndices
 		 *            the one-based indices of the characters added to the cut
-		 * @return the generic return type {@link R}, usually a new command
-		 *         signature or a builder with methods for chained invocation of
-		 *         following commands
+		 * @return the generic type {@code <R>} defined by the implementing
+		 *         class, even if the command itself returns no value and writes
+		 *         its result to an {@link Output} object. This serves
+		 *         implementing classes like the command {@link Factory} to
+		 *         return a new {@link Command} instance for the argument values
+		 *         passed to this method. {@link CommandBuilder} extensions also
+		 *         implementing this this command interface usually return an
+		 *         instance to itself facilitating chained invocation of joined
+		 *         commands.
 		 */
 		R cut(int[] charIndices);
 	}

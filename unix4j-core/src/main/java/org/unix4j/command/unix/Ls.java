@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
@@ -35,9 +36,15 @@ public final class Ls {
 		 * Lists all files and directories in the user's current working
 		 * directory and writes them to the output.
 		 * 
-		 * @return the generic return type {@link R}, usually a new command
-		 *         signature or a builder with methods for chained invocation of
-		 *         following commands
+		 * @return the generic type {@code <R>} defined by the implementing
+		 *         class, even if the command itself returns no value and writes
+		 *         its result to an {@link Output} object. This serves
+		 *         implementing classes like the command {@link Factory} to
+		 *         return a new {@link Command} instance for the argument values
+		 *         passed to this method. {@link CommandBuilder} extensions also
+		 *         implementing this this command interface usually return an
+		 *         instance to itself facilitating chained invocation of joined
+		 *         commands.
 		 */
 		R ls();
 
@@ -48,9 +55,15 @@ public final class Ls {
 		 * @param files
 		 *            the files or directories used as starting point for the
 		 *            listing
-		 * @return the generic return type {@link R}, usually a new command
-		 *         signature or a builder with methods for chained invocation of
-		 *         following commands
+		 * @return the generic type {@code <R>} defined by the implementing
+		 *         class, even if the command itself returns no value and writes
+		 *         its result to an {@link Output} object. This serves
+		 *         implementing classes like the command {@link Factory} to
+		 *         return a new {@link Command} instance for the argument values
+		 *         passed to this method. {@link CommandBuilder} extensions also
+		 *         implementing this this command interface usually return an
+		 *         instance to itself facilitating chained invocation of joined
+		 *         commands.
 		 */
 		R ls(File... files);
 
@@ -61,9 +74,15 @@ public final class Ls {
 		 * 
 		 * @param options
 		 *            the options defining the output format
-		 * @return the generic return type {@link R}, usually a new command
-		 *         signature or a builder with methods for chained invocation of
-		 *         following commands
+		 * @return the generic type {@code <R>} defined by the implementing
+		 *         class, even if the command itself returns no value and writes
+		 *         its result to an {@link Output} object. This serves
+		 *         implementing classes like the command {@link Factory} to
+		 *         return a new {@link Command} instance for the argument values
+		 *         passed to this method. {@link CommandBuilder} extensions also
+		 *         implementing this this command interface usually return an
+		 *         instance to itself facilitating chained invocation of joined
+		 *         commands.
 		 */
 		R ls(Option... options);
 
@@ -77,9 +96,15 @@ public final class Ls {
 		 *            listing
 		 * @param options
 		 *            the options defining the output format
-		 * @return the generic return type {@link R}, usually a new command
-		 *         signature or a builder with methods for chained invocation of
-		 *         following commands
+		 * @return the generic type {@code <R>} defined by the implementing
+		 *         class, even if the command itself returns no value and writes
+		 *         its result to an {@link Output} object. This serves
+		 *         implementing classes like the command {@link Factory} to
+		 *         return a new {@link Command} instance for the argument values
+		 *         passed to this method. {@link CommandBuilder} extensions also
+		 *         implementing this this command interface usually return an
+		 *         instance to itself facilitating chained invocation of joined
+		 *         commands.
 		 */
 		R ls(List<File> files, Option... options);
 	}

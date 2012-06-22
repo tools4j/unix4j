@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
@@ -34,9 +35,15 @@ public final class Echo {
 		 * 
 		 * @param message
 		 *            the message to echo
-		 * @return the generic return type {@link R}, usually a new command
-		 *         signature or a builder with methods for chained invocation of
-		 *         following commands
+		 * @return the generic type {@code <R>} defined by the implementing
+		 *         class, even if the command itself returns no value and writes
+		 *         its result to an {@link Output} object. This serves
+		 *         implementing classes like the command {@link Factory} to
+		 *         return a new {@link Command} instance for the argument values
+		 *         passed to this method. {@link CommandBuilder} extensions also
+		 *         implementing this this command interface usually return an
+		 *         instance to itself facilitating chained invocation of joined
+		 *         commands.
 		 */
 		R echo(String message);
 
@@ -46,9 +53,15 @@ public final class Echo {
 		 * 
 		 * @param messages
 		 *            the messages to echo
-		 * @return the generic return type {@link R}, usually a new command
-		 *         signature or a builder with methods for chained invocation of
-		 *         following commands
+		 * @return the generic type {@code <R>} defined by the implementing
+		 *         class, even if the command itself returns no value and writes
+		 *         its result to an {@link Output} object. This serves
+		 *         implementing classes like the command {@link Factory} to
+		 *         return a new {@link Command} instance for the argument values
+		 *         passed to this method. {@link CommandBuilder} extensions also
+		 *         implementing this this command interface usually return an
+		 *         instance to itself facilitating chained invocation of joined
+		 *         commands.
 		 */
 		R echo(String... messages);
 	}
