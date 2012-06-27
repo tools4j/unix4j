@@ -47,7 +47,7 @@ public final class Cut {
 		R cut(int fieldIndex);
 
 		/**
-		 * Splits the line into words using the given delimiter, cuts the every
+		 * Splits the line into words using the given delimiter, cuts every
 		 * <code>i<sup>th</sup></code> word for every {@code i} in
 		 * {@code fieldIndices} and writes the cut words to the output using a
 		 * single tab as delimiter.
@@ -69,7 +69,7 @@ public final class Cut {
 		R cut(String delimiter, int... fieldIndices);
 
 		/**
-		 * Splits the line into words using the given input delimiter, cuts the
+		 * Splits the line into words using the given input delimiter, cuts
 		 * every <code>i<sup>th</sup></code> word for every {@code i} in
 		 * {@code fieldIndices} and writes the cut words to the output using the
 		 * specified output delimiter.
