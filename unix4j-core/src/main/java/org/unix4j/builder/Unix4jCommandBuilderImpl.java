@@ -1,19 +1,20 @@
 package org.unix4j.builder;
 
-import java.io.File;
-import java.util.List;
-
 import org.unix4j.command.Command;
 import org.unix4j.command.unix.Cut;
 import org.unix4j.command.unix.Echo;
 import org.unix4j.command.unix.Grep;
 import org.unix4j.command.unix.Ls;
+import org.unix4j.command.unix.Sed;
 import org.unix4j.command.unix.Sort;
 import org.unix4j.command.unix.Xargs;
 import org.unix4j.io.Input;
 
+import java.io.File;
+import java.util.List;
+
 public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements Unix4jCommandBuilder {
-	
+
 	public Unix4jCommandBuilderImpl() {
 		super();
 	}
@@ -80,34 +81,40 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 		join(Sort.FACTORY.sort(options));
 		return this;
 	}
-	
+
 	@Override
 	public Unix4jCommandBuilder cut(int fieldIndex) {
 		join(Cut.FACTORY.cut(fieldIndex));
 		return this;
 	}
-	
+
 	@Override
 	public Unix4jCommandBuilder cut(String delimiter, int... fieldIndices) {
 		join(Cut.FACTORY.cut(delimiter, fieldIndices));
 		return this;
 	}
-	
+
 	@Override
 	public Unix4jCommandBuilder cut(String inputDelimiter, String outputDelimiter, int... fieldIndices) {
 		join(Cut.FACTORY.cut(inputDelimiter, outputDelimiter, fieldIndices));
 		return this;
 	}
-	
+
 	@Override
 	public Unix4jCommandBuilder cut(int start, int length) {
 		join(Cut.FACTORY.cut(start, length));
 		return this;
 	}
-	
+
 	@Override
 	public Unix4jCommandBuilder cut(int[] charIndices) {
 		join(Cut.FACTORY.cut(charIndices));
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder sed(String script) {
+		join(Sed.FACTORY.sed(script));
 		return this;
 	}
 
@@ -116,7 +123,7 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 		join(Xargs.FACTORY.xargs());
 		return this;
 	}
-	
+
 	@Override
 	public Unix4jCommandBuilder join(Command<?> command) {
 		super.join(command);

@@ -1,7 +1,5 @@
 package org.unix4j.builder;
 
-import java.io.File;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,11 +7,14 @@ import org.unix4j.command.unix.Cut;
 import org.unix4j.command.unix.Echo;
 import org.unix4j.command.unix.Grep;
 import org.unix4j.command.unix.Ls;
+import org.unix4j.command.unix.Sed;
 import org.unix4j.command.unix.Sort;
 import org.unix4j.command.unix.Xargs;
 import org.unix4j.io.Input;
 import org.unix4j.io.Output;
 import org.unix4j.io.StreamOutput;
+
+import java.io.File;
 
 public class GenericCommandBuilderTest {
 
@@ -23,7 +24,7 @@ public class GenericCommandBuilderTest {
 	@SuppressWarnings("unchecked")
 	private static Unix4jCommandBuilder createCommandBuilder(Input input) {
 		final DefaultCommandBuilder defaultCommandBuilder = input == null ? new DefaultCommandBuilder() : new DefaultCommandBuilder(input);
-		return GenericCommandBuilder.createCommandBuilder(Unix4jCommandBuilder.class, defaultCommandBuilder, Ls.FACTORY, Grep.FACTORY, Echo.FACTORY, Sort.FACTORY, Cut.FACTORY, Xargs.FACTORY);
+		return GenericCommandBuilder.createCommandBuilder(Unix4jCommandBuilder.class, defaultCommandBuilder, Ls.FACTORY, Grep.FACTORY, Echo.FACTORY, Sort.FACTORY, Cut.FACTORY, Sed.FACTORY, Xargs.FACTORY);
 	}
 	@Before
 	public void beforeEach() {
