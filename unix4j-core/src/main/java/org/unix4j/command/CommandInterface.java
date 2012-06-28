@@ -2,8 +2,8 @@ package org.unix4j.command;
 
 import org.unix4j.builder.GenericCommandBuilder;
 import org.unix4j.builder.Unix4jCommandBuilder;
-import org.unix4j.command.unix.Ls;
-import org.unix4j.command.unix.Ls.Factory;
+import org.unix4j.unix.Ls;
+import org.unix4j.unix.Ls.Factory;
 
 /**
  * A command interface defines the different ways a certain {@link Command} can

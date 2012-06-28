@@ -1,4 +1,4 @@
-package org.unix4j.command.unix;
+package org.unix4j.unix;
 
 import java.io.File;
 import java.util.Collections;
@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.builder.Unix4jCommandBuilder;
+import org.unix4j.unix.Ls;
 
 public class LsTest {
 	private Unix4jCommandBuilder unix4j;

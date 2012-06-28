@@ -7,11 +7,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.builder.Unix4jCommandBuilder;
-import org.unix4j.command.unix.Grep;
-import org.unix4j.command.unix.Sort;
-import org.unix4j.command.unix.Xargs;
 import org.unix4j.io.Output;
 import org.unix4j.io.StreamOutput;
+import org.unix4j.unix.Grep;
+import org.unix4j.unix.Sort;
+import org.unix4j.unix.Xargs;
 
 public class CommandBuilderTest {
 

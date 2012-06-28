@@ -1,4 +1,4 @@
-package org.unix4j.command.unix;
+package org.unix4j.unix;
 
 import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.AbstractArgs;

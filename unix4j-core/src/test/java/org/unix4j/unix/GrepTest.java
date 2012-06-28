@@ -1,10 +1,11 @@
-package org.unix4j.command.unix;
+package org.unix4j.unix;
 
 import java.io.StringWriter;
 
 import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.io.WriterOutput;
+import org.unix4j.unix.Grep;
 import org.unix4j.util.MultilineString;
 
 /**
