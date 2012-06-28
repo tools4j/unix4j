@@ -1,9 +1,9 @@
 package org.unix4j.command;
 
 import org.unix4j.command.Command.Type;
-import org.unix4j.command.unix.Echo;
 import org.unix4j.io.Input;
 import org.unix4j.io.Output;
+import org.unix4j.unix.Echo;
 
 /**
  * Abstract base class suitable for most command implementations. Name, type and

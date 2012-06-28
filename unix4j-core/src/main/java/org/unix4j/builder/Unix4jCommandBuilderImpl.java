@@ -1,14 +1,14 @@
 package org.unix4j.builder;
 
 import org.unix4j.command.Command;
-import org.unix4j.command.unix.Cut;
-import org.unix4j.command.unix.Echo;
-import org.unix4j.command.unix.Grep;
-import org.unix4j.command.unix.Ls;
-import org.unix4j.command.unix.Sed;
-import org.unix4j.command.unix.Sort;
-import org.unix4j.command.unix.Xargs;
 import org.unix4j.io.Input;
+import org.unix4j.unix.Cut;
+import org.unix4j.unix.Echo;
+import org.unix4j.unix.Grep;
+import org.unix4j.unix.Ls;
+import org.unix4j.unix.Sed;
+import org.unix4j.unix.Sort;
+import org.unix4j.unix.Xargs;
 
 import java.io.File;
 import java.util.List;

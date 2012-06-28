@@ -1,4 +1,4 @@
-package org.unix4j.command.unix;
+package org.unix4j.unix;
 
 import java.util.regex.Pattern;
 

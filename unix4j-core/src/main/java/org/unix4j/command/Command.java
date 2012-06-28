@@ -1,9 +1,9 @@
 package org.unix4j.command;
 
-import org.unix4j.command.unix.Echo;
-import org.unix4j.command.unix.Xargs;
 import org.unix4j.io.Input;
 import org.unix4j.io.Output;
+import org.unix4j.unix.Echo;
+import org.unix4j.unix.Xargs;
 
 /**
  * A command is an executable unit defined by its {@link #getName() name} and
