@@ -35,7 +35,11 @@ public class LsTest {
 		unix4j.ls(Ls.Option.longFormat, Ls.Option.allFiles);
 	}
 	@Test
-	public void testLsAL() {
+	public void testLsALH() {
 		unix4j.ls(Collections.singletonList(new File(System.getProperty("user.home"))), Ls.Option.l, Ls.Option.a, Ls.Option.h);
+	}
+	@Test
+	public void testLsLARTH() {
+		unix4j.ls(Collections.singletonList(new File(System.getProperty("user.home"))), Ls.Option.l, Ls.Option.a, Ls.Option.h, Ls.Option.t, Ls.Option.r);
 	}
 }
