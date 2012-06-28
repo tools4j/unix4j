@@ -24,6 +24,7 @@
 				<version>2.8.1</version>
 				<configuration>
 					<linksource>true</linksource>
+					<show>package</show>
 					<groups>
 						<group>
 							<title>unix4j-core</title>
