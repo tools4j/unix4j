@@ -149,8 +149,9 @@ abstract public class AbstractArgs<O extends Enum<O>, A extends AbstractArgs<O, 
 	public A clone(boolean cloneDeep) {
 		try {
 			final A clone = (A) super.clone();
-			clone.args = clone.args.clone(cloneDeep);
-			clone.opts = clone.opts.clone();
+			final AbstractArgs<O,A> c = clone;//alias necessary for java 1.7 compiler to access private members (next 2 lines)
+			c.args = c.args.clone(cloneDeep);
+			c.opts = c.opts.clone();
 			return clone;
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(getClass().getName() + " should be cloneable", e);
