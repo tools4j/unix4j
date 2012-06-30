@@ -1,14 +1,14 @@
 package org.unix4j.unix;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
 import org.unix4j.io.Input;
 import org.unix4j.io.Output;
 import org.unix4j.util.TypedMap;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Non-instantiable module with inner types making up the sed command.
@@ -50,7 +50,7 @@ public final class Sed {
 		 * <p>
 		 * Java regular expressions are used for searching and replacing. For an
 		 * overview of the Java pattern matching, and substition, please see the
-		 * {@link java.util.Pattern} documentation.
+		 * {@link java.util.regex.Pattern} documentation.
 		 * 
 		 * @param script
 		 *            the sed script
