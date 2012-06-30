@@ -1,16 +1,16 @@
-package org.unix4j.unix.ls;
+package org.unix4j.util;
 
-class StringUtil {
+public class StringUtil {
 
-	static final String fixSizeString(int size, boolean left, char filler, int value) {
+	public static final String fixSizeString(int size, boolean left, char filler, int value) {
 		return fixSizeString(size, left, filler, String.valueOf(value));
 	}
 
-	static final String fixSizeString(int size, boolean left, String s) {
+	public static final String fixSizeString(int size, boolean left, String s) {
 		return fixSizeString(size, left, ' ', s);
 	}
 
-	static final String fixSizeString(int size, boolean left, char filler, String s) {
+	public static final String fixSizeString(int size, boolean left, char filler, String s) {
 		if (s.length() < size) {
 			final StringBuilder sb = new StringBuilder(size);
 			if (left)

@@ -5,6 +5,8 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import org.unix4j.io.Output;
+import org.unix4j.util.Java7Util;
+import org.unix4j.util.StringUtil;
 
 /**
  * Formatter for long file output including permissions, owner, size etc. An
@@ -98,11 +100,7 @@ public class LsFormatterLong implements LsFormatter {
 	}
 
 	static LsFormatter getInstance() {
-		try {
-			return new LsFormatterLong7();
-		} catch (NoClassDefFoundError e) {
-			return new LsFormatterLong();
-		}
+		return Java7Util.newInstance(LsFormatterLong.class, new LsFormatterLong());
 	}
 
 }
