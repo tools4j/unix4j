@@ -30,36 +30,37 @@ public final class Sed {
 	 */
 	public static interface Interface<R> extends CommandInterface<R> {
 		/**
-		 * Sed  is a stream editor.  A stream editor is used to perform basic text
-		 * transformations on an input stream (a file or input from  a  pipeline).
-		 * While  in  some  ways similar to an editor which permits scripted edits
-		 * (such as ed), sed works by making only one pass over the input(s),  and
-		 * is consequently more efficient.  But it is sed's ability to filter text
-		 * in a pipeline which particularly distinguishes it from other  types  of
-		 * editors.
-		 *
+		 * Sed is a stream editor. A stream editor is used to perform basic text
+		 * transformations on an input stream (a file or input from a pipeline).
+		 * While in some ways similar to an editor which permits scripted edits
+		 * (such as ed), sed works by making only one pass over the input(s),
+		 * and is consequently more efficient. But it is sed's ability to filter
+		 * text in a pipeline which particularly distinguishes it from other
+		 * types of editors.
+		 * <p>
 		 * This command is very much a work-in-progress.
-		 *
-		 * Currently the only sed command supported is the substition "s" command.
-		 *
-		 * e.g. input day into sed("s/day/night/")
-		 * This will output "night".
-		 *
-		 * e.g. input "day and night" into sed("s/\\sand\\s/-to-/")
-		 * This will output "day-to-night". (Note the use of \s whitespace character).
-		 *
-		 * Java regular expressions are used for searching and replacing.  For an overview of the Java
-		 * pattern matching, and substition, please see the java.util.Pattern documentation:
-		 * http://docs.oracle.com/javase/6/docs/api/java/util/regex/Pattern.html
-		 *
+		 * <p>
+		 * Currently the only sed command supported is the substition "s"
+		 * command.
+		 * <p>
+		 * e.g. input day into sed("s/day/night/") This will output "night".
+		 * <p>
+		 * e.g. input "day and night" into sed("s/\\sand\\s/-to-/") This will
+		 * output "day-to-night". (Note the use of \s whitespace character).
+		 * <p>
+		 * Java regular expressions are used for searching and replacing. For an
+		 * overview of the Java pattern matching, and substition, please see the
+		 * {@link java.util.Pattern} documentation.
+		 * 
 		 * @param script
 		 *            the sed script
 		 * @return the generic type {@code <R>} defined by the implementing
 		 *         class, even if the command itself returns no value and writes
-		 *         its result to an {@link org.unix4j.io.Output} object. This serves
-		 *         implementing classes like the command {@link Factory} to
-		 *         return a new {@link Command} instance for the argument values
-		 *         passed to this method. {@link org.unix4j.builder.CommandBuilder} extensions also
+		 *         its result to an {@link org.unix4j.io.Output} object. This
+		 *         serves implementing classes like the command {@link Factory}
+		 *         to return a new {@link Command} instance for the argument
+		 *         values passed to this method.
+		 *         {@link org.unix4j.builder.CommandBuilder} extensions also
 		 *         implementing this this command interface usually return an
 		 *         instance to itself facilitating chained invocation of joined
 		 *         commands.
