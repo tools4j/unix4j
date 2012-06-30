@@ -7,6 +7,8 @@ import java.nio.file.attribute.PosixFileAttributeView;
 import java.nio.file.attribute.PosixFilePermission;
 import java.util.Set;
 
+import org.unix4j.util.StringUtil;
+
 /**
  * Long format for java 7.
  */
