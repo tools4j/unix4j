@@ -7,6 +7,7 @@ import org.unix4j.Unix4j;
 import org.unix4j.io.Output;
 import org.unix4j.io.StreamOutput;
 import org.unix4j.unix.Grep;
+import org.unix4j.unix.Ls;
 import org.unix4j.unix.Sort;
 import org.unix4j.unix.Xargs;
 
@@ -34,6 +35,20 @@ public class CommandBuilderTest {
 	@Test
 	public void testLs() {
 		unix4j.ls();
+	}
+	@Test
+	public void testLsStar() {
+		unix4j.ls("*");
+	}
+	@Test
+	public void testLsStarStarStarJava() {
+		unix4j.ls("src/*/*/*/*/*.java", "src/*/*/*/*/*/*.java", "src/*/*/*/*/*/*/*.java");
+//		unix4j.ls("src/*/*/*/*/*.java");
+	}
+	@Test
+	public void testLsStarStarStarJavaLA() {
+		unix4j.ls(Ls.Option.l.a(), "src/*/*/*/*/*.java", "src/*/*/*/*/*/*.java", "src/*/*/*/*/*/*/*.java");
+//		unix4j.ls(Ls.Option.l.a(), "src/*/*/*/*/*.java");
 	}
 	@Test
 	public void testLsFile() {

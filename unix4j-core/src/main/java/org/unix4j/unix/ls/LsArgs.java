@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.unix.Ls.Option;
+import org.unix4j.util.FileUtil;
 import org.unix4j.util.TypedMap;
 
 /**
@@ -16,7 +17,7 @@ class LsArgs extends AbstractArgs<Option, LsArgs> {
 	public static final TypedMap.Key<List<File>> FILES = TypedMap.DefaultKey.keyForListOf("files", File.class);
 
 	public LsArgs() {
-		this(new File(System.getProperty("user.dir")));
+		this(FileUtil.getUserDir());
 	}
 
 	public LsArgs(File file) {
@@ -72,4 +73,5 @@ class LsArgs extends AbstractArgs<Option, LsArgs> {
 		}
 		return String.valueOf(bytes);
 	}
+
 }

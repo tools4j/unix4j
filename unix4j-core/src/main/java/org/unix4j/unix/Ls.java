@@ -1,7 +1,7 @@
 package org.unix4j.unix;
 
 import java.io.File;
-import java.util.List;
+import java.util.EnumSet;
 import java.util.Set;
 
 import org.unix4j.builder.CommandBuilder;
@@ -9,6 +9,7 @@ import org.unix4j.command.Command;
 import org.unix4j.command.CommandInterface;
 import org.unix4j.io.Output;
 import org.unix4j.unix.ls.LsFactory;
+import org.unix4j.unix.ls.LsOptionSet;
 
 /**
  * Non-instantiable module with inner types making up the ls command.
@@ -62,6 +63,25 @@ public final class Ls {
 		 *         instance to itself facilitating chained invocation of joined
 		 *         commands.
 		 */
+		R ls(File... files);
+
+		/**
+		 * Prints the name of the given files and lists all files contained in
+		 * directories for every directory in {@code files}.
+		 * 
+		 * @param files
+		 *            the files or directories used as starting point for the
+		 *            listing
+		 * @return the generic type {@code <R>} defined by the implementing
+		 *         class, even if the command itself returns no value and writes
+		 *         its result to an {@link Output} object. This serves
+		 *         implementing classes like the command {@link LsFactory} to
+		 *         return a new {@link Command} instance for the argument values
+		 *         passed to this method. {@link CommandBuilder} extensions also
+		 *         implementing this this command interface usually return an
+		 *         instance to itself facilitating chained invocation of joined
+		 *         commands.
+		 */
 		R ls(String... files);
 
 		/**
@@ -81,40 +101,18 @@ public final class Ls {
 		 *         instance to itself facilitating chained invocation of joined
 		 *         commands.
 		 */
-		R ls(Option... options);
-
-		/**
-		 * Prints the name of the given file and lists all files contained in
-		 * {@code files} if it is a directory. The given options define the
-		 * details of the output format.
-		 * 
-		 * @param file
-		 *            the file or directory used as starting point for the
-		 *            listing
-		 * @param options
-		 *            the options defining the output format
-		 * @return the generic type {@code <R>} defined by the implementing
-		 *         class, even if the command itself returns no value and writes
-		 *         its result to an {@link Output} object. This serves
-		 *         implementing classes like the command {@link LsFactory} to
-		 *         return a new {@link Command} instance for the argument values
-		 *         passed to this method. {@link CommandBuilder} extensions also
-		 *         implementing this this command interface usually return an
-		 *         instance to itself facilitating chained invocation of joined
-		 *         commands.
-		 */
-		R ls(File file, Option... options);
+		R ls(OptionSet options);
 
 		/**
 		 * Prints the name of the given files and lists all files contained in
 		 * directories for every directory in {@code files}. The given options
 		 * define the details of the output format.
 		 * 
+		 * @param options
+		 *            the options defining the output format
 		 * @param files
 		 *            the files or directories used as starting point for the
 		 *            listing
-		 * @param options
-		 *            the options defining the output format
 		 * @return the generic type {@code <R>} defined by the implementing
 		 *         class, even if the command itself returns no value and writes
 		 *         its result to an {@link Output} object. This serves
@@ -125,13 +123,35 @@ public final class Ls {
 		 *         instance to itself facilitating chained invocation of joined
 		 *         commands.
 		 */
-		R ls(List<File> files, Option... options);
+		R ls(OptionSet options, File... files);
+
+		/**
+		 * Prints the name of the given files and lists all files contained in
+		 * directories for every directory in {@code files}. The given options
+		 * define the details of the output format.
+		 * 
+		 * @param options
+		 *            the options defining the output format
+		 * @param files
+		 *            the files or directories used as starting point for the
+		 *            listing
+		 * @return the generic type {@code <R>} defined by the implementing
+		 *         class, even if the command itself returns no value and writes
+		 *         its result to an {@link Output} object. This serves
+		 *         implementing classes like the command {@link LsFactory} to
+		 *         return a new {@link Command} instance for the argument values
+		 *         passed to this method. {@link CommandBuilder} extensions also
+		 *         implementing this this command interface usually return an
+		 *         instance to itself facilitating chained invocation of joined
+		 *         commands.
+		 */
+		R ls(OptionSet options, String... files);
 	}
 
 	/**
 	 * Option flags for the ls command.
 	 */
-	public static enum Option {
+	public static enum Option implements OptionSet {
 		/**
 		 * Lists all files in the given directory, including hidden files (those
 		 * whose names start with "." in Unix). By default, these files are
@@ -235,6 +255,94 @@ public final class Ls {
 		public boolean isSet(Set<? extends Option> options) {
 			return options.contains(this) || options.contains(alias);
 		}
+		
+		// interface OptionSet
+		
+		@Override
+		public EnumSet<Option> asSet() {
+			return EnumSet.of(this);
+		}
+		@Override
+		public boolean isSet(Option option) {
+			return equals(option);
+		}
+		@Override
+		public OptionSet set(Option option) {
+			return new LsOptionSet(this, option);
+		}
+		@Override
+		public OptionSet setAll(Option... options) {
+			return new LsOptionSet(this, options);
+		}
+		@Override
+		public OptionSet allFiles() {
+			return set(allFiles);
+		}
+		@Override
+		public OptionSet a() {
+			return set(a);
+		}
+		@Override
+		public OptionSet humanReadable() {
+			return set(humanReadable);
+		}
+		@Override
+		public OptionSet h() {
+			return set(h);
+		}
+		@Override
+		public OptionSet longFormat() {
+			return set(longFormat);
+		}
+		@Override
+		public OptionSet l() {
+			return set(l);
+		}
+		@Override
+		public OptionSet reverseOrder() {
+			return set(reverseOrder);
+		}
+		@Override
+		public OptionSet r() {
+			return set(r);
+		}
+		@Override
+		public OptionSet recurseSubdirs() {
+			return set(recurseSubdirs);
+		}
+		@Override
+		public OptionSet R() {
+			return set(R);
+		}
+		@Override
+		public OptionSet timeSorted() {
+			return set(timeSorted);
+		}
+		@Override
+		public OptionSet t() {
+			return set(t);
+		}
+		@Override
+		public OptionSet copy() {
+			return new LsOptionSet(this);
+		}
+	}
+	
+	public static interface OptionSet extends org.unix4j.optset.OptionSet<Ls.Option> {
+		OptionSet allFiles();
+		OptionSet a();
+		OptionSet humanReadable();
+		OptionSet h();
+		OptionSet longFormat();
+		OptionSet l();
+		OptionSet reverseOrder();
+		OptionSet r();
+		OptionSet recurseSubdirs();
+		OptionSet R();
+		OptionSet timeSorted();
+		OptionSet t();
+		@Override
+		OptionSet copy();
 	}
 
 	/**

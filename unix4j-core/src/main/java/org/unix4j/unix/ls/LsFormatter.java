@@ -1,6 +1,7 @@
 package org.unix4j.unix.ls;
 
 import java.io.File;
+import java.util.List;
 
 import org.unix4j.io.Output;
 
@@ -11,6 +12,10 @@ interface LsFormatter {
 	/**
 	 * Writes information of the given file to the {@code output}.
 	 * 
+	 * @param relativeTo
+	 *            the starting directory to use as starting point to get to
+	 *            {@code file}; all path elements from this directory to
+	 *            {@code file} should be printed
 	 * @param file
 	 *            the file whose name or other information is written to
 	 *            {@code output}
@@ -19,32 +24,27 @@ interface LsFormatter {
 	 * @param output
 	 *            the output object to write to
 	 */
-	void writeFormatted(File file, LsArgs args, Output output);
-	
-	LsFormatter SHORT = new LsFormatter() {
-		@Override
-		public void writeFormatted(File file, LsArgs args, Output output) {
-			output.writeLine(file.getPath());
-		}
-	};
-	
-	LsFormatter DIRECTORY_HEADER = new LsFormatter() {
-		@Override
-		public void writeFormatted(File file, LsArgs args, Output output) {
-			output.writeLine(file.getPath());
-			long totalBytes = 0;
-			for (final File f : file.listFiles()) {
-				if (f.isFile()) {
-					totalBytes += file.length();
-				}
-			}
-			output.writeLine("total: " + args.getSizeString(totalBytes));
-		}
-	};
+	void writeFormatted(File relativeTo, File file, LsArgs args, Output output);
 
-	/**
-	 * Long file output format.
-	 */
-	LsFormatter LONG = LsFormatterLong.getInstance();;
+	interface Factory {
+		/**
+		 * Creates and returns a new formatter for the files in the specified
+		 * {@code directory}.
+		 * 
+		 * @param relativeTo
+		 *            the starting directory to use as starting point to get to
+		 *            {@code directory}; all path elements from the relative
+		 *            directory to the files in {@code directory} should be
+		 *            printed
+		 * @param directory
+		 *            the directory whose files should be formatted
+		 * @param directoryFiles
+		 *            the directory files to be formatted by the returned
+		 *            formatter
+		 * @param args
+		 *            arguments possibly used to lookup some formatting options
+		 */
+		LsFormatter create(File relativeTo, File directory, List<File> directoryFiles, LsArgs args);
+	}
 
 }
