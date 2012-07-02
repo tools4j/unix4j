@@ -1,7 +1,6 @@
 package org.unix4j.builder;
 
 import java.io.File;
-import java.util.List;
 
 import org.unix4j.command.Command;
 import org.unix4j.io.Input;
@@ -9,7 +8,6 @@ import org.unix4j.unix.Cut;
 import org.unix4j.unix.Echo;
 import org.unix4j.unix.Grep;
 import org.unix4j.unix.Ls;
-import org.unix4j.unix.Ls.Option;
 import org.unix4j.unix.Sed;
 import org.unix4j.unix.Sort;
 import org.unix4j.unix.Xargs;
@@ -30,26 +28,32 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 	}
 	
 	@Override
+	public Unix4jCommandBuilder ls(File... files) {
+		join(Ls.FACTORY.ls(files));
+		return this;
+	}
+
+	@Override
 	public Unix4jCommandBuilder ls(String... files) {
 		join(Ls.FACTORY.ls(files));
 		return this;
 	}
 
 	@Override
-	public Unix4jCommandBuilder ls(Ls.Option... options) {
+	public Unix4jCommandBuilder ls(Ls.OptionSet options) {
 		join(Ls.FACTORY.ls(options));
 		return this;
 	}
 	
 	@Override
-	public Unix4jCommandBuilder ls(File file, Option... options) {
-		join(Ls.FACTORY.ls(file, options));
+	public Unix4jCommandBuilder ls(Ls.OptionSet options, File... files) {
+		join(Ls.FACTORY.ls(options, files));
 		return this;
 	}
-
+	
 	@Override
-	public Unix4jCommandBuilder ls(List<File> files, Ls.Option... options) {
-		join(Ls.FACTORY.ls(files, options));
+	public Unix4jCommandBuilder ls(Ls.OptionSet options, String... files) {
+		join(Ls.FACTORY.ls(options, files));
 		return this;
 	}
 

@@ -1,10 +1,9 @@
 package org.unix4j.unix.ls;
 
 import java.io.File;
-import java.util.List;
 
 import org.unix4j.unix.Ls.Interface;
-import org.unix4j.unix.Ls.Option;
+import org.unix4j.unix.Ls.OptionSet;
 
 /**
  * Factory class returning a new {@link LsCommand} instance from every signature
@@ -30,28 +29,34 @@ public final class LsFactory implements Interface<LsCommand> {
 	}
 
 	@Override
+	public LsCommand ls(File... files) {
+		return new LsCommand(new LsArgs(files));
+	}
+
+	@Override
 	public LsCommand ls(String... files) {
 		return new LsCommand(new LsArgs(files));
 	}
 
 	@Override
-	public LsCommand ls(Option... options) {
+	public LsCommand ls(OptionSet options) {
 		final LsArgs args = new LsArgs();
 		args.setOpts(options);
 		return new LsCommand(args);
 	}
 
 	@Override
-	public LsCommand ls(File file, Option... options) {
-		final LsArgs args = new LsArgs(file);
+	public LsCommand ls(OptionSet options, File... files) {
+		final LsArgs args = new LsArgs(files);
 		args.setOpts(options);
 		return new LsCommand(args);
 	}
 
 	@Override
-	public LsCommand ls(List<File> files, Option... options) {
+	public LsCommand ls(OptionSet options, String... files) {
 		final LsArgs args = new LsArgs(files);
 		args.setOpts(options);
 		return new LsCommand(args);
 	}
+
 }

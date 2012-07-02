@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.unix4j.optset.OptionSet;
 import org.unix4j.util.TypedMap;
 import org.unix4j.util.TypedMap.Key;
 import org.unix4j.util.Variables;
@@ -85,7 +86,7 @@ abstract public class AbstractArgs<O extends Enum<O>, A extends AbstractArgs<O, 
 	}
 
 	/**
-	 * Sets the specified option.
+	 * Sets the specified option. If the option is already set, it remains set.
 	 * 
 	 * @param opt
 	 *            the option to be set
@@ -94,10 +95,41 @@ abstract public class AbstractArgs<O extends Enum<O>, A extends AbstractArgs<O, 
 		opts.add(opt);
 	}
 
+	/**
+	 * Sets all specified options. If certain options are already set, it will
+	 * still be set after this operation (the option is not toggled). If an
+	 * option occurs multiple times in the given {@code opts} list, it is only
+	 * set once.
+	 * 
+	 * @param opts
+	 *            the options to be set
+	 */
 	public void setOpts(O... opts) {
 		for (final O opt : opts) {
 			setOpt(opt);
 		}
+	}
+
+	/**
+	 * Sets all specified options. If certain options are already set, it will
+	 * still be set after this operation (the option is not toggled).
+	 * 
+	 * @param opts
+	 *            the options to be set
+	 */
+	public void setOpts(Set<? extends O> opts) {
+		this.opts.addAll(opts);
+	}
+
+	/**
+	 * Sets all specified options. If certain options are already set, it will
+	 * still be set after this operation (the option is not toggled).
+	 * 
+	 * @param opts
+	 *            the options to be set
+	 */
+	public void setOpts(OptionSet<? extends O> opts) {
+		setOpts(opts.asSet());
 	}
 
 	/**
@@ -149,7 +181,9 @@ abstract public class AbstractArgs<O extends Enum<O>, A extends AbstractArgs<O, 
 	public A clone(boolean cloneDeep) {
 		try {
 			final A clone = (A) super.clone();
-			final AbstractArgs<O,A> c = clone;//alias necessary for java 1.7 compiler to access private members (next 2 lines)
+			final AbstractArgs<O, A> c = clone;// alias necessary for java 1.7
+												// compiler to access private
+												// members (next 2 lines)
 			c.args = c.args.clone(cloneDeep);
 			c.opts = c.opts.clone();
 			return clone;
@@ -164,16 +198,39 @@ abstract public class AbstractArgs<O extends Enum<O>, A extends AbstractArgs<O, 
 			return "";
 		}
 		final StringBuilder sb = new StringBuilder();
+		if (!opts.isEmpty()) {
+			sb.append(getOptionString());
+		}
 		for (Map.Entry<TypedMap.Key<?>, ?> e : args.asMap().entrySet()) {
 			if (sb.length() > 0)
 				sb.append(' ');
-			sb.append("-").append(e.getKey().getKey());
+			sb.append("--").append(e.getKey().getKey());
 			sb.append(" ").append(e.getValue());
 		}
+		return sb.toString();
+	}
+
+	private String getOptionString() {
+		final StringBuilder sb = new StringBuilder();
+		//first all one char options
 		for (final O opt : opts) {
-			if (sb.length() > 0)
-				sb.append(' ');
-			sb.append("-").append(opt);
+			final String name = opt.name();
+			if (name.length() == 1) {
+				if (sb.length() == 0) {
+					sb.append("-");
+				}
+				sb.append(name);
+			}
+		}
+		//now all options with a long name
+		for (final O opt : opts) {
+			final String name = opt.name();
+			if (name.length() != 1) {
+				if (sb.length() > 0) {
+					sb.append(" ");
+				}
+				sb.append("--").append(name);
+			}
 		}
 		return sb.toString();
 	}

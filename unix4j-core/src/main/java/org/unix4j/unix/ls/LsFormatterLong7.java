@@ -12,6 +12,7 @@ import org.unix4j.util.StringUtil;
 /**
  * Long format for java 7.
  */
+/* NOTE: must be public for reflection */
 public class LsFormatterLong7 extends LsFormatterLong {
 	
 	public LsFormatterLong7() {
@@ -72,10 +73,13 @@ public class LsFormatterLong7 extends LsFormatterLong {
 	
 	@Override
 	protected String getSize(File file, LsArgs args) {
+		final long size;
 		try {
-			return args.getSizeString(Files.size(file.toPath()));
+			size = Files.size(file.toPath());
 		} catch (Exception e) {
 			return super.getSize(file, args);
 		}
+		final String sizeString = args.getSizeString(size);
+		return StringUtil.fixSizeString(maxSizeStringLength.get(), false, sizeString);
 	}
 }
