@@ -17,6 +17,6 @@ public class GrepPerfTest {
 	private void runGrep(final String expression, final Grep.Option... options){
 		final InputStream testFileAsInputStream = this.getClass().getClassLoader().getResourceAsStream("1.1M_test_file.txt");
 		final StringWriter actualOutputStringWriter = new StringWriter();
-		Unix4j.builder(testFileAsInputStream).grep(expression, options).execute(new WriterOutput(actualOutputStringWriter));
+		Unix4j.fromInputStream(testFileAsInputStream).grep(expression, options).execute(new WriterOutput(actualOutputStringWriter));
 	}
 }
