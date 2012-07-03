@@ -1,7 +1,5 @@
 package org.unix4j.builder;
 
-import java.io.File;
-
 import org.unix4j.command.Command;
 import org.unix4j.io.Input;
 import org.unix4j.unix.Cut;
@@ -10,7 +8,10 @@ import org.unix4j.unix.Grep;
 import org.unix4j.unix.Ls;
 import org.unix4j.unix.Sed;
 import org.unix4j.unix.Sort;
+import org.unix4j.unix.Wc;
 import org.unix4j.unix.Xargs;
+
+import java.io.File;
 
 public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements Unix4jCommandBuilder {
 
@@ -26,7 +27,7 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 		join(Ls.FACTORY.ls());
 		return this;
 	}
-	
+
 	@Override
 	public Unix4jCommandBuilder ls(File... files) {
 		join(Ls.FACTORY.ls(files));
@@ -44,13 +45,13 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 		join(Ls.FACTORY.ls(options));
 		return this;
 	}
-	
+
 	@Override
 	public Unix4jCommandBuilder ls(Ls.OptionSet options, File... files) {
 		join(Ls.FACTORY.ls(options, files));
 		return this;
 	}
-	
+
 	@Override
 	public Unix4jCommandBuilder ls(Ls.OptionSet options, String... files) {
 		join(Ls.FACTORY.ls(options, files));
@@ -138,6 +139,42 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 	@Override
 	public Unix4jCommandBuilder join(Command<?> command) {
 		super.join(command);
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder wc() {
+		join(Wc.FACTORY.wc());
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder wcCountLinesWordsAndChars() {
+		join(Wc.FACTORY.wcCountLinesWordsAndChars());
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder wc(Wc.Option... options) {
+		join(Wc.FACTORY.wc(options));
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder wcCountLines() {
+		join(Wc.FACTORY.wcCountLines());
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder wcCountChars() {
+		join(Wc.FACTORY.wcCountChars());
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder wcCountWords() {
+		join(Wc.FACTORY.wcCountWords());
 		return this;
 	}
 }
