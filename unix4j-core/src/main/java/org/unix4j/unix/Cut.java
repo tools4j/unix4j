@@ -20,10 +20,10 @@ public final class Cut {
 
 	/**
 	 * Interface defining all method signatures for the cut command.
-	 * 
+	 *
 	 * @param <R>
 	 *            the return type for all command signature methods, usually a
-	 *            new command instance or a command builder providing methods
+	 *            new command instance or a command fromFile providing methods
 	 *            for chained invocation of following commands
 	 */
 	public static interface Interface<R> extends CommandInterface<R> {
@@ -31,7 +31,7 @@ public final class Cut {
 		 * Splits the line into words using whitespace as delimiter, cuts the
 		 * <code>i<sup>th</sup></code> word and writes it to the output, where
 		 * {@code i=fieldIndex}.
-		 * 
+		 *
 		 * @param fieldIndex
 		 *            the one-based index of the word to cut out
 		 * @return the generic type {@code <R>} defined by the implementing
@@ -51,7 +51,7 @@ public final class Cut {
 		 * <code>i<sup>th</sup></code> word for every {@code i} in
 		 * {@code fieldIndices} and writes the cut words to the output using a
 		 * single tab as delimiter.
-		 * 
+		 *
 		 * @param delimiter
 		 *            the delimiter separating the words on the the input line
 		 * @param fieldIndices
@@ -73,7 +73,7 @@ public final class Cut {
 		 * every <code>i<sup>th</sup></code> word for every {@code i} in
 		 * {@code fieldIndices} and writes the cut words to the output using the
 		 * specified output delimiter.
-		 * 
+		 *
 		 * @param inputDelimiter
 		 *            the delimiter separating the words on the the input line
 		 * @param outputDelimiter
@@ -96,7 +96,7 @@ public final class Cut {
 		/**
 		 * Cuts {@code n=length} characters from the input line starting from
 		 * {@code start} and writes them to the output.
-		 * 
+		 *
 		 * @param start
 		 *            the one-based start index for the first character in the
 		 *            cut
@@ -117,7 +117,7 @@ public final class Cut {
 		/**
 		 * Cuts the characters {@code charIndices[0]}, {@code charIndices[1]},
 		 * etc. from the input line and writes them to the output.
-		 * 
+		 *
 		 * @param charIndices
 		 *            the one-based indices of the characters added to the cut
 		 * @return the generic type {@code <R>} defined by the implementing

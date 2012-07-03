@@ -33,7 +33,7 @@ public final class Xargs {
 	 * Encoded variable for <code>i<sup>th</sup></code> "xarg" value, where
 	 * {@code i} specifies the column index of the value on the input line. Can
 	 * be used as argument value in the command following xargs.
-	 * 
+	 *
 	 * @param i
 	 *            the zero-based column index of the value in the input line
 	 * @throws IndexOutOfBoundsException
@@ -45,10 +45,10 @@ public final class Xargs {
 
 	/**
 	 * Interface defining all method signatures for the xargs command.
-	 * 
+	 *
 	 * @param <R>
 	 *            the return type for all command signature methods, usually a
-	 *            new command instance or a command builder providing methods
+	 *            new command instance or a command fromFile providing methods
 	 *            for chained invocation of following commands
 	 */
 	public static interface Interface<R> extends CommandInterface<R> {
@@ -59,7 +59,7 @@ public final class Xargs {
 		 * <p>
 		 * The arguments from xargs can be passed to the next command as string
 		 * argument values using {@link Xargs#XARG} and {@link Xargs#xarg(int)}.
-		 * 
+		 *
 		 * @return the generic type {@code <R>} defined by the implementing
 		 *         class, even if the command itself returns no value and writes
 		 *         its result to an {@link Output} object. This serves

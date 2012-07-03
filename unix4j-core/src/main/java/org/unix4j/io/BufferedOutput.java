@@ -24,9 +24,18 @@ public class BufferedOutput implements Output {
 		return lines.toString();
 	}
 	public String toMultiLineString() {
+		return toMultiLineString(true);
+	}
+	public String toMultiLineString(boolean appendTrailingLineEnding) {
 		final StringBuilder sb = new StringBuilder();
 		for (final String line : lines) {
-			sb.append(line).append(NEW_LINE);
+			if(sb.length() > 0){
+				sb.append(NEW_LINE);
+			}
+			sb.append(line);
+		}
+		if(appendTrailingLineEnding){
+			sb.append(NEW_LINE);
 		}
 		return sb.toString();
 	}

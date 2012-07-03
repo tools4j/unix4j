@@ -12,6 +12,7 @@ import org.unix4j.unix.Grep;
 import org.unix4j.unix.Ls;
 import org.unix4j.unix.Sed;
 import org.unix4j.unix.Sort;
+import org.unix4j.unix.Wc;
 import org.unix4j.unix.Xargs;
 
 import java.io.File;
@@ -24,7 +25,7 @@ public class GenericCommandBuilderTest {
 	@SuppressWarnings("unchecked")
 	private static Unix4jCommandBuilder createCommandBuilder(Input input) {
 		final DefaultCommandBuilder defaultCommandBuilder = input == null ? new DefaultCommandBuilder() : new DefaultCommandBuilder(input);
-		return GenericCommandBuilder.createCommandBuilder(Unix4jCommandBuilder.class, defaultCommandBuilder, Ls.FACTORY, Grep.FACTORY, Echo.FACTORY, Sort.FACTORY, Cut.FACTORY, Sed.FACTORY, Xargs.FACTORY);
+		return GenericCommandBuilder.createCommandBuilder(Unix4jCommandBuilder.class, defaultCommandBuilder, Ls.FACTORY, Grep.FACTORY, Echo.FACTORY, Sort.FACTORY, Cut.FACTORY, Sed.FACTORY, Wc.FACTORY, Xargs.FACTORY);
 	}
 	@Before
 	public void beforeEach() {

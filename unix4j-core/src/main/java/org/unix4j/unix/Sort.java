@@ -23,17 +23,17 @@ public final class Sort {
 
 	/**
 	 * Interface defining all method signatures for the sort command.
-	 * 
+	 *
 	 * @param <R>
 	 *            the return type for all command signature methods, usually a
-	 *            new command instance or a command builder providing methods
+	 *            new command instance or a command fromFile providing methods
 	 *            for chained invocation of following commands
 	 */
 	public static interface Interface<R> extends CommandInterface<R> {
 		/**
 		 * Sorts the input in ascending order. Equivalent to
 		 * <tt>sort(Sort.Option.ascending}</tt>.
-		 * 
+		 *
 		 * @return the generic type {@code <R>} defined by the implementing
 		 *         class, even if the command itself returns no value and writes
 		 *         its result to an {@link Output} object. This serves
@@ -48,7 +48,7 @@ public final class Sort {
 
 		/**
 		 * Sorts the input using the specified sort {@link Option option}.
-		 * 
+		 *
 		 * @param options
 		 *            the sort options
 		 * @return the generic type {@code <R>} defined by the implementing
