@@ -1,7 +1,5 @@
 package org.unix4j.unix;
 
-import java.util.regex.Pattern;
-
 import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
@@ -9,6 +7,8 @@ import org.unix4j.command.CommandInterface;
 import org.unix4j.io.Input;
 import org.unix4j.io.Output;
 import org.unix4j.util.TypedMap;
+
+import java.util.regex.Pattern;
 
 /**
  * Non-instantiable module with inner types making up the grep command.
@@ -22,10 +22,10 @@ public final class Grep {
 
 	/**
 	 * Interface defining all method signatures for the grep command.
-	 * 
+	 *
 	 * @param <R>
 	 *            the return type for all command signature methods, usually a
-	 *            new command instance or a command builder providing methods
+	 *            new command instance or a command fromFile providing methods
 	 *            for chained invocation of following commands
 	 */
 	public static interface Interface<R> extends CommandInterface<R> {
@@ -33,7 +33,7 @@ public final class Grep {
 		 * Filters the input lines and writes the matching lines to the output.
 		 * A line matches if it contains the given {@code matchString} using
 		 * case-sensitive string comparison.
-		 * 
+		 *
 		 * @param matchString
 		 *            the string to be matched by the lines
 		 * @return the generic type {@code <R>} defined by the implementing
@@ -52,7 +52,7 @@ public final class Grep {
 		 * Filters the input lines and writes the matching lines to the output.
 		 * Whether or not a line matches the given {@code matchString} depends
 		 * on the specified {@code options}.
-		 * 
+		 *
 		 * @param matchString
 		 *            the string to be matched by the lines
 		 * @param options
