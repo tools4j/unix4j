@@ -6,6 +6,9 @@ package org.unix4j.util;
  */
 public class Java7Util {
 
+	/**
+	 * The suffix used for Java 7 classes, the string "7".
+	 */
 	public static final String JAVA7_CLASS_NAME_SUFFIX = "7";
 
 	/**
