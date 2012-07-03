@@ -18,7 +18,7 @@ public class CommandBuilderTest {
 
 	@Before
 	public void beforeEach() {
-		unix4j = Unix4j.builder();
+		unix4j = Unix4j.create();
 		output = null;
 	}
 
@@ -89,7 +89,7 @@ public class CommandBuilderTest {
 //TODO Need to load a file from the resources directory
 //	@Test
 //	public void testFromFile() {
-//		unix4j = Unix4j.builder(new File(".classpath")).sort();
+//		unix4j = Unix4j.fromFile(new File(".classpath")).sort();
 //	}
 	@Test
 	public void testToSystemError() {

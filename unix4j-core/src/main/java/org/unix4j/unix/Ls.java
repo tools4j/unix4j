@@ -1,15 +1,15 @@
 package org.unix4j.unix;
 
-import java.io.File;
-import java.util.EnumSet;
-import java.util.Set;
-
 import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.Command;
 import org.unix4j.command.CommandInterface;
 import org.unix4j.io.Output;
 import org.unix4j.unix.ls.LsFactory;
 import org.unix4j.unix.ls.LsOptionSet;
+
+import java.io.File;
+import java.util.EnumSet;
+import java.util.Set;
 
 /**
  * Non-instantiable module with inner types making up the ls command.
@@ -23,17 +23,17 @@ public final class Ls {
 
 	/**
 	 * Interface defining all method signatures for the ls command.
-	 * 
+	 *
 	 * @param <R>
 	 *            the return type for all command signature methods, usually a
-	 *            new command instance or a command builder providing methods
+	 *            new command instance or a command fromFile providing methods
 	 *            for chained invocation of following commands
 	 */
 	public static interface Interface<R> extends CommandInterface<R> {
 		/**
 		 * Lists all files and directories in the user's current working
 		 * directory and writes them to the output.
-		 * 
+		 *
 		 * @return the generic type {@code <R>} defined by the implementing
 		 *         class, even if the command itself returns no value and writes
 		 *         its result to an {@link Output} object. This serves
@@ -49,7 +49,7 @@ public final class Ls {
 		/**
 		 * Prints the name of the given files and lists all files contained in
 		 * directories for every directory in {@code files}.
-		 * 
+		 *
 		 * @param files
 		 *            the files or directories used as starting point for the
 		 *            listing
@@ -68,7 +68,7 @@ public final class Ls {
 		/**
 		 * Prints the name of the given files and lists all files contained in
 		 * directories for every directory in {@code files}.
-		 * 
+		 *
 		 * @param files
 		 *            the files or directories used as starting point for the
 		 *            listing
@@ -88,7 +88,7 @@ public final class Ls {
 		 * Lists all files and directories in the user's current working
 		 * directory and writes them to the output using the given options
 		 * specifying the details of the output format.
-		 * 
+		 *
 		 * @param options
 		 *            the options defining the output format
 		 * @return the generic type {@code <R>} defined by the implementing
@@ -107,7 +107,7 @@ public final class Ls {
 		 * Prints the name of the given files and lists all files contained in
 		 * directories for every directory in {@code files}. The given options
 		 * define the details of the output format.
-		 * 
+		 *
 		 * @param options
 		 *            the options defining the output format
 		 * @param files
@@ -129,7 +129,7 @@ public final class Ls {
 		 * Prints the name of the given files and lists all files contained in
 		 * directories for every directory in {@code files}. The given options
 		 * define the details of the output format.
-		 * 
+		 *
 		 * @param options
 		 *            the options defining the output format
 		 * @param files
@@ -255,9 +255,9 @@ public final class Ls {
 		public boolean isSet(Set<? extends Option> options) {
 			return options.contains(this) || options.contains(alias);
 		}
-		
+
 		// interface OptionSet
-		
+
 		@Override
 		public EnumSet<Option> asSet() {
 			return EnumSet.of(this);
@@ -327,7 +327,7 @@ public final class Ls {
 			return new LsOptionSet(this);
 		}
 	}
-	
+
 	public static interface OptionSet extends org.unix4j.optset.OptionSet<Ls.Option> {
 		OptionSet allFiles();
 		OptionSet a();

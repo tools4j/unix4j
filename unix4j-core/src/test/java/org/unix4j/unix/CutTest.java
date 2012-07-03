@@ -1,11 +1,11 @@
 package org.unix4j.unix;
 
-import java.io.StringWriter;
-
 import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.io.WriterOutput;
 import org.unix4j.util.MultilineString;
+
+import java.io.StringWriter;
 
 public class CutTest {
 	private final static MultilineString input;
@@ -123,14 +123,14 @@ public class CutTest {
 				.appendLine("row8col1,row8col2,row8col3,row8col4,row8col5");
 
 		final StringWriter actualOutputStringWriter = new StringWriter();
-		Unix4j.builder(input.toInput()).cut(1).execute(new WriterOutput(actualOutputStringWriter));
+		Unix4j.fromInput(input.toInput()).cut(1).execute(new WriterOutput(actualOutputStringWriter));
 		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
 		actualOutput.assertMultilineStringEquals(expectedOutput);
 	}
 
 	private void assertFieldCut(final MultilineString input, final MultilineString expectedOutput, int... fields) {
 		final StringWriter actualOutputStringWriter = new StringWriter();
-		Unix4j.builder(input.toInput()).cut(",", ",", fields).execute(new WriterOutput(actualOutputStringWriter));
+		Unix4j.fromInput(input.toInput()).cut(",", ",", fields).execute(new WriterOutput(actualOutputStringWriter));
 		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
 		actualOutput.assertMultilineStringEquals(expectedOutput);
 	}
@@ -198,7 +198,7 @@ public class CutTest {
 
 	private void assertRangeCut(final MultilineString input, final MultilineString expectedOutput, int start, int length) {
 		final StringWriter actualOutputStringWriter = new StringWriter();
-		Unix4j.builder(input.toInput()).cut(start, length).execute(new WriterOutput(actualOutputStringWriter));
+		Unix4j.fromInput(input.toInput()).cut(start, length).execute(new WriterOutput(actualOutputStringWriter));
 		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
 		actualOutput.assertMultilineStringEquals(expectedOutput);
 	}
@@ -265,18 +265,18 @@ public class CutTest {
 
 	private void assertCharacterCut(final MultilineString input, final MultilineString expectedOutput, int... characters) {
 		final StringWriter actualOutputStringWriter = new StringWriter();
-		Unix4j.builder(input.toInput()).cut(characters).execute(new WriterOutput(actualOutputStringWriter));
+		Unix4j.fromInput(input.toInput()).cut(characters).execute(new WriterOutput(actualOutputStringWriter));
 		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
 		actualOutput.assertMultilineStringEquals(expectedOutput);
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void testNullCharactersArray() {
-		Unix4j.builder().cut(null).execute();
+		Unix4j.create().cut(null).execute();
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void testNullFields() {
-		Unix4j.builder().cut(",", ",", null).execute();
+		Unix4j.create().cut(",", ",", null).execute();
 	}
 }

@@ -1,9 +1,5 @@
 package org.unix4j.unix;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
@@ -11,6 +7,10 @@ import org.unix4j.command.CommandInterface;
 import org.unix4j.io.Input;
 import org.unix4j.io.Output;
 import org.unix4j.util.TypedMap;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Non-instantiable module with inner types making up the echo command.
@@ -23,16 +23,16 @@ public final class Echo {
 
 	/**
 	 * Interface defining all method signatures for the echo command.
-	 * 
+	 *
 	 * @param <R>
 	 *            the return type for all command signature methods, usually a
-	 *            new command instance or a command builder providing methods
+	 *            new command instance or a command fromFile providing methods
 	 *            for chained invocation of following commands
 	 */
 	public static interface Interface<R> extends CommandInterface<R> {
 		/**
 		 * Echos the given input argument to the output.
-		 * 
+		 *
 		 * @param message
 		 *            the message to echo
 		 * @return the generic type {@code <R>} defined by the implementing
@@ -50,7 +50,7 @@ public final class Echo {
 		/**
 		 * Echos the given input arguments to the output. The input arguments
 		 * are separated with a single space character.
-		 * 
+		 *
 		 * @param messages
 		 *            the messages to echo
 		 * @return the generic type {@code <R>} defined by the implementing
@@ -122,6 +122,8 @@ public final class Echo {
 	 * Echo command implementation.
 	 */
 	public static class Command extends AbstractCommand<Args> {
+		private static final String LINE_SEPERATOR = System.getProperty("line.separator");
+
 		public Command(Args arguments) {
 			super(NAME, Type.NoInput, arguments);
 		}
@@ -133,6 +135,18 @@ public final class Echo {
 
 		@Override
 		public void executeBatch(Input input, Output output) {
+			final String messages = joinMessages();
+			final String[] lines = messages.split(LINE_SEPERATOR);
+			for( final String line: lines){
+				output.writeLine(line);
+			}
+			if(messages.endsWith(LINE_SEPERATOR)){
+				output.writeLine("");
+			}
+
+		}
+
+		private String joinMessages() {
 			final List<String> messages = getArguments().getMessages();
 			final StringBuilder sb = new StringBuilder();
 			if (!messages.isEmpty()) {
@@ -141,7 +155,7 @@ public final class Echo {
 					sb.append(' ').append(messages.get(i));
 				}
 			}
-			output.writeLine(sb.toString());
+			return sb.toString();
 		}
 	}
 
