@@ -1,0 +1,83 @@
+# Configuration file for freemarker/fmpp code generation 
+modes: [ 
+    execute(**/*.java, **/*.txt) 
+    copy(**/*) 
+] 
+data: { 
+    commands: [
+    	{
+    		name:			ls
+    		packagePath:	org/unix4j/unix
+    		packageName:	org.unix4j.unix
+    		className:		Ls
+    		javadoc:		"/** bla bla javadoc bla */"
+			methods: [
+				{
+    				javadoc:	"/** bla bli method javadoc */"
+    				name: 		ls
+    				params:	[
+    					{type:Ls.Options,	name:options}
+    					{type:String...,	name:files}
+    				]
+    			}
+			]
+    		options: {
+    			initial: Option__lah
+    			enumClassName: org.unix4j.unix.ls.LsOption
+    			types: {
+    				Option__lah: {
+    					current: []
+    					next: {
+    						l:Option_l_ah
+    						a:Option_a_lh
+    						h:Option_h_al
+    					}
+    				}
+    				Option_l_ah: {
+    					current: [l]
+    					next: {
+    						a:Option_la_h
+    						h:Option_lh_a
+    					}
+    				}
+    				Option_a_lh: {
+    					current: [a]
+    					next: {
+    						l:Option_la_h
+    						h:Option_lh_a
+    						}
+    				}
+    				Option_h_al: {
+    					current: [h]
+    					next: {
+    						a:Option_ah_l
+    						l:Option_lh_a
+    					}
+    				}
+    				Option_la_h: {
+    					current: [l,a]
+    					next: {h:Option_lah}
+    				}
+    				Option_ah_l: {
+    					current: [a,h]
+    					next: {l:Option_lah}
+    				}
+    				Option_lh_a: {
+    					current: [l,h]
+    					next: {a:Option_lah}
+    				}
+    				Option_lha: {
+    					current: [l,a,h]
+    					next: {}
+    				}
+    			}
+    			javadoc: {
+    				l:	"/*javadoc for l*/"
+    				a:	"/*javadoc for a*/"
+    				h:	"/*javadoc for h*/"
+    			}
+    		}
+    	}
+    ]
+}
+
