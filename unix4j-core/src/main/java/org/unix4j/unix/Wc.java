@@ -10,17 +10,19 @@ import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
 
+import static org.unix4j.util.Assert.assertArgFalse;
+
 /**
  * <b>NAME</b>
  * <p>
  * wc - word, line, and byte or character count
  * <p>
  * <b>SYNOPSIS</b>
- * 
+ *
  * <pre>
  * wc[-lwm]
  * </pre>
- * 
+ *
  * <b>DESCRIPTION</b>
  * <p>
  * The wc utility reads one or more input files and, by default, writes the
@@ -62,7 +64,7 @@ public final class Wc {
 
 	/**
 	 * Interface defining all method signatures for the wc command.
-	 * 
+	 *
 	 * @param <R>
 	 *            the return type for all command signature methods, usually a
 	 *            new command instance or a command fromFile providing methods
@@ -72,7 +74,7 @@ public final class Wc {
 		/**
 		 * Executes a count of lines, words and chars in the given input and
 		 * writes them to the output
-		 * 
+		 *
 		 * @return the generic type {@code <R>} defined by the implementing
 		 *         class, even if the command itself returns no value and writes
 		 *         its result to an {@link Output} object. This serves
@@ -90,7 +92,7 @@ public final class Wc {
 		/**
 		 * Executes a count of lines, words and chars in the given input and
 		 * writes them to the output
-		 * 
+		 *
 		 * @return the generic type {@code <R>} defined by the implementing
 		 *         class, even if the command itself returns no value and writes
 		 *         its result to an {@link Output} object. This serves
@@ -108,10 +110,10 @@ public final class Wc {
 		/**
 		 * Executes a one or more counts, depending on the given options, and
 		 * writes them to the output
-		 * 
+		 *
 		 * @param options
 		 *            the options defining the counts to execute.
-		 * 
+		 *
 		 * @return the generic type {@code <R>} defined by the implementing
 		 *         class, even if the command itself returns no value and writes
 		 *         its result to an {@link Output} object. This serves
@@ -128,7 +130,7 @@ public final class Wc {
 
 		/**
 		 * Executes a count of lines and writes this count to the output.
-		 * 
+		 *
 		 * @return the generic type {@code <R>} defined by the implementing
 		 *         class, even if the command itself returns no value and writes
 		 *         its result to an {@link Output} object. This serves
@@ -145,7 +147,7 @@ public final class Wc {
 
 		/**
 		 * Executes a count of chars and writes this count to the output.
-		 * 
+		 *
 		 * @return the generic type {@code <R>} defined by the implementing
 		 *         class, even if the command itself returns no value and writes
 		 *         its result to an {@link Output} object. This serves
@@ -162,7 +164,7 @@ public final class Wc {
 
 		/**
 		 * Executes a count of words and writes this count to the output.
-		 * 
+		 *
 		 * @return the generic type {@code <R>} defined by the implementing
 		 *         class, even if the command itself returns no value and writes
 		 *         its result to an {@link Output} object. This serves
@@ -276,10 +278,7 @@ public final class Wc {
 		@Override
 		public void executeBatch(Input input, Output output) {
 			Args args = getArguments();
-
-			if (args.isNoCountTypeSpecified()) {
-				throw new IllegalArgumentException("No count type specified.  At least one count type required.");
-			}
+			assertArgFalse("No count type specified. At least one count type required.", args.isNoCountTypeSpecified());
 
 			int lineCount = 0;
 			int wordCount = 0;

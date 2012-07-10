@@ -131,6 +131,18 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 	}
 
 	@Override
+	public Unix4jCommandBuilder sedSubstitute(String searchExpression, String replaceExpression) {
+		join(Sed.FACTORY.sedSubstitute(searchExpression, replaceExpression));
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder sedSubstituteFirst(String searchExpression, String replaceExpression) {
+		join(Sed.FACTORY.sedSubstituteFirst(searchExpression, replaceExpression));
+		return this;
+	}
+
+	@Override
 	public Unix4jCommandBuilder xargs() {
 		join(Xargs.FACTORY.xargs());
 		return this;
