@@ -10,6 +10,8 @@ import org.unix4j.util.TypedMap;
 
 import java.util.regex.Pattern;
 
+import static org.unix4j.util.Assert.*;
+
 /**
  * Non-instantiable module with inner types making up the grep command.
  */
@@ -116,9 +118,7 @@ public final class Grep {
 
 		public Args(String matchString) {
 			super(Option.class);
-			if (matchString == null) {
-				throw new NullPointerException("matchString cannot be null");
-			}
+			assertArgNotNull("matchString cannot be null", matchString);
 			setArg(MATCH_STRING, matchString);
 		}
 
