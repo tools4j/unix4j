@@ -60,9 +60,9 @@ public class SedTest {
 
 	@Test
 	public void testSed_searchAndReplaceUsingEscapedForwardSlashes() {
-		final String input = "foo/bar";
-		final String script = "s/foo\\/bar/this is foobar/g";
-		final String expectedOutput = "this is foobar";
+		final String input = "to be/not to be that is the question";
+		final String script = "s/be\\/not/be or not/g";
+		final String expectedOutput = "to be or not to be that is the question";
 
 		final String output = Unix4j.fromString(input).sed(script).executeToString(false);
 		assertEquals(expectedOutput, output);

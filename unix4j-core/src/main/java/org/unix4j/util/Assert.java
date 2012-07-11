@@ -20,6 +20,30 @@ public class Assert {
 		}
 	}
 
+	public static void assertArgGreaterThan(final String message, int argValue, int num){
+		if(argValue <= num){
+			throw new IllegalArgumentException(message);
+		}
+	}
+
+	public static void assertArgGreaterThanOrEqualTo(final String message, int argValue, int num){
+		if(argValue < num){
+			throw new IllegalArgumentException(message);
+		}
+	}
+
+	public static void assertArgLessThan(final String message, int argValue, int num){
+		if(argValue >= num){
+			throw new IllegalArgumentException(message);
+		}
+	}
+
+	public static void assertArgLessThanOrEqualTo(final String message, int argValue, int num){
+		if(argValue > num){
+			throw new IllegalArgumentException(message);
+		}
+	}
+
 	public static void assertArgFalse(final String message, boolean expression){
 		if(expression){
 			throw new IllegalArgumentException(message);
