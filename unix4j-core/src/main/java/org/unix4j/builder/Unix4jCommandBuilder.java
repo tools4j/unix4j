@@ -1,13 +1,6 @@
 package org.unix4j.builder;
 
-import org.unix4j.unix.Cut;
-import org.unix4j.unix.Echo;
-import org.unix4j.unix.Grep;
-import org.unix4j.unix.Ls;
-import org.unix4j.unix.Sed;
-import org.unix4j.unix.Sort;
-import org.unix4j.unix.Wc;
-import org.unix4j.unix.Xargs;
+import org.unix4j.unix.*;
 
 public interface Unix4jCommandBuilder
 		extends CommandBuilder,
@@ -18,5 +11,7 @@ public interface Unix4jCommandBuilder
 		Cut.Interface<Unix4jCommandBuilder>,
 		Sed.Interface<Unix4jCommandBuilder>,
 		Wc.Interface<Unix4jCommandBuilder>,
-		Xargs.Interface<Unix4jCommandBuilder> {
+		Head.Interface<Unix4jCommandBuilder>,
+		Tail.Interface<Unix4jCommandBuilder>,
+		Xargs.Interface<Unix4jCommandBuilder>{
 }

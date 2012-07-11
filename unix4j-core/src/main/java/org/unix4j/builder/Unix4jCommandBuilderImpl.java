@@ -2,14 +2,7 @@ package org.unix4j.builder;
 
 import org.unix4j.command.Command;
 import org.unix4j.io.Input;
-import org.unix4j.unix.Cut;
-import org.unix4j.unix.Echo;
-import org.unix4j.unix.Grep;
-import org.unix4j.unix.Ls;
-import org.unix4j.unix.Sed;
-import org.unix4j.unix.Sort;
-import org.unix4j.unix.Wc;
-import org.unix4j.unix.Xargs;
+import org.unix4j.unix.*;
 
 import java.io.File;
 
@@ -187,6 +180,30 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 	@Override
 	public Unix4jCommandBuilder wcCountWords() {
 		join(Wc.FACTORY.wcCountWords());
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder head(int lines) {
+		join(Head.FACTORY.head(lines));
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder head() {
+		join(Head.FACTORY.head());
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder tail(int lines) {
+		join(Tail.FACTORY.tail(lines));
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder tail() {
+		join(Tail.FACTORY.tail());
 		return this;
 	}
 }
