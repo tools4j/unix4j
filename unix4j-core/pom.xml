@@ -6,44 +6,14 @@
 	<groupId>org.unix4j</groupId>
 	<artifactId>unix4j-core</artifactId>
 	<version>0.1</version>
+	<packaging>pom</packaging>
+	
+	<modules>
+		<module>unix4j-base</module>
+		<module>unix4j-command-api</module>
+		<module>unix4j-command-impl</module>
+	</modules>
 
-	<build>
-		<plugins>
-			<!-- Freemarker maven plugin for code generation -->
-			<plugin>
-				<configuration>
-					<cfgFile>src/main/resources/codegen/config.fmpp</cfgFile>
-					<outputDirectory>target/generated-sources/main/java</outputDirectory>
-					<templateDirectory>src/main/resources/codegen/templates</templateDirectory>
-				</configuration>
-				<groupId>com.googlecode.fmpp-maven-plugin</groupId>
-				<artifactId>fmpp-maven-plugin</artifactId>
-				<version>1.0</version>
-				<executions>
-					<execution>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
-
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.10</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.googlecode.fmpp-maven-plugin</groupId>
-			<artifactId>fmpp-maven-plugin</artifactId>
-			<version>1.0</version>
-		</dependency>
-	</dependencies>
 	<profiles>
 		<profile>
 			<id>jdk16</id>
