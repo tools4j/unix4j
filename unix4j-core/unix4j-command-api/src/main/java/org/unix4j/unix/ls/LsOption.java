@@ -1,4 +1,4 @@
-package org.unix4j.unix.ls.def;
+package org.unix4j.unix.ls;
 
 import org.unix4j.codegen.annotation.Acronym;
 import org.unix4j.codegen.annotation.Javadoc;

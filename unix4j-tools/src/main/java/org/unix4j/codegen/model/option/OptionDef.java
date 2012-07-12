@@ -13,7 +13,7 @@ public class OptionDef extends AbstractModelElement {
 		this(new Command(commandName, commandClass), new TypeDef(optionClass), optionSetPackage);
 	}
 	public <E extends Enum<?>> OptionDef(Command command, TypeDef optionType, String optionSetPackage) {
-		this(command, optionType, new TypeDef(optionType.name + "Set", optionSetPackage));
+		this(command, optionType, new TypeDef(optionType.className + "Set", optionSetPackage));
 	}
 	public <E extends Enum<?>> OptionDef(Command command, TypeDef optionType, TypeDef optionSetType) {
 		this.command = command;

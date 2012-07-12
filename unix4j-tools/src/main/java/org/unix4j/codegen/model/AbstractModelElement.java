@@ -5,7 +5,45 @@ import java.lang.reflect.Modifier;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-abstract public class AbstractModelElement {
+import freemarker.template.ObjectWrapper;
+import freemarker.template.TemplateHashModel;
+import freemarker.template.TemplateModel;
+import freemarker.template.TemplateModelException;
+
+abstract public class AbstractModelElement implements TemplateHashModel {
+
+	private final Map<String, Field> fields = new LinkedHashMap<String, Field>();
+	
+	public AbstractModelElement() {
+		for (final Field field : getClass().getFields()) {
+			if (0 == (field.getModifiers() & Modifier.STATIC)) {
+				fields.put(field.getName(), field);
+			}
+		}
+	}
+	
+	@Override
+	public boolean isEmpty() throws TemplateModelException {
+		return fields.isEmpty();
+	}
+	
+	@Override
+	public TemplateModel get(String key) throws TemplateModelException {
+		final Object value = getFieldValue(key);
+		if (value instanceof TemplateModel) {
+			return (TemplateModel)value;
+		}
+		return value == null ? null : ObjectWrapper.DEFAULT_WRAPPER.wrap(value);
+	}
+
+	public Object getFieldValue(String name) {
+		final Field field = fields.get(name);
+		try {
+			return field == null ? null : field.get(this);
+		} catch (Exception e) {
+			return "ERROR: cannot read field " + field.getName() + "e=" + e;
+		}
+	}
 
 	@Override
 	public String toString() {
@@ -13,24 +51,10 @@ abstract public class AbstractModelElement {
 	}
 	public Map<String,Object> toMap() {
 		final Map<String, Object> map = new LinkedHashMap<String, Object>();
-		toMap(getClass(), map);
+		for (final String name : fields.keySet()) {
+			map.put(name, getFieldValue(name));
+		}
 		return map;
-	}
-
-	private void toMap(Class<?> clazz, Map<String, Object> map) {
-		final Class<?> superClass = clazz.getSuperclass();
-		while (superClass != null && !Object.class.equals(superClass) && !AbstractModelElement.class.equals(superClass)) {
-			toMap(clazz.getSuperclass(), map);
-		}
-		for (final Field field : clazz.getFields()) {
-			if (0 == (field.getModifiers() & Modifier.STATIC)) {
-				try {
-					map.put(field.getName(), field.get(this));
-				} catch (Exception e) {
-					map.put(field.getName(), "ERROR: " + e);
-				}
-			}
-		}
 	}
 	public String toString(String indent) {
 		return toMultiLineString(indent, toMap());

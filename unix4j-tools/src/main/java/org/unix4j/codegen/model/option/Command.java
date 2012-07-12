@@ -1,23 +1,18 @@
 package org.unix4j.codegen.model.option;
 
-import org.unix4j.codegen.model.AbstractModelElement;
 import org.unix4j.codegen.model.TypeDef;
 
-public class Command extends AbstractModelElement {
+public class Command extends TypeDef {
 	
 	public Command(String name, Class<?> type) {
-		this(name, new TypeDef(type));
-	}
-	public Command(String name, TypeDef type) {
+		super(type);
 		this.name = name;
-		this.type = type;
 	}
-	public final String name;
-	public final TypeDef type;
+	public Command(String name, String typeName, String packageName) {
+		super(typeName, packageName);
+		this.name = name;
+	}
 
-	@Override
-	public String toString(String indent) {
-		return	indent + "name: " + name + "\n" +
-				indent + "type: " + "\n" + type.toString(indent + "\t");
-	}
+	public final String name;
+
 }
