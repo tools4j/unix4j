@@ -7,11 +7,11 @@ public class TypeDef extends AbstractModelElement {
 		this(type.getSimpleName(), type.getPackage() == null ? "" : type.getPackage().getName());
 	}
 	public TypeDef(String typeName, String packageName) {
-		this.name = typeName;
+		this.className = typeName;
 		this.packageName = packageName;
 		this.packagePath = packageName.replace('.', '/');
 	}
-	public final String name;
+	public final String className;
 	public final String packageName;
 	public final String packagePath;
 }

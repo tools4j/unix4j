@@ -1,48 +1,53 @@
 <@pp.dropOutputFile /> 
 <#list optionDefs as def> 
-<#global pkgName=def.packagePath> 
-<@pp.changeOutputFile name=pp.pathTo(def.packagePath+"/"+def.optionSetClassName+".java")/> 
-package ${def.packageName};
+<#global cmdDef=def.command> 
+<#global optDef=def.optionType> 
+<#global setDef=def.optionSetType> 
+<@pp.changeOutputFile name=pp.pathTo(setDef.packagePath+"/"+setDef.className+".java")/> 
+package ${setDef.packageName};
 
 import java.util.Set;
 import java.util.EnumSet;
 import java.util.Arrays;
 import java.util.Collections;
 import org.unix4j.optset.OptionSet;
-import ${def.command.packageName}.${def.command.className};
-import ${def.packageName}.${def.optionClassName};
+import ${cmdDef.packageName}.${cmdDef.className};
+import ${optDef.packageName}.${optDef.className};
 
 /**
- * {@link ${def.optionClassName}} sets for the {@link ${def.command.className} ${def.command.name}} command.
+ * {@link ${optDef.className}} sets for the {@link ${cmdDef.className} ${cmdDef.name}} command.
  */
-public enum ${def.optionSetClassName} implements OptionSet<${def.optionClassName}> {
+public enum ${setDef.className} implements OptionSet<${optDef.className}> {
 	<#foreach set in def.optionSets>
 	/** OptionSet with the following active options: [<#foreach opt in set.active>${opt}<#if opt_has_next>, </#if></#foreach>]*/
 	${set.name}(<#foreach opt in def.options?keys><#if set.next[opt]??>${set.next[opt]}<#else>null/*already set*/</#if><#if opt_has_next || set.active?size != 0>, </#if></#foreach>
-		/*active:*/<#foreach opt in set.active>${def.optionClassName}.${def.options[opt]}<#if opt_has_next>, </#if></#foreach>
+		/*active:*/<#foreach opt in set.active>${optDef.className}.${def.options[opt]}<#if opt_has_next>, </#if></#foreach>
 	)<#if set_has_next>,<#else>;</#if>
 	</#foreach>
 	<#foreach opt in def.options?keys>
-	/** OptionSet with the current options plus the option ${opt} (same set if option is already set)*/
-	public final ${def.optionSetClassName} ${opt};
+	/** Set with the current options plus the option "-${opt}" (aka "${def.options[opt]}"). This same set if "--${def.options[opt]}" is already set.*/
+	public final ${setDef.className} ${opt};
+	/** Set with the current options plus the option "--${def.options[opt]}" (aka "-${opt}"). This same set if "--${def.options[opt]}" is already set.*/
+	public final ${setDef.className} ${def.options[opt]};
 	</#foreach>
-	private final Set<${def.optionClassName}> options;
-	private ${def.optionSetClassName}(
-		<#foreach opt in def.options?keys>${def.optionSetClassName} ${opt}, </#foreach>
-		${def.optionClassName}... activeOptions
+	private final Set<${optDef.className}> options;
+	private ${setDef.className}(
+		<#foreach opt in def.options?keys>${setDef.className} ${opt}, </#foreach>
+		${optDef.className}... activeOptions
 	) {
 		<#foreach opt in def.options?keys>
 		this.${opt} = ${opt} == null ? this : ${opt};
+		this.${def.options[opt]} = ${opt};
 		</#foreach>
-		final EnumSet<${def.optionClassName}> set = activeOptions.length == 0 ? EnumSet.noneOf(${def.optionClassName}.class) : EnumSet.copyOf(Arrays.asList(activeOptions));
+		final EnumSet<${optDef.className}> set = activeOptions.length == 0 ? EnumSet.noneOf(${optDef.className}.class) : EnumSet.copyOf(Arrays.asList(activeOptions));
 		this.options = Collections.unmodifiableSet(set);
 	}
 	@Override
-	public boolean isSet(${def.optionClassName} option) {
+	public boolean isSet(${optDef.className} option) {
 		return options.contains(option);
 	}
 	@Override
-	public Set<${def.optionClassName}> asSet() {
+	public Set<${optDef.className}> asSet() {
 		return options;
 	}
 }

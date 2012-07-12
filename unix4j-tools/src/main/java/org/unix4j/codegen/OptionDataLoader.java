@@ -12,7 +12,7 @@ import freemarker.template.SimpleSequence;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
 
-public class OptionDataLoader extends CompilingDataLoader {
+public class OptionDataLoader extends ClassInspectionDataLoader {
 	
 	public OptionDataLoader() {
 		super(TEMPLATE_LOADER);
@@ -42,6 +42,7 @@ public class OptionDataLoader extends CompilingDataLoader {
 		}
 		private TemplateModel loadOptionDef(Class<?> commandClass, Class<? extends Enum<?>> optionClass) {
 			final OptionDef optionDef = create(commandClass, optionClass);
+			System.out.println(optionDef.toString("......"));
 			try {
 				return ObjectWrapper.DEFAULT_WRAPPER.wrap(optionDef);
 			} catch (TemplateModelException e) {

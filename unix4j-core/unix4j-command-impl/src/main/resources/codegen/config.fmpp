@@ -4,7 +4,9 @@ modes: [
     copy(**/*) 
 ] 
 data: {
-    optionDefs: org.unix4j.codegen.OptionDataLoader()
+    optionDefs: org.unix4j.codegen.OptionDataLoader(
+    	org.unix4j.unix.ls.LsInterface
+    )
     optionDefsOld: [
 	    {
 			command: {

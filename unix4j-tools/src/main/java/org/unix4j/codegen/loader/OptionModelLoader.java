@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.unix4j.codegen.annotation.Acronym;
 import org.unix4j.codegen.annotation.Javadoc;
+import org.unix4j.codegen.annotation.Name;
 import org.unix4j.codegen.model.TypeDef;
 import org.unix4j.codegen.model.option.Command;
 import org.unix4j.codegen.model.option.OptionDef;
@@ -24,7 +25,8 @@ public class OptionModelLoader {
 	}
 
 	private Command defineCommand(Class<?> commandClass) {
-		return new Command(commandClass.getSimpleName().toLowerCase(), new TypeDef(commandClass));
+		final Name name = commandClass.getAnnotation(Name.class);
+		return new Command(name != null ? name.value() : commandClass.getSimpleName(), commandClass);
 	}
 
 	private <E extends Enum<E>> void defineOptions(Class<E> optionClass, OptionDef def) {
@@ -54,7 +56,7 @@ public class OptionModelLoader {
 	private <E extends Enum<E>> void defineOptionSetsRecursive(Class<E> optionClass, OptionDef def, Collection<EnumSet<E>> thisLevelActiveOptions) {
 		final Set<EnumSet<E>> nextLevelActiveOptions = new LinkedHashSet<EnumSet<E>>();
 		for (final EnumSet<E> active : thisLevelActiveOptions) {
-			final OptionSet optionSet = defineOptionSet(def.optionSetType.name, active);
+			final OptionSet optionSet = defineOptionSet(def.optionSetType.className, active);
 			def.optionSets.add(optionSet);
 			for (final E newInactive : active) {
 				final EnumSet<E> nextActive = EnumSet.copyOf(active);
@@ -67,8 +69,8 @@ public class OptionModelLoader {
 		}
 	}
 	private <E extends Enum<E>> OptionSet defineOptionSet(String optionSetClassName, EnumSet<E> activeOptions) {
-		final OptionSet set = new OptionSet();
-		set.name = getOptionSetName(optionSetClassName, activeOptions);
+		final String name = getOptionSetName(optionSetClassName, activeOptions);
+		final OptionSet set = new OptionSet(name);
 		for (final E active : activeOptions) {
 			set.active.add(getOptionName(active));
 		}

@@ -1,8 +1,9 @@
-package org.unix4j.unix.ls.def;
+package org.unix4j.unix.ls;
 
 import java.io.File;
 
 import org.unix4j.builder.CommandBuilder;
+import org.unix4j.codegen.annotation.Name;
 import org.unix4j.codegen.annotation.Options;
 import org.unix4j.command.Command;
 import org.unix4j.io.Output;
@@ -74,6 +75,7 @@ import org.unix4j.io.Output;
  *            new command instance or a command fromFile providing methods
  *            for chained invocation of following commands
  */
+@Name(LsInterface.NAME)
 @Options(LsOption.class)
 public interface LsInterface<R> {
 
