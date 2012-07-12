@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.unix4j</groupId>
+		<artifactId>unix4j-core</artifactId>
+		<version>0.1</version>
+	</parent>
+	<groupId>org.unix4j</groupId>
+	<artifactId>unix4j-command-impl</artifactId>
+	<version>0.1</version>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.unix4j</groupId>
+						<artifactId>unix4j-base</artifactId>
+						<version>0.1</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<configuration>
+							<target>
+								<property name="compile_classpath" refid="maven.compile.classpath" />
+								<echo message="${basedir}/src/main/java/org/unix4j/unix/ls/def"
+									file="target/generated-sources/main/java/CompilingDataLoader/java-source-dir" append="false" />
+								<echo message="${basedir}/target/CompilingDataLoader/output"
+									file="target/generated-sources/main/java/CompilingDataLoader/class-output-dir" append="false" />
+								<echo message="${compile_classpath}"
+									file="target/generated-sources/main/java/CompilingDataLoader/classpath" append="false" />
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Freemarker maven plugin for code generation -->
+			<plugin>
+				<groupId>com.googlecode.fmpp-maven-plugin</groupId>
+				<artifactId>fmpp-maven-plugin</artifactId>
+				<version>1.0</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.unix4j</groupId>
+						<artifactId>unix4j-tools</artifactId>
+						<version>0.1</version>
+					</dependency>
+					<dependency>
+						<groupId>org.unix4j</groupId>
+						<artifactId>unix4j-base</artifactId>
+						<version>0.1</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<cfgFile>src/main/resources/codegen/config.fmpp</cfgFile>
+					<outputDirectory>target/generated-sources/main/java</outputDirectory>
+					<templateDirectory>src/main/resources/codegen/templates</templateDirectory>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.unix4j</groupId>
+			<artifactId>unix4j-tools</artifactId>
+			<version>0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.unix4j</groupId>
+			<artifactId>unix4j-base</artifactId>
+			<version>0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.googlecode.fmpp-maven-plugin</groupId>
+			<artifactId>fmpp-maven-plugin</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<profiles>
+		<profile>
+			<id>jdk16</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>jdk17</id>
+			<activation>
+				<jdk>1.7</jdk>
+			</activation>
+		</profile>
+	</profiles>
+</project>

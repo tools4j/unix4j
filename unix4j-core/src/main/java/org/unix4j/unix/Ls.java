@@ -1,15 +1,15 @@
 package org.unix4j.unix;
 
+import java.io.File;
+import java.util.EnumSet;
+import java.util.Set;
+
 import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.Command;
 import org.unix4j.command.CommandInterface;
 import org.unix4j.io.Output;
 import org.unix4j.unix.ls.LsFactory;
 import org.unix4j.unix.ls.LsOptionSet;
-
-import java.io.File;
-import java.util.EnumSet;
-import java.util.Set;
 
 /**
  * <b>NAME</b>
@@ -327,14 +327,8 @@ public final class Ls {
 			return equals(option);
 		}
 
-		@Override
 		public OptionSet set(Option option) {
 			return new LsOptionSet(this, option);
-		}
-
-		@Override
-		public OptionSet setAll(Option... options) {
-			return new LsOptionSet(this, options);
 		}
 
 		@Override
@@ -396,11 +390,6 @@ public final class Ls {
 		public OptionSet t() {
 			return set(t);
 		}
-
-		@Override
-		public OptionSet copy() {
-			return new LsOptionSet(this);
-		}
 	}
 
 	public static interface OptionSet extends org.unix4j.optset.OptionSet<Ls.Option> {
@@ -427,9 +416,6 @@ public final class Ls {
 		OptionSet timeSorted();
 
 		OptionSet t();
-
-		@Override
-		OptionSet copy();
 	}
 
 	/**
