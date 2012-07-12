@@ -1,2 +1,6 @@
+target
+.classpath
+.project
+.settings
 chmod-javadoc.sh
 rsync-javadoc.sh

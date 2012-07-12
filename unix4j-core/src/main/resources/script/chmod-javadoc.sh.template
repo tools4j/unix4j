@@ -1,1 +1,0 @@
-ssh -p <port> <user>@unix4j.org "(cd /www/unix4j.org/www/htdocs/javadoc ; find . -exec chmod a+r {} \; ; find . -type d -exec chmod a+x {} \; )"
