@@ -37,7 +37,7 @@ public enum ${setDef.className} implements OptionSet<${optDef.className}> {
 	) {
 		<#foreach opt in def.options?keys>
 		this.${opt} = ${opt} == null ? this : ${opt};
-		this.${def.options[opt]} = ${opt};
+		this.${def.options[opt]} = this.${opt};
 		</#foreach>
 		final EnumSet<${optDef.className}> set = activeOptions.length == 0 ? EnumSet.noneOf(${optDef.className}.class) : EnumSet.copyOf(Arrays.asList(activeOptions));
 		this.options = Collections.unmodifiableSet(set);
