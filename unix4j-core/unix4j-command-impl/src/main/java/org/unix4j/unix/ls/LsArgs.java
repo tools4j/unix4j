@@ -6,14 +6,13 @@ import java.util.Collections;
 import java.util.List;
 
 import org.unix4j.command.AbstractArgs;
-import org.unix4j.unix.Ls.Option;
 import org.unix4j.util.FileUtil;
 import org.unix4j.util.TypedMap;
 
 /**
  * Arguments and options for the ls command.
  */
-class LsArgs extends AbstractArgs<Option, LsArgs> {
+class LsArgs extends AbstractArgs<LsOption, LsArgs> {
 	public static final TypedMap.Key<List<File>> FILES = TypedMap.DefaultKey.keyForListOf("files", File.class);
 
 	public LsArgs() {
@@ -41,7 +40,7 @@ class LsArgs extends AbstractArgs<Option, LsArgs> {
 	}
 
 	public LsArgs(List<File> files) {
-		super(Option.class);
+		super(LsOption.class);
 		setArg(FILES, files);
 	}
 
@@ -50,12 +49,12 @@ class LsArgs extends AbstractArgs<Option, LsArgs> {
 	}
 
 	@Override
-	public boolean hasOpt(Option opt) {
-		return opt.isSet(getOpts());
+	public boolean hasOpt(LsOption opt) {
+		return getOpts().contains(opt);
 	}
 
 	public String getSizeString(long bytes) {
-		if (hasOpt(Option.humanReadable)) {
+		if (hasOpt(LsOption.humanReadable)) {
 			final String units = "BKMG";
 			int unit = 0;
 			int fraction = 0;

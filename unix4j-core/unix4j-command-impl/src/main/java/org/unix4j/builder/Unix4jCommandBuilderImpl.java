@@ -1,5 +1,7 @@
 package org.unix4j.builder;
 
+import java.io.File;
+
 import org.unix4j.command.Command;
 import org.unix4j.io.Input;
 import org.unix4j.unix.Cut;
@@ -10,8 +12,7 @@ import org.unix4j.unix.Sed;
 import org.unix4j.unix.Sort;
 import org.unix4j.unix.Wc;
 import org.unix4j.unix.Xargs;
-
-import java.io.File;
+import org.unix4j.unix.ls.LsOptionSet;
 
 public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements Unix4jCommandBuilder {
 
@@ -41,19 +42,19 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 	}
 
 	@Override
-	public Unix4jCommandBuilder ls(Ls.OptionSet options) {
+	public Unix4jCommandBuilder ls(LsOptionSet options) {
 		join(Ls.FACTORY.ls(options));
 		return this;
 	}
 
 	@Override
-	public Unix4jCommandBuilder ls(Ls.OptionSet options, File... files) {
+	public Unix4jCommandBuilder ls(LsOptionSet options, File... files) {
 		join(Ls.FACTORY.ls(options, files));
 		return this;
 	}
 
 	@Override
-	public Unix4jCommandBuilder ls(Ls.OptionSet options, String... files) {
+	public Unix4jCommandBuilder ls(LsOptionSet options, String... files) {
 		join(Ls.FACTORY.ls(options, files));
 		return this;
 	}

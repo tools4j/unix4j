@@ -1,14 +1,13 @@
 package org.unix4j.unix;
 
 import java.io.File;
-import java.util.EnumSet;
-import java.util.Set;
 
 import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.Command;
 import org.unix4j.command.CommandInterface;
 import org.unix4j.io.Output;
 import org.unix4j.unix.ls.LsFactory;
+import org.unix4j.unix.ls.LsOptionSet;
 
 /**
  * <b>NAME</b>
@@ -159,7 +158,7 @@ public final class Ls {
 		 *         instance to itself facilitating chained invocation of joined
 		 *         commands.
 		 */
-		R ls(OptionSet options);
+		R ls(LsOptionSet options);
 
 		/**
 		 * Prints the name of the given files and lists all files contained in
@@ -181,7 +180,7 @@ public final class Ls {
 		 *         instance to itself facilitating chained invocation of joined
 		 *         commands.
 		 */
-		R ls(OptionSet options, File... files);
+		R ls(LsOptionSet options, File... files);
 
 		/**
 		 * Prints the name of the given files and lists all files contained in
@@ -203,219 +202,13 @@ public final class Ls {
 		 *         instance to itself facilitating chained invocation of joined
 		 *         commands.
 		 */
-		R ls(OptionSet options, String... files);
+		R ls(LsOptionSet options, String... files);
 	}
-
+	
 	/**
-	 * Option flags for the ls command.
+	 * Options for the ls command.
 	 */
-	public static enum Option implements OptionSet {
-		/**
-		 * Lists all files in the given directory, including hidden files (those
-		 * whose names start with "." in Unix). By default, these files are
-		 * excluded from the list.
-		 * <p>
-		 * This option is identical to the option {@link #a}.
-		 */
-		allFiles,
-		/**
-		 * Lists all files in the given directory, including hidden files (those
-		 * whose names start with "." in Unix). By default, these files are
-		 * excluded from the list.
-		 * <p>
-		 * This option is identical to the option {@link #allFiles}.
-		 */
-		a(allFiles),
-		/**
-		 * Print sizes in human readable format. (e.g., 1K, 234M, 2G, etc.)
-		 * <p>
-		 * This option is identical to the option {@link #h}.
-		 */
-		humanReadable,
-		/**
-		 * Print sizes in human readable format. (e.g., 1K, 234M, 2G, etc.)
-		 * <p>
-		 * This option is identical to the option {@link #humanReadable}.
-		 */
-		h(humanReadable),
-		/**
-		 * Long format, displaying file types, permissions, number of hard
-		 * links, owner, group, size, date, and filename.
-		 * <p>
-		 * This option is identical to the option {@link #l}.
-		 */
-		longFormat,
-		/**
-		 * Long format, displaying file types, permissions, number of hard
-		 * links, owner, group, size, date, and filename.
-		 * <p>
-		 * This option is identical to the option {@link #longFormat}.
-		 */
-		l(longFormat),
-		/**
-		 * Recursively lists subdirectories encountered.
-		 * <p>
-		 * This option is identical to the option {@link #R}.
-		 */
-		recurseSubdirs,
-		/**
-		 * Recursively lists subdirectories encountered.
-		 * <p>
-		 * This option is identical to the option {@link #recurseSubdirs}.
-		 */
-		R(recurseSubdirs),
-		/**
-		 * Reverses the order of the sort to get reverse collating sequence or
-		 * oldest first.
-		 * <p>
-		 * This option is identical to the option {@link #r}.
-		 */
-		reverseOrder,
-		/**
-		 * Reverses the order of the sort to get reverse collating sequence or
-		 * oldest first.
-		 * <p>
-		 * This option is identical to the option {@link #reverseOrder}.
-		 */
-		r(reverseOrder),
-		/**
-		 * Sorts with the primary key being time modified (most recently
-		 * modified first) and the secondary key being filename in the collating
-		 * sequence.
-		 * <p>
-		 * This option is identical to the option {@link #t}.
-		 */
-		timeSorted,
-		/**
-		 * Sorts with the primary key being time modified (most recently
-		 * modified first) and the secondary key being filename in the collating
-		 * sequence.
-		 * <p>
-		 * This option is identical to the option {@link #timeSorted}.
-		 */
-		t(timeSorted);
-
-		private Option alias;
-
-		private Option() {
-			this.alias = null;
-		}
-
-		private Option(Option alias) {
-			this.alias = alias;
-			alias.alias = this;
-		}
-
-		public boolean isSame(Option option) {
-			return equals(option) || alias.equals(option);
-		}
-
-		public boolean isSet(Set<? extends Option> options) {
-			return options.contains(this) || options.contains(alias);
-		}
-
-		// interface OptionSet
-
-		@Override
-		public EnumSet<Option> asSet() {
-			return EnumSet.of(this);
-		}
-
-		@Override
-		public boolean isSet(Option option) {
-			return equals(option);
-		}
-
-		public OptionSet set(Option option) {
-			return null;//FIXME new LsOptionSet(this, option);
-		}
-
-		@Override
-		public OptionSet allFiles() {
-			return set(allFiles);
-		}
-
-		@Override
-		public OptionSet a() {
-			return set(a);
-		}
-
-		@Override
-		public OptionSet humanReadable() {
-			return set(humanReadable);
-		}
-
-		@Override
-		public OptionSet h() {
-			return set(h);
-		}
-
-		@Override
-		public OptionSet longFormat() {
-			return set(longFormat);
-		}
-
-		@Override
-		public OptionSet l() {
-			return set(l);
-		}
-
-		@Override
-		public OptionSet reverseOrder() {
-			return set(reverseOrder);
-		}
-
-		@Override
-		public OptionSet r() {
-			return set(r);
-		}
-
-		@Override
-		public OptionSet recurseSubdirs() {
-			return set(recurseSubdirs);
-		}
-
-		@Override
-		public OptionSet R() {
-			return set(R);
-		}
-
-		@Override
-		public OptionSet timeSorted() {
-			return set(timeSorted);
-		}
-
-		@Override
-		public OptionSet t() {
-			return set(t);
-		}
-	}
-
-	public static interface OptionSet extends org.unix4j.optset.OptionSet<Ls.Option> {
-		OptionSet allFiles();
-
-		OptionSet a();
-
-		OptionSet humanReadable();
-
-		OptionSet h();
-
-		OptionSet longFormat();
-
-		OptionSet l();
-
-		OptionSet reverseOrder();
-
-		OptionSet r();
-
-		OptionSet recurseSubdirs();
-
-		OptionSet R();
-
-		OptionSet timeSorted();
-
-		OptionSet t();
-	}
+	public static final LsOptionSet Options = LsOptionSet.LsOptionSet;
 
 	/**
 	 * Singleton {@link LsFactory factory} instance for the ls command.
