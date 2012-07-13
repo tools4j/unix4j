@@ -1,5 +1,7 @@
 package org.unix4j.unix;
 
+import static org.unix4j.util.Assert.assertArgNotNull;
+
 import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
@@ -158,9 +160,7 @@ public final class Cut {
 
 		public Args(String inputDelimiter, String outputDelimiter, int... fields) {
 			super(Option.class);
-			if (fields == null) {
-				throw new NullPointerException("fields cannot be null");
-			}
+			assertArgNotNull("fields cannot be null", fields);
 			this.type = Type.Fields;
 			setArg(INPUT_DELIMITER, inputDelimiter == null ? "\\s+" : inputDelimiter);
 			setArg(OUTPUT_DELIMITER, inputDelimiter == null ? " " : outputDelimiter);
@@ -175,9 +175,7 @@ public final class Cut {
 
 		public Args(int[] charIndices) {
 			super(Option.class);
-			if (charIndices == null) {
-				throw new NullPointerException("charIndices cannot be null");
-			}
+			assertArgNotNull("charIndices cannot be null", charIndices);
 			this.type = Type.Chars;
 			setArg(CHARS, charIndices);
 		}

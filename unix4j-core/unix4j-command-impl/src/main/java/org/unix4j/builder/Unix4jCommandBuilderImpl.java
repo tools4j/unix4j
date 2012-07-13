@@ -7,9 +7,11 @@ import org.unix4j.io.Input;
 import org.unix4j.unix.Cut;
 import org.unix4j.unix.Echo;
 import org.unix4j.unix.Grep;
+import org.unix4j.unix.Head;
 import org.unix4j.unix.Ls;
 import org.unix4j.unix.Sed;
 import org.unix4j.unix.Sort;
+import org.unix4j.unix.Tail;
 import org.unix4j.unix.Wc;
 import org.unix4j.unix.Xargs;
 import org.unix4j.unix.ls.LsOptionSet;
@@ -132,6 +134,18 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 	}
 
 	@Override
+	public Unix4jCommandBuilder sedSubstitute(String searchExpression, String replaceExpression) {
+		join(Sed.FACTORY.sedSubstitute(searchExpression, replaceExpression));
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder sedSubstituteFirst(String searchExpression, String replaceExpression) {
+		join(Sed.FACTORY.sedSubstituteFirst(searchExpression, replaceExpression));
+		return this;
+	}
+
+	@Override
 	public Unix4jCommandBuilder xargs() {
 		join(Xargs.FACTORY.xargs());
 		return this;
@@ -176,6 +190,30 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 	@Override
 	public Unix4jCommandBuilder wcCountWords() {
 		join(Wc.FACTORY.wcCountWords());
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder head(int lines) {
+		join(Head.FACTORY.head(lines));
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder head() {
+		join(Head.FACTORY.head());
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder tail(int lines) {
+		join(Tail.FACTORY.tail(lines));
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder tail() {
+		join(Tail.FACTORY.tail());
 		return this;
 	}
 }

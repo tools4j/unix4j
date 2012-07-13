@@ -7,6 +7,8 @@ import org.unix4j.util.MultilineString;
 
 import java.io.StringWriter;
 
+import static org.junit.Assert.assertEquals;
+
 public class SedTest {
 	private final static MultilineString input;
 	static {
@@ -54,6 +56,16 @@ public class SedTest {
 
 		final String script = "s/blah/hasblah/g";
 		assertSed(input, script, expectedOutput);
+	}
+
+	@Test
+	public void testSed_searchAndReplaceUsingEscapedForwardSlashes() {
+		final String input = "to be/not to be that is the question";
+		final String script = "s/be\\/not/be or not/g";
+		final String expectedOutput = "to be or not to be that is the question";
+
+		final String output = Unix4j.fromString(input).sed(script).executeToString(false);
+		assertEquals(expectedOutput, output);
 	}
 
 	@Test
@@ -122,6 +134,54 @@ public class SedTest {
 
 		final String script = "s/(This) (is) (a) (test)/$4 $3 \\$ $2 $1/";
 		assertSed( input, script, expectedOutput );
+	}
+
+	@Test
+	public void testSed_searchAndReplaceUsingSubstituteMethodSimple() {
+		final MultilineString expectedOutput = new MultilineString();
+		expectedOutput
+				.appendLine("This is a test hasblah blah blah")
+				.appendLine("This is a test hasblah blah")
+				.appendLine("This is a test one two three")
+				.appendLine("one")
+				.appendLine("a")
+				.appendLine("")
+				.appendLine("two")
+				.appendLine("def\\d123");
+
+		final StringWriter actualOutputStringWriter = new StringWriter();
+		Unix4j.fromString(input.toString()).sedSubstituteFirst("blah", "hasblah").execute(new WriterOutput(actualOutputStringWriter));
+		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
+		actualOutput.assertMultilineStringEquals(expectedOutput);
+	}
+
+	@Test
+	public void testSed_searchAndReplaceUsingSubstituteMethodGlobal() {
+		final MultilineString expectedOutput = new MultilineString();
+		expectedOutput
+				.appendLine("This is a test hasblah hasblah hasblah")
+				.appendLine("This is a test hasblah hasblah")
+				.appendLine("This is a test one two three")
+				.appendLine("one")
+				.appendLine("a")
+				.appendLine("")
+				.appendLine("two")
+				.appendLine("def\\d123");
+
+		final StringWriter actualOutputStringWriter = new StringWriter();
+		Unix4j.fromString(input.toString()).sedSubstitute("blah", "hasblah").execute(new WriterOutput(actualOutputStringWriter));
+		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
+		actualOutput.assertMultilineStringEquals(expectedOutput);
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void testSed_substituteNullSearchParam() {
+		Unix4j.fromString("blah").sedSubstitute(null, "hasblah").executeToString();
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void testSed_substituteNullReplaceParam() {
+		Unix4j.fromString("blah").sedSubstitute("blah", null).executeToString();
 	}
 
 	private void assertSed(final MultilineString input, final String script, final MultilineString expectedOutput){

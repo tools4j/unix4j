@@ -1,15 +1,17 @@
 package org.unix4j.unix;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
 import org.unix4j.io.Input;
 import org.unix4j.io.Output;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static org.unix4j.util.Assert.assertArgFalse;
 
 /**
  * Non-instantiable module with inner types making up the sort command.
@@ -130,9 +132,7 @@ public final class Sort {
 		public void executeBatch(Input input, Output output) {
 			final boolean isAsc = getArguments().hasOpt(Option.ascending);
 			final boolean isDesc = getArguments().hasOpt(Option.descending);
-			if (isAsc && isDesc) {
-				throw new IllegalArgumentException("Options " + Option.ascending + " and " + Option.descending + " cannot be specified at the same time");
-			}
+			assertArgFalse("Options " + Option.ascending + " and " + Option.descending + " cannot be specified at the same time", (isAsc && isDesc));
 			final List<String> lines = new ArrayList<String>();
 			while (input.hasMoreLines()) {
 				lines.add(input.readLine());

@@ -1,5 +1,9 @@
 package org.unix4j.unix;
 
+import java.util.regex.Pattern;
+
+import static org.unix4j.util.Assert.assertArgNotNull;
+
 import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
@@ -7,8 +11,6 @@ import org.unix4j.command.CommandInterface;
 import org.unix4j.io.Input;
 import org.unix4j.io.Output;
 import org.unix4j.util.TypedMap;
-
-import java.util.regex.Pattern;
 
 /**
  * Non-instantiable module with inner types making up the grep command.
@@ -116,9 +118,7 @@ public final class Grep {
 
 		public Args(String matchString) {
 			super(Option.class);
-			if (matchString == null) {
-				throw new NullPointerException("matchString cannot be null");
-			}
+			assertArgNotNull("matchString cannot be null", matchString);
 			setArg(MATCH_STRING, matchString);
 		}
 
