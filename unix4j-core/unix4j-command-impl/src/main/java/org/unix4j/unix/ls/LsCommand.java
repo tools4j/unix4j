@@ -9,7 +9,6 @@ import org.unix4j.command.AbstractCommand;
 import org.unix4j.io.Input;
 import org.unix4j.io.Output;
 import org.unix4j.unix.Ls;
-import org.unix4j.unix.Ls.Option;
 import org.unix4j.util.FileUtil;
 import org.unix4j.util.ReverseOrderComparator;
 
@@ -38,10 +37,10 @@ class LsCommand extends AbstractCommand<LsArgs> {
 	private void listFiles(File relativeTo, File parent, List<File> files, Output output) {
 		final LsArgs args = getArguments();
 		final Comparator<File> comparator = getComparator(relativeTo);
-		final boolean allFiles = args.hasOpt(Option.allFiles);
-		final boolean longFormat = args.hasOpt(Option.longFormat);
+		final boolean allFiles = args.hasOpt(LsOption.allFiles);
+		final boolean longFormat = args.hasOpt(LsOption.longFormat);
 		final LsFormatter formatter = longFormat ? LsFormatterLong.FACTORY.create(relativeTo, parent, files, args) : LsFormatterShort.INSTANCE;
-		final boolean recurseSubdirs = parent == null || args.hasOpt(Option.recurseSubdirs);
+		final boolean recurseSubdirs = parent == null || args.hasOpt(LsOption.recurseSubdirs);
 
 		//add special directories . and ..
 		if (parent != null && allFiles) {
@@ -75,8 +74,8 @@ class LsCommand extends AbstractCommand<LsArgs> {
 
 	private Comparator<File> getComparator(File relativeTo) {
 		final LsArgs args = getArguments();
-		final Comparator<File> comparator = args.hasOpt(Option.timeSorted) ? FileComparators.timeAndRelativeFileName(relativeTo) : FileComparators.typeAndRelativeFileName(relativeTo);
-		return args.hasOpt(Option.reverseOrder) ? ReverseOrderComparator.reverse(comparator) : comparator;
+		final Comparator<File> comparator = args.hasOpt(LsOption.timeSorted) ? FileComparators.timeAndRelativeFileName(relativeTo) : FileComparators.typeAndRelativeFileName(relativeTo);
+		return args.hasOpt(LsOption.reverseOrder) ? ReverseOrderComparator.reverse(comparator) : comparator;
 	}
 
 }
