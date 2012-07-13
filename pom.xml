@@ -13,7 +13,7 @@
 		<module>unix4j-core</module>
 		<module>unix4j-perf</module>
 	</modules>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -54,6 +54,7 @@
 						<configuration>
 							<linksource>true</linksource>
 							<javadocVersion>1.6</javadocVersion>
+							<aggregate>true</aggregate>
 							<show>package</show>
 							<groups>
 								<group>
@@ -88,6 +89,7 @@
 						<configuration>
 							<linksource>true</linksource>
 							<javadocVersion>1.7</javadocVersion>
+							<aggregate>true</aggregate>
 							<show>package</show>
 							<groups>
 								<group>
