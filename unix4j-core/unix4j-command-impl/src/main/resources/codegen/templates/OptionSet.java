@@ -30,11 +30,11 @@ import ${optDef.packageName}.${optDef.className};
 /**
  * Option sets for the {@link ${cmdDef.className} ${cmdDef.name}} command with 
  * the following options: <#foreach opt in def.options?keys>{@link #${opt} ${opt}}<#if opt_has_next>, </#if></#foreach>.
- * Note that each option has also a long name: <#foreach opt in def.options?keys>${opt}:{@link #${def.options[opt]} ${def.options[opt]}}<#if opt_has_next>, </#if></#foreach>.
+ * Note that each option has also a long name: <#foreach opt in def.options?keys>{@code ${opt}:}{@link #${def.options[opt]} ${def.options[opt]}}<#if opt_has_next>, </#if></#foreach>.
  */
 public enum ${setDef.className} implements OptionSet<${optDef.className}> {
 	<#foreach set in def.optionSets>
-	/** OptionSet with the following active options: [<#foreach opt in set.active>${opt}<#if opt_has_next>, </#if></#foreach>]*/
+	/** OptionSet with the following active options: <#foreach opt in set.active>{@link #${opt} ${opt}}<#if opt_has_next>, </#if></#foreach>*/
 	${set.name}(<#foreach opt in def.options?keys><#if set.next[opt]??>${set.next[opt]}<#else>null/*already set*/</#if><#if opt_has_next || set.active?size != 0>, </#if></#foreach>
 		/*active:*/<#foreach opt in set.active>${optDef.className}.${def.options[opt]}<#if opt_has_next>, </#if></#foreach>
 	)<#if set_has_next>,<#else>;</#if>
