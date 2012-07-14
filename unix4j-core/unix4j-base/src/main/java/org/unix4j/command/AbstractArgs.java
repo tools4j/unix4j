@@ -128,8 +128,8 @@ abstract public class AbstractArgs<O extends Enum<O>, A extends AbstractArgs<O, 
 	 * @param opts
 	 *            the options to be set
 	 */
-	public void setOpts(OptionSet<? extends O> opts) {
-		setOpts(opts.asSet());
+	public void setOpts(OptionSet<O> opts) {
+		this.opts.addAll(opts.asSet());
 	}
 
 	/**

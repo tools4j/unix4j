@@ -6,6 +6,19 @@
 <@pp.changeOutputFile name=pp.pathTo(setDef.packagePath+"/"+setDef.className+".java")/> 
 package ${setDef.packageName};
 
+<#macro optionJavadoc opt alias javadoc> 
+	/**
+	 * Option {@code "-${opt}"}: ${javadoc}
+	 * <p>
+	 * The option {@code "-${opt}"} is equivalent to the {@code "--}{@link #${alias} ${alias}}{@code "} option.
+	 * <p>
+	 * Technically speaking, this field points to a set with the options of the 
+	 * current set plus the option {@code "-${opt}"}. If the option {@code "-${opt}"}
+	 * is already set, the field {@code ${opt}} points to the enum constant itself
+	 * as it already represents the current set of options. 
+	 */
+</#macro>
+
 import java.util.Set;
 import java.util.EnumSet;
 import java.util.Arrays;
@@ -15,7 +28,9 @@ import ${cmdDef.packageName}.${cmdDef.className};
 import ${optDef.packageName}.${optDef.className};
 
 /**
- * {@link ${optDef.className}} sets for the {@link ${cmdDef.className} ${cmdDef.name}} command.
+ * Option sets for the {@link ${cmdDef.className} ${cmdDef.name}} command with 
+ * the following options: <#foreach opt in def.options?keys>{@link #${opt} ${opt}}<#if opt_has_next>, </#if></#foreach>.
+ * Note that each option has also a long name: <#foreach opt in def.options?keys>${opt}:{@link #${def.options[opt]} ${def.options[opt]}}<#if opt_has_next>, </#if></#foreach>.
  */
 public enum ${setDef.className} implements OptionSet<${optDef.className}> {
 	<#foreach set in def.optionSets>
@@ -24,13 +39,6 @@ public enum ${setDef.className} implements OptionSet<${optDef.className}> {
 		/*active:*/<#foreach opt in set.active>${optDef.className}.${def.options[opt]}<#if opt_has_next>, </#if></#foreach>
 	)<#if set_has_next>,<#else>;</#if>
 	</#foreach>
-	<#foreach opt in def.options?keys>
-	/** Set with the current options plus the option "-${opt}" (aka "${def.options[opt]}"). This same set if "--${def.options[opt]}" is already set.*/
-	public final ${setDef.className} ${opt};
-	/** Set with the current options plus the option "--${def.options[opt]}" (aka "-${opt}"). This same set if "--${def.options[opt]}" is already set.*/
-	public final ${setDef.className} ${def.options[opt]};
-	</#foreach>
-	private final Set<${optDef.className}> options;
 	private ${setDef.className}(
 		<#foreach opt in def.options?keys>${setDef.className} ${opt}, </#foreach>
 		${optDef.className}... activeOptions
@@ -42,10 +50,22 @@ public enum ${setDef.className} implements OptionSet<${optDef.className}> {
 		final EnumSet<${optDef.className}> set = activeOptions.length == 0 ? EnumSet.noneOf(${optDef.className}.class) : EnumSet.copyOf(Arrays.asList(activeOptions));
 		this.options = Collections.unmodifiableSet(set);
 	}
+	<#foreach opt in def.options?keys>
+	<@optionJavadoc opt def.options[opt] def.javadoc[opt]/>
+	public final ${setDef.className} ${opt};
+	<@optionJavadoc def.options[opt] opt def.javadoc[opt]/>
+	public final ${setDef.className} ${def.options[opt]};
+	</#foreach>
+	private final Set<${optDef.className}> options;
+	//inherit javadoc
 	@Override
 	public boolean isSet(${optDef.className} option) {
 		return options.contains(option);
 	}
+	/**
+	 * Returns an unmodifiable set with the active options.
+	 * @return an unmodifiable set with the active options.
+	 */
 	@Override
 	public Set<${optDef.className}> asSet() {
 		return options;

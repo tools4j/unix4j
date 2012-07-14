@@ -20,9 +20,10 @@ public interface OptionSet<E extends Enum<E>> {
 	boolean isSet(E option);
 
 	/**
-	 * Returns an unmodifiable version of the backing set with options.
+	 * Returns the active options in a {@link Set}. It depends on the implementation 
+	 * whether the returned set is modifiable or not.
 	 * 
-	 * @return an unmodifiable set containing all set options
+	 * @return an set containing all active options
 	 */
 	Set<E> asSet();
 }
