@@ -24,6 +24,7 @@ import java.util.EnumSet;
 import java.util.Arrays;
 import java.util.Collections;
 import org.unix4j.optset.OptionSet;
+
 import ${cmdDef.packageName}.${cmdDef.className};
 import ${optDef.packageName}.${optDef.className};
 
@@ -31,10 +32,22 @@ import ${optDef.packageName}.${optDef.className};
  * Option sets for the {@link ${cmdDef.className} ${cmdDef.name}} command with 
  * the following options: <#foreach opt in def.options?keys>{@link #${opt} ${opt}}<#if opt_has_next>, </#if></#foreach>.
  * Note that each option has also a long name: <#foreach opt in def.options?keys>{@code ${opt}:}{@link #${def.options[opt]} ${def.options[opt]}}<#if opt_has_next>, </#if></#foreach>.
+ * <p>
+ * Every possible {@code ${cmdDef.name}} option permutation is reflected by one
+ * of the {@code ${setDef.className}} constants. With this explicit expansion
+ * of all possible option combinations, options can be passed to the command in
+ * a very compact form, such as:
+ * <pre>
+<#if def.options?keys?size != 0> * ${cmdDef.name}(${setDef.className}.${def.options?keys[0]}, ...);
+<#if def.options?keys?size != 1> * ${cmdDef.name}(${setDef.className}.${def.options?keys[0]}.${def.options?keys[1]}, ...);
+<#if def.options?keys?size != 2> * ...
+<#if def.options?keys?size != 2> * ${cmdDef.name}(${setDef.className}<#foreach o in def.options?keys>.${o}</#foreach>, ...);
+</#if></#if></#if></#if>
+ * </pre>
  */
 public enum ${setDef.className} implements OptionSet<${optDef.className}> {
 	<#foreach set in def.optionSets>
-	/** OptionSet with the following active options: <#foreach opt in set.active>{@link #${opt} ${opt}}<#if opt_has_next>, </#if></#foreach>*/
+	/** <#if set.active?size==0>Empty option set without active options<#else>Option set with the following active options: <#foreach opt in set.active>{@link #${opt} ${opt}}<#if opt_has_next>, </#if></#foreach></#if>.*/
 	${set.name}(<#foreach opt in def.options?keys><#if set.next[opt]??>${set.next[opt]}<#else>null/*already set*/</#if><#if opt_has_next || set.active?size != 0>, </#if></#foreach>
 		/*active:*/<#foreach opt in set.active>${optDef.className}.${def.options[opt]}<#if opt_has_next>, </#if></#foreach>
 	)<#if set_has_next>,<#else>;</#if>
