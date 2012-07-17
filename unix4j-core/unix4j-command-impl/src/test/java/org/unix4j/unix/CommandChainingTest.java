@@ -1,11 +1,13 @@
 package org.unix4j.unix;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.util.MultilineString;
 
 import static org.junit.Assert.assertEquals;
 
+@Ignore
 public class CommandChainingTest {
 	private final static MultilineString input;
 	static {
