@@ -6,7 +6,7 @@
 	<groupId>org.unix4j</groupId>
 	<artifactId>unix4j-tools</artifactId>
 	<version>0.1</version>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -14,12 +14,28 @@
 			<version>4.10</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.googlecode.fmpp-maven-plugin</groupId>
-			<artifactId>fmpp-maven-plugin</artifactId>
-			<version>1.0</version>
-		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.19</version>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.fmpp-maven-plugin</groupId>
+            <artifactId>fmpp-maven-plugin</artifactId>
+            <version>1.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.beanshell</groupId>
+                    <artifactId>bsh</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.beanshell</groupId>
+            <artifactId>bsh</artifactId>
+            <version>2.0b5</version>
+        </dependency>
+    </dependencies>
 	<profiles>
 		<profile>
 			<id>jdk16</id>
