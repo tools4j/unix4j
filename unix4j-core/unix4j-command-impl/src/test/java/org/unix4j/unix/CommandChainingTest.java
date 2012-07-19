@@ -7,7 +7,7 @@ import org.unix4j.util.MultilineString;
 
 import static org.junit.Assert.assertEquals;
 
-@Ignore
+//@Ignore
 public class CommandChainingTest {
 	private final static MultilineString input;
 	static {
@@ -57,7 +57,7 @@ public class CommandChainingTest {
 	@Test
 	public void test_headTail_4() {
 		final MultilineString expectedOutput = new MultilineString();
-		expectedOutput.appendLine("This is a test one two three");
+		expectedOutput.appendLine("This is a test blah blah blah");
 		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).head(1).tail(1).executeToString(false));
 	}
 

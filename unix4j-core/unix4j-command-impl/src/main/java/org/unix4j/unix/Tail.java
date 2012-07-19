@@ -1,16 +1,15 @@
 package org.unix4j.unix;
 
+import static org.unix4j.util.Assert.assertArgGreaterThanOrEqualTo;
+
+import java.util.LinkedList;
+
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
 import org.unix4j.io.Input;
 import org.unix4j.io.Output;
 import org.unix4j.util.TypedMap;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.unix4j.util.Assert.assertArgGreaterThanOrEqualTo;
 
 /**
  * <b>NAME</b>
@@ -157,19 +156,17 @@ public final class Tail {
 
 		@Override
 		public void executeBatch(Input input, Output output) {
-			int linesToOutput = getArguments().getLines();
-			final List<String> lines = new ArrayList<String>();
+			final int linesToOutput = getArguments().getLines();
+			final LinkedList<String> lines = new LinkedList<String>();
 			while (input.hasMoreLines()){
 				lines.add(input.readLine());
+				if (lines.size() > linesToOutput) {
+					lines.removeFirst();
+				}
 			}
-
-			int startFrom = lines.size() - linesToOutput;
-			if( startFrom < 0 ){
-				startFrom = 0;
-			}
-
-			for(int i=startFrom; i<lines.size(); i++){
-				output.writeLine(lines.get(i));
+			
+			for (final String line : lines) {
+				output.writeLine(line);
 			}
 		}
 	}

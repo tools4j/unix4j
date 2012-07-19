@@ -7,6 +7,7 @@ import org.unix4j.command.CommandInterface;
 import org.unix4j.io.Input;
 import org.unix4j.io.Output;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -180,7 +181,7 @@ public final class Sort {
 			while (input.hasMoreLines()) {
 				lines.add(input.readLine());
 			}
-			Collections.sort(lines);
+			Collections.sort(lines, Collator.getInstance());
 			if (isDesc) {
 				for (int i = lines.size() - 1; i >= 0; i--) {
 					output.writeLine(lines.get(i));
