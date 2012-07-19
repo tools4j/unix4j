@@ -70,6 +70,11 @@
 							<groups>
 								<group>
 									<title>unix4j-core</title>
+									<packages>org.unix4j:org.unix4j.builder:org.unix4j.command:org.unix4j.io:org.unix4j.optset:org.unix4j.unix*:org.unix4j.util</packages>
+								</group>
+								<group>
+									<title>unix4j-tools</title>
+									<packages>org.unix4j.compiler*:org.unix4j.codegen*</packages>
 								</group>
 							</groups>
 						</configuration>
@@ -105,6 +110,11 @@
 							<groups>
 								<group>
 									<title>unix4j-core</title>
+									<packages>org.unix4j:org.unix4j.builder:org.unix4j.command:org.unix4j.io:org.unix4j.optset:org.unix4j.unix*:org.unix4j.util</packages>
+								</group>
+								<group>
+									<title>unix4j-tools</title>
+									<packages>org.unix4j.compiler*:org.unix4j.codegen*</packages>
 								</group>
 							</groups>
 						</configuration>
