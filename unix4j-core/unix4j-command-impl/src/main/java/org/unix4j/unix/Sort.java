@@ -49,6 +49,39 @@ public final class Sort {
 		R sort();
 
 		/**
+		 * Sorts the input in ascending order. Equivalent to
+		 * <tt>sort(Sort.Option.ascending}</tt>.
+		 *
+		 * @return the generic type {@code <R>} defined by the implementing
+		 *         class, even if the command itself returns no value and writes
+		 *         its result to an {@link Output} object. This serves
+		 *         implementing classes like the command {@link Factory} to
+		 *         return a new {@link Command} instance for the argument values
+		 *         passed to this method. {@link CommandBuilder} extensions also
+		 *         implementing this this command interface usually return an
+		 *         instance to itself facilitating chained invocation of joined
+		 *         commands.
+		 */
+		R sortAscending();
+
+
+		/**
+		 * Sorts the input in descending order. Equivalent to
+		 * <tt>sort(Sort.Option.descending}</tt>.
+		 *
+		 * @return the generic type {@code <R>} defined by the implementing
+		 *         class, even if the command itself returns no value and writes
+		 *         its result to an {@link Output} object. This serves
+		 *         implementing classes like the command {@link Factory} to
+		 *         return a new {@link Command} instance for the argument values
+		 *         passed to this method. {@link CommandBuilder} extensions also
+		 *         implementing this this command interface usually return an
+		 *         instance to itself facilitating chained invocation of joined
+		 *         commands.
+		 */
+		R sortDescending();
+
+		/**
 		 * Sorts the input using the specified sort {@link Option option}.
 		 *
 		 * @param options
@@ -107,6 +140,16 @@ public final class Sort {
 		@Override
 		public Command sort() {
 			return new Command(new Args());
+		}
+
+		@Override
+		public Command sortAscending() {
+			return sort();
+		}
+
+		@Override
+		public Command sortDescending() {
+			return new Command(new Args(Option.descending));
 		}
 
 		@Override
