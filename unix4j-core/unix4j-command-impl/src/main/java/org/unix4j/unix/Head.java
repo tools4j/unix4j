@@ -142,10 +142,8 @@ public final class Head {
 	 * Head command implementation.
 	 */
 	public static class Command extends AbstractCommand<Args> {
-		int countOfLinesOutput = 0;
-
 		public Command(Args arguments) {
-			super(NAME, Type.LineByLine, arguments);
+			super(NAME, Type.CompleteInput, arguments);
 		}
 
 		@Override
@@ -155,12 +153,13 @@ public final class Head {
 
 		@Override
 		public void executeBatch(Input input, Output output) {
-			int linesToOutput = getArguments().getLines();
+			final int linesToOutput = getArguments().getLines();
+			int lines = 0;
 			while (input.hasMoreLines()){
 				final String line = input.readLine();
-				if(countOfLinesOutput < linesToOutput) {
+				if (lines < linesToOutput) {
 					output.writeLine(line);
-					countOfLinesOutput++;
+					lines++;
 				}
 			}
 		}

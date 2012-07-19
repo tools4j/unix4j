@@ -96,6 +96,18 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 		join(Sort.FACTORY.sort(options));
 		return this;
 	}
+	
+	@Override
+	public Unix4jCommandBuilder sortAscending() {
+		join(Sort.FACTORY.sortAscending());
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder sortDescending() {
+		join(Sort.FACTORY.sortDescending());
+		return this;
+	}
 
 	@Override
 	public Unix4jCommandBuilder cut(int fieldIndex) {

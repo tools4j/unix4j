@@ -1,5 +1,7 @@
 package org.unix4j.unix;
 
+import java.util.Locale;
+
 import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.util.MultilineString;
@@ -7,6 +9,11 @@ import org.unix4j.util.MultilineString;
 import static org.junit.Assert.assertEquals;
 
 public class SortTest {
+	
+	static {
+		Locale.setDefault(Locale.US);//make sure that sort is always the same, uses Collator.getInstance() with default locale
+	}
+	
 	@Test
 	public void testSortSimple() {
 		final MultilineString input = new MultilineString();
