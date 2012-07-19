@@ -20,23 +20,92 @@ public class CommandChainingTest {
 				.appendLine("a")
 				.appendLine("")
 				.appendLine("two")
-				.appendLine("def\\d123");
+				.appendLine("def123");
 	}
 
 	@Test
-	public void test1() {
+	public void test_headTail_1() {
+		assertEquals("one", Unix4j.fromString(input.toString()).head(4).tail(1).executeToString(false));
+	}
+
+	@Test
+	public void test_headTail_2() {
 		final MultilineString expectedOutput = new MultilineString();
 		expectedOutput
-				.appendLine("This is a test hasblah blah blah")
-				.appendLine("This is a test hasblah blah")
+				.appendLine("one")
+				.appendLine("a");
+
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).head(5).tail(2).executeToString(false));
+	}
+
+	@Test
+	public void test_headTail_3() {
+		final MultilineString expectedOutput = new MultilineString();
+		expectedOutput
+				.appendLine("This is a test blah blah blah")
+				.appendLine("This is a test blah blah")
 				.appendLine("This is a test one two three")
 				.appendLine("one")
 				.appendLine("a")
 				.appendLine("")
 				.appendLine("two")
-				.appendLine("def\\d123");
+				.appendLine("def123");
 
-		assertEquals("one", Unix4j.fromString(input.toString()).head(4).tail(1).executeToString(false));
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).head(10).tail(10).executeToString(false));
 	}
 
+	@Test
+	public void test_headTail_4() {
+		final MultilineString expectedOutput = new MultilineString();
+		expectedOutput.appendLine("This is a test one two three");
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).head(1).tail(1).executeToString(false));
+	}
+
+	@Test
+	public void test_headTail_5() {
+		assertEquals("", Unix4j.fromString(input.toString()).head(0).tail(0).executeToString(false));
+	}
+
+	@Test
+	public void test_headTailHead() {
+		assertEquals("a", Unix4j.fromString(input.toString()).head(10).tail(4).head(1).executeToString(false));
+	}
+
+	@Test
+	public void test_headSortSedTail() {
+		final MultilineString expectedOutput = new MultilineString();
+		expectedOutput
+				.appendLine("a")
+				.appendLine("def123")
+				.appendLine("one")
+				.appendLine("Dude is a test blah blah")
+				.appendLine("Dude is a test blah blah blah")
+				.appendLine("Dude is a test one two three")
+				.appendLine("two");
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).head(10).sort().tail(7).sedSubstitute("This", "Dude").executeToString(false));
+	}
+
+	@Test
+	public void test_headSortSedTailGrep() {
+		final MultilineString expectedOutput = new MultilineString();
+		expectedOutput
+				.appendLine("Dude is a test blah blah")
+				.appendLine("Dude is a test blah blah blah")
+				.appendLine("Dude is a test one two three");
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).head(10).sort().tail(7).sedSubstitute("This", "Dude").grep("Dude").executeToString(false));
+	}
+
+	@Test
+	public void test_headSortSedTailGrepHeadWc() {
+		assertEquals("6", /*6 words*/
+				Unix4j.fromString(input.toString())
+						.head(10)
+						.sort()
+						.tail(7)
+						.sedSubstitute("This", "Dude")
+						.grep("Dude")
+						.head(1)
+						.wcCountWords()
+						.executeToString(false));
+	}
 }
