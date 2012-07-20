@@ -117,7 +117,7 @@ public class HeadTest {
 				.appendLine(LINE9)
 				.appendLine(LINE10);
 		final String actualOutput = Unix4j.fromString(input.toString()).head().executeToString();
-		assertEquals(expectedOutput.toString(), actualOutput);
+		assertEquals(expectedOutput.toString(true), actualOutput);
 	}
 
 	@Test

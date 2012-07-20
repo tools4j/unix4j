@@ -97,6 +97,16 @@ public class CommandChainingTest {
 
 	@Test
 	public void test_headSortSedTailGrepHeadWc() {
+		System.out.println(
+			Unix4j.fromString(input.toString())
+			.head(10)
+			.sort()
+			.tail(7)
+			.sedSubstitute("This", "Dude")
+			.grep("Dude")
+			.head(1)
+//			.wcCountWords()
+			.executeToString(false));
 		assertEquals("6", /*6 words*/
 				Unix4j.fromString(input.toString())
 						.head(10)
