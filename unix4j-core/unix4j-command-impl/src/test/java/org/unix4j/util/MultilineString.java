@@ -12,8 +12,8 @@ import org.unix4j.io.BufferedInput;
 import org.unix4j.io.Input;
 
 public class MultilineString {
+	public final static String LINE_ENDING = System.getProperty("line.separator");
 	public final static MultilineString EMPTY = new MultilineString("");
-	public final static String LINE_ENDING = "\n";
 
 	private final List<String> lines = new ArrayList<String>();
 
@@ -21,8 +21,17 @@ public class MultilineString {
 		super();
 	}
 
-	public MultilineString(final String content){
-		fromString(content);
+	public MultilineString(final String content) {
+		int start = 0;
+		int end = content.indexOf(LINE_ENDING, start);
+		while (end >= 0) {
+			lines.add(content.substring(start, end));
+			start = end + LINE_ENDING.length();
+			end = content.indexOf(LINE_ENDING, start);
+		}
+		if (start < content.length()) {
+			lines.add(content.substring(start, end));
+		}
 	}
 
 	public MultilineString appendLine(final String line){
@@ -77,12 +86,18 @@ public class MultilineString {
 	
 	@Override
 	public String toString() {
+		return toString(false);
+	}
+	public String toString(boolean lastLineWithLineEnding) {
 		final StringBuilder sb = new StringBuilder();
 		for (final String line : lines) {
 			if (sb.length() > 0) {
 				sb.append(LINE_ENDING);
 			}
 			sb.append(line);
+		}
+		if (lastLineWithLineEnding && !lines.isEmpty()) {
+			sb.append(LINE_ENDING);
 		}
 		return sb.toString();
 	}

@@ -38,9 +38,9 @@ public class SortTest {
 				.appendLine("To suffer the")
 				.appendLine("Whether tis nobler in the mind");
 
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort().executeToString());
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sortAscending().executeToString());
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Option.ascending).executeToString());
+		assertEquals(expectedOutput.toString(true), Unix4j.fromString(input.toString()).sort().executeToString());
+		assertEquals(expectedOutput.toString(true), Unix4j.fromString(input.toString()).sortAscending().executeToString());
+		assertEquals(expectedOutput.toString(true), Unix4j.fromString(input.toString()).sort(Sort.Option.ascending).executeToString());
 	}
 
 	@Test
@@ -67,8 +67,8 @@ public class SortTest {
 				.appendLine("arms against a sea of troubles.")
 				.appendLine("10 slings and arrows");
 
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sortDescending().executeToString());
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Option.descending).executeToString());
+		assertEquals(expectedOutput.toString(true), Unix4j.fromString(input.toString()).sortDescending().executeToString());
+		assertEquals(expectedOutput.toString(true), Unix4j.fromString(input.toString()).sort(Sort.Option.descending).executeToString());
 	}
 
 	@Test
@@ -95,7 +95,7 @@ public class SortTest {
 				.appendLine("arms against a sea of troubles.")
 				.appendLine("10 slings and arrows");
 
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort().sortDescending().executeToString());
+		assertEquals(expectedOutput.toString(true), Unix4j.fromString(input.toString()).sort().sortDescending().executeToString());
 	}
 
 	@Test
@@ -133,8 +133,8 @@ public class SortTest {
 				.appendLine("999 To suffer the");
 
 
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort().executeToString());
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Option.ascending).executeToString());
+		assertEquals(expectedOutput.toString(true), Unix4j.fromString(input.toString()).sort().executeToString());
+		assertEquals(expectedOutput.toString(true), Unix4j.fromString(input.toString()).sort(Sort.Option.ascending).executeToString());
 	}
 
 	@Test
@@ -161,7 +161,7 @@ public class SortTest {
 				.appendLine("10 That is the question")
 				.appendLine("1000 To be or not to be");
 
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sortDescending().executeToString());
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Option.descending).executeToString());
+		assertEquals(expectedOutput.toString(true), Unix4j.fromString(input.toString()).sortDescending().executeToString());
+		assertEquals(expectedOutput.toString(true), Unix4j.fromString(input.toString()).sort(Sort.Option.descending).executeToString());
 	}
 }
