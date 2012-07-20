@@ -19,5 +19,8 @@ public class BufferedInput implements Input {
 		}
 		return null;
 	}
-
+	@Override
+	public String toString() {
+		return lines.toString();
+	}
 }
