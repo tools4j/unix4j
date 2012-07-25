@@ -95,10 +95,6 @@ public class CommandChainingTest {
 		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).head(10).sort().tail(7).sedSubstitute("This", "Dude").grep("Dude").toStringResult());
 	}
 
-<<<<<<< HEAD
-=======
-	@Ignore	//FIXME make this test work, NOTE mt: this is toFile/batch/finish problem!
->>>>>>> b37ca8e538406787210220669b64803f8ef2f115
 	@Test
 	public void test_headSortSedTailGrepHeadWc() {
 		System.out.println(

@@ -1,5 +1,7 @@
 package org.unix4j.builder;
 
+import java.io.File;
+
 import org.unix4j.command.Command;
 import org.unix4j.command.DefaultExecutionContext;
 import org.unix4j.command.ExecutionContext;
@@ -9,8 +11,6 @@ import org.unix4j.io.Input;
 import org.unix4j.io.NullInput;
 import org.unix4j.io.Output;
 import org.unix4j.io.StdOutput;
-
-import java.io.File;
 
 public class DefaultCommandBuilder implements CommandBuilder {
 
@@ -39,27 +39,23 @@ public class DefaultCommandBuilder implements CommandBuilder {
 		return command == null ? "nop" : command.toString();
 	}
 	@Override
-	public void execute() {
-		execute(new StdOutput());
+	public void toStdOut() {
+		toOutput(new StdOutput());
 	}
 	@Override
-	public void execute(Output output) {
+	public void toOutput(Output output) {
 		final ExecutionContext context = DefaultExecutionContext.start(true);
 		build().execute(context, input, output);
 		output.finish();
 	}
 	@Override
-	public void execute(File file) {
-		execute(new FileOutput(file));
+	public void toFile(File file) {
+		toOutput(new FileOutput(file));
 	}
 	@Override
-	public String executeToString() {
-		return executeToString(true);
-	}
-	@Override
-	public String executeToString(boolean appendTrailingLineEnding) {
+	public String toStringResult() {
 		final BufferedOutput out = new BufferedOutput();
-		execute(out);
-		return out.toMultiLineString(appendTrailingLineEnding);
+		toOutput(out);
+		return out.toMultiLineString();
 	}
 }
