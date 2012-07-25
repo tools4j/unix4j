@@ -14,17 +14,17 @@ public class FromFileTest {
 	public void testFromFile() {
 		URL url = this.getClass().getResource("/commuting.txt");
 		File testFile = new File(url.getFile());
-		assertThat(Unix4j.fromFile(testFile).grep("from").head(4).tail(1).wcCountWords().executeToString(false), is("13"));
+		assertThat(Unix4j.fromFile(testFile).grep("from").head(4).tail(1).wcCountWords().toStringResult(), is("13"));
 	}
 
 	@Test(expected = RuntimeException.class)
 	public void testFromFile_fileNotFound() {
 		File testFile = new File("asfd");
-		Unix4j.fromFile(testFile).execute();
+		Unix4j.fromFile(testFile).toStdOut();
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void testFromFile_fileParamIsNull() {
-		Unix4j.fromFile(null).execute();
+		Unix4j.fromFile(null).toStdOut();
 	}
 }

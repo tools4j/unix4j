@@ -1,19 +1,19 @@
 package org.unix4j.unix;
 
-import java.util.Locale;
-
 import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.util.MultilineString;
 
+import java.util.Locale;
+
 import static org.junit.Assert.assertEquals;
 
 public class SortTest {
-	
+
 	static {
 		Locale.setDefault(Locale.US);//make sure that sort is always the same, uses Collator.getInstance() with default locale
 	}
-	
+
 	@Test
 	public void testSortSimple() {
 		final MultilineString input = new MultilineString();
@@ -38,9 +38,9 @@ public class SortTest {
 				.appendLine("To suffer the")
 				.appendLine("Whether tis nobler in the mind");
 
-		assertEquals(expectedOutput.toString(true), Unix4j.fromString(input.toString()).sort().executeToString());
-		assertEquals(expectedOutput.toString(true), Unix4j.fromString(input.toString()).sortAscending().executeToString());
-		assertEquals(expectedOutput.toString(true), Unix4j.fromString(input.toString()).sort(Sort.Option.ascending).executeToString());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort().toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sortAscending().toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Option.ascending).toStringResult());
 	}
 
 	@Test
@@ -67,8 +67,8 @@ public class SortTest {
 				.appendLine("arms against a sea of troubles.")
 				.appendLine("10 slings and arrows");
 
-		assertEquals(expectedOutput.toString(true), Unix4j.fromString(input.toString()).sortDescending().executeToString());
-		assertEquals(expectedOutput.toString(true), Unix4j.fromString(input.toString()).sort(Sort.Option.descending).executeToString());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sortDescending().toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Option.descending).toStringResult());
 	}
 
 	@Test
@@ -95,17 +95,17 @@ public class SortTest {
 				.appendLine("arms against a sea of troubles.")
 				.appendLine("10 slings and arrows");
 
-		assertEquals(expectedOutput.toString(true), Unix4j.fromString(input.toString()).sort().sortDescending().executeToString());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort().sortDescending().toStringResult());
 	}
 
 	@Test
 	public void testSortOneLine() {
-		assertEquals("blah", Unix4j.fromString("blah").sort().sortDescending().executeToString(false));
+		assertEquals("blah", Unix4j.fromString("blah").sort().sortDescending().toStringResult());
 	}
 
 	@Test
 	public void testSortNothing() {
-		assertEquals("", Unix4j.fromString("").sort().sortDescending().executeToString(false));
+		assertEquals("", Unix4j.fromString("").sort().sortDescending().toStringResult());
 	}
 
 	@Test
@@ -133,8 +133,8 @@ public class SortTest {
 				.appendLine("999 To suffer the");
 
 
-		assertEquals(expectedOutput.toString(true), Unix4j.fromString(input.toString()).sort().executeToString());
-		assertEquals(expectedOutput.toString(true), Unix4j.fromString(input.toString()).sort(Sort.Option.ascending).executeToString());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort().toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Option.ascending).toStringResult());
 	}
 
 	@Test
@@ -161,7 +161,7 @@ public class SortTest {
 				.appendLine("10 That is the question")
 				.appendLine("1000 To be or not to be");
 
-		assertEquals(expectedOutput.toString(true), Unix4j.fromString(input.toString()).sortDescending().executeToString());
-		assertEquals(expectedOutput.toString(true), Unix4j.fromString(input.toString()).sort(Sort.Option.descending).executeToString());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sortDescending().toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Option.descending).toStringResult());
 	}
 }

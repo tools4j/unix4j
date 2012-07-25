@@ -12,11 +12,11 @@ public class FromInputStream {
 	@Test
 	public void testFromInputStream() {
 		final InputStream inputStream = getClass().getResourceAsStream("/commuting.txt");
-		assertThat(Unix4j.fromInputStream(inputStream).grep("from").head(4).tail(1).wcCountWords().executeToString(false), is("13"));
+		assertThat(Unix4j.fromInputStream(inputStream).grep("from").head(4).tail(1).wcCountWords().toStringResult(), is("13"));
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void testFromInputStream_fileNotFound() {
-		Unix4j.fromInputStream(null).grep("asfd").executeToString(false);
+		Unix4j.fromInputStream(null).grep("asfd").toStringResult();
 	}
 }
