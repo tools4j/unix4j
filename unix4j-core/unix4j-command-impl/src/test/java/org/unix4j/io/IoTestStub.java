@@ -12,6 +12,7 @@ public class IoTestStub implements Input, Output {
 	private static final RecordedActions recordedActions = new RecordedActions();
 	private static boolean recording = false;
 	private final List<String> lines = new LinkedList<String>();
+	@SuppressWarnings("unused")
 	private final String id;
 
 	public enum ActionType{READ, WRITE;}

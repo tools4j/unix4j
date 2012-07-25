@@ -84,6 +84,7 @@ public class LineByLineTest {
 				.finish();
 	}
 
+	@Ignore
 	@Test
 	public void testLineByLine_headPipedIntoGrep() throws Exception {
 
