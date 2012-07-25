@@ -13,7 +13,7 @@ import org.unix4j.util.TypedMap;
  * Arguments and options for the ls command.
  */
 class LsArgs extends AbstractArgs<LsOption, LsArgs> {
-	public static final TypedMap.Key<List<File>> FILES = TypedMap.DefaultKey.keyForListOf("files", File.class);
+	public static final TypedMap.Key<List<File>> FILES = TypedMap.keyForListOf("files", File.class);
 
 	public LsArgs() {
 		this(FileUtil.getUserDir());

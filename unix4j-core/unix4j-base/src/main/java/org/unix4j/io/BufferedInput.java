@@ -4,23 +4,23 @@ import java.util.LinkedList;
 
 
 public class BufferedInput implements Input {
-	private final LinkedList<String> lines;
-	public BufferedInput(LinkedList<String> lines) {
-		this.lines = lines;
+	private final LinkedList<String> buffer;
+	public BufferedInput(LinkedList<String> buffer) {
+		this.buffer = buffer;
 	}
 	@Override
 	public boolean hasMoreLines() {
-		return !lines.isEmpty();
+		return !buffer.isEmpty();
 	}
 	@Override
 	public String readLine() {
-		if (!lines.isEmpty()) {
-			return lines.remove(0);
+		if (!buffer.isEmpty()) {
+			return buffer.remove(0);
 		}
 		return null;
 	}
 	@Override
 	public String toString() {
-		return lines.toString();
+		return buffer.toString();
 	}
 }

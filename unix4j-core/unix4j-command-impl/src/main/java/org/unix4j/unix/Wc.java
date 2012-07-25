@@ -1,16 +1,19 @@
 package org.unix4j.unix;
 
-import org.unix4j.command.AbstractArgs;
-import org.unix4j.command.AbstractCommand;
-import org.unix4j.command.CommandInterface;
-import org.unix4j.io.Input;
-import org.unix4j.io.Output;
+import static org.unix4j.util.Assert.assertArgFalse;
 
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
 
-import static org.unix4j.util.Assert.assertArgFalse;
+import org.unix4j.command.AbstractArgs;
+import org.unix4j.command.AbstractCommand;
+import org.unix4j.command.CommandInterface;
+import org.unix4j.command.ExecutionContext;
+import org.unix4j.io.Input;
+import org.unix4j.io.Output;
+import org.unix4j.util.Counter;
+import org.unix4j.util.TypedMap;
 
 /**
  * <b>NAME</b>
@@ -265,45 +268,61 @@ public final class Wc {
 	 */
 	public static class Command extends AbstractCommand<Args> {
 		private final static int MIN_COUNT_PADDING = 2;
+		private static final TypedMap.Key<Counter> LINE_COUNTER_KEY = TypedMap.keyFor("lineCounter", Counter.class);
+		private static final TypedMap.Key<Counter> WORD_COUNTER_KEY = TypedMap.keyFor("wordCounter", Counter.class);
+		private static final TypedMap.Key<Counter> CHAR_COUNTER_KEY = TypedMap.keyFor("charCounter", Counter.class);
 
 		public Command(Args arguments) {
-			super(NAME, Type.CompleteInput, arguments);
+			super(NAME, arguments);
 		}
 
 		@Override
 		public Command withArgs(Args arguments) {
 			return new Command(arguments);
 		}
+		
+		private Counter getCounter(ExecutionContext context, TypedMap.Key<Counter> counterKey) {
+			Counter counter = context.getCommandStorage().get(counterKey);
+			if (counter == null) {
+				counter = new Counter();
+				context.getCommandStorage().put(counterKey, counter);
+			}
+			return counter;
+		}
 
 		@Override
-		public void executeBatch(Input input, Output output) {
+		public boolean execute(ExecutionContext context, Input input, Output output) {
 			Args args = getArguments();
 			assertArgFalse("No count type specified. At least one count type required.", args.isNoCountTypeSpecified());
 
-			int lineCount = 0;
-			int wordCount = 0;
-			int charCount = 0;
+			final Counter lineCounter = getCounter(context, LINE_COUNTER_KEY);
+			final Counter wordCounter = getCounter(context, WORD_COUNTER_KEY);
+			final Counter charCounter = getCounter(context, CHAR_COUNTER_KEY);
 
 			while (input.hasMoreLines()) {
 				final String line = input.readLine();
-				lineCount++;
-				wordCount += wordCount(line);
-				charCount += line.length();
+				lineCounter.increment();
+				wordCounter.increment(wordCount(line));
+				charCounter.increment(line.length());
 			}
 
-			if (lineCount == 1 && charCount == 0) {
-				lineCount = 0;
+			if (context.isTerminalInvocation()) {
+				if (lineCounter.getCount() == 1 && charCounter.getCount() == 0) {
+					lineCounter.reset();
+				}
+	
+				final List<Long> counts = new ArrayList<Long>();
+				if (args.isCountLines())
+					counts.add(lineCounter.getCount());
+				if (args.isCountWords())
+					counts.add(wordCounter.getCount());
+				if (args.isCountChars())
+					counts.add(charCounter.getCount());
+	
+				output.writeLine(formatCounts(counts));
+				return false;
 			}
-
-			final List<Integer> counts = new ArrayList<Integer>();
-			if (args.isCountLines())
-				counts.add(lineCount);
-			if (args.isCountWords())
-				counts.add(wordCount);
-			if (args.isCountChars())
-				counts.add(charCount);
-
-			output.writeLine(formatCounts(counts));
+			return true;
 		}
 
 		private int wordCount(String line) {
@@ -317,28 +336,27 @@ public final class Wc {
 			return wordCount;
 		}
 
-		private String formatCounts(List<Integer> counts) {
+		private String formatCounts(List<Long> counts) {
 			final StringBuilder format = new StringBuilder();
 
 			if (counts.size() > 1) {
 				int widestCount = getWidestCount(counts);
 				int fixedWidth = widestCount + MIN_COUNT_PADDING;
-				for (@SuppressWarnings("unused") int count : counts) {
+				for (int i = 0; i < counts.size(); i++) {
 					format.append("%").append(fixedWidth).append("d");
 				}
 			} else {
 				format.append("%d");
 			}
 
-			Formatter formatter = new Formatter();
-			formatter = formatter.format(format.toString(), counts.toArray());
+			final Formatter formatter = new Formatter().format(format.toString(), counts.toArray());
 			return formatter.toString();
 		}
 
-		private int getWidestCount(final List<Integer> counts) {
+		private int getWidestCount(List<Long> counts) {
 			int widestCount = 0;
-			for (int count : counts) {
-				final int width = ("" + count).length();
+			for (final long count : counts) {
+				final int width = String.valueOf(count).length();
 				if (width > widestCount) {
 					widestCount = width;
 				}

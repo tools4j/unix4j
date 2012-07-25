@@ -7,13 +7,16 @@ import java.util.List;
 
 public class BufferedOutput implements Output {
 	private static final String NEW_LINE = System.getProperty("line.separator");
-	private final List<String> lines = new ArrayList<String>();
+	private final List<String> buffer;
 	public BufferedOutput() {
-		super();
+		this(new ArrayList<String>());
+	}
+	public BufferedOutput(List<String> buffer) {
+		this.buffer = buffer;
 	}
 	@Override
 	public void writeLine(String line) {
-		lines.add(line);
+		buffer.add(line);
 	}
 	@Override
 	public void finish() {
@@ -21,14 +24,14 @@ public class BufferedOutput implements Output {
 	}
 	@Override
 	public String toString() {
-		return lines.toString();
+		return buffer.toString();
 	}
 	public String toMultiLineString() {
 		return toMultiLineString(true);
 	}
 	public String toMultiLineString(boolean appendTrailingLineEnding) {
 		final StringBuilder sb = new StringBuilder();
-		for (final String line : lines) {
+		for (final String line : buffer) {
 			if(sb.length() > 0){
 				sb.append(NEW_LINE);
 			}
@@ -40,16 +43,16 @@ public class BufferedOutput implements Output {
 		return sb.toString();
 	}
 	public void writeTo(Output output) {
-		for (final String line : lines) {
+		for (final String line : buffer) {
 			output.writeLine(line);
 		}
 		output.finish();
 	}
 	public BufferedInput asInput() {
-		return new BufferedInput(new LinkedList<String>(lines));
+		return new BufferedInput(new LinkedList<String>(buffer));
 	}
 	public BufferedOutput clear() {
-		lines.clear();
+		buffer.clear();
 		return this;
 	}
 }

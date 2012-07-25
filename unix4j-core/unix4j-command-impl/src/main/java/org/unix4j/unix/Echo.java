@@ -4,6 +4,7 @@ import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
+import org.unix4j.command.ExecutionContext;
 import org.unix4j.io.Input;
 import org.unix4j.io.Output;
 import org.unix4j.util.TypedMap;
@@ -77,7 +78,7 @@ public final class Echo {
 	 * Arguments and options for the echo command.
 	 */
 	public static class Args extends AbstractArgs<Option, Args> {
-		public static final TypedMap.Key<List<String>> MESSAGES = TypedMap.DefaultKey.keyForListOf("messages", String.class);
+		public static final TypedMap.Key<List<String>> MESSAGES = TypedMap.keyForListOf("messages", String.class);
 
 		public Args(String message) {
 			this(Collections.singletonList(message));
@@ -125,7 +126,7 @@ public final class Echo {
 		private static final String LINE_SEPERATOR = System.getProperty("line.separator");
 
 		public Command(Args arguments) {
-			super(NAME, Type.NoInput, arguments);
+			super(NAME, arguments);
 		}
 
 		@Override
@@ -134,7 +135,7 @@ public final class Echo {
 		}
 
 		@Override
-		public void executeBatch(Input input, Output output) {
+		public boolean execute(ExecutionContext context, Input input, Output output) {
 			final String messages = joinMessages();
 			final String[] lines = messages.split(LINE_SEPERATOR);
 			for( final String line: lines){
@@ -143,7 +144,7 @@ public final class Echo {
 			if(messages.endsWith(LINE_SEPERATOR)){
 				output.writeLine("");
 			}
-
+			return false;//never expect any more input
 		}
 
 		private String joinMessages() {

@@ -1,6 +1,8 @@
 package org.unix4j.builder;
 
 import org.unix4j.command.Command;
+import org.unix4j.command.DefaultExecutionContext;
+import org.unix4j.command.ExecutionContext;
 import org.unix4j.io.BufferedOutput;
 import org.unix4j.io.FileOutput;
 import org.unix4j.io.Input;
@@ -42,7 +44,8 @@ public class DefaultCommandBuilder implements CommandBuilder {
 	}
 	@Override
 	public void execute(Output output) {
-		build().execute(input, output);
+		final ExecutionContext context = DefaultExecutionContext.start(true);
+		build().execute(context, input, output);
 		output.finish();
 	}
 	@Override

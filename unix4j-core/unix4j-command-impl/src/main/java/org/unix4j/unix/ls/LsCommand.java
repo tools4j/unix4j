@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.unix4j.command.AbstractCommand;
+import org.unix4j.command.ExecutionContext;
 import org.unix4j.io.Input;
 import org.unix4j.io.Output;
 import org.unix4j.unix.Ls;
@@ -17,7 +18,7 @@ import org.unix4j.util.ReverseOrderComparator;
  */
 class LsCommand extends AbstractCommand<LsArgs> {
 	public LsCommand(LsArgs arguments) {
-		super(Ls.NAME, Type.NoInput, arguments);
+		super(Ls.NAME, arguments);
 	}
 
 	@Override
@@ -26,11 +27,12 @@ class LsCommand extends AbstractCommand<LsArgs> {
 	}
 
 	@Override
-	public void executeBatch(Input input, Output output) {
+	public boolean execute(ExecutionContext context, Input input, Output output) {
 		final LsArgs args = getArguments();
 		final List<File> files = args.getFiles();
 		final List<File> expanded = FileUtil.expandFiles(files);
 		listFiles(FileUtil.getUserDir(), null, expanded, output);
+		return false;//never expect any more input
 	}
 
 
