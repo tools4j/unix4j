@@ -64,7 +64,7 @@ public class SedTest {
 		final String script = "s/be\\/not/be or not/g";
 		final String expectedOutput = "to be or not to be that is the question";
 
-		final String output = Unix4j.fromString(input).sed(script).executeToString(false);
+		final String output = Unix4j.fromString(input).sed(script).toStringResult();
 		assertEquals(expectedOutput, output);
 	}
 
@@ -150,7 +150,7 @@ public class SedTest {
 				.appendLine("def\\d123");
 
 		final StringWriter actualOutputStringWriter = new StringWriter();
-		Unix4j.fromString(input.toString()).sedSubstituteFirst("blah", "hasblah").execute(new WriterOutput(actualOutputStringWriter));
+		Unix4j.fromString(input.toString()).sedSubstituteFirst("blah", "hasblah").toOutput(new WriterOutput(actualOutputStringWriter));
 		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
 		actualOutput.assertMultilineStringEquals(expectedOutput);
 	}
@@ -169,24 +169,24 @@ public class SedTest {
 				.appendLine("def\\d123");
 
 		final StringWriter actualOutputStringWriter = new StringWriter();
-		Unix4j.fromString(input.toString()).sedSubstitute("blah", "hasblah").execute(new WriterOutput(actualOutputStringWriter));
+		Unix4j.fromString(input.toString()).sedSubstitute("blah", "hasblah").toOutput(new WriterOutput(actualOutputStringWriter));
 		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
 		actualOutput.assertMultilineStringEquals(expectedOutput);
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void testSed_substituteNullSearchParam() {
-		Unix4j.fromString("blah").sedSubstitute(null, "hasblah").executeToString();
+		Unix4j.fromString("blah").sedSubstitute(null, "hasblah").toStringResult();
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void testSed_substituteNullReplaceParam() {
-		Unix4j.fromString("blah").sedSubstitute("blah", null).executeToString();
+		Unix4j.fromString("blah").sedSubstitute("blah", null).toStringResult();
 	}
 
 	private void assertSed(final MultilineString input, final String script, final MultilineString expectedOutput){
 		final StringWriter actualOutputStringWriter = new StringWriter();
-		Unix4j.fromInput(input.toInput()).sed(script).execute(new WriterOutput(actualOutputStringWriter));
+		Unix4j.fromInput(input.toInput()).sed(script).toOutput(new WriterOutput(actualOutputStringWriter));
 		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
 		actualOutput.assertMultilineStringEquals(expectedOutput);
 	}
@@ -194,6 +194,6 @@ public class SedTest {
 	@Test(expected = NullPointerException.class)
 	public void testSed_nullScript() {
 		final StringWriter actualOutputStringWriter = new StringWriter();
-		Unix4j.fromInput(input.toInput()).sed(null).execute(new WriterOutput(actualOutputStringWriter));
+		Unix4j.fromInput(input.toInput()).sed(null).toOutput(new WriterOutput(actualOutputStringWriter));
 	}
 }

@@ -1,15 +1,15 @@
 package org.unix4j.util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import org.unix4j.io.BufferedInput;
+import org.unix4j.io.Input;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.unix4j.io.BufferedInput;
-import org.unix4j.io.Input;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class MultilineString {
 	public final static String LINE_ENDING = System.getProperty("line.separator");
@@ -44,10 +44,6 @@ public class MultilineString {
 		return this;
 	}
 
-	public void fromString(final String content){
-		appendLines(content.split(LINE_ENDING));
-	}
-
 	public void assertMultilineStringEquals(final MultilineString expected) {
 		if (lines.equals(expected.lines)) {
 			assertEquals(expected.lines, lines);
@@ -69,12 +65,12 @@ public class MultilineString {
 	public Input toInput() {
 		return new BufferedInput(new LinkedList<String>(lines));
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return lines.hashCode();
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == this) return true;
@@ -83,12 +79,9 @@ public class MultilineString {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public String toString() {
-		return toString(false);
-	}
-	public String toString(boolean lastLineWithLineEnding) {
 		final StringBuilder sb = new StringBuilder();
 		for (final String line : lines) {
 			if (sb.length() > 0) {
@@ -96,10 +89,7 @@ public class MultilineString {
 			}
 			sb.append(line);
 		}
-		if (lastLineWithLineEnding && !lines.isEmpty()) {
-			sb.append(LINE_ENDING);
-		}
 		return sb.toString();
 	}
-	
+
 }

@@ -12,31 +12,31 @@ import static org.junit.Assert.assertEquals;
 public class EchoTest {
 	@Test
 	public void testEchoSingle() {
-		assertEquals("test\n", Unix4j.create().echo("test").executeToString());
+		assertEquals("test", Unix4j.create().echo("test").toStringResult());
 	}
 
 	@Test
 	public void testEchoEmpty() {
-		assertEquals("\n", Unix4j.create().echo("").executeToString());
+		assertEquals("", Unix4j.create().echo("").toStringResult());
 	}
 
 	@Test
 	public void testEchoTwoWords() {
-		assertEquals("one two\n", Unix4j.create().echo("one two").executeToString());
+		assertEquals("one two", Unix4j.create().echo("one two").toStringResult());
 	}
 
 	@Test
 	public void testTwoLines() {
-		assertEquals("one\ntwo\n", Unix4j.create().echo("one\ntwo").executeToString());
+		assertEquals("one\ntwo", Unix4j.create().echo("one\ntwo").toStringResult());
 	}
 
 	@Test
 	public void testThreeLinesLastLineEmpty() {
-		assertEquals("one\ntwo\n\n", Unix4j.create().echo("one\ntwo\n").executeToString());
+		assertEquals("one\ntwo", Unix4j.create().echo("one\ntwo").toStringResult());
 	}
 
 	@Test
 	public void testTwoMessages() {
-		assertEquals("one\ntwo three\nfour\n", Unix4j.create().echo("one\ntwo", "three\nfour").executeToString());
+		assertEquals("one\ntwo three\nfour", Unix4j.create().echo("one\ntwo", "three\nfour").toStringResult());
 	}
 }
