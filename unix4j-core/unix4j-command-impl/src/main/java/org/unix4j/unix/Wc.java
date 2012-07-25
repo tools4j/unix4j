@@ -53,7 +53,7 @@ import org.unix4j.util.TypedMap;
  * When any option is specified, wc reports only the information requested by
  * the specified options.
  * <p>
- * If only one count type is requested, the count is outputed as an integer. If
+ * If only one count type is requested, the count is outputted as an integer. If
  * more than one count is requested, a fixed width formatting is used, with the
  * counts being right aligned. The width of each field is equal to the width of
  * the widest field (count) plus two characters.

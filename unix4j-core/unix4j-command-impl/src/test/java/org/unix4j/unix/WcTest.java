@@ -62,7 +62,7 @@ public class WcTest {
 	}
 
 	private void assertWc(final String input, final String expectedOutput, Wc.Option... options){
-		final String actualOutput = Unix4j.fromString(input).wc(options).executeToString(false);
+		final String actualOutput = Unix4j.fromString(input).wc(options).toStringResult();
 		System.out.println("Asserting: expected:'" + expectedOutput + "' = actual:'" + actualOutput +"'");
 	    assertEquals(expectedOutput, actualOutput);
 	}

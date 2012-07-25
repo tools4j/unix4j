@@ -116,8 +116,8 @@ public class HeadTest {
 				.appendLine(LINE8)
 				.appendLine(LINE9)
 				.appendLine(LINE10);
-		final String actualOutput = Unix4j.fromString(input.toString()).head().executeToString();
-		assertEquals(expectedOutput.toString(true), actualOutput);
+		final String actualOutput = Unix4j.fromString(input.toString()).head().toStringResult();
+		assertEquals(expectedOutput.toString(), actualOutput);
 	}
 
 	@Test
@@ -146,7 +146,7 @@ public class HeadTest {
 
 	private void assertHead(final MultilineString input, final int lines, final MultilineString expectedOutput){
 		final StringWriter actualOutputStringWriter = new StringWriter();
-		Unix4j.fromInput(input.toInput()).head(lines).execute(new WriterOutput(actualOutputStringWriter));
+		Unix4j.fromInput(input.toInput()).head(lines).toOutput(new WriterOutput(actualOutputStringWriter));
 		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
 		actualOutput.assertMultilineStringEquals(expectedOutput);
 	}

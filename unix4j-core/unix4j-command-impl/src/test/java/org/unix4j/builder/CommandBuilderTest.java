@@ -26,9 +26,9 @@ public class CommandBuilderTest {
 	public void afterEach() {
 		System.out.println(">>> " + unix4j);
 		if (output == null) {
-			unix4j.execute();
+			unix4j.toStdOut();
 		} else {
-			unix4j.execute(output);
+			unix4j.toOutput(output);
 		}
 	}
 

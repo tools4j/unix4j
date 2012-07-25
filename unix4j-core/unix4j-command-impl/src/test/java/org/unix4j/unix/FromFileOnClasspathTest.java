@@ -10,17 +10,17 @@ import static org.junit.Assert.assertThat;
 public class FromFileOnClasspathTest {
 	@Test
 	public void testFromFileOnClasspath_fileInRootPackage() {
-		assertThat(Unix4j.fromFileOnClasspath("/commuting.txt").grep("from").head(4).tail(1).wcCountWords().executeToString(false), is("13"));
+		assertThat(Unix4j.fromFileOnClasspath("/commuting.txt").grep("from").head(4).tail(1).wcCountWords().toStringResult(), is("13"));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testFromFileOnClasspath_fileNotFound() {
-		Unix4j.fromFileOnClasspath("/asdfasfdasfd").grep("asfdasfdasfd").execute();
+		Unix4j.fromFileOnClasspath("/asdfasfdasfd").grep("asfdasfdasfd").toStdOut();
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void testFromFileOnClasspath_fileParamIsNull() {
-		Unix4j.fromFileOnClasspath(null).grep("asfdasfdasfd").execute();
+		Unix4j.fromFileOnClasspath(null).grep("asfdasfdasfd").toStdOut();
 	}
 
 	@Ignore
@@ -29,8 +29,8 @@ public class FromFileOnClasspathTest {
 		/*
 		Hey marco, try this line.  Should return the number of lines, but executeBatch
 		is called for each line for some reason.
-		System.out.println(Unix4j.fromFileOnClasspath("/my/package/redneck.txt").grep("for").grep("ask").wcCountLines().executeToString(false));
+		System.out.println(Unix4j.fromFileOnClasspath("/my/package/redneck.txt").grep("for").grep("ask").wcCountLines().toStringResult());
 		 */
-		assertThat(Unix4j.fromFileOnClasspath("/my/package/redneck.txt").grep("for").grep("ask").wcCountLines().wcCountLines().executeToString(false), is("1"));
+		assertThat(Unix4j.fromFileOnClasspath("/my/package/redneck.txt").grep("for").grep("ask").wcCountLines().wcCountLines().toStringResult(), is("1"));
 	}
 }
