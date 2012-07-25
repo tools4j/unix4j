@@ -8,6 +8,7 @@ import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
+import org.unix4j.command.ExecutionContext;
 import org.unix4j.io.Input;
 import org.unix4j.io.Output;
 import org.unix4j.util.TypedMap;
@@ -114,7 +115,7 @@ public final class Grep {
 	 * Arguments and options for the grep command.
 	 */
 	public static class Args extends AbstractArgs<Option, Args> {
-		public static final TypedMap.Key<String> MATCH_STRING = TypedMap.DefaultKey.keyFor("matchString", String.class);
+		public static final TypedMap.Key<String> MATCH_STRING = TypedMap.keyFor("matchString", String.class);
 
 		public Args(String matchString) {
 			super(Option.class);
@@ -174,7 +175,7 @@ public final class Grep {
 	 */
 	public static class Command extends AbstractCommand<Args> {
 		public Command(Args arguments) {
-			super(NAME, Type.LineByLine, arguments);
+			super(NAME, arguments);
 		}
 
 		@Override
@@ -183,12 +184,13 @@ public final class Grep {
 		}
 
 		@Override
-		public void executeBatch(Input input, Output output) {
+		public boolean execute(ExecutionContext context, Input input, Output output) {
 			if (getArguments().isFixedStrings()) {
 				grepWithFixedStrings(input, output);
 			} else {
 				grepWithRegularExpression(input, output);
 			}
+			return true;
 		}
 
 		private void grepWithRegularExpression(Input input, Output output) {

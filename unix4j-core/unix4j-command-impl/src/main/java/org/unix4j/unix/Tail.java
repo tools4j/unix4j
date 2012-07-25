@@ -3,10 +3,12 @@ package org.unix4j.unix;
 import static org.unix4j.util.Assert.assertArgGreaterThanOrEqualTo;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
+import org.unix4j.command.ExecutionContext;
 import org.unix4j.io.Input;
 import org.unix4j.io.Output;
 import org.unix4j.util.TypedMap;
@@ -105,7 +107,7 @@ public final class Tail {
 	 * Arguments and options for the tail command.
 	 */
 	public static class Args extends AbstractArgs<Option, Args> {
-		public static final TypedMap.Key<Integer> LINES = TypedMap.DefaultKey.keyFor("lines", Integer.class);
+		public static final TypedMap.Key<Integer> LINES = TypedMap.keyFor("lines", Integer.class);
 
 		public Args(int lines) {
 			super(Option.class);
@@ -145,8 +147,9 @@ public final class Tail {
 	 * Tail command implementation.
 	 */
 	public static class Command extends AbstractCommand<Args> {
+		private static final TypedMap.Key<List<String>> BUFFER_KEY = TypedMap.keyForListOf("buffer", String.class);
 		public Command(Args arguments) {
-			super(NAME, Type.CompleteInput, arguments);
+			super(NAME, arguments);
 		}
 
 		@Override
@@ -154,20 +157,32 @@ public final class Tail {
 			return new Command(arguments);
 		}
 
+		private List<String> getBuffer(ExecutionContext context) {
+			List<String> buffer = context.getCommandStorage().get(BUFFER_KEY);
+			if (buffer == null) {
+				buffer = new LinkedList<String>();//linked list is efficient to remove element 0
+				context.getCommandStorage().put(BUFFER_KEY, buffer);
+			}
+			return buffer;
+		}
 		@Override
-		public void executeBatch(Input input, Output output) {
+		public boolean execute(ExecutionContext context, Input input, Output output) {
 			final int linesToOutput = getArguments().getLines();
-			final LinkedList<String> lines = new LinkedList<String>();
+			final List<String> buffer = getBuffer(context);
 			while (input.hasMoreLines()){
-				lines.add(input.readLine());
-				if (lines.size() > linesToOutput) {
-					lines.removeFirst();
+				buffer.add(input.readLine());
+				if (buffer.size() > linesToOutput) {
+					buffer.remove(0);
 				}
 			}
 			
-			for (final String line : lines) {
-				output.writeLine(line);
+			if (context.isTerminalInvocation()) {
+				for (final String line : buffer) {
+					output.writeLine(line);
+				}
+				return false;
 			}
+			return true;
 		}
 	}
 

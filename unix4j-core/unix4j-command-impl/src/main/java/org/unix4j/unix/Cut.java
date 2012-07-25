@@ -6,6 +6,7 @@ import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
+import org.unix4j.command.ExecutionContext;
 import org.unix4j.io.Input;
 import org.unix4j.io.Output;
 import org.unix4j.util.TypedMap;
@@ -150,11 +151,11 @@ public final class Cut {
 			Fields, Range, Chars;
 		}
 
-		public static final TypedMap.Key<int[]> FIELDS = TypedMap.DefaultKey.keyFor("fields", int[].class);
-		public static final TypedMap.Key<String> INPUT_DELIMITER = TypedMap.DefaultKey.keyFor("inputDelimiter", String.class);
-		public static final TypedMap.Key<String> OUTPUT_DELIMITER = TypedMap.DefaultKey.keyFor("outputDelimiter", String.class);
-		public static final TypedMap.Key<int[]> RANGE = TypedMap.DefaultKey.keyFor("range", int[].class);
-		public static final TypedMap.Key<int[]> CHARS = TypedMap.DefaultKey.keyFor("chars", int[].class);
+		public static final TypedMap.Key<int[]> FIELDS = TypedMap.keyFor("fields", int[].class);
+		public static final TypedMap.Key<String> INPUT_DELIMITER = TypedMap.keyFor("inputDelimiter", String.class);
+		public static final TypedMap.Key<String> OUTPUT_DELIMITER = TypedMap.keyFor("outputDelimiter", String.class);
+		public static final TypedMap.Key<int[]> RANGE = TypedMap.keyFor("range", int[].class);
+		public static final TypedMap.Key<int[]> CHARS = TypedMap.keyFor("chars", int[].class);
 
 		private final Type type;
 
@@ -250,7 +251,7 @@ public final class Cut {
 	 */
 	public static class Command extends AbstractCommand<Args> {
 		public Command(Args arguments) {
-			super(NAME, Type.LineByLine, arguments);
+			super(NAME, arguments);
 		}
 
 		@Override
@@ -259,7 +260,7 @@ public final class Cut {
 		}
 
 		@Override
-		public void executeBatch(Input input, Output output) {
+		public boolean execute(ExecutionContext context, Input input, Output output) {
 			switch (getArguments().getType()) {
 			case Fields:
 				cutByFields(input, output);
@@ -273,6 +274,7 @@ public final class Cut {
 			default:
 				throw new IllegalArgumentException("unknown type: " + getArguments().getType());
 			}
+			return true;
 		}
 
 		private void cutByFields(Input input, Output output) {

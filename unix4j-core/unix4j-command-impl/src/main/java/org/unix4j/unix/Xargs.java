@@ -8,6 +8,7 @@ import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.Arguments;
 import org.unix4j.command.CommandInterface;
+import org.unix4j.command.ExecutionContext;
 import org.unix4j.command.JoinedCommand;
 import org.unix4j.io.Input;
 import org.unix4j.io.NullInput;
@@ -115,7 +116,7 @@ public final class Xargs {
 	 */
 	public static class Command extends AbstractCommand<Args> {
 		public Command(Args arguments) {
-			super(NAME, Type.LineByLine, arguments);
+			super(NAME, arguments);
 		}
 
 		@Override
@@ -131,7 +132,7 @@ public final class Xargs {
 		private static <A1 extends Arguments<A1>, A2 extends Arguments<A2>> org.unix4j.command.Command<A1> join(org.unix4j.command.Command<A1> first, final org.unix4j.command.Command<A2> second) {
 			return new JoinedCommand<A1>(first, second) {
 				@Override
-				public void execute(Input input, Output output) {
+				public boolean execute(ExecutionContext context, Input input, Output output) {
 					final Map<String, String> xargs = new HashMap<String, String>();
 					final A2 args = second.getArguments().clone(true /*
 																	 * deep
@@ -144,15 +145,16 @@ public final class Xargs {
 							xargs.put(xarg(i), words[i]);
 						}
 						args.resolve(xargs);
-						second.withArgs(args).execute(NullInput.INSTANCE, output);
+						second.withArgs(args).execute(context, NullInput.INSTANCE, output);
 						xargs.clear();
 					}
+					return false;//FIXME does not work yet
 				}
 			};
 		}
 
 		@Override
-		public void executeBatch(Input input, Output output) {
+		public boolean execute(ExecutionContext context, Input input, Output output) {
 			while (input.hasMoreLines()) {
 				final String line = input.readLine();
 				final String[] words = line.split("\\s+");
@@ -160,6 +162,7 @@ public final class Xargs {
 					output.writeLine(words[i]);
 				}
 			}
+			return true;
 		}
 	}
 

@@ -1,7 +1,9 @@
 package org.unix4j.command;
 
 import org.unix4j.io.Input;
+import org.unix4j.io.InputOutputJoin;
 import org.unix4j.io.Output;
+import org.unix4j.util.TypedMap;
 
 /**
  * A composite command joining two commands. The output of the
@@ -9,6 +11,8 @@ import org.unix4j.io.Output;
  * {@link #getSecond() second} command.
  */
 public class JoinedCommand<A extends Arguments<A>> implements Command<A> {
+	
+	private final TypedMap.Key<ExecutionContext> secondContextKey = new TypedMap.DefaultKey<ExecutionContext>(ExecutionContext.class, ExecutionContext.class);
 
 	private final Command<A> first;
 	private final Command<?> second;
@@ -74,16 +78,6 @@ public class JoinedCommand<A extends Arguments<A>> implements Command<A> {
 		return getArguments();
 	}
 
-	/**
-	 * Returns the type of the first command
-	 * 
-	 * @return the type of the first command
-	 */
-	@Override
-	public Type getType() {
-		return first.getType();
-	}
-
 	@Override
 	public Command<A> withArgs(A arguments) {
 		return new JoinedCommand<A>(first.withArgs(arguments), second);
@@ -109,9 +103,21 @@ public class JoinedCommand<A extends Arguments<A>> implements Command<A> {
 	 *            the output for the second command
 	 */
 	@Override
-	public void execute(Input input, Output output) {
-		final JoinedOutput joinedOutput = new JoinedOutput(getSecond(), output);
-		getFirst().execute(input, joinedOutput);
+	public boolean execute(ExecutionContext context, Input input, Output output) {
+		final InputOutputJoin join = new InputOutputJoin();
+		final boolean terminate1 = !getFirst().execute(context, input, join.getOutput()) || context.isTerminalInvocation();
+		if (terminate1 || !join.isEmpty()) {
+			ExecutionContext context2 = context.getCommandStorage().get(secondContextKey);
+			if (context2 == null) {
+				context2 = DefaultExecutionContext.deriveForNextCommand(context, terminate1);
+				context.getCommandStorage().put(secondContextKey, context2);
+			} else {
+				context2 = DefaultExecutionContext.deriveNextForSameCommand(context2, terminate1);
+			}
+			final boolean terminate2 = getSecond().execute(context2, join.getInput(), output);
+			return terminate1 || terminate2;
+		}
+		return terminate1;
 	}
 
 	/**

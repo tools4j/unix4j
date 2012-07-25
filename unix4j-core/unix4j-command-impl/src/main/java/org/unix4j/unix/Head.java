@@ -3,8 +3,10 @@ package org.unix4j.unix;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
+import org.unix4j.command.ExecutionContext;
 import org.unix4j.io.Input;
 import org.unix4j.io.Output;
+import org.unix4j.util.Counter;
 import org.unix4j.util.TypedMap;
 
 import static org.unix4j.util.Assert.assertArgGreaterThanOrEqualTo;
@@ -102,7 +104,7 @@ public final class Head {
 	 * Arguments and options for the head command.
 	 */
 	public static class Args extends AbstractArgs<Option, Args> {
-		public static final TypedMap.Key<Integer> LINES = TypedMap.DefaultKey.keyFor("lines", Integer.class);
+		public static final TypedMap.Key<Integer> LINES = TypedMap.keyFor("lines", Integer.class);
 
 		public Args(int lines) {
 			super(Option.class);
@@ -142,8 +144,9 @@ public final class Head {
 	 * Head command implementation.
 	 */
 	public static class Command extends AbstractCommand<Args> {
+		private static final TypedMap.Key<Counter> COUNTER_KEY = TypedMap.keyFor("counter", Counter.class);
 		public Command(Args arguments) {
-			super(NAME, Type.CompleteInput, arguments);
+			super(NAME, arguments);
 		}
 
 		@Override
@@ -151,17 +154,28 @@ public final class Head {
 			return new Command(arguments);
 		}
 
+		private Counter getCounter(ExecutionContext context) {
+			Counter counter = context.getCommandStorage().get(COUNTER_KEY);
+			if (counter == null) {
+				counter = new Counter();
+				context.getCommandStorage().put(COUNTER_KEY, counter);
+			}
+			return counter;
+		}
 		@Override
-		public void executeBatch(Input input, Output output) {
+		public boolean execute(ExecutionContext context, Input input, Output output) {
 			final int linesToOutput = getArguments().getLines();
-			int lines = 0;
-			while (input.hasMoreLines()){
+			final Counter counter = getCounter(context);
+			while (input.hasMoreLines()) {
 				final String line = input.readLine();
-				if (lines < linesToOutput) {
+				if (counter.getCount() < linesToOutput) {
 					output.writeLine(line);
-					lines++;
+					counter.increment();
+				} else {
+					return false;
 				}
 			}
+			return counter.getCount() < linesToOutput;
 		}
 	}
 

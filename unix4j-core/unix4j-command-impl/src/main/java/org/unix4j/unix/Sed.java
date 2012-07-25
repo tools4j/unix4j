@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
+import org.unix4j.command.ExecutionContext;
 import org.unix4j.io.Input;
 import org.unix4j.io.Output;
 import org.unix4j.util.TypedMap;
@@ -150,7 +151,7 @@ public final class Sed {
 	 * Arguments and options for the sed command.
 	 */
 	public static class Args extends AbstractArgs<Option, Args> {
-		public static final TypedMap.Key<String> SCRIPT = TypedMap.DefaultKey.keyFor("script", String.class);
+		public static final TypedMap.Key<String> SCRIPT = TypedMap.keyFor("script", String.class);
 
 		public Args(String script) {
 			super(Option.class);
@@ -199,7 +200,7 @@ public final class Sed {
 	 */
 	public static class Command extends AbstractCommand<Args> {
 		public Command(Args arguments) {
-			super(NAME, Type.LineByLine, arguments);
+			super(NAME, arguments);
 		}
 
 		@Override
@@ -208,7 +209,7 @@ public final class Sed {
 		}
 
 		@Override
-		public void executeBatch(Input input, Output output) {
+		public boolean execute(ExecutionContext context, Input input, Output output) {
 			final Args args = getArguments();
 			final String SED_REGEX = "s/(.*?)(?<!\\\\)/(.*?)(?<!\\\\)/(g)?";
 			final String script = args.getScript();
@@ -226,6 +227,7 @@ public final class Sed {
 				globalSearchAndReplace = true;
 			}
 			searchAndReplace(input, output, search, replace, globalSearchAndReplace);
+			return true;
 		}
 
 		private void searchAndReplace(Input input, Output output, final String search, final String replace, final boolean globalSearchAndReplace) {
