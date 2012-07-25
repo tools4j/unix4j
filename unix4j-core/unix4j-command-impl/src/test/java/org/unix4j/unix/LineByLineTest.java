@@ -39,6 +39,27 @@ public class LineByLineTest {
 
 	@Ignore
 	@Test
+	public void testLineByLine_headOnlyFirstTwoLines() throws Exception {
+
+		final IoTestStub input = new IoTestStub("input");
+		final IoTestStub output = new IoTestStub("output");
+
+		input.addLine("1").addLine("2").addLine("3").addLine("4").addLine("5");
+		IoTestStub.startRecording();
+
+		Unix4j.fromInput(input).head(2).toOutput(output);
+
+		IoTestStub.stopRecordingAndVerify()
+				.expect(input,  IoTestStub.ActionType.READ,  "1")
+				.expect(output, IoTestStub.ActionType.WRITE, "1")
+				.expect(input,  IoTestStub.ActionType.READ,  "2")
+				.expect(output, IoTestStub.ActionType.WRITE, "2")
+				.finish();
+	}
+
+
+	@Ignore
+	@Test
 	public void testLineByLine_headPipedIntoHead() throws Exception {
 
 		final IoTestStub input = new IoTestStub("input");
