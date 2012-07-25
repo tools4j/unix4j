@@ -12,7 +12,7 @@ public interface CommandBuilder {
 	 * command specific methods of this fromFile.
 	 * <p>
 	 * This method is rarely used by application code. Usually one of the
-	 * execute(..) methods is invoked directly. To get a string representation
+	 * toFile(..) methods is invoked directly. To get a string representation
 	 * of the built command, the command fromFile's toString() method can be
 	 * used.
 	 *
@@ -40,28 +40,20 @@ public interface CommandBuilder {
 	 * Executes the composite command and writes the result to the standard
 	 * output.
 	 */
-	void execute();
+	void toStdOut();
 
 	/**
 	 * Executes the composite command and writes the result to the given file.
 	 */
-	void execute(File file);
+	void toFile(File file);
 
 	/**
 	 * Executes the composite command and writes the result to the given output.
 	 */
-	void execute(Output output);
+	void toOutput(Output output);
 
 	/**
 	 * Executes the composite command and returns the result as string.
 	 */
-	String executeToString();
-
-	/**
-	 * Executes the composite command and returns the result as string with
-	 * @param appendTrailingLineEnding
-	 *            Specifies whether a line ending is appended to the very
-	 *            end of the result.
-	 */
-	String executeToString(boolean appendTrailingLineEnding);
+	String toStringResult();
 }

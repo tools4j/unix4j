@@ -1,11 +1,11 @@
 package org.unix4j.unix;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Ignore;
 import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.util.MultilineString;
+
+import static org.junit.Assert.assertEquals;
 
 //@Ignore
 public class CommandChainingTest {
@@ -25,7 +25,7 @@ public class CommandChainingTest {
 
 	@Test
 	public void test_headTail_1() {
-		assertEquals("one", Unix4j.fromString(input.toString()).head(4).tail(1).executeToString(false));
+		assertEquals("one", Unix4j.fromString(input.toString()).head(4).tail(1).toStringResult());
 	}
 
 	@Test
@@ -35,7 +35,7 @@ public class CommandChainingTest {
 				.appendLine("one")
 				.appendLine("a");
 
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).head(5).tail(2).executeToString(false));
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).head(5).tail(2).toStringResult());
 	}
 
 	@Test
@@ -51,24 +51,24 @@ public class CommandChainingTest {
 				.appendLine("two")
 				.appendLine("def123");
 
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).head(10).tail(10).executeToString(false));
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).head(10).tail(10).toStringResult());
 	}
 
 	@Test
 	public void test_headTail_4() {
 		final MultilineString expectedOutput = new MultilineString();
 		expectedOutput.appendLine("This is a test blah blah blah");
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).head(1).tail(1).executeToString(false));
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).head(1).tail(1).toStringResult());
 	}
 
 	@Test
 	public void test_headTail_5() {
-		assertEquals("", Unix4j.fromString(input.toString()).head(0).tail(0).executeToString(false));
+		assertEquals("", Unix4j.fromString(input.toString()).head(0).tail(0).toStringResult());
 	}
 
 	@Test
 	public void test_headTailHead() {
-		assertEquals("a", Unix4j.fromString(input.toString()).head(10).tail(4).head(1).executeToString(false));
+		assertEquals("a", Unix4j.fromString(input.toString()).head(10).tail(4).head(1).toStringResult());
 	}
 
 	@Test
@@ -82,7 +82,7 @@ public class CommandChainingTest {
 				.appendLine("Dude is a test blah blah blah")
 				.appendLine("Dude is a test one two three")
 				.appendLine("two");
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).head(10).sort().tail(7).sedSubstitute("This", "Dude").executeToString(false));
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).head(10).sort().tail(7).sedSubstitute("This", "Dude").toStringResult());
 	}
 
 	@Test
@@ -92,10 +92,10 @@ public class CommandChainingTest {
 				.appendLine("Dude is a test blah blah")
 				.appendLine("Dude is a test blah blah blah")
 				.appendLine("Dude is a test one two three");
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).head(10).sort().tail(7).sedSubstitute("This", "Dude").grep("Dude").executeToString(false));
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).head(10).sort().tail(7).sedSubstitute("This", "Dude").grep("Dude").toStringResult());
 	}
 
-	@Ignore	//FIXME make this test work, NOTE mt: this is execute/batch/finish problem!
+	@Ignore	//FIXME make this test work, NOTE mt: this is toFile/batch/finish problem!
 	@Test
 	public void test_headSortSedTailGrepHeadWc() {
 		System.out.println(
@@ -107,7 +107,7 @@ public class CommandChainingTest {
 			.grep("Dude")
 			.head(1)
 			.wcCountWords()
-			.executeToString(false));
+			.toStringResult());
 		assertEquals("6", /*6 words*/
 				Unix4j.fromString(input.toString())
 						.head(10)
@@ -117,6 +117,6 @@ public class CommandChainingTest {
 						.grep("Dude")
 						.head(1)
 						.wcCountWords()
-						.executeToString(false));
+						.toStringResult());
 	}
 }
