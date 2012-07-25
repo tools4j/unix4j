@@ -9,21 +9,17 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class IoTestStub implements Input, Output {
-	private final List<String> lines = new LinkedList<String>();
 	private static final RecordedActions recordedActions = new RecordedActions();
 	private static boolean recording = false;
+	private final List<String> lines = new LinkedList<String>();
 	private final String id;
 
-	public IoTestStub(final String id) {
-		this.id = id;
-	}
+	public enum ActionType{READ, WRITE;}
 
-	public enum ActionType{READ, WRITE}
 	static class Action{
 		final IoTestStub instance;
 		final ActionType actionType;
 		final String line;
-
 		Action(IoTestStub instance, ActionType actionType, String line) {
 			this.instance = instance;
 			this.actionType = actionType;
@@ -52,11 +48,11 @@ public class IoTestStub implements Input, Output {
 					", line='" + line + '\'' +
 					'}';
 		}
+
 	}
 
 	public static class RecordedActions{
 		private static final List<Action> actions = new ArrayList<Action>();
-
 		private void recordAction(final IoTestStub instance, final ActionType actionType, final String line){
 			actions.add(new Action(instance, actionType, line));
 		}
@@ -73,9 +69,13 @@ public class IoTestStub implements Input, Output {
 		}
 
 		public void finish(){
-			assertTrue(actions.isEmpty());
+			assertTrue("There should be no more actions recorded. " + actions, actions.isEmpty());
 			recordedActions.clear();
 		}
+	}
+
+	public IoTestStub(final String id) {
+		this.id = id;
 	}
 
 	public static void startRecording(){
