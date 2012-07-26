@@ -1,11 +1,10 @@
 package org.unix4j.unix;
 
+import java.io.StringWriter;
+
 import org.junit.Test;
 import org.unix4j.Unix4j;
-import org.unix4j.io.WriterOutput;
 import org.unix4j.util.MultilineString;
-
-import java.io.StringWriter;
 
 public class TailTest {
 	private final static String LINE1 = "This is a test blah blah blah";
@@ -116,7 +115,7 @@ public class TailTest {
 				.appendLine(LINE12);
 
 		final StringWriter actualOutputStringWriter = new StringWriter();
-		Unix4j.fromInput(input.toInput()).tail().toOutput(new WriterOutput(actualOutputStringWriter));
+		Unix4j.fromInput(input.toInput()).tail().toWriter(actualOutputStringWriter);
 		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
 		actualOutput.assertMultilineStringEquals(expectedOutput);
 	}
@@ -147,7 +146,7 @@ public class TailTest {
 
 	private void assertTail(final MultilineString input, final int lines, final MultilineString expectedOutput){
 		final StringWriter actualOutputStringWriter = new StringWriter();
-		Unix4j.fromInput(input.toInput()).tail(lines).toOutput(new WriterOutput(actualOutputStringWriter));
+		Unix4j.fromInput(input.toInput()).tail(lines).toWriter(actualOutputStringWriter);
 		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
 		actualOutput.assertMultilineStringEquals(expectedOutput);
 	}

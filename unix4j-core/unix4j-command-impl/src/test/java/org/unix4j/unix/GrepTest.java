@@ -4,7 +4,6 @@ import java.io.StringWriter;
 
 import org.junit.Test;
 import org.unix4j.Unix4j;
-import org.unix4j.io.WriterOutput;
 import org.unix4j.util.MultilineString;
 
 /**
@@ -222,7 +221,7 @@ public class GrepTest {
 
 	private void assertGrep(final MultilineString input, final String expression, final MultilineString expectedOutput, Grep.Option... options){
 		final StringWriter actualOutputStringWriter = new StringWriter();
-		Unix4j.fromInput(input.toInput()).grep(expression, options).toOutput(new WriterOutput(actualOutputStringWriter));
+		Unix4j.fromInput(input.toInput()).grep(expression, options).toWriter(actualOutputStringWriter);
 		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
 		actualOutput.assertMultilineStringEquals(expectedOutput);
 	}

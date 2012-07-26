@@ -1,9 +1,14 @@
 package org.unix4j.builder;
 
 import java.io.File;
+import java.io.InputStream;
+import java.io.Reader;
+import java.net.URL;
+import java.util.Collection;
 
 import org.unix4j.command.Command;
 import org.unix4j.io.Input;
+import org.unix4j.redirect.From;
 import org.unix4j.unix.Cut;
 import org.unix4j.unix.Echo;
 import org.unix4j.unix.Grep;
@@ -23,6 +28,66 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 	}
 	public Unix4jCommandBuilderImpl(Input input) {
 		super(input);
+	}
+	
+	@Override
+	public Unix4jCommandBuilder fromString(String input) {
+		join(From.FACTORY.fromString(input));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder fromStrings(String... input) {
+		join(From.FACTORY.fromStrings(input));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder from(Collection<String> input) {
+		join(From.FACTORY.from(input));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder fromFile(String file) {
+		join(From.FACTORY.fromFile(file));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder from(File file) {
+		join(From.FACTORY.from(file));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder fromResource(String resource) {
+		join(From.FACTORY.fromResource(resource));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder from(InputStream stream) {
+		join(From.FACTORY.from(stream));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder from(URL url) {
+		join(From.FACTORY.from(url));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder from(Reader reader) {
+		join(From.FACTORY.from(reader));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder from(Input input) {
+		join(From.FACTORY.from(input));
+		return this;
 	}
 
 	@Override

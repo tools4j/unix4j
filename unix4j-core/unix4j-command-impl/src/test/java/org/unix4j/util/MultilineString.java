@@ -1,37 +1,27 @@
 package org.unix4j.util;
 
-import org.unix4j.io.BufferedInput;
-import org.unix4j.io.Input;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import org.unix4j.io.BufferedInput;
+import org.unix4j.io.Input;
 
 public class MultilineString {
-	public final static String LINE_ENDING = System.getProperty("line.separator");
 	public final static MultilineString EMPTY = new MultilineString("");
 
-	private final List<String> lines = new ArrayList<String>();
+	private final List<String> lines;
 
 	public MultilineString() {
-		super();
+		this.lines = new ArrayList<String>();
 	}
 
 	public MultilineString(final String content) {
-		int start = 0;
-		int end = content.indexOf(LINE_ENDING, start);
-		while (end >= 0) {
-			lines.add(content.substring(start, end));
-			start = end + LINE_ENDING.length();
-			end = content.indexOf(LINE_ENDING, start);
-		}
-		if (start < content.length()) {
-			lines.add(content.substring(start, end));
-		}
+		this.lines = StringUtil.splitLines(content);
 	}
 
 	public MultilineString appendLine(final String line){
@@ -85,7 +75,7 @@ public class MultilineString {
 		final StringBuilder sb = new StringBuilder();
 		for (final String line : lines) {
 			if (sb.length() > 0) {
-				sb.append(LINE_ENDING);
+				sb.append(StringUtil.LINE_ENDING);
 			}
 			sb.append(line);
 		}
