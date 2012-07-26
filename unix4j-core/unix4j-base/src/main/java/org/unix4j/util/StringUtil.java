@@ -1,9 +1,30 @@
 package org.unix4j.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Utility class with static methods for strings.
  */
 public class StringUtil {
+
+	/**
+	 * Operating system dependent line ending taken from the system property
+	 * {@code "line.separator"}. This is usually {@code "\n"} on UNIX systems
+	 * and {@code "\r\n"} on WINDOWS.
+	 */
+	public static final String LINE_ENDING = System.getProperty("line.separator");
+
+	/**
+	 * The line feed (LF) character {@code '\n'} used to encode line endings in
+	 * UNIX.
+	 */
+	public static final char LF = '\n';
+	/**
+	 * The carriage return (CR) character {@code '\r'} used to encode line
+	 * endings in WINDOWS together with {@link #LF}.
+	 */
+	public static final char CR = '\r';
 
 	/**
 	 * Returns the given {@code value} as a string of fixed length {@code size}
@@ -123,6 +144,44 @@ public class StringUtil {
 		} else {
 			return left ? s.substring(0, size) : s.substring(s.length() - size, s.length());
 		}
+	}
+
+	/**
+	 * Splits the given string into lines and returns each line as a separate
+	 * string in the result list. The result list will contain at least one
+	 * entry unless the string is empty. Note that all line ending characters
+	 * are accepted to split lines, no matter what operating system this code is
+	 * hosted on.
+	 * 
+	 * @param s
+	 *            the string to split
+	 * @return a list with the lines found in {@code s}
+	 */
+	public static final List<String> splitLines(String s) {
+		final List<String> lines = new ArrayList<String>();
+		int start = 0;
+		int index = 0;
+		while (index < s.length()) {
+			final char ch = s.charAt(index);
+			if (ch == LF || ch == CR) {
+				final int lineEndingStart = index;
+				index++;
+				if (index < s.length()) {
+					final char ch2 = s.charAt(index);
+					if (ch2 != ch && (ch2 == LF || ch2 == CR)) {
+						index++;
+					}
+				}
+				lines.add(s.substring(start, lineEndingStart));
+				start = index;
+			} else {
+				index++;
+			}
+		}
+		if (start < s.length()) {
+			lines.add(s.substring(start));
+		}
+		return lines;
 	}
 
 	// no instances
