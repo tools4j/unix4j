@@ -74,12 +74,16 @@ public class StringUtilTest {
 		final String[] input = {
 				"hello\nworld",	
 				"hello\r\nworld", 
+				"hello\n\r\r\nworld",
 				"hello\n\r\r\nworld\n",
+				"hello\n\r\r\nworld\n\n",
 			};
 		final String[][] expected = {
 				{"hello", "world"},
 				{"hello", "world"},
 				{"hello", "", "world"},
+				{"hello", "", "world"},
+				{"hello", "", "world", ""},
 			};
 		for (int i = 0; i < input.length; i++) {
 			final List<String> actual = StringUtil.splitLines(input[i]);

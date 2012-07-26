@@ -149,9 +149,18 @@ public class StringUtil {
 	/**
 	 * Splits the given string into lines and returns each line as a separate
 	 * string in the result list. The result list will contain at least one
-	 * entry unless the string is empty. Note that all line ending characters
-	 * are accepted to split lines, no matter what operating system this code is
-	 * hosted on.
+	 * entry unless the string is empty.
+	 * <p>
+	 * A trailing newline after the last line is ignored, meaning that no empty
+	 * string is appended as separate line if the string ends with a newline.
+	 * However multiple trailing newlines will still lead to empty line strings
+	 * at the end of the list.
+	 * <p>
+	 * Note that all line ending characters are accepted to split lines, no
+	 * matter what operating system this code is hosted on. More precisely, the
+	 * {@link #LF} and {@link #CR} characters are recognized as line ending
+	 * characters, either as single character or as a pair {@code CR+LF} or
+	 * {@code LF+CR}.
 	 * 
 	 * @param s
 	 *            the string to split
