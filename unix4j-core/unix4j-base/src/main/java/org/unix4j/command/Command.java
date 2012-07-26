@@ -16,8 +16,13 @@ import org.unix4j.io.Output;
  * @param <A>
  *            the type parameter defining the arguments and options of the
  *            command
+ * @param <L>
+ *            the type parameter defining the local variable accessible
+ *            throughout command execution via {@code context} parameter in the
+ *            {@link #execute(ExecutionContext, Input, Output) execute(..)}
+ *            method
  */
-public interface Command<A extends Arguments<A>> {
+public interface Command<A extends Arguments<A>, L> {
 	/**
 	 * Returns the name of this command, usually a lower-case string such as
 	 * "grep" or "ls".
@@ -45,7 +50,21 @@ public interface Command<A extends Arguments<A>> {
 	 * @return a new command of the same type as this command using the
 	 *         specified {@code arguments}
 	 */
-	Command<A> withArgs(A arguments);
+	Command<A, L> withArgs(A arguments);
+
+	/**
+	 * Creates and returns an initial local variable available throughout the
+	 * {@link #execute(ExecutionContext, Input, Output) execute(..)} invocations
+	 * of a command execution. The context local is initialized by and
+	 * accessible through the {@link ExecutionContext} passed to the
+	 * {@code execute(..)} method.
+	 * 
+	 * @return an initial local variable accessible throughout command execution
+	 *         via {@code context} parameter in the
+	 *         {@link #execute(ExecutionContext, Input, Output) execute(..)}
+	 *         method
+	 */
+	L initializeLocal();
 
 	/**
 	 * Returns a new command representing the combination of {@code this}
@@ -64,21 +83,21 @@ public interface Command<A extends Arguments<A>> {
 	 * @return a new command representing the combination of {@code this}
 	 *         command joined to {@code next}
 	 */
-	Command<?> join(Command<?> next);
+	<L2> Command<?, ?> join(Command<?, L2> next);
 
 	/**
 	 * Executes this command reading from the given {@code input} and writing to
 	 * the {@code output} object. Note that the command execution can consist of
 	 * a single or multiple {@code execute} method invocations as indicated by
-	 * the {@link ExecutionContext#isInitialInvocation() initial} and
-	 * {@link ExecutionContext#isTerminalInvocation() terminal} flags in the
+	 * the {@link ExecutionContext#isInitial() initial} and
+	 * {@link ExecutionContext#isTerminal() terminal} flags in the
 	 * {@code context} object.
 	 * <p>
 	 * The method returns true if it expects another invocation with more input
 	 * to be processed, and false if execution can be aborted because there is
 	 * no need to process any further input. The return value is irrelevant and
 	 * ignored if the {@code context} indicates that this is the
-	 * {@link ExecutionContext#isTerminalInvocation() terminal} invocation.
+	 * {@link ExecutionContext#isTerminal() terminal} invocation.
 	 * 
 	 * @param context
 	 *            the command execution context
@@ -90,7 +109,7 @@ public interface Command<A extends Arguments<A>> {
 	 *         if this command has completed and no other invocation is
 	 *         required.
 	 */
-	boolean execute(ExecutionContext context, Input input, Output output);
+	boolean execute(ExecutionContext<L> context, Input input, Output output);
 
 	/**
 	 * Returns a string representation of the command instance including the

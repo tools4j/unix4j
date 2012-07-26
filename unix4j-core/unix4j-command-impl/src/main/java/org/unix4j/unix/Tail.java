@@ -3,7 +3,6 @@ package org.unix4j.unix;
 import static org.unix4j.util.Assert.assertArgGreaterThanOrEqualTo;
 
 import java.util.LinkedList;
-import java.util.List;
 
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
@@ -146,8 +145,7 @@ public final class Tail {
 	/**
 	 * Tail command implementation.
 	 */
-	public static class Command extends AbstractCommand<Args> {
-		private static final TypedMap.Key<List<String>> BUFFER_KEY = TypedMap.keyForListOf("buffer", String.class);
+	public static class Command extends AbstractCommand<Args, LinkedList<String>> {
 		public Command(Args arguments) {
 			super(NAME, arguments);
 		}
@@ -156,27 +154,24 @@ public final class Tail {
 		public Command withArgs(Args arguments) {
 			return new Command(arguments);
 		}
-
-		private List<String> getBuffer(ExecutionContext context) {
-			List<String> buffer = context.getCommandStorage().get(BUFFER_KEY);
-			if (buffer == null) {
-				buffer = new LinkedList<String>();//linked list is efficient to remove element 0
-				context.getCommandStorage().put(BUFFER_KEY, buffer);
-			}
-			return buffer;
-		}
+		
 		@Override
-		public boolean execute(ExecutionContext context, Input input, Output output) {
+		public LinkedList<String> initializeLocal() {
+			return new LinkedList<String>();//linked list is efficient to remove element 0
+		}
+
+		@Override
+		public boolean execute(ExecutionContext<LinkedList<String>> context, Input input, Output output) {
 			final int linesToOutput = getArguments().getLines();
-			final List<String> buffer = getBuffer(context);
-			while (input.hasMoreLines()){
+			final LinkedList<String> buffer = context.getLocal();
+			while (input.hasMoreLines()) {
 				buffer.add(input.readLine());
 				if (buffer.size() > linesToOutput) {
-					buffer.remove(0);
+					buffer.removeFirst();
 				}
 			}
 			
-			if (context.isTerminalInvocation()) {
+			if (context.isTerminal()) {
 				for (final String line : buffer) {
 					output.writeLine(line);
 				}

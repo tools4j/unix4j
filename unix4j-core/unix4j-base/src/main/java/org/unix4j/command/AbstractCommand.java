@@ -1,5 +1,7 @@
 package org.unix4j.command;
 
+import org.unix4j.io.Input;
+import org.unix4j.io.Output;
 
 /**
  * Abstract base class suitable for most command implementations. Name, type and
@@ -8,8 +10,13 @@ package org.unix4j.command;
  * @param <A>
  *            the type parameter defining the arguments and options of the
  *            command
+ * @param <L>
+ *            the type parameter defining the local variable accessible
+ *            throughout command execution via {@code context} parameter in the
+ *            {@link #execute(ExecutionContext, Input, Output) execute(..)}
+ *            method
  */
-abstract public class AbstractCommand<A extends Arguments<A>> implements Command<A> {
+abstract public class AbstractCommand<A extends Arguments<A>, L> implements Command<A, L> {
 
 	private final String name;
 	private final A arguments;
@@ -39,7 +46,7 @@ abstract public class AbstractCommand<A extends Arguments<A>> implements Command
 	}
 
 	@Override
-	public Command<?> join(Command<?> next) {
+	public <L2> Command<?, ?> join(Command<?, L2> next) {
 		return JoinedCommand.join(this, next);
 	}
 

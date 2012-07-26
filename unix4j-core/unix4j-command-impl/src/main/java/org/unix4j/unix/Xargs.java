@@ -9,7 +9,6 @@ import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.Arguments;
 import org.unix4j.command.CommandInterface;
 import org.unix4j.command.ExecutionContext;
-import org.unix4j.command.JoinedCommand;
 import org.unix4j.io.Input;
 import org.unix4j.io.NullInput;
 import org.unix4j.io.Output;
@@ -114,7 +113,7 @@ public final class Xargs {
 	/**
 	 * Xargs command implementation.
 	 */
-	public static class Command extends AbstractCommand<Args> {
+	public static class Command extends AbstractCommand<Args, Void> {
 		public Command(Args arguments) {
 			super(NAME, arguments);
 		}
@@ -123,21 +122,23 @@ public final class Xargs {
 		public Command withArgs(Args arguments) {
 			return new Command(arguments);
 		}
+		
+		@Override
+		public Void initializeLocal() {
+			return null;//no local
+		}
 
 		@Override
-		public org.unix4j.command.Command<?> join(org.unix4j.command.Command<?> next) {
+		public <L2> org.unix4j.command.Command<?,?> join(org.unix4j.command.Command<?,L2> next) {
 			return join(this, next);
 		}
 
-		private static <A1 extends Arguments<A1>, A2 extends Arguments<A2>> org.unix4j.command.Command<A1> join(org.unix4j.command.Command<A1> first, final org.unix4j.command.Command<A2> second) {
-			return new JoinedCommand<A1>(first, second) {
+		private static <A1 extends Arguments<A1>, L1, A2 extends Arguments<A2>, L2> org.unix4j.command.Command<A1,?> join(org.unix4j.command.Command<A1,L1> first, final org.unix4j.command.Command<A2,L2> second) {
+			return new AbstractCommand<A1,L2>(NAME + " " + second.getName(), first.getArguments()) {
 				@Override
-				public boolean execute(ExecutionContext context, Input input, Output output) {
+				public boolean execute(ExecutionContext<L2> context, Input input, Output output) {
 					final Map<String, String> xargs = new HashMap<String, String>();
-					final A2 args = second.getArguments().clone(true /*
-																	 * deep
-																	 * clone
-																	 */);
+					final A2 args = second.getArguments().clone(true /* deep clone */);
 					while (input.hasMoreLines()) {
 						final String line = input.readLine();
 						final String[] words = line.split("\\s+");
@@ -150,11 +151,21 @@ public final class Xargs {
 					}
 					return false;//FIXME does not work yet
 				}
+
+				@Override
+				public org.unix4j.command.Command<A1, L2> withArgs(A1 arguments) {
+					return this;//FIXME dodgy
+				}
+
+				@Override
+				public L2 initializeLocal() {
+					return second.initializeLocal();
+				}
 			};
 		}
 
 		@Override
-		public boolean execute(ExecutionContext context, Input input, Output output) {
+		public boolean execute(ExecutionContext<Void> context, Input input, Output output) {
 			while (input.hasMoreLines()) {
 				final String line = input.readLine();
 				final String[] words = line.split("\\s+");

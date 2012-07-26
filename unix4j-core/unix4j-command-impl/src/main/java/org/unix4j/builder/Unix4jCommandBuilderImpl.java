@@ -229,7 +229,7 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 	}
 
 	@Override
-	public Unix4jCommandBuilder join(Command<?> command) {
+	public Unix4jCommandBuilder join(Command<?,?> command) {
 		super.join(command);
 		return this;
 	}

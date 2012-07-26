@@ -3,19 +3,21 @@ package org.unix4j.command;
 import org.unix4j.io.Input;
 import org.unix4j.io.InputOutputJoin;
 import org.unix4j.io.Output;
-import org.unix4j.util.TypedMap;
 
 /**
  * A composite command joining two commands. The output of the
  * {@link #getFirst() first} command is joined to the input of the
  * {@link #getSecond() second} command.
  */
-public class JoinedCommand<A extends Arguments<A>> implements Command<A> {
+public class JoinedCommand<A extends Arguments<A>, L1, L2> implements Command<A, JoinedCommand.Local<L1,L2>> {
 	
-	private final TypedMap.Key<ExecutionContext> secondContextKey = new TypedMap.DefaultKey<ExecutionContext>(ExecutionContext.class, ExecutionContext.class);
+	public static class Local<L1, L2> {
+		private ExecutionContext<L1> context1;
+		private ExecutionContext<L2> context2;
+	}
 
-	private final Command<A> first;
-	private final Command<?> second;
+	private final Command<A, L1> first;
+	private final Command<?, L2> second;
 
 	/**
 	 * Constructor with first and second command in the join.
@@ -30,7 +32,7 @@ public class JoinedCommand<A extends Arguments<A>> implements Command<A> {
 	 *             if any of the command arguments is null
 	 * 
 	 */
-	public JoinedCommand(Command<A> first, Command<?> second) {
+	public JoinedCommand(Command<A, L1> first, Command<?, L2> second) {
 		if (first == null) {
 			throw new NullPointerException("first command cannot be null");
 		}
@@ -41,8 +43,8 @@ public class JoinedCommand<A extends Arguments<A>> implements Command<A> {
 		this.second = second;
 	}
 
-	public static <A extends Arguments<A>> JoinedCommand<A> join(Command<A> first, Command<?> second) {
-		return new JoinedCommand<A>(first, second);
+	public static <A extends Arguments<A>, L1, L2> JoinedCommand<A, L1, L2> join(Command<A, L1> first, Command<?, L2> second) {
+		return new JoinedCommand<A, L1, L2>(first, second);
 	}
 
 	/**
@@ -50,7 +52,7 @@ public class JoinedCommand<A extends Arguments<A>> implements Command<A> {
 	 * 
 	 * @return the first command in the join
 	 */
-	public Command<A> getFirst() {
+	public Command<A, L1> getFirst() {
 		return first;
 	}
 
@@ -59,7 +61,7 @@ public class JoinedCommand<A extends Arguments<A>> implements Command<A> {
 	 * 
 	 * @return the second command in the join
 	 */
-	public Command<?> getSecond() {
+	public Command<?, L2> getSecond() {
 		return second;
 	}
 
@@ -79,12 +81,17 @@ public class JoinedCommand<A extends Arguments<A>> implements Command<A> {
 	}
 
 	@Override
-	public Command<A> withArgs(A arguments) {
-		return new JoinedCommand<A>(first.withArgs(arguments), second);
+	public JoinedCommand<A, L1, L2> withArgs(A arguments) {
+		return new JoinedCommand<A, L1, L2>(first.withArgs(arguments), second);
+	}
+	
+	@Override
+	public Local<L1, L2> initializeLocal() {
+		return new Local<L1, L2>();
 	}
 
 	@Override
-	public Command<?> join(Command<?> next) {
+	public <L3> Command<?, ?> join(Command<?, L3> next) {
 		return JoinedCommand.join(getFirst(), getSecond().join(next));
 	}
 
@@ -103,18 +110,18 @@ public class JoinedCommand<A extends Arguments<A>> implements Command<A> {
 	 *            the output for the second command
 	 */
 	@Override
-	public boolean execute(ExecutionContext context, Input input, Output output) {
+	public boolean execute(ExecutionContext<Local<L1,L2>> context, Input input, Output output) {
+		final Local<L1,L2> local = context.getLocal();
+		if (context.isInitial()) {
+			local.context1 = DefaultExecutionContext.deriveForNextCommand(context, getFirst(), context.isTerminal());
+		}
 		final InputOutputJoin join = new InputOutputJoin();
-		final boolean terminate1 = !getFirst().execute(context, input, join.getOutput()) || context.isTerminalInvocation();
+		final boolean terminate1 = !getFirst().execute(local.context1, input, join.getOutput()) || context.isTerminal();
 		if (terminate1 || !join.isEmpty()) {
-			ExecutionContext context2 = context.getCommandStorage().get(secondContextKey);
-			if (context2 == null) {
-				context2 = DefaultExecutionContext.deriveForNextCommand(context, terminate1);
-				context.getCommandStorage().put(secondContextKey, context2);
-			} else {
-				context2 = DefaultExecutionContext.deriveNextForSameCommand(context2, terminate1);
+			if (local.context2 == null) {
+				local.context2 = DefaultExecutionContext.deriveForNextCommand(local.context1, getSecond(), terminate1);
 			}
-			final boolean terminate2 = getSecond().execute(context2, join.getInput(), output);
+			final boolean terminate2 = getSecond().execute(local.context2, join.getInput(), output);
 			return terminate1 || terminate2;
 		}
 		return terminate1;
