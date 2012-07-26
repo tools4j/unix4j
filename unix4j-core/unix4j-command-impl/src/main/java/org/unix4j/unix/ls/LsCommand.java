@@ -16,7 +16,7 @@ import org.unix4j.util.ReverseOrderComparator;
 /**
  * Ls command implementation.
  */
-class LsCommand extends AbstractCommand<LsArgs> {
+class LsCommand extends AbstractCommand<LsArgs,Void> {
 	public LsCommand(LsArgs arguments) {
 		super(Ls.NAME, arguments);
 	}
@@ -27,7 +27,12 @@ class LsCommand extends AbstractCommand<LsArgs> {
 	}
 
 	@Override
-	public boolean execute(ExecutionContext context, Input input, Output output) {
+	public Void initializeLocal() {
+		return null;//no local
+	}
+
+	@Override
+	public boolean execute(ExecutionContext<Void> context, Input input, Output output) {
 		final LsArgs args = getArguments();
 		final List<File> files = args.getFiles();
 		final List<File> expanded = FileUtil.expandFiles(files);

@@ -10,12 +10,14 @@ import org.unix4j.util.TypedMap;
  * information for the current execution of the command or command chain. The
  * same context object instance is passed to multiple {@code execute(..)} calls
  * if they belong to the same command execution.
- * <p>
- * A {@link #getStorage() storage} object can be accessed by commands to store
- * intermediary results persisting multiple calls of the {@code execute(..)}
- * method belonging to the same execution.
+ * 
+ * @param <L>
+ *            the parameter defining the type of the command specific local
+ *            variable accessible throughout the multiple invocations of
+ *            {@link Command#execute(ExecutionContext, Input, Output)
+ *            Command.execute(..)}
  */
-public interface ExecutionContext {
+public interface ExecutionContext<L> {
 	/**
 	 * Returns true if this is the first call of the {@link Command}'s
 	 * {@link Command#execute(Input, Output) execute(..)} method. There is one
@@ -23,15 +25,15 @@ public interface ExecutionContext {
 	 * an {@code ExecutionContext}; all subsequent invocations (if any) will
 	 * return false if they belong to the same command execution.
 	 * <p>
-	 * Note that an invocation can be {@code initial} and
-	 * {@link #isTerminalInvocation() terminal} at the same time if the whole
-	 * command execution consists of a single {@code execute(..)} method call.
+	 * Note that an invocation can be {@code initial} and {@link #isTerminal()
+	 * terminal} at the same time if the whole command execution consists of a
+	 * single {@code execute(..)} method call.
 	 * 
 	 * @return true if this the first invocation of the
 	 *         {@link Command#execute(Input, Output) execute(..)} method in the
 	 *         context of one command execution, and false otherwise
 	 */
-	boolean isInitialInvocation();
+	boolean isInitial();
 
 	/**
 	 * Returns true if this is the last invocation of the {@link Command}'s
@@ -43,7 +45,7 @@ public interface ExecutionContext {
 	 * {@link Command#execute(Input, Output) execute(..)} method; in this case,
 	 * no terminal invocation exists.
 	 * <p>
-	 * Note that an invocation can be {@link #isInitialInvocation() initial} and
+	 * Note that an invocation can be {@link #isInitial() initial} and
 	 * {@code terminal} at the same time if the whole command execution consists
 	 * of a single {@code execute(..)} method call.
 	 * 
@@ -51,7 +53,7 @@ public interface ExecutionContext {
 	 *         {@link Command#execute(Input, Output) execute(..)} method in the
 	 *         context of one command execution, and false otherwise
 	 */
-	boolean isTerminalInvocation();
+	boolean isTerminal();
 
 	/**
 	 * Returns a typed map that can be used as storage for intermediary results
@@ -62,17 +64,18 @@ public interface ExecutionContext {
 	 * 
 	 * @return a typed storage map for values accessible by all commands
 	 */
-	TypedMap getGlobalStorage();
+	TypedMap getStorage();
 
 	/**
-	 * Returns a typed map that can be used as storage for intermediary results
-	 * of the current command. Values stored in the map are only accessible by
-	 * the current command. They are persisting multiple calls of the
-	 * {@link Command}'s {@link Command#execute(Input, Output) execute(..)}
-	 * method and will be discarded after the {@link #isTerminalInvocation()
-	 * terminal} invocation of {@code Command.execute(..)}.
+	 * Returns the context local variable of the {@link Command}. This variable
+	 * is initialized through {@link Command#initializeLocal()} when this
+	 * context object is created and before the first invocation of
+	 * {@link Command#execute(ExecutionContext, Input, Output)
+	 * Command.execute(..)}. The variable is preserved during the command
+	 * execution possibly consisting of multiple {@code execute(..)}
+	 * invocations.
 	 * 
-	 * @return a typed storage map for intermediary command execution results
+	 * @return the execution context local variable of the command
 	 */
-	TypedMap getCommandStorage();
+	L getLocal();
 }

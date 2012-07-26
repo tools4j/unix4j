@@ -198,7 +198,7 @@ public final class Sed {
 	/**
 	 * sed command implementation.
 	 */
-	public static class Command extends AbstractCommand<Args> {
+	public static class Command extends AbstractCommand<Args,Void> {
 		public Command(Args arguments) {
 			super(NAME, arguments);
 		}
@@ -209,7 +209,12 @@ public final class Sed {
 		}
 
 		@Override
-		public boolean execute(ExecutionContext context, Input input, Output output) {
+		public Void initializeLocal() {
+			return null;//no local
+		}
+
+		@Override
+		public boolean execute(ExecutionContext<Void> context, Input input, Output output) {
 			final Args args = getArguments();
 			final String SED_REGEX = "s/(.*?)(?<!\\\\)/(.*?)(?<!\\\\)/(g)?";
 			final String script = args.getScript();

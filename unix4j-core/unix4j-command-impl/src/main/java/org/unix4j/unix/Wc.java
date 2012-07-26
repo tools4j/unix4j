@@ -13,7 +13,6 @@ import org.unix4j.command.ExecutionContext;
 import org.unix4j.io.Input;
 import org.unix4j.io.Output;
 import org.unix4j.util.Counter;
-import org.unix4j.util.TypedMap;
 
 /**
  * <b>NAME</b>
@@ -266,11 +265,14 @@ public final class Wc {
 	/**
 	 * wc command implementation.
 	 */
-	public static class Command extends AbstractCommand<Args> {
+	public static class Command extends AbstractCommand<Args, Command.Counters> {
 		private final static int MIN_COUNT_PADDING = 2;
-		private static final TypedMap.Key<Counter> LINE_COUNTER_KEY = TypedMap.keyFor("lineCounter", Counter.class);
-		private static final TypedMap.Key<Counter> WORD_COUNTER_KEY = TypedMap.keyFor("wordCounter", Counter.class);
-		private static final TypedMap.Key<Counter> CHAR_COUNTER_KEY = TypedMap.keyFor("charCounter", Counter.class);
+		
+		private static class Counters {
+			public final Counter lineCounter = new Counter();
+			public final Counter wordCounter = new Counter();
+			public final Counter charCounter = new Counter();
+		}
 
 		public Command(Args arguments) {
 			super(NAME, arguments);
@@ -280,44 +282,37 @@ public final class Wc {
 		public Command withArgs(Args arguments) {
 			return new Command(arguments);
 		}
-		
-		private Counter getCounter(ExecutionContext context, TypedMap.Key<Counter> counterKey) {
-			Counter counter = context.getCommandStorage().get(counterKey);
-			if (counter == null) {
-				counter = new Counter();
-				context.getCommandStorage().put(counterKey, counter);
-			}
-			return counter;
+
+		@Override
+		public Counters initializeLocal() {
+			return new Counters();
 		}
 
 		@Override
-		public boolean execute(ExecutionContext context, Input input, Output output) {
+		public boolean execute(ExecutionContext<Counters> context, Input input, Output output) {
 			Args args = getArguments();
 			assertArgFalse("No count type specified. At least one count type required.", args.isNoCountTypeSpecified());
 
-			final Counter lineCounter = getCounter(context, LINE_COUNTER_KEY);
-			final Counter wordCounter = getCounter(context, WORD_COUNTER_KEY);
-			final Counter charCounter = getCounter(context, CHAR_COUNTER_KEY);
-
+			final Counters counters = context.getLocal();
 			while (input.hasMoreLines()) {
 				final String line = input.readLine();
-				lineCounter.increment();
-				wordCounter.increment(wordCount(line));
-				charCounter.increment(line.length());
+				counters.lineCounter.increment();
+				counters.wordCounter.increment(wordCount(line));
+				counters.charCounter.increment(line.length());
 			}
 
-			if (context.isTerminalInvocation()) {
-				if (lineCounter.getCount() == 1 && charCounter.getCount() == 0) {
-					lineCounter.reset();
+			if (context.isTerminal()) {
+				if (counters.lineCounter.getCount() == 1 && counters.charCounter.getCount() == 0) {
+					counters.lineCounter.reset();
 				}
 	
 				final List<Long> counts = new ArrayList<Long>();
 				if (args.isCountLines())
-					counts.add(lineCounter.getCount());
+					counts.add(counters.lineCounter.getCount());
 				if (args.isCountWords())
-					counts.add(wordCounter.getCount());
+					counts.add(counters.wordCounter.getCount());
 				if (args.isCountChars())
-					counts.add(charCounter.getCount());
+					counts.add(counters.charCounter.getCount());
 	
 				output.writeLine(formatCounts(counts));
 				return false;

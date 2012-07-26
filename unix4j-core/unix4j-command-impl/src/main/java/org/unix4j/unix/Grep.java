@@ -173,7 +173,7 @@ public final class Grep {
 	/**
 	 * Grep command implementation.
 	 */
-	public static class Command extends AbstractCommand<Args> {
+	public static class Command extends AbstractCommand<Args,Void> {
 		public Command(Args arguments) {
 			super(NAME, arguments);
 		}
@@ -184,7 +184,12 @@ public final class Grep {
 		}
 
 		@Override
-		public boolean execute(ExecutionContext context, Input input, Output output) {
+		public Void initializeLocal() {
+			return null;//no local
+		}
+
+		@Override
+		public boolean execute(ExecutionContext<Void> context, Input input, Output output) {
 			if (getArguments().isFixedStrings()) {
 				grepWithFixedStrings(input, output);
 			} else {

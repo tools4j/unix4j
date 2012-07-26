@@ -362,7 +362,7 @@ public final class From {
 	/**
 	 * "From" command implementation.
 	 */
-	public static class Command extends AbstractCommand<Args> {
+	public static class Command extends AbstractCommand<Args,Void> {
 		public Command(Args arguments) {
 			super(NAME, arguments);
 		}
@@ -371,9 +371,14 @@ public final class From {
 		public Command withArgs(Args arguments) {
 			return new Command(arguments);
 		}
+		
+		@Override
+		public Void initializeLocal() {
+			return null;//no local
+		}
 
 		@Override
-		public boolean execute(ExecutionContext context, Input input, Output output) {
+		public boolean execute(ExecutionContext<Void> context, Input input, Output output) {
 			final Input from = getArguments().getInput();
 			while (from.hasMoreLines()) {
 				output.writeLine(from.readLine());

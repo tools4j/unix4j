@@ -143,8 +143,7 @@ public final class Head {
 	/**
 	 * Head command implementation.
 	 */
-	public static class Command extends AbstractCommand<Args> {
-		private static final TypedMap.Key<Counter> COUNTER_KEY = TypedMap.keyFor("counter", Counter.class);
+	public static class Command extends AbstractCommand<Args, Counter> {
 		public Command(Args arguments) {
 			super(NAME, arguments);
 		}
@@ -153,19 +152,16 @@ public final class Head {
 		public Command withArgs(Args arguments) {
 			return new Command(arguments);
 		}
-
-		private Counter getCounter(ExecutionContext context) {
-			Counter counter = context.getCommandStorage().get(COUNTER_KEY);
-			if (counter == null) {
-				counter = new Counter();
-				context.getCommandStorage().put(COUNTER_KEY, counter);
-			}
-			return counter;
-		}
+		
 		@Override
-		public boolean execute(ExecutionContext context, Input input, Output output) {
+		public Counter initializeLocal() {
+			return new Counter();
+		}
+
+		@Override
+		public boolean execute(ExecutionContext<Counter> context, Input input, Output output) {
 			final int linesToOutput = getArguments().getLines();
-			final Counter counter = getCounter(context);
+			final Counter counter = context.getLocal();
 			while (input.hasMoreLines()) {
 				final String line = input.readLine();
 				if (counter.getCount() < linesToOutput) {

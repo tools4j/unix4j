@@ -21,7 +21,7 @@ import org.unix4j.io.WriterOutput;
 public class DefaultCommandBuilder implements CommandBuilder {
 
 	protected Input input = null;
-	protected Command<?> command = null;
+	protected Command<?,?> command = null;
 
 	public DefaultCommandBuilder() {
 		super();
@@ -29,12 +29,12 @@ public class DefaultCommandBuilder implements CommandBuilder {
 	public DefaultCommandBuilder(Input input) {
 		this.input = input;
 	}
-	public CommandBuilder join(Command<?> command) {
+	public CommandBuilder join(Command<?,?> command) {
 		this.command = this.command == null ? command : this.command.join(command);
 		return this;
 	}
 	@Override
-	public Command<?> build() {
+	public Command<?,?> build() {
 		if (command == null) {
 			throw new IllegalStateException("no command has been built yet");
 		}
@@ -56,9 +56,7 @@ public class DefaultCommandBuilder implements CommandBuilder {
 	}
 	@Override
 	public void toOutput(Output output) {
-		final ExecutionContext context = DefaultExecutionContext.start(true);
-		build().execute(context, input == null ? NullInput.INSTANCE : input, output);
-		output.finish();
+		execute(build(), output);
 	}
 	@Override
 	public void toFile(String file) {
@@ -81,5 +79,11 @@ public class DefaultCommandBuilder implements CommandBuilder {
 		final BufferedOutput out = new BufferedOutput();
 		toOutput(out);
 		return out.toMultiLineString();
+	}
+	
+	private <L> void execute(Command<?,L> command, Output output) {
+		final ExecutionContext<L> context = DefaultExecutionContext.start(command, true);
+		command.execute(context, input == null ? NullInput.INSTANCE : input, output);
+		output.finish();
 	}
 }

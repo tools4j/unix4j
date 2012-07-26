@@ -14,7 +14,6 @@ import org.unix4j.command.CommandInterface;
 import org.unix4j.command.ExecutionContext;
 import org.unix4j.io.Input;
 import org.unix4j.io.Output;
-import org.unix4j.util.TypedMap;
 
 /**
  * Non-instantiable module with inner types making up the sort command.
@@ -164,8 +163,7 @@ public final class Sort {
 	/**
 	 * Sort command implementation.
 	 */
-	public static class Command extends AbstractCommand<Args> {
-		private static final TypedMap.Key<List<String>> BUFFER_KEY = TypedMap.keyForListOf("buffer", String.class);
+	public static class Command extends AbstractCommand<Args,List<String>> {
 		public Command(Args arguments) {
 			super(NAME, arguments);
 		}
@@ -174,22 +172,19 @@ public final class Sort {
 		public Command withArgs(Args arguments) {
 			return new Command(arguments);
 		}
-
-		private List<String> getBuffer(ExecutionContext context) {
-			List<String> buffer = context.getCommandStorage().get(BUFFER_KEY);
-			if (buffer == null) {
-				buffer = new ArrayList<String>();
-				context.getCommandStorage().put(BUFFER_KEY, buffer);
-			}
-			return buffer;
-		}
+		
 		@Override
-		public boolean execute(ExecutionContext context, Input input, Output output) {
-			final List<String> buffer = getBuffer(context);
+		public List<String> initializeLocal() {
+			return new ArrayList<String>();//array list is good for sorting
+		}
+
+		@Override
+		public boolean execute(ExecutionContext<List<String>> context, Input input, Output output) {
+			final List<String> buffer = context.getLocal();
 			while (input.hasMoreLines()) {
 				buffer.add(input.readLine());
 			}
-			if (context.isTerminalInvocation()) {
+			if (context.isTerminal()) {
 				final boolean isAsc = getArguments().hasOpt(Option.ascending);
 				final boolean isDesc = getArguments().hasOpt(Option.descending);
 				assertArgFalse("Options " + Option.ascending + " and " + Option.descending + " cannot be specified at the same time", (isAsc && isDesc));

@@ -13,11 +13,11 @@ import org.unix4j.command.CommandInterface;
 
 public class GenericCommandBuilder {
 	
-	public static <B extends CommandBuilder> B createCommandBuilder(Class<B> commandBuilderInterface, CommandInterface<? extends Command<?>>... commandFactories) {
+	public static <B extends CommandBuilder> B createCommandBuilder(Class<B> commandBuilderInterface, CommandInterface<? extends Command<?,?>>... commandFactories) {
 		return createCommandBuilder(commandBuilderInterface, new DefaultCommandBuilder(), commandFactories);
 	}
 	@SuppressWarnings("unchecked")
-	public static <B extends CommandBuilder> B createCommandBuilder(Class<B> commandBuilderInterface, DefaultCommandBuilder defaultCommandBuilder, CommandInterface<? extends Command<?>>... commandFactories) {
+	public static <B extends CommandBuilder> B createCommandBuilder(Class<B> commandBuilderInterface, DefaultCommandBuilder defaultCommandBuilder, CommandInterface<? extends Command<?,?>>... commandFactories) {
 		if (commandBuilderInterface.isInterface()) {
 			return (B) Proxy.newProxyInstance(GenericCommandBuilder.class.getClassLoader(), new Class[] {commandBuilderInterface}, new GenericCommandHandler<B>(commandBuilderInterface, defaultCommandBuilder, commandFactories));
 		}
@@ -27,7 +27,7 @@ public class GenericCommandBuilder {
 	private static class GenericCommandHandler<B extends CommandBuilder> implements InvocationHandler {
 		private final DefaultCommandBuilder defaultCommandBuilder;
 		private final Map<MethodSignature, Object> signatureToTarget = new HashMap<GenericCommandBuilder.MethodSignature, Object>();
-		public GenericCommandHandler(Class<B> commandBuilderInterface, DefaultCommandBuilder defaultCommandBuilder, CommandInterface<? extends Command<?>>... commandFactories) {
+		public GenericCommandHandler(Class<B> commandBuilderInterface, DefaultCommandBuilder defaultCommandBuilder, CommandInterface<? extends Command<?,?>>... commandFactories) {
 			this.defaultCommandBuilder = defaultCommandBuilder;
 			final Map<MethodSignature, Object> factoryMethods = new HashMap<GenericCommandBuilder.MethodSignature, Object>();
 			addSignatures(factoryMethods, defaultCommandBuilder);
@@ -62,7 +62,7 @@ public class GenericCommandBuilder {
 			if (target != null) {
 				Object result = signature.invoke(target, args);
 				if (result instanceof Command) {
-					result = defaultCommandBuilder.join((Command<?>)result);
+					result = defaultCommandBuilder.join((Command<?,?>)result);
 				}
 				if (result == defaultCommandBuilder) {
 					result = proxy;

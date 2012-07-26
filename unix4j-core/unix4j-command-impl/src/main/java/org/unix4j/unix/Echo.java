@@ -122,7 +122,7 @@ public final class Echo {
 	/**
 	 * Echo command implementation.
 	 */
-	public static class Command extends AbstractCommand<Args> {
+	public static class Command extends AbstractCommand<Args,Void> {
 		private static final String LINE_SEPERATOR = System.getProperty("line.separator");
 
 		public Command(Args arguments) {
@@ -135,7 +135,12 @@ public final class Echo {
 		}
 
 		@Override
-		public boolean execute(ExecutionContext context, Input input, Output output) {
+		public Void initializeLocal() {
+			return null;//no local
+		}
+
+		@Override
+		public boolean execute(ExecutionContext<Void> context, Input input, Output output) {
 			final String messages = joinMessages();
 			final String[] lines = messages.split(LINE_SEPERATOR);
 			for( final String line: lines){
