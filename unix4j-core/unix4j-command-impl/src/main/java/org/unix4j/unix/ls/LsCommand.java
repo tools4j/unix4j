@@ -6,9 +6,8 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.unix4j.command.AbstractCommand;
-import org.unix4j.command.ExecutionContext;
-import org.unix4j.io.Input;
-import org.unix4j.io.Output;
+import org.unix4j.line.Line;
+import org.unix4j.line.LineProcessor;
 import org.unix4j.unix.Ls;
 import org.unix4j.util.FileUtil;
 import org.unix4j.util.ReverseOrderComparator;
@@ -16,7 +15,7 @@ import org.unix4j.util.ReverseOrderComparator;
 /**
  * Ls command implementation.
  */
-class LsCommand extends AbstractCommand<LsArgs,Void> {
+class LsCommand extends AbstractCommand<LsArgs> {
 	public LsCommand(LsArgs arguments) {
 		super(Ls.NAME, arguments);
 	}
@@ -27,21 +26,25 @@ class LsCommand extends AbstractCommand<LsArgs,Void> {
 	}
 
 	@Override
-	public Void initializeLocal() {
-		return null;//no local
+	public LineProcessor execute(final LineProcessor output) {
+		return new LineProcessor() {
+			@Override
+			public boolean processLine(Line line) {
+				return false;//we ignore all input
+			}
+			@Override
+			public void finish() {
+				final LsArgs args = getArguments();
+				final List<File> files = args.getFiles();
+				final List<File> expanded = FileUtil.expandFiles(files);
+				listFiles(FileUtil.getUserDir(), null, expanded, output);
+				output.finish();
+			}
+		};
 	}
 
-	@Override
-	public boolean execute(ExecutionContext<Void> context, Input input, Output output) {
-		final LsArgs args = getArguments();
-		final List<File> files = args.getFiles();
-		final List<File> expanded = FileUtil.expandFiles(files);
-		listFiles(FileUtil.getUserDir(), null, expanded, output);
-		return false;//never expect any more input
-	}
 
-
-	private void listFiles(File relativeTo, File parent, List<File> files, Output output) {
+	private void listFiles(File relativeTo, File parent, List<File> files, LineProcessor output) {
 		final LsArgs args = getArguments();
 		final Comparator<File> comparator = getComparator(relativeTo);
 		final boolean allFiles = args.hasOpt(LsOption.allFiles);

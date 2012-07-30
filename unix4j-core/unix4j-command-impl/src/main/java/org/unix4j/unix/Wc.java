@@ -9,9 +9,10 @@ import java.util.List;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
-import org.unix4j.command.ExecutionContext;
-import org.unix4j.io.Input;
 import org.unix4j.io.Output;
+import org.unix4j.line.Line;
+import org.unix4j.line.LineProcessor;
+import org.unix4j.line.SimpleLine;
 import org.unix4j.util.Counter;
 
 /**
@@ -265,14 +266,8 @@ public final class Wc {
 	/**
 	 * wc command implementation.
 	 */
-	public static class Command extends AbstractCommand<Args, Command.Counters> {
+	public static class Command extends AbstractCommand<Args> {
 		private final static int MIN_COUNT_PADDING = 2;
-		
-		private static class Counters {
-			public final Counter lineCounter = new Counter();
-			public final Counter wordCounter = new Counter();
-			public final Counter charCounter = new Counter();
-		}
 
 		public Command(Args arguments) {
 			super(NAME, arguments);
@@ -284,44 +279,45 @@ public final class Wc {
 		}
 
 		@Override
-		public Counters initializeLocal() {
-			return new Counters();
-		}
-
-		@Override
-		public boolean execute(ExecutionContext<Counters> context, Input input, Output output) {
-			Args args = getArguments();
+		public LineProcessor execute(final LineProcessor output) {
+			final Args args = getArguments();
 			assertArgFalse("No count type specified. At least one count type required.", args.isNoCountTypeSpecified());
-
-			final Counters counters = context.getLocal();
-			while (input.hasMoreLines()) {
-				final String line = input.readLine();
-				counters.lineCounter.increment();
-				counters.wordCounter.increment(wordCount(line));
-				counters.charCounter.increment(line.length());
-			}
-
-			if (context.isTerminal()) {
-				if (counters.lineCounter.getCount() == 1 && counters.charCounter.getCount() == 0) {
-					counters.lineCounter.reset();
+			return new LineProcessor() {
+				private final Counter lineCounter = new Counter();
+				private final Counter wordCounter = args.isCountWords() ? new Counter() : null;
+				private final Counter charCounter = new Counter();
+				@Override
+				public boolean processLine(Line line) {
+					lineCounter.increment();
+					if (wordCounter != null) {
+						wordCounter.increment(wordCount(line));
+					}
+					charCounter.increment(line.length());
+					return true;//we want more lines
 				}
-	
-				final List<Long> counts = new ArrayList<Long>();
-				if (args.isCountLines())
-					counts.add(counters.lineCounter.getCount());
-				if (args.isCountWords())
-					counts.add(counters.wordCounter.getCount());
-				if (args.isCountChars())
-					counts.add(counters.charCounter.getCount());
-	
-				output.writeLine(formatCounts(counts));
-				return false;
-			}
-			return true;
+				
+				@Override
+				public void finish() {
+					if (lineCounter.getCount() == 1 && charCounter.getCount() == 0) {
+						lineCounter.reset();
+					}
+		
+					final List<Long> counts = new ArrayList<Long>();
+					if (args.isCountLines())
+						counts.add(lineCounter.getCount());
+					if (args.isCountWords())
+						counts.add(wordCounter.getCount());
+					if (args.isCountChars())
+						counts.add(charCounter.getCount());
+		
+					output.processLine(formatCounts(counts));
+					output.finish();
+				}
+			};
 		}
 
-		private int wordCount(String line) {
-			final String[] words = line.split("\\s+");
+		private int wordCount(Line line) {
+			final String[] words = line.getContent().split("\\s+");
 			int wordCount = 0;
 			for (final String word : words) {
 				if (word.length() > 0) {
@@ -331,7 +327,7 @@ public final class Wc {
 			return wordCount;
 		}
 
-		private String formatCounts(List<Long> counts) {
+		private Line formatCounts(List<Long> counts) {
 			final StringBuilder format = new StringBuilder();
 
 			if (counts.size() > 1) {
@@ -345,7 +341,7 @@ public final class Wc {
 			}
 
 			final Formatter formatter = new Formatter().format(format.toString(), counts.toArray());
-			return formatter.toString();
+			return new SimpleLine(formatter.toString());
 		}
 
 		private int getWidestCount(List<Long> counts) {

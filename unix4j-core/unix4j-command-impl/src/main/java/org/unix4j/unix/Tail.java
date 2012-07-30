@@ -7,9 +7,8 @@ import java.util.LinkedList;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
-import org.unix4j.command.ExecutionContext;
-import org.unix4j.io.Input;
-import org.unix4j.io.Output;
+import org.unix4j.line.Line;
+import org.unix4j.line.LineProcessor;
 import org.unix4j.util.TypedMap;
 
 /**
@@ -145,7 +144,7 @@ public final class Tail {
 	/**
 	 * Tail command implementation.
 	 */
-	public static class Command extends AbstractCommand<Args, LinkedList<String>> {
+	public static class Command extends AbstractCommand<Args> {
 		public Command(Args arguments) {
 			super(NAME, arguments);
 		}
@@ -156,28 +155,26 @@ public final class Tail {
 		}
 		
 		@Override
-		public LinkedList<String> initializeLocal() {
-			return new LinkedList<String>();//linked list is efficient to remove element 0
-		}
-
-		@Override
-		public boolean execute(ExecutionContext<LinkedList<String>> context, Input input, Output output) {
-			final int linesToOutput = getArguments().getLines();
-			final LinkedList<String> buffer = context.getLocal();
-			while (input.hasMoreLines()) {
-				buffer.add(input.readLine());
-				if (buffer.size() > linesToOutput) {
-					buffer.removeFirst();
+		public LineProcessor execute(final LineProcessor output) {
+			return new LineProcessor() {
+				final int linesToOutput = getArguments().getLines();
+				private final LinkedList<Line> tailLines = new LinkedList<Line>();//linked list is most efficient to remove first line
+				@Override
+				public boolean processLine(Line line) {
+					tailLines.add(line);
+					if (tailLines.size() > linesToOutput) {
+						tailLines.removeFirst();
+					}
+					return true;
 				}
-			}
-			
-			if (context.isTerminal()) {
-				for (final String line : buffer) {
-					output.writeLine(line);
+				@Override
+				public void finish() {
+					for (final Line line : tailLines) {
+						output.processLine(line);
+					}
+					output.finish();
 				}
-				return false;
-			}
-			return true;
+			};
 		}
 	}
 

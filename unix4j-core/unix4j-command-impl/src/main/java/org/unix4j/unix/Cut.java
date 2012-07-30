@@ -6,9 +6,10 @@ import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
-import org.unix4j.command.ExecutionContext;
-import org.unix4j.io.Input;
 import org.unix4j.io.Output;
+import org.unix4j.line.Line;
+import org.unix4j.line.LineProcessor;
+import org.unix4j.line.SimpleLine;
 import org.unix4j.util.TypedMap;
 
 /**
@@ -249,7 +250,7 @@ public final class Cut {
 	/**
 	 * Cut command implementation.
 	 */
-	public static class Command extends AbstractCommand<Args,Void> {
+	public static class Command extends AbstractCommand<Args> {
 		public Command(Args arguments) {
 			super(NAME, arguments);
 		}
@@ -258,81 +259,78 @@ public final class Cut {
 		public Command withArgs(Args arguments) {
 			return new Command(arguments);
 		}
-		
-		@Override
-		public Void initializeLocal() {
-			return null;//no local
-		}
 
 		@Override
-		public boolean execute(ExecutionContext<Void> context, Input input, Output output) {
-			switch (getArguments().getType()) {
-			case Fields:
-				cutByFields(input, output);
-				break;
-			case Range:
-				cutByRange(input, output);
-				break;
-			case Chars:
-				cutByChars(input, output);
-				break;
-			default:
-				throw new IllegalArgumentException("unknown type: " + getArguments().getType());
-			}
-			return true;
+		public LineProcessor execute(final LineProcessor output) {
+			return new LineProcessor() {
+				
+				@Override
+				public boolean processLine(Line line) {
+					switch (getArguments().getType()) {
+					case Fields:
+						cutByFields(line, output);
+						break;
+					case Range:
+						cutByRange(line, output);
+						break;
+					case Chars:
+						cutByChars(line, output);
+						break;
+					default:
+						throw new IllegalArgumentException("unknown type: " + getArguments().getType());
+					}
+					return true;
+				}
+				
+				@Override
+				public void finish() {
+					output.finish();
+				}
+			};
 		}
 
-		private void cutByFields(Input input, Output output) {
+		private void cutByFields(Line line, LineProcessor output) {
 			final Args args = getArguments();
 			final String inputDelim = args.getInputDelimiter();
 			final String outputDelim = args.getOutputDelimiter();
-			while (input.hasMoreLines()) {
-				final String line = input.readLine();
-				final String[] splitLine = line.split(inputDelim);
-				final StringBuilder sb = new StringBuilder();
-				boolean first = true;
-				for (final int field : args.getFields()) {
-					if (first) {
-						first = false;
-					} else {
-						sb.append(outputDelim);
-					}
-					if (splitLine.length >= field && field > 0) {
-						sb.append(splitLine[field - 1]);
-					}
+			final String[] splitLine = line.getContent().split(inputDelim);
+			final StringBuilder sb = new StringBuilder();
+			boolean first = true;
+			for (final int field : args.getFields()) {
+				if (first) {
+					first = false;
+				} else {
+					sb.append(outputDelim);
 				}
-				output.writeLine(sb.toString());
-				sb.setLength(0);
+				if (splitLine.length >= field && field > 0) {
+					sb.append(splitLine[field - 1]);
+				}
 			}
+			output.processLine(new SimpleLine(sb, line.getLineEnding()));
 		}
 
-		private void cutByRange(Input input, Output output) {
+		private void cutByRange(Line line, LineProcessor output) {
 			final Args args = getArguments();
 			final int start = Math.max(0, args.getRangeStart() - 1);
 			final int end = start + args.getRangeLength();
-			while (input.hasMoreLines()) {
-				final String line = input.readLine();
-				if (start < line.length()) {
-					output.writeLine(line.substring(start, Math.min(end, line.length())));
-				} else {
-					output.writeLine("");
-				}
+			final CharSequence range;
+			if (start < line.getContentLength()) {
+				range = line.subSequence(start, Math.min(end, line.getContentLength()));
+			} else {
+				range = "";
 			}
+			output.processLine(new SimpleLine(range, line.getLineEnding()));
 		}
 
-		private void cutByChars(Input input, Output output) {
+		private void cutByChars(Line line, LineProcessor output) {
 			final Args args = getArguments();
 			final StringBuilder sb = new StringBuilder();
-			while (input.hasMoreLines()) {
-				final String line = input.readLine();
-				for (final int charNum : args.getChars()) {
-					if (charNum > 0 && charNum <= line.length()) {
-						sb.append(line.charAt(charNum - 1));
-					}
+			for (final int charNum : args.getChars()) {
+				if (charNum > 0 && charNum <= line.getContentLength()) {
+					sb.append(line.charAt(charNum - 1));
 				}
-				output.writeLine(sb.toString());
-				sb.setLength(0);
 			}
+			output.processLine(new SimpleLine(sb, line.getLineEnding()));
 		}
 	}
 

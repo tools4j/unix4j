@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.unix4j.command.JoinedCommand;
+import org.unix4j.line.Line;
 
 /**
  * Output object used for joined commands. Uses a linked list as common line
@@ -14,7 +15,7 @@ import org.unix4j.command.JoinedCommand;
  */
 public class InputOutputJoin {
 
-	private final LinkedList<String> buffer = new LinkedList<String>();
+	private final LinkedList<Line> buffer = new LinkedList<Line>();
 	private final BufferedInput input = new BufferedInput(buffer);
 	private final BufferedOutput output = new BufferedOutput(buffer);
 
@@ -22,7 +23,7 @@ public class InputOutputJoin {
 		super();
 	}
 
-	public List<String> getBuffer() {
+	public List<Line> getBuffer() {
 		return buffer;
 	}
 

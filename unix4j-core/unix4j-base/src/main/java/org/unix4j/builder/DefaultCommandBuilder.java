@@ -7,21 +7,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.unix4j.command.Command;
-import org.unix4j.command.DefaultExecutionContext;
-import org.unix4j.command.ExecutionContext;
 import org.unix4j.io.BufferedOutput;
 import org.unix4j.io.FileOutput;
 import org.unix4j.io.Input;
-import org.unix4j.io.NullInput;
 import org.unix4j.io.Output;
 import org.unix4j.io.StdOutput;
 import org.unix4j.io.StreamOutput;
 import org.unix4j.io.WriterOutput;
+import org.unix4j.line.Line;
+import org.unix4j.redirect.From;
 
 public class DefaultCommandBuilder implements CommandBuilder {
 
 	protected Input input = null;
-	protected Command<?,?> command = null;
+	protected Command<?> command = null;
 
 	public DefaultCommandBuilder() {
 		super();
@@ -29,12 +28,12 @@ public class DefaultCommandBuilder implements CommandBuilder {
 	public DefaultCommandBuilder(Input input) {
 		this.input = input;
 	}
-	public CommandBuilder join(Command<?,?> command) {
+	public CommandBuilder join(Command<?> command) {
 		this.command = this.command == null ? command : this.command.join(command);
 		return this;
 	}
 	@Override
-	public Command<?,?> build() {
+	public Command<?> build() {
 		if (command == null) {
 			throw new IllegalStateException("no command has been built yet");
 		}
@@ -49,14 +48,18 @@ public class DefaultCommandBuilder implements CommandBuilder {
 		toOutput(new StdOutput());
 	}
 	@Override
-	public List<String> toLineList() {
-		final List<String> lines = new ArrayList<String>();
+	public List<Line> toLineList() {
+		final List<Line> lines = new ArrayList<Line>();
 		toOutput(new BufferedOutput(lines));
 		return lines;
 	}
 	@Override
 	public void toOutput(Output output) {
-		execute(build(), output);
+		Command<?> command = build();
+		if (input != null) {
+			command = From.FACTORY.from(input).join(command);
+		}
+		command.execute(output).finish();
 	}
 	@Override
 	public void toFile(String file) {
@@ -79,11 +82,5 @@ public class DefaultCommandBuilder implements CommandBuilder {
 		final BufferedOutput out = new BufferedOutput();
 		toOutput(out);
 		return out.toMultiLineString();
-	}
-	
-	private <L> void execute(Command<?,L> command, Output output) {
-		final ExecutionContext<L> context = DefaultExecutionContext.start(command, true);
-		command.execute(context, input == null ? NullInput.INSTANCE : input, output);
-		output.finish();
 	}
 }

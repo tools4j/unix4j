@@ -1,17 +1,18 @@
 package org.unix4j.unix;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
-import org.unix4j.command.ExecutionContext;
-import org.unix4j.io.Input;
 import org.unix4j.io.Output;
+import org.unix4j.line.Line;
+import org.unix4j.line.LineProcessor;
+import org.unix4j.util.StringUtil;
 import org.unix4j.util.TypedMap;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Non-instantiable module with inner types making up the echo command.
@@ -122,9 +123,7 @@ public final class Echo {
 	/**
 	 * Echo command implementation.
 	 */
-	public static class Command extends AbstractCommand<Args,Void> {
-		private static final String LINE_SEPERATOR = System.getProperty("line.separator");
-
+	public static class Command extends AbstractCommand<Args> {
 		public Command(Args arguments) {
 			super(NAME, arguments);
 		}
@@ -135,21 +134,22 @@ public final class Echo {
 		}
 
 		@Override
-		public Void initializeLocal() {
-			return null;//no local
-		}
-
-		@Override
-		public boolean execute(ExecutionContext<Void> context, Input input, Output output) {
-			final String messages = joinMessages();
-			final String[] lines = messages.split(LINE_SEPERATOR);
-			for( final String line: lines){
-				output.writeLine(line);
-			}
-			if(messages.endsWith(LINE_SEPERATOR)){
-				output.writeLine("");
-			}
-			return false;//never expect any more input
+		public LineProcessor execute(final LineProcessor output) {
+			return new LineProcessor() {
+				@Override
+				public boolean processLine(Line line) {
+					return false;//we want no input
+				}
+				@Override
+				public void finish() {
+					final String messages = joinMessages();
+					final List<Line> lines = StringUtil.splitLines(messages);
+					for( final Line line: lines){
+						output.processLine(line);
+					}
+					output.finish();
+				}
+			};
 		}
 
 		private String joinMessages() {

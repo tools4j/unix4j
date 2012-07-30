@@ -9,9 +9,9 @@ import java.util.regex.Pattern;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
-import org.unix4j.command.ExecutionContext;
-import org.unix4j.io.Input;
-import org.unix4j.io.Output;
+import org.unix4j.line.Line;
+import org.unix4j.line.LineProcessor;
+import org.unix4j.line.SimpleLine;
 import org.unix4j.util.TypedMap;
 
 /**
@@ -144,23 +144,64 @@ public final class Sed {
 	 * Option flags for the sed command.
 	 */
 	public static enum Option {
-		// no options?
+		GlobalSearchAndReplace
 	}
 
 	/**
 	 * Arguments and options for the sed command.
 	 */
 	public static class Args extends AbstractArgs<Option, Args> {
-		public static final TypedMap.Key<String> SCRIPT = TypedMap.keyFor("script", String.class);
+		private static final String SED_REGEX = "s/(.*?)(?<!\\\\)/(.*?)(?<!\\\\)/(g)?";
+
+		private static final TypedMap.Key<String> SCRIPT_KEY = TypedMap.keyFor("script", String.class);
+		private static final TypedMap.Key<String> SEARCH_EXPRESSION_KEY = TypedMap.keyFor("search", String.class);
+		private static final TypedMap.Key<String> REPLACE_EXPRESSION_KEY = TypedMap.keyFor("replace", String.class);
 
 		public Args(String script) {
 			super(Option.class);
 			assertArgNotNull("Script cannot be null", script);
-			setArg(SCRIPT, script);
+			
+			final Pattern pattern = Pattern.compile(SED_REGEX);
+			assertArgTrue("Invalid sed script, must be in the form s/<search>/<replace>/[g]", script.matches(SED_REGEX));
+			final Matcher m = pattern.matcher(script);
+			m.find();
+			final String search = m.group(1);
+			final String replace = m.group(2);
+			final String globalSearchAndReplaceStr = m.group(3);
+
+			setArg(SCRIPT_KEY, script);
+			setArg(SEARCH_EXPRESSION_KEY, search);
+			setArg(REPLACE_EXPRESSION_KEY, replace);
+			if (globalSearchAndReplaceStr != null && globalSearchAndReplaceStr.equals("g")){
+				setOpt(Option.GlobalSearchAndReplace);
+			}
+		}
+
+		public Args(String searchExpression, String replaceExpression, boolean isGlobalSearchAndReplace) {
+			super(Option.class);
+			setArg(SCRIPT_KEY, "s/" + searchExpression + "/" + replaceExpression + "/" + (isGlobalSearchAndReplace ? "g" : ""));
+			setArg(SEARCH_EXPRESSION_KEY, searchExpression);
+			setArg(REPLACE_EXPRESSION_KEY, replaceExpression);
+			if (isGlobalSearchAndReplace) {
+				setOpt(Option.GlobalSearchAndReplace);
+			}
 		}
 
 		public String getScript() {
-			return getArg(SCRIPT);
+			return getArg(SCRIPT_KEY);
+		}
+		public String getSearchExpression() {
+			return getArg(SEARCH_EXPRESSION_KEY);
+		}
+		public String getReplaceExpression() {
+			return getArg(REPLACE_EXPRESSION_KEY);
+		}
+		public boolean isGlobalSearchAndReplace() {
+			return hasOpt(Option.GlobalSearchAndReplace);
+		}
+		@Override
+		public String toString() {
+			return getScript();
 		}
 	}
 
@@ -184,21 +225,21 @@ public final class Sed {
 		public Command sedSubstitute(String searchExpression, String replaceExpression) {
 			assertArgNotNull("searchExpression cannot be null", searchExpression);
 			assertArgNotNull("replaceExpression cannot be null", replaceExpression);
-			return new Command(new Args("s/" + searchExpression + "/" + replaceExpression + "/g"));
+			return new Command(new Args(searchExpression, replaceExpression, true));
 		}
 
 		@Override
 		public Command sedSubstituteFirst(String searchExpression, String replaceExpression) {
 			assertArgNotNull("searchExpression cannot be null", searchExpression);
 			assertArgNotNull("replaceExpression cannot be null", replaceExpression);
-			return new Command(new Args("s/" + searchExpression + "/" + replaceExpression + "/"));
+			return new Command(new Args(searchExpression, replaceExpression, false));
 		}
 	};
 
 	/**
 	 * sed command implementation.
 	 */
-	public static class Command extends AbstractCommand<Args,Void> {
+	public static class Command extends AbstractCommand<Args> {
 		public Command(Args arguments) {
 			super(NAME, arguments);
 		}
@@ -209,43 +250,30 @@ public final class Sed {
 		}
 
 		@Override
-		public Void initializeLocal() {
-			return null;//no local
-		}
-
-		@Override
-		public boolean execute(ExecutionContext<Void> context, Input input, Output output) {
-			final Args args = getArguments();
-			final String SED_REGEX = "s/(.*?)(?<!\\\\)/(.*?)(?<!\\\\)/(g)?";
-			final String script = args.getScript();
-			assertArgTrue("Invalid sed script, must be in the form s/<search>/<replace>/[g]", script.matches(SED_REGEX));
-
-			Pattern p = Pattern.compile(SED_REGEX);
-			Matcher m = p.matcher(script);
-			m.find();
-			final String search = m.group(1);
-			final String replace = m.group(2);
-			final String globalSearchAndReplaceStr = m.group(3);
-
-			boolean globalSearchAndReplace = false;
-			if(  globalSearchAndReplaceStr != null && globalSearchAndReplaceStr.equals("g")){
-				globalSearchAndReplace = true;
-			}
-			searchAndReplace(input, output, search, replace, globalSearchAndReplace);
-			return true;
-		}
-
-		private void searchAndReplace(Input input, Output output, final String search, final String replace, final boolean globalSearchAndReplace) {
-			while (input.hasMoreLines()) {
-				String line = input.readLine();
-
-				if(globalSearchAndReplace){
-					line = line.replaceAll(search, replace);
-				} else {
-					line = line.replaceFirst(search, replace);
+		public LineProcessor execute(final LineProcessor output) {
+			return new LineProcessor() {
+				@Override
+				public boolean processLine(Line line) {
+					searchAndReplace(line, output);
+					return true;
 				}
-				output.writeLine(line);
+				
+				@Override
+				public void finish() {
+					output.finish();
+				}
+			};
+		}
+		private void searchAndReplace(Line line, LineProcessor output) {
+			final Args args = getArguments();
+			final String content = line.getContent();//or should sed operate on line with ending?
+			final String changed;
+			if (args.isGlobalSearchAndReplace()) {
+				changed = content.replaceAll(args.getSearchExpression(), args.getReplaceExpression());
+			} else {
+				changed = content.replaceFirst(args.getSearchExpression(), args.getReplaceExpression());
 			}
+			output.processLine(changed == content ? line : new SimpleLine(changed, line.getLineEnding()));
 		}
 	}
 

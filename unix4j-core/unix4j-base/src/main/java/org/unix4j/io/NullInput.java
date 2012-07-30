@@ -1,7 +1,9 @@
 package org.unix4j.io;
 
+import org.unix4j.line.Line;
 
-public class NullInput implements Input {
+
+public class NullInput extends AbstractInput {
 	
 	public static final NullInput INSTANCE = new NullInput();
 	
@@ -11,7 +13,7 @@ public class NullInput implements Input {
 	}
 
 	@Override
-	public String readLine() {
+	public Line readLine() {
 		return null;
 	}
 	

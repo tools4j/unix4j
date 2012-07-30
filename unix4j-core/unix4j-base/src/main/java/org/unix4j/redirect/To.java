@@ -6,6 +6,7 @@ import java.io.Writer;
 import java.util.List;
 
 import org.unix4j.io.Output;
+import org.unix4j.line.Line;
 
 /**
  * Interface defining command execution and output redirection methods.
@@ -37,7 +38,7 @@ public interface To {
 	 * 
 	 * @return the result as a list of line strings
 	 */
-	List<String> toLineList();
+	List<Line> toLineList();
 
 	/**
 	 * Executes the composite command and writes the result to the given file.
