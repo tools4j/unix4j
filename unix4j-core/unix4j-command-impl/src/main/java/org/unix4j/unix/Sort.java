@@ -5,15 +5,16 @@ import static org.unix4j.util.Assert.assertArgFalse;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
-import org.unix4j.command.ExecutionContext;
-import org.unix4j.io.Input;
 import org.unix4j.io.Output;
+import org.unix4j.line.Line;
+import org.unix4j.line.LineProcessor;
 
 /**
  * Non-instantiable module with inner types making up the sort command.
@@ -163,7 +164,7 @@ public final class Sort {
 	/**
 	 * Sort command implementation.
 	 */
-	public static class Command extends AbstractCommand<Args,List<String>> {
+	public static class Command extends AbstractCommand<Args> {
 		public Command(Args arguments) {
 			super(NAME, arguments);
 		}
@@ -172,35 +173,45 @@ public final class Sort {
 		public Command withArgs(Args arguments) {
 			return new Command(arguments);
 		}
-		
-		@Override
-		public List<String> initializeLocal() {
-			return new ArrayList<String>();//array list is good for sorting
-		}
 
 		@Override
-		public boolean execute(ExecutionContext<List<String>> context, Input input, Output output) {
-			final List<String> buffer = context.getLocal();
-			while (input.hasMoreLines()) {
-				buffer.add(input.readLine());
-			}
-			if (context.isTerminal()) {
-				final boolean isAsc = getArguments().hasOpt(Option.ascending);
-				final boolean isDesc = getArguments().hasOpt(Option.descending);
-				assertArgFalse("Options " + Option.ascending + " and " + Option.descending + " cannot be specified at the same time", (isAsc && isDesc));
-				Collections.sort(buffer, Collator.getInstance());
-				if (isDesc) {
-					for (int i = buffer.size() - 1; i >= 0; i--) {
-						output.writeLine(buffer.get(i));
-					}
-				} else {
-					for (final String line : buffer) {
-						output.writeLine(line);
-					}
+		public LineProcessor execute(final LineProcessor output) {
+			final boolean isAsc = getArguments().hasOpt(Option.ascending);
+			final boolean isDesc = getArguments().hasOpt(Option.descending);
+			assertArgFalse("Options " + Option.ascending + " and " + Option.descending + " cannot be specified at the same time", (isAsc && isDesc));
+			return new LineProcessor() {
+				private final List<Line> lines = new ArrayList<Line>();//array list is good for sorting;
+				@Override
+				public boolean processLine(Line line) {
+					lines.add(line);
+					return true;//we want more!
 				}
-				return false;
+				@Override
+				public void finish() {
+					outputSorted(lines, output, isDesc);
+					output.finish();
+				}
+			};
+		}
+
+		private static final Comparator<Line> COMPARATOR = new Comparator<Line>() {
+			private final Collator collator = Collator.getInstance();
+			@Override
+			public int compare(Line o1, Line o2) {
+				return collator.compare(o1.getContent(), o2.getContent());
 			}
-			return true;
+		};
+		private void outputSorted(List<Line> lines, LineProcessor output, boolean isDesc) {
+			Collections.sort(lines, COMPARATOR);
+			if (isDesc) {
+				for (int i = lines.size() - 1; i >= 0; i--) {
+					output.processLine(lines.get(i));
+				}
+			} else {
+				for (final Line line : lines) {
+					output.processLine(line);
+				}
+			}
 		}
 	}
 

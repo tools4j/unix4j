@@ -11,8 +11,6 @@ import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
-import org.unix4j.command.ExecutionContext;
-import org.unix4j.io.BufferedInput;
 import org.unix4j.io.FileInput;
 import org.unix4j.io.Input;
 import org.unix4j.io.Output;
@@ -21,6 +19,8 @@ import org.unix4j.io.ResourceInput;
 import org.unix4j.io.StreamInput;
 import org.unix4j.io.StringInput;
 import org.unix4j.io.URLInput;
+import org.unix4j.line.Line;
+import org.unix4j.line.LineProcessor;
 import org.unix4j.util.TypedMap;
 
 /**
@@ -320,7 +320,7 @@ public final class From {
 		@Override
 		public Command from(Collection<String> input) {
 			final LinkedList<String> linkedList = input instanceof LinkedList ? (LinkedList<String>) input : new LinkedList<String>(input);
-			return new Command(new Args(new BufferedInput(linkedList)));
+			return new Command(new Args(new StringInput(linkedList)));
 		}
 
 		@Override
@@ -362,7 +362,7 @@ public final class From {
 	/**
 	 * "From" command implementation.
 	 */
-	public static class Command extends AbstractCommand<Args,Void> {
+	public static class Command extends AbstractCommand<Args> {
 		public Command(Args arguments) {
 			super(NAME, arguments);
 		}
@@ -373,17 +373,23 @@ public final class From {
 		}
 		
 		@Override
-		public Void initializeLocal() {
-			return null;//no local
-		}
-
-		@Override
-		public boolean execute(ExecutionContext<Void> context, Input input, Output output) {
-			final Input from = getArguments().getInput();
-			while (from.hasMoreLines()) {
-				output.writeLine(from.readLine());
-			}
-			return false;
+		public LineProcessor execute(final LineProcessor output) {
+			return new LineProcessor() {
+				@Override
+				public boolean processLine(Line line) {
+					//ignore input, we ARE the redirected input
+					return false;//no more lines expected
+				}
+				
+				@Override
+				public void finish() {
+					final Input input = getArguments().getInput();
+					for (final Line line : input) {
+						output.processLine(line);
+					}
+					output.finish();
+				}
+			};
 		}
 
 	}

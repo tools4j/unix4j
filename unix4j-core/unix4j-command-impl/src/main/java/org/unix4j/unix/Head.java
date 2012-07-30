@@ -1,15 +1,14 @@
 package org.unix4j.unix;
 
+import static org.unix4j.util.Assert.assertArgGreaterThanOrEqualTo;
+
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
-import org.unix4j.command.ExecutionContext;
-import org.unix4j.io.Input;
-import org.unix4j.io.Output;
+import org.unix4j.line.Line;
+import org.unix4j.line.LineProcessor;
 import org.unix4j.util.Counter;
 import org.unix4j.util.TypedMap;
-
-import static org.unix4j.util.Assert.assertArgGreaterThanOrEqualTo;
 
 /**
  * <b>NAME</b>
@@ -143,7 +142,7 @@ public final class Head {
 	/**
 	 * Head command implementation.
 	 */
-	public static class Command extends AbstractCommand<Args, Counter> {
+	public static class Command extends AbstractCommand<Args> {
 		public Command(Args arguments) {
 			super(NAME, arguments);
 		}
@@ -152,26 +151,27 @@ public final class Head {
 		public Command withArgs(Args arguments) {
 			return new Command(arguments);
 		}
-		
-		@Override
-		public Counter initializeLocal() {
-			return new Counter();
-		}
 
 		@Override
-		public boolean execute(ExecutionContext<Counter> context, Input input, Output output) {
-			final int linesToOutput = getArguments().getLines();
-			final Counter counter = context.getLocal();
-			while (input.hasMoreLines()) {
-				final String line = input.readLine();
-				if (counter.getCount() < linesToOutput) {
-					output.writeLine(line);
-					counter.increment();
-				} else {
-					return false;
+		public LineProcessor execute(final LineProcessor output) {
+			return new LineProcessor() {
+				private final int linesToOutput = getArguments().getLines();
+				private final Counter counter = new Counter();
+				@Override
+				public boolean processLine(Line line) {
+					if (counter.getCount() < linesToOutput) {
+						output.processLine(line);
+						return counter.increment() < linesToOutput;
+					} else {
+						return false;
+					}
 				}
-			}
-			return counter.getCount() < linesToOutput;
+				
+				@Override
+				public void finish() {
+					output.finish();
+				}
+			};
 		}
 	}
 

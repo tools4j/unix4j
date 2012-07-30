@@ -6,6 +6,8 @@ import java.util.List;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.unix4j.line.Line;
+import org.unix4j.line.SimpleLine;
 
 /**
  * Unit test for {@link StringUtil}.
@@ -78,15 +80,15 @@ public class StringUtilTest {
 				"hello\n\r\r\nworld\n",
 				"hello\n\r\r\nworld\n\n",
 			};
-		final String[][] expected = {
-				{"hello", "world"},
-				{"hello", "world"},
-				{"hello", "", "world"},
-				{"hello", "", "world"},
-				{"hello", "", "world", ""},
+		final Line[][] expected = {
+				{new SimpleLine("hello", "\n"), new SimpleLine("world", "")},
+				{new SimpleLine("hello", "\r\n"), new SimpleLine("world", "")},
+				{new SimpleLine("hello", "\n\r"), new SimpleLine("", "\r\n"), new SimpleLine("world", "")},
+				{new SimpleLine("hello", "\n\r"), new SimpleLine("", "\r\n"), new SimpleLine("world", "\n")},
+				{new SimpleLine("hello", "\n\r"), new SimpleLine("", "\r\n"), new SimpleLine("world", "\n"), new SimpleLine("", "\n")},
 			};
 		for (int i = 0; i < input.length; i++) {
-			final List<String> actual = StringUtil.splitLines(input[i]);
+			final List<Line> actual = StringUtil.splitLines(input[i]);
 			Assert.assertEquals(Arrays.asList(expected[i]), actual);
 		}
 	}

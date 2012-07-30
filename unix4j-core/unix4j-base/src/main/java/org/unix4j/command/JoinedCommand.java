@@ -1,23 +1,16 @@
 package org.unix4j.command;
 
-import org.unix4j.io.Input;
-import org.unix4j.io.InputOutputJoin;
-import org.unix4j.io.Output;
+import org.unix4j.line.LineProcessor;
 
 /**
  * A composite command joining two commands. The output of the
  * {@link #getFirst() first} command is joined to the input of the
  * {@link #getSecond() second} command.
  */
-public class JoinedCommand<A extends Arguments<A>, L1, L2> implements Command<A, JoinedCommand.Local<L1,L2>> {
-	
-	public static class Local<L1, L2> {
-		private ExecutionContext<L1> context1;
-		private ExecutionContext<L2> context2;
-	}
+public class JoinedCommand<A extends Arguments<A>> implements Command<A> {
 
-	private final Command<A, L1> first;
-	private final Command<?, L2> second;
+	private final Command<A> first;
+	private final Command<?> second;
 
 	/**
 	 * Constructor with first and second command in the join.
@@ -32,7 +25,7 @@ public class JoinedCommand<A extends Arguments<A>, L1, L2> implements Command<A,
 	 *             if any of the command arguments is null
 	 * 
 	 */
-	public JoinedCommand(Command<A, L1> first, Command<?, L2> second) {
+	public JoinedCommand(Command<A> first, Command<?> second) {
 		if (first == null) {
 			throw new NullPointerException("first command cannot be null");
 		}
@@ -43,8 +36,8 @@ public class JoinedCommand<A extends Arguments<A>, L1, L2> implements Command<A,
 		this.second = second;
 	}
 
-	public static <A extends Arguments<A>, L1, L2> JoinedCommand<A, L1, L2> join(Command<A, L1> first, Command<?, L2> second) {
-		return new JoinedCommand<A, L1, L2>(first, second);
+	public static <A extends Arguments<A>> JoinedCommand<A> join(Command<A> first, Command<?> second) {
+		return new JoinedCommand<A>(first, second);
 	}
 
 	/**
@@ -52,7 +45,7 @@ public class JoinedCommand<A extends Arguments<A>, L1, L2> implements Command<A,
 	 * 
 	 * @return the first command in the join
 	 */
-	public Command<A, L1> getFirst() {
+	public Command<A> getFirst() {
 		return first;
 	}
 
@@ -61,7 +54,7 @@ public class JoinedCommand<A extends Arguments<A>, L1, L2> implements Command<A,
 	 * 
 	 * @return the second command in the join
 	 */
-	public Command<?, L2> getSecond() {
+	public Command<?> getSecond() {
 		return second;
 	}
 
@@ -81,50 +74,31 @@ public class JoinedCommand<A extends Arguments<A>, L1, L2> implements Command<A,
 	}
 
 	@Override
-	public JoinedCommand<A, L1, L2> withArgs(A arguments) {
-		return new JoinedCommand<A, L1, L2>(first.withArgs(arguments), second);
-	}
-	
-	@Override
-	public Local<L1, L2> initializeLocal() {
-		return new Local<L1, L2>();
+	public JoinedCommand<A> withArgs(A arguments) {
+		return new JoinedCommand<A>(first.withArgs(arguments), second);
 	}
 
 	@Override
-	public <L3> Command<?, ?> join(Command<?, L3> next) {
+	public Command<?> join(Command<?> next) {
 		return JoinedCommand.join(getFirst(), getSecond().join(next));
 	}
 
 	/**
-	 * Executes this joined command. The first command reads from the given
-	 * {@code input} and writes to a new {@link JoinedOutput} instance buffering
-	 * the lines if necessary. The joined output object triggers the execution
-	 * of the second command. It depends on the type of the second command
-	 * whether it is called immediately for every line written by the first
-	 * command or only once at the end when the first command calls
-	 * {@link JoinedOutput#finish() finish()}.
+	 * Executes this joined command redirecting the output of the first command
+	 * such that it becomes the input of the second command.
+	 * <p>
+	 * The specified {@code output} object is passed to the second command's
+	 * {@code execute(..)} method. The {@link LineProcessor} returned by the
+	 * second command is passed to the {@code execute(..)} method of the first
+	 * command, with the effect that the first command provides its output to
+	 * the second command as input.
 	 * 
-	 * @param input
-	 *            the input for the first command
 	 * @param output
 	 *            the output for the second command
 	 */
 	@Override
-	public boolean execute(ExecutionContext<Local<L1,L2>> context, Input input, Output output) {
-		final Local<L1,L2> local = context.getLocal();
-		if (context.isInitial()) {
-			local.context1 = DefaultExecutionContext.deriveForNextCommand(context, getFirst(), context.isTerminal());
-		}
-		final InputOutputJoin join = new InputOutputJoin();
-		final boolean terminate1 = !getFirst().execute(local.context1, input, join.getOutput()) || context.isTerminal();
-		if (terminate1 || !join.isEmpty()) {
-			if (local.context2 == null) {
-				local.context2 = DefaultExecutionContext.deriveForNextCommand(local.context1, getSecond(), terminate1);
-			}
-			final boolean terminate2 = getSecond().execute(local.context2, join.getInput(), output);
-			return terminate1 || terminate2;
-		}
-		return terminate1;
+	public LineProcessor execute(LineProcessor output) {
+		return getFirst().execute(getSecond().execute(output));
 	}
 
 	/**

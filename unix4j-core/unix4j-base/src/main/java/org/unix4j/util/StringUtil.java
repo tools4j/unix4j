@@ -3,6 +3,9 @@ package org.unix4j.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.unix4j.line.SingleCharSequenceLine;
+import org.unix4j.line.Line;
+
 /**
  * Utility class with static methods for strings.
  */
@@ -166,8 +169,8 @@ public class StringUtil {
 	 *            the string to split
 	 * @return a list with the lines found in {@code s}
 	 */
-	public static final List<String> splitLines(String s) {
-		final List<String> lines = new ArrayList<String>();
+	public static final List<Line> splitLines(String s) {
+		final List<Line> lines = new ArrayList<Line>();
 		int start = 0;
 		int index = 0;
 		while (index < s.length()) {
@@ -181,14 +184,16 @@ public class StringUtil {
 						index++;
 					}
 				}
-				lines.add(s.substring(start, lineEndingStart));
+				final Line line = new SingleCharSequenceLine(s, start, lineEndingStart - start, index - lineEndingStart);
+				lines.add(line);
 				start = index;
 			} else {
 				index++;
 			}
 		}
 		if (start < s.length()) {
-			lines.add(s.substring(start));
+			final Line line = new SingleCharSequenceLine(s, start, s.length() - start, 0);
+			lines.add(line);
 		}
 		return lines;
 	}

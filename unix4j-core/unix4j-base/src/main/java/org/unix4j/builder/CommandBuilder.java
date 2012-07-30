@@ -17,7 +17,7 @@ public interface CommandBuilder extends To {
 	 * @return a newly created composite command based on the commands joined up
 	 *         by invoking command specific methods of this fromFile
 	 */
-	Command<?,?> build();
+	Command<?> build();
 
 	/**
 	 * Returns a string representation of the composite command that would be
