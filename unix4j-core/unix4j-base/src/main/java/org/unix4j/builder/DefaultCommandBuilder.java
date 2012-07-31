@@ -13,6 +13,7 @@ import org.unix4j.io.Input;
 import org.unix4j.io.Output;
 import org.unix4j.io.StdOutput;
 import org.unix4j.io.StreamOutput;
+import org.unix4j.io.StringOutput;
 import org.unix4j.io.WriterOutput;
 import org.unix4j.line.Line;
 import org.unix4j.redirect.From;
@@ -79,8 +80,8 @@ public class DefaultCommandBuilder implements CommandBuilder {
 	}
 	@Override
 	public String toStringResult() {
-		final BufferedOutput out = new BufferedOutput();
+		final StringOutput out = new StringOutput();
 		toOutput(out);
-		return out.toMultiLineString();
+		return out.toString();
 	}
 }

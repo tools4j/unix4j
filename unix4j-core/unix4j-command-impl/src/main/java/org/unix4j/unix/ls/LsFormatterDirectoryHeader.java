@@ -29,12 +29,14 @@ class LsFormatterDirectoryHeader implements LsFormatter {
 	}
 
 	@Override
-	public void writeFormatted(File relativeTo, File file, LsArgs args, LineProcessor output) {
+	public boolean writeFormatted(File relativeTo, File file, LsArgs args, LineProcessor output) {
 		final String relativePath = FileUtil.getRelativePath(relativeTo, file);
 		if (!".".equals(relativePath)) {
-			output.processLine(new SimpleLine(relativePath));
+			if (!output.processLine(new SimpleLine(relativePath))) {
+				return false;
+			}
 		}
-		output.processLine(new SimpleLine("total: " + args.getSizeString(totalBytes)));
+		return output.processLine(new SimpleLine("total: " + args.getSizeString(totalBytes)));
 	}
 
 }

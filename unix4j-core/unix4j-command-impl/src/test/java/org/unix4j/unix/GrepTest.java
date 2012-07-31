@@ -221,7 +221,7 @@ public class GrepTest {
 
 	private void assertGrep(final MultilineString input, final String expression, final MultilineString expectedOutput, Grep.Option... options){
 		final StringWriter actualOutputStringWriter = new StringWriter();
-		Unix4j.fromInput(input.toInput()).grep(expression, options).toWriter(actualOutputStringWriter);
+		Unix4j.from(input.toInput()).grep(expression, options).toWriter(actualOutputStringWriter);
 		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
 		actualOutput.assertMultilineStringEquals(expectedOutput);
 	}
