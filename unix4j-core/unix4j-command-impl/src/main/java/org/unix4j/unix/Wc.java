@@ -1,16 +1,19 @@
 package org.unix4j.unix;
 
-import org.unix4j.command.AbstractArgs;
-import org.unix4j.command.AbstractCommand;
-import org.unix4j.command.CommandInterface;
-import org.unix4j.io.Input;
-import org.unix4j.io.Output;
+import static org.unix4j.util.Assert.assertArgFalse;
 
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
 
-import static org.unix4j.util.Assert.assertArgFalse;
+import org.unix4j.command.AbstractArgs;
+import org.unix4j.command.AbstractCommand;
+import org.unix4j.command.CommandInterface;
+import org.unix4j.io.Output;
+import org.unix4j.line.Line;
+import org.unix4j.line.LineProcessor;
+import org.unix4j.line.SimpleLine;
+import org.unix4j.util.Counter;
 
 /**
  * <b>NAME</b>
@@ -267,7 +270,7 @@ public final class Wc {
 		private final static int MIN_COUNT_PADDING = 2;
 
 		public Command(Args arguments) {
-			super(NAME, Type.CompleteInput, arguments);
+			super(NAME, arguments);
 		}
 
 		@Override
@@ -276,38 +279,45 @@ public final class Wc {
 		}
 
 		@Override
-		public void executeBatch(Input input, Output output) {
-			Args args = getArguments();
+		public LineProcessor execute(final LineProcessor output) {
+			final Args args = getArguments();
 			assertArgFalse("No count type specified. At least one count type required.", args.isNoCountTypeSpecified());
-
-			int lineCount = 0;
-			int wordCount = 0;
-			int charCount = 0;
-
-			while (input.hasMoreLines()) {
-				final String line = input.readLine();
-				lineCount++;
-				wordCount += wordCount(line);
-				charCount += line.length();
-			}
-
-			if (lineCount == 1 && charCount == 0) {
-				lineCount = 0;
-			}
-
-			final List<Integer> counts = new ArrayList<Integer>();
-			if (args.isCountLines())
-				counts.add(lineCount);
-			if (args.isCountWords())
-				counts.add(wordCount);
-			if (args.isCountChars())
-				counts.add(charCount);
-
-			output.writeLine(formatCounts(counts));
+			return new LineProcessor() {
+				private final Counter lineCounter = new Counter();
+				private final Counter wordCounter = args.isCountWords() ? new Counter() : null;
+				private final Counter charCounter = new Counter();
+				@Override
+				public boolean processLine(Line line) {
+					lineCounter.increment();
+					if (wordCounter != null) {
+						wordCounter.increment(wordCount(line));
+					}
+					charCounter.increment(line.length());
+					return true;//we want more lines
+				}
+				
+				@Override
+				public void finish() {
+					if (lineCounter.getCount() == 1 && charCounter.getCount() == 0) {
+						lineCounter.reset();
+					}
+		
+					final List<Long> counts = new ArrayList<Long>();
+					if (args.isCountLines())
+						counts.add(lineCounter.getCount());
+					if (args.isCountWords())
+						counts.add(wordCounter.getCount());
+					if (args.isCountChars())
+						counts.add(charCounter.getCount());
+		
+					output.processLine(formatCounts(counts));
+					output.finish();
+				}
+			};
 		}
 
-		private int wordCount(String line) {
-			final String[] words = line.split("\\s+");
+		private int wordCount(Line line) {
+			final String[] words = line.getContent().split("\\s+");
 			int wordCount = 0;
 			for (final String word : words) {
 				if (word.length() > 0) {
@@ -317,28 +327,27 @@ public final class Wc {
 			return wordCount;
 		}
 
-		private String formatCounts(List<Integer> counts) {
+		private Line formatCounts(List<Long> counts) {
 			final StringBuilder format = new StringBuilder();
 
 			if (counts.size() > 1) {
 				int widestCount = getWidestCount(counts);
 				int fixedWidth = widestCount + MIN_COUNT_PADDING;
-				for (@SuppressWarnings("unused") int count : counts) {
+				for (int i = 0; i < counts.size(); i++) {
 					format.append("%").append(fixedWidth).append("d");
 				}
 			} else {
 				format.append("%d");
 			}
 
-			Formatter formatter = new Formatter();
-			formatter = formatter.format(format.toString(), counts.toArray());
-			return formatter.toString();
+			final Formatter formatter = new Formatter().format(format.toString(), counts.toArray());
+			return new SimpleLine(formatter.toString());
 		}
 
-		private int getWidestCount(final List<Integer> counts) {
+		private int getWidestCount(List<Long> counts) {
 			int widestCount = 0;
-			for (int count : counts) {
-				final int width = ("" + count).length();
+			for (final long count : counts) {
+				final int width = String.valueOf(count).length();
 				if (width > widestCount) {
 					widestCount = width;
 				}

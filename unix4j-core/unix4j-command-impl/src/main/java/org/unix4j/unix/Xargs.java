@@ -8,10 +8,9 @@ import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.Arguments;
 import org.unix4j.command.CommandInterface;
-import org.unix4j.command.JoinedCommand;
-import org.unix4j.io.Input;
-import org.unix4j.io.NullInput;
 import org.unix4j.io.Output;
+import org.unix4j.line.Line;
+import org.unix4j.line.LineProcessor;
 import org.unix4j.util.Variables;
 
 /**
@@ -115,51 +114,66 @@ public final class Xargs {
 	 */
 	public static class Command extends AbstractCommand<Args> {
 		public Command(Args arguments) {
-			super(NAME, Type.LineByLine, arguments);
+			super(NAME, arguments);
 		}
 
 		@Override
 		public Command withArgs(Args arguments) {
 			return new Command(arguments);
 		}
-
+		
+		@Override
+		public LineProcessor execute(LineProcessor output) {
+			return output;//does not much if not joined to the next command
+		}
+		
 		@Override
 		public org.unix4j.command.Command<?> join(org.unix4j.command.Command<?> next) {
 			return join(this, next);
 		}
 
 		private static <A1 extends Arguments<A1>, A2 extends Arguments<A2>> org.unix4j.command.Command<A1> join(org.unix4j.command.Command<A1> first, final org.unix4j.command.Command<A2> second) {
-			return new JoinedCommand<A1>(first, second) {
+			return new AbstractCommand<A1>(NAME + " " + second.getName(), first.getArguments()) {
 				@Override
-				public void execute(Input input, Output output) {
-					final Map<String, String> xargs = new HashMap<String, String>();
-					final A2 args = second.getArguments().clone(true /*
-																	 * deep
-																	 * clone
-																	 */);
-					while (input.hasMoreLines()) {
-						final String line = input.readLine();
-						final String[] words = line.split("\\s+");
-						for (int i = 0; i < words.length; i++) {
-							xargs.put(xarg(i), words[i]);
+				public LineProcessor execute(final LineProcessor output) {
+					final LineProcessor noFinishOutput = new LineProcessor() {
+						@Override
+						public boolean processLine(Line line) {
+							return output.processLine(line);
 						}
-						args.resolve(xargs);
-						second.withArgs(args).execute(NullInput.INSTANCE, output);
-						xargs.clear();
-					}
+						@Override
+						public void finish() {
+							//don't finish yet
+						}
+					};
+					return new LineProcessor() {
+						private final Map<String, String> xargs = new HashMap<String, String>();
+						@Override
+						public boolean processLine(Line line) {
+							final A2 args = second.getArguments().clone(true /* deep clone */);
+							xargs.clear();
+							final String[] words = line.getContent().split("\\s+");
+							for (int i = 0; i < words.length; i++) {
+								xargs.put(xarg(i), words[i]);
+							}
+							args.resolve(xargs);
+							final LineProcessor processor = second.withArgs(args).execute(noFinishOutput);
+							processor.finish();
+							return true;//we want more lines
+						}
+						
+						@Override
+						public void finish() {
+							output.finish();
+						}
+					};
+				}
+
+				@Override
+				public org.unix4j.command.Command<A1> withArgs(A1 arguments) {
+					return this;//FIXME dodgy
 				}
 			};
-		}
-
-		@Override
-		public void executeBatch(Input input, Output output) {
-			while (input.hasMoreLines()) {
-				final String line = input.readLine();
-				final String[] words = line.split("\\s+");
-				for (int i = 0; i < words.length; i++) {
-					output.writeLine(words[i]);
-				}
-			}
 		}
 	}
 

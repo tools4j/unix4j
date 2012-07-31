@@ -1,18 +1,20 @@
 package org.unix4j.unix;
 
-import org.unix4j.builder.CommandBuilder;
-import org.unix4j.command.AbstractArgs;
-import org.unix4j.command.AbstractCommand;
-import org.unix4j.command.CommandInterface;
-import org.unix4j.io.Input;
-import org.unix4j.io.Output;
+import static org.unix4j.util.Assert.assertArgFalse;
 
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-import static org.unix4j.util.Assert.assertArgFalse;
+import org.unix4j.builder.CommandBuilder;
+import org.unix4j.command.AbstractArgs;
+import org.unix4j.command.AbstractCommand;
+import org.unix4j.command.CommandInterface;
+import org.unix4j.io.Output;
+import org.unix4j.line.Line;
+import org.unix4j.line.LineProcessor;
 
 /**
  * Non-instantiable module with inner types making up the sort command.
@@ -164,7 +166,7 @@ public final class Sort {
 	 */
 	public static class Command extends AbstractCommand<Args> {
 		public Command(Args arguments) {
-			super(NAME, Type.CompleteInput, arguments);
+			super(NAME, arguments);
 		}
 
 		@Override
@@ -173,22 +175,41 @@ public final class Sort {
 		}
 
 		@Override
-		public void executeBatch(Input input, Output output) {
+		public LineProcessor execute(final LineProcessor output) {
 			final boolean isAsc = getArguments().hasOpt(Option.ascending);
 			final boolean isDesc = getArguments().hasOpt(Option.descending);
 			assertArgFalse("Options " + Option.ascending + " and " + Option.descending + " cannot be specified at the same time", (isAsc && isDesc));
-			final List<String> lines = new ArrayList<String>();
-			while (input.hasMoreLines()) {
-				lines.add(input.readLine());
+			return new LineProcessor() {
+				private final List<Line> lines = new ArrayList<Line>();//array list is good for sorting;
+				@Override
+				public boolean processLine(Line line) {
+					lines.add(line);
+					return true;//we want more!
+				}
+				@Override
+				public void finish() {
+					outputSorted(lines, output, isDesc);
+					output.finish();
+				}
+			};
+		}
+
+		private static final Comparator<Line> COMPARATOR = new Comparator<Line>() {
+			private final Collator collator = Collator.getInstance();
+			@Override
+			public int compare(Line o1, Line o2) {
+				return collator.compare(o1.getContent(), o2.getContent());
 			}
-			Collections.sort(lines, Collator.getInstance());
+		};
+		private void outputSorted(List<Line> lines, LineProcessor output, boolean isDesc) {
+			Collections.sort(lines, COMPARATOR);
 			if (isDesc) {
 				for (int i = lines.size() - 1; i >= 0; i--) {
-					output.writeLine(lines.get(i));
+					output.processLine(lines.get(i));
 				}
 			} else {
-				for (final String line : lines) {
-					output.writeLine(line);
+				for (final Line line : lines) {
+					output.processLine(line);
 				}
 			}
 		}

@@ -1,16 +1,18 @@
 package org.unix4j.unix;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
-import org.unix4j.io.Input;
 import org.unix4j.io.Output;
+import org.unix4j.line.Line;
+import org.unix4j.line.LineProcessor;
+import org.unix4j.util.StringUtil;
 import org.unix4j.util.TypedMap;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Non-instantiable module with inner types making up the echo command.
@@ -77,7 +79,7 @@ public final class Echo {
 	 * Arguments and options for the echo command.
 	 */
 	public static class Args extends AbstractArgs<Option, Args> {
-		public static final TypedMap.Key<List<String>> MESSAGES = TypedMap.DefaultKey.keyForListOf("messages", String.class);
+		public static final TypedMap.Key<List<String>> MESSAGES = TypedMap.keyForListOf("messages", String.class);
 
 		public Args(String message) {
 			this(Collections.singletonList(message));
@@ -122,10 +124,8 @@ public final class Echo {
 	 * Echo command implementation.
 	 */
 	public static class Command extends AbstractCommand<Args> {
-		private static final String LINE_SEPERATOR = System.getProperty("line.separator");
-
 		public Command(Args arguments) {
-			super(NAME, Type.NoInput, arguments);
+			super(NAME, arguments);
 		}
 
 		@Override
@@ -134,16 +134,22 @@ public final class Echo {
 		}
 
 		@Override
-		public void executeBatch(Input input, Output output) {
-			final String messages = joinMessages();
-			final String[] lines = messages.split(LINE_SEPERATOR);
-			for( final String line: lines){
-				output.writeLine(line);
-			}
-			if(messages.endsWith(LINE_SEPERATOR)){
-				output.writeLine("");
-			}
-
+		public LineProcessor execute(final LineProcessor output) {
+			return new LineProcessor() {
+				@Override
+				public boolean processLine(Line line) {
+					return false;//we want no input
+				}
+				@Override
+				public void finish() {
+					final String messages = joinMessages();
+					final List<Line> lines = StringUtil.splitLines(messages);
+					for( final Line line: lines){
+						output.processLine(line);
+					}
+					output.finish();
+				}
+			};
 		}
 
 		private String joinMessages() {

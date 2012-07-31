@@ -1,8 +1,13 @@
 package org.unix4j.util;
 
-import org.junit.Test;
+import java.util.Arrays;
+import java.util.List;
 
 import junit.framework.Assert;
+
+import org.junit.Test;
+import org.unix4j.line.Line;
+import org.unix4j.line.SimpleLine;
 
 /**
  * Unit test for {@link StringUtil}.
@@ -63,6 +68,28 @@ public class StringUtilTest {
 				final String actual = StringUtil.fixSizeString(j, left[i], filler[i], s[i]);
 				Assert.assertEquals("length=" + j + " of " + s[i], expected[j][i], actual);
 			}
+		}
+	}
+	
+	@Test
+	public void testSplitLines() {
+		final String[] input = {
+				"hello\nworld",	
+				"hello\r\nworld", 
+				"hello\n\r\r\nworld",
+				"hello\n\r\r\nworld\n",
+				"hello\n\r\r\nworld\n\n",
+			};
+		final Line[][] expected = {
+				{new SimpleLine("hello", "\n"), new SimpleLine("world", "")},
+				{new SimpleLine("hello", "\r\n"), new SimpleLine("world", "")},
+				{new SimpleLine("hello", "\n\r"), new SimpleLine("", "\r\n"), new SimpleLine("world", "")},
+				{new SimpleLine("hello", "\n\r"), new SimpleLine("", "\r\n"), new SimpleLine("world", "\n")},
+				{new SimpleLine("hello", "\n\r"), new SimpleLine("", "\r\n"), new SimpleLine("world", "\n"), new SimpleLine("", "\n")},
+			};
+		for (int i = 0; i < input.length; i++) {
+			final List<Line> actual = StringUtil.splitLines(input[i]);
+			Assert.assertEquals(Arrays.asList(expected[i]), actual);
 		}
 	}
 }

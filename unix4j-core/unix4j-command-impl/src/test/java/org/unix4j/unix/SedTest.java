@@ -1,13 +1,12 @@
 package org.unix4j.unix;
 
-import org.junit.Test;
-import org.unix4j.Unix4j;
-import org.unix4j.io.WriterOutput;
-import org.unix4j.util.MultilineString;
+import static org.junit.Assert.assertEquals;
 
 import java.io.StringWriter;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+import org.unix4j.Unix4j;
+import org.unix4j.util.MultilineString;
 
 public class SedTest {
 	private final static MultilineString input;
@@ -150,7 +149,7 @@ public class SedTest {
 				.appendLine("def\\d123");
 
 		final StringWriter actualOutputStringWriter = new StringWriter();
-		Unix4j.fromString(input.toString()).sedSubstituteFirst("blah", "hasblah").toOutput(new WriterOutput(actualOutputStringWriter));
+		Unix4j.fromString(input.toString()).sedSubstituteFirst("blah", "hasblah").toWriter(actualOutputStringWriter);
 		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
 		actualOutput.assertMultilineStringEquals(expectedOutput);
 	}
@@ -169,7 +168,7 @@ public class SedTest {
 				.appendLine("def\\d123");
 
 		final StringWriter actualOutputStringWriter = new StringWriter();
-		Unix4j.fromString(input.toString()).sedSubstitute("blah", "hasblah").toOutput(new WriterOutput(actualOutputStringWriter));
+		Unix4j.fromString(input.toString()).sedSubstitute("blah", "hasblah").toWriter(actualOutputStringWriter);
 		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
 		actualOutput.assertMultilineStringEquals(expectedOutput);
 	}
@@ -186,7 +185,7 @@ public class SedTest {
 
 	private void assertSed(final MultilineString input, final String script, final MultilineString expectedOutput){
 		final StringWriter actualOutputStringWriter = new StringWriter();
-		Unix4j.fromInput(input.toInput()).sed(script).toOutput(new WriterOutput(actualOutputStringWriter));
+		Unix4j.fromInput(input.toInput()).sed(script).toWriter(actualOutputStringWriter);
 		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
 		actualOutput.assertMultilineStringEquals(expectedOutput);
 	}
@@ -194,6 +193,6 @@ public class SedTest {
 	@Test(expected = NullPointerException.class)
 	public void testSed_nullScript() {
 		final StringWriter actualOutputStringWriter = new StringWriter();
-		Unix4j.fromInput(input.toInput()).sed(null).toOutput(new WriterOutput(actualOutputStringWriter));
+		Unix4j.fromInput(input.toInput()).sed(null).toWriter(actualOutputStringWriter);
 	}
 }

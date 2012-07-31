@@ -1,7 +1,6 @@
 package org.unix4j.command;
 
-import org.unix4j.io.Input;
-import org.unix4j.io.Output;
+import org.unix4j.line.LineProcessor;
 
 /**
  * A composite command joining two commands. The output of the
@@ -74,18 +73,8 @@ public class JoinedCommand<A extends Arguments<A>> implements Command<A> {
 		return getArguments();
 	}
 
-	/**
-	 * Returns the type of the first command
-	 * 
-	 * @return the type of the first command
-	 */
 	@Override
-	public Type getType() {
-		return first.getType();
-	}
-
-	@Override
-	public Command<A> withArgs(A arguments) {
+	public JoinedCommand<A> withArgs(A arguments) {
 		return new JoinedCommand<A>(first.withArgs(arguments), second);
 	}
 
@@ -95,23 +84,21 @@ public class JoinedCommand<A extends Arguments<A>> implements Command<A> {
 	}
 
 	/**
-	 * Executes this joined command. The first command reads from the given
-	 * {@code input} and writes to a new {@link JoinedOutput} instance buffering
-	 * the lines if necessary. The joined output object triggers the execution
-	 * of the second command. It depends on the type of the second command
-	 * whether it is called immediately for every line written by the first
-	 * command or only once at the end when the first command calls
-	 * {@link JoinedOutput#finish() finish()}.
+	 * Executes this joined command redirecting the output of the first command
+	 * such that it becomes the input of the second command.
+	 * <p>
+	 * The specified {@code output} object is passed to the second command's
+	 * {@code execute(..)} method. The {@link LineProcessor} returned by the
+	 * second command is passed to the {@code execute(..)} method of the first
+	 * command, with the effect that the first command provides its output to
+	 * the second command as input.
 	 * 
-	 * @param input
-	 *            the input for the first command
 	 * @param output
 	 *            the output for the second command
 	 */
 	@Override
-	public void execute(Input input, Output output) {
-		final JoinedOutput joinedOutput = new JoinedOutput(getSecond(), output);
-		getFirst().execute(input, joinedOutput);
+	public LineProcessor execute(LineProcessor output) {
+		return getFirst().execute(getSecond().execute(output));
 	}
 
 	/**
