@@ -12,7 +12,8 @@
 		<module>unix4j-tools</module>
 		<module>unix4j-core</module>
 		<module>unix4j-perf</module>
-	</modules>
+        <module>unix4j-example</module>
+    </modules>
 
 	<dependencies>
 		<dependency>
@@ -21,22 +22,6 @@
 			<version>4.10</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.googlecode.fmpp-maven-plugin</groupId>
-			<artifactId>fmpp-maven-plugin</artifactId>
-			<version>1.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.beanshell</groupId>
-                    <artifactId>bsh</artifactId>
-                </exclusion>
-            </exclusions>
-		</dependency>
-        <dependency>
-            <groupId>org.beanshell</groupId>
-            <artifactId>bsh</artifactId>
-            <version>2.0b5</version>
-        </dependency>
     </dependencies>
 	<profiles>
 		<profile>
