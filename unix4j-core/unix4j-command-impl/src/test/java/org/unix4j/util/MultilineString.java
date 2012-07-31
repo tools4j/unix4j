@@ -3,40 +3,37 @@ package org.unix4j.util;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
-import org.unix4j.io.BufferedInput;
+import org.unix4j.io.BufferedOutput;
 import org.unix4j.io.Input;
 import org.unix4j.line.Line;
-import org.unix4j.line.SimpleLine;
 
 public class MultilineString {
 	public final static MultilineString EMPTY = new MultilineString("");
 
-	private final List<Line> lines;
+	private final BufferedOutput buffer = new BufferedOutput();
 
 	public MultilineString() {
-		this.lines = new ArrayList<Line>();
+		super();
 	}
 
 	public MultilineString(final String content) {
-		this();
 		appendLine(content);
 	}
 
-	public MultilineString appendLine(final String line){
+	public MultilineString appendLine(final String line) {
 		if (line.isEmpty()) {
-			lines.add(new SimpleLine(""));
+			buffer.processLine(Line.EMPTY_LINE);
 		} else {
-			lines.addAll(StringUtil.splitLines(line));
+			for (final Line l : StringUtil.splitLines(line)) {
+				buffer.processLine(l);
+			}
 		}
 		return this;
 	}
 
-	public MultilineString appendLines(final String... lines){
+	public MultilineString appendLines(final String... lines) {
 		for (int i = 0; i < lines.length; i++) {
 			appendLine(lines[i]);
 		}
@@ -44,25 +41,38 @@ public class MultilineString {
 	}
 
 	public void assertMultilineStringEquals(final MultilineString expected) {
-		if (lines.equals(expected.lines)) {
-			assertEquals(expected.lines, lines);
+		if (equals(expected)) {
+			assertEquals(expected, this);
 		} else {
-			final String unequalityMessage = "Expected string does not equal actual string.\nExpected: \n'" + expected.toString() + "' \nActual: '\n" + toString() + "'\n";
-			if(lines.size() != expected.lines.size()){
-				String message = "Expected string has " + expected.lines.size() + " lines, but actual string has " + lines.size() + " lines.\n";
+			final String unequalityMessage = "Expected string does not equal actual string.\nExpected: \n'" + expected + "' \nActual: '\n" + this + "'\n";
+			if (buffer.size() != expected.buffer.size()) {
+				String message = "Expected string has " + expected.buffer.size() + " lines, but actual string has " + buffer.size() + " lines.\n";
 				fail(message + unequalityMessage);
 			} else {
-				for(int i=0; i<expected.lines.size(); i++){
-					final Line expectedLine = expected.lines.get(i);
-					final Line actualLine = lines.get(i);
-					assertEquals("line index:" + i, expectedLine, actualLine);
+				final List<Line> actualLines = buffer.asList();
+				final List<Line> expectedLines = expected.buffer.asList();
+				for (int i = 0; i < expectedLines.size(); i++) {
+					final Line expectedLine = expectedLines.get(i);
+					final Line actualLine = actualLines.get(i);
+					if (!expectedLine.equals(actualLine)) {
+						if (!expectedLine.getContent().equals(actualLine.getContent())) {
+							assertEquals("line index:" + i, expectedLine, actualLine);
+						} else {
+							if (i + 1 < expectedLines.size()) {
+								// line endings different?
+								if (expectedLine.getLineEndingLength() != 0 && actualLine.getLineEndingLength() != 0) {
+									assertEquals("line index:" + i + " (line endings different) ", expectedLine, actualLine);
+								}
+							}
+						}
+					}
 				}
 			}
 		}
 	}
 
 	public Input toInput() {
-		return new BufferedInput(new LinkedList<Line>(lines));
+		return buffer.asInput();
 	}
 
 	@Override
@@ -72,26 +82,26 @@ public class MultilineString {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == this) return true;
+		if (obj == this)
+			return true;
 		if (obj instanceof MultilineString) {
 			return toString().equals(obj.toString());
 		}
 		return false;
 	}
 
+	/**
+	 * Returns a multi-line representation of the lines in this
+	 * {@code MultilineString} object. The last line is never terminated, all
+	 * other lines are terminated with guarantee even if the line itself has an
+	 * empty line ending string.
+	 * 
+	 * @return a multi-line string of the buffered lines, without line
+	 *         termination for the last line
+	 */
 	@Override
 	public String toString() {
-		final StringBuilder sb = new StringBuilder();
-		final Iterator<Line> it = lines.iterator();
-		while (it.hasNext()) {
-			final Line line = it.next();
-			sb.append(line.getContent());
-			if (it.hasNext()) {
-				sb.append(line.getLineEndingLength() == 0 ? StringUtil.LINE_ENDING : line.getLineEnding());
-			}
-			//no line ending for last line
-		}
-		return sb.toString();
+		return buffer.toMultiLineString();
 	}
 
 }

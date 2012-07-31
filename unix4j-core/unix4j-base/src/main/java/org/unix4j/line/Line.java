@@ -1,7 +1,5 @@
 package org.unix4j.line;
 
-import java.io.Writer;
-
 /**
  * A line is a line string including the line ending character(s). The
  * {@link #getContent()} method returns the line without line ending characters;
@@ -14,6 +12,31 @@ import java.io.Writer;
  * could for instance be an existing Windows or Unix file.
  */
 public interface Line extends CharSequence {
+	/**
+	 * Operating system dependent line ending taken from the system property
+	 * {@code "line.separator"}. This is usually {@code "\n"} on UNIX systems
+	 * and {@code "\r\n"} on WINDOWS.
+	 */
+	String LINE_ENDING = System.getProperty("line.separator");
+
+	/**
+	 * Line with empty content string and a default operating system dependent
+	 * line ending as defined by {@link #LINE_ENDING}.
+	 */
+	Line EMPTY_LINE = new SimpleLine("");
+
+	/**
+	 * The line feed (LF) character {@code '\n'} used to encode line endings in
+	 * UNIX.
+	 */
+	char LF = '\n';
+
+	/**
+	 * The carriage return (CR) character {@code '\r'} used to encode line
+	 * endings in WINDOWS together with {@link #LF}.
+	 */
+	char CR = '\r';
+
 	/**
 	 * Returns the contents making up this line, but without the line ending
 	 * characters. Returns an empty string if the line consists only of line
@@ -61,19 +84,33 @@ public interface Line extends CharSequence {
 	int getLineEndingLength();
 
 	/**
-	 * Uses the specified {@code writer} to output this line including line
-	 * ending characters.
-	 * 
-	 * @param writer
-	 *            the writer used to write this line to an output device
-	 */
-	void write(Writer writer);
-
-	/**
 	 * Returns this line including the line ending characters as a string.
 	 * 
 	 * @return the line with line ending
 	 */
 	@Override
-	public String toString();
+	String toString();
+
+	/**
+	 * Compares {@code this} line with {@code obj} and returns true if
+	 * {@code obj} is a {@link Line} (any subclass) and both lines are
+	 * identical. The line comparison considers both the {@link #getContent()
+	 * content} and the {@link #getLineEnding() line ending}.
+	 * 
+	 * @param obj
+	 *            the object to be compared with
+	 * @return true if {@code obj} is a {@code Line} identical to {@code this}
+	 *         {@code Line} also considering the line ending when comparing the
+	 *         lines
+	 */
+	@Override
+	boolean equals(Object obj);
+
+	/**
+	 * The hash code for this line, based on the complete line with line ending.
+	 * 
+	 * @return the hash code based on content and line ending
+	 */
+	@Override
+	public int hashCode();
 }

@@ -10,17 +10,17 @@ import static org.junit.Assert.assertThat;
 public class FromFileOnClasspathTest {
 	@Test
 	public void testFromFileOnClasspath_fileInRootPackage() {
-		assertThat(Unix4j.fromFileOnClasspath("/commuting.txt").grep("from").head(4).tail(1).wcCountWords().toStringResult(), is("13"));
+		assertThat(Unix4j.fromResource("/commuting.txt").grep("from").head(4).tail(1).wcCountWords().toStringResult(), is("13"));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testFromFileOnClasspath_fileNotFound() {
-		Unix4j.fromFileOnClasspath("/asdfasfdasfd").grep("asfdasfdasfd").toStdOut();
+		Unix4j.fromResource("/asdfasfdasfd").grep("asfdasfdasfd").toStdOut();
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void testFromFileOnClasspath_fileParamIsNull() {
-		Unix4j.fromFileOnClasspath(null).grep("asfdasfdasfd").toStdOut();
+		Unix4j.fromResource(null).grep("asfdasfdasfd").toStdOut();
 	}
 
 	@Ignore
@@ -31,6 +31,6 @@ public class FromFileOnClasspathTest {
 		is called for each line for some reason.
 		System.out.println(Unix4j.fromFileOnClasspath("/my/package/redneck.txt").grep("for").grep("ask").wcCountLines().toStringResult());
 		 */
-		assertThat(Unix4j.fromFileOnClasspath("/my/package/redneck.txt").grep("for").grep("ask").wcCountLines().wcCountLines().toStringResult(), is("1"));
+		assertThat(Unix4j.fromResource("/my/package/redneck.txt").grep("for").grep("ask").wcCountLines().wcCountLines().toStringResult(), is("1"));
 	}
 }

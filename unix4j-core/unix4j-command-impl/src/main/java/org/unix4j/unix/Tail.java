@@ -169,8 +169,9 @@ public final class Tail {
 				}
 				@Override
 				public void finish() {
-					for (final Line line : tailLines) {
-						output.processLine(line);
+					boolean more = true;
+					while (more && !tailLines.isEmpty()) {
+						more = output.processLine(tailLines.removeFirst());
 					}
 					output.finish();
 				}

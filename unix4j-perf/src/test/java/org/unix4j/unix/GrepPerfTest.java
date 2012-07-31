@@ -1,11 +1,10 @@
 package org.unix4j.unix;
 
 import java.io.InputStream;
-import java.io.StringWriter;
 
 import org.junit.Test;
 import org.unix4j.Unix4j;
-import org.unix4j.io.WriterOutput;
+import org.unix4j.io.StringOutput;
 
 public class GrepPerfTest {
 	@Test
@@ -16,7 +15,7 @@ public class GrepPerfTest {
 
 	private void runGrep(final String expression, final Grep.Option... options){
 		final InputStream testFileAsInputStream = this.getClass().getClassLoader().getResourceAsStream("1.1M_test_file.txt");
-		final StringWriter actualOutputStringWriter = new StringWriter();
-		Unix4j.fromInputStream(testFileAsInputStream).grep(expression, options).toOutput(new WriterOutput(actualOutputStringWriter));
+		final StringOutput actualStringOutput = new StringOutput();
+		Unix4j.from(testFileAsInputStream).grep(expression, options).toOutput(actualStringOutput);
 	}
 }

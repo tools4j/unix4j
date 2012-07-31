@@ -184,7 +184,7 @@ public final class Sort {
 				@Override
 				public boolean processLine(Line line) {
 					lines.add(line);
-					return true;//we want more!
+					return true;//we want it all!
 				}
 				@Override
 				public void finish() {
@@ -205,11 +205,15 @@ public final class Sort {
 			Collections.sort(lines, COMPARATOR);
 			if (isDesc) {
 				for (int i = lines.size() - 1; i >= 0; i--) {
-					output.processLine(lines.get(i));
+					if (!output.processLine(lines.get(i))) {
+						return;
+					}
 				}
 			} else {
-				for (final Line line : lines) {
-					output.processLine(line);
+				for (int i = 0; i < lines.size(); i++) {
+					if (!output.processLine(lines.get(i))) {
+						return;
+					}
 				}
 			}
 		}

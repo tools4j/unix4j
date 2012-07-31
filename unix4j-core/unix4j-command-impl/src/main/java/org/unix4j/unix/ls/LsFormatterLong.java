@@ -50,8 +50,8 @@ class LsFormatterLong implements LsFormatter {
 	}
 
 	@Override
-	public void writeFormatted(File relativeTo, File file, LsArgs args, LineProcessor output) {
-		output.processLine(
+	public boolean writeFormatted(File relativeTo, File file, LsArgs args, LineProcessor output) {
+		return output.processLine(
 				new SimpleLine(
 						getFilePermissions(file, args) + ' ' +
 								getOwner(file, args) + ' ' +
