@@ -1,13 +1,14 @@
 package org.unix4j.unix;
 
+import static org.unix4j.util.Assert.assertArgGreaterThanOrEqualTo;
+
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
-import org.unix4j.io.Input;
-import org.unix4j.io.Output;
+import org.unix4j.line.Line;
+import org.unix4j.line.LineProcessor;
+import org.unix4j.util.Counter;
 import org.unix4j.util.TypedMap;
-
-import static org.unix4j.util.Assert.assertArgGreaterThanOrEqualTo;
 
 /**
  * <b>NAME</b>
@@ -102,7 +103,7 @@ public final class Head {
 	 * Arguments and options for the head command.
 	 */
 	public static class Args extends AbstractArgs<Option, Args> {
-		public static final TypedMap.Key<Integer> LINES = TypedMap.DefaultKey.keyFor("lines", Integer.class);
+		public static final TypedMap.Key<Integer> LINES = TypedMap.keyFor("lines", Integer.class);
 
 		public Args(int lines) {
 			super(Option.class);
@@ -143,7 +144,7 @@ public final class Head {
 	 */
 	public static class Command extends AbstractCommand<Args> {
 		public Command(Args arguments) {
-			super(NAME, Type.CompleteInput, arguments);
+			super(NAME, arguments);
 		}
 
 		@Override
@@ -152,16 +153,25 @@ public final class Head {
 		}
 
 		@Override
-		public void executeBatch(Input input, Output output) {
-			final int linesToOutput = getArguments().getLines();
-			int lines = 0;
-			while (input.hasMoreLines()){
-				final String line = input.readLine();
-				if (lines < linesToOutput) {
-					output.writeLine(line);
-					lines++;
+		public LineProcessor execute(final LineProcessor output) {
+			return new LineProcessor() {
+				private final int linesToOutput = getArguments().getLines();
+				private final Counter counter = new Counter();
+				@Override
+				public boolean processLine(Line line) {
+					if (counter.getCount() < linesToOutput) {
+						output.processLine(line);
+						return counter.increment() < linesToOutput;
+					} else {
+						return false;
+					}
 				}
-			}
+				
+				@Override
+				public void finish() {
+					output.finish();
+				}
+			};
 		}
 	}
 

@@ -3,7 +3,8 @@ package org.unix4j.unix.ls;
 import java.io.File;
 import java.util.List;
 
-import org.unix4j.io.Output;
+import org.unix4j.line.LineProcessor;
+import org.unix4j.line.SimpleLine;
 import org.unix4j.util.FileUtil;
 
 class LsFormatterDirectoryHeader implements LsFormatter {
@@ -28,12 +29,12 @@ class LsFormatterDirectoryHeader implements LsFormatter {
 	}
 
 	@Override
-	public void writeFormatted(File relativeTo, File file, LsArgs args, Output output) {
+	public void writeFormatted(File relativeTo, File file, LsArgs args, LineProcessor output) {
 		final String relativePath = FileUtil.getRelativePath(relativeTo, file);
 		if (!".".equals(relativePath)) {
-			output.writeLine(relativePath);
+			output.processLine(new SimpleLine(relativePath));
 		}
-		output.writeLine("total: " + args.getSizeString(totalBytes));
+		output.processLine(new SimpleLine("total: " + args.getSizeString(totalBytes)));
 	}
 
 }

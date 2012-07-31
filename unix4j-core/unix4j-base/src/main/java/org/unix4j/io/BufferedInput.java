@@ -2,25 +2,31 @@ package org.unix4j.io;
 
 import java.util.LinkedList;
 
+import org.unix4j.line.Line;
+import org.unix4j.line.SimpleLine;
 
-public class BufferedInput implements Input {
-	private final LinkedList<String> lines;
-	public BufferedInput(LinkedList<String> lines) {
-		this.lines = lines;
+public class BufferedInput extends AbstractInput {
+	private final LinkedList<Line> buffer;
+	public BufferedInput(LinkedList<Line> buffer) {
+		this.buffer = buffer;
 	}
 	@Override
 	public boolean hasMoreLines() {
-		return !lines.isEmpty();
+		return !buffer.isEmpty();
 	}
 	@Override
-	public String readLine() {
-		if (!lines.isEmpty()) {
-			return lines.remove(0);
+	public Line readLine() {
+		if (!buffer.isEmpty()) {
+			final Line line = buffer.remove(0);
+			if (!buffer.isEmpty() && line.getLineEndingLength() == 0) {
+				return new SimpleLine(line);//add line ending if not final line
+			}
+			return line;
 		}
 		return null;
 	}
 	@Override
 	public String toString() {
-		return lines.toString();
+		return buffer.toString();
 	}
 }

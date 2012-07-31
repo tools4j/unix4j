@@ -100,15 +100,6 @@ public class TypedMap implements Cloneable {
 			this.valueType = valueType;
 		}
 
-		public static <E> DefaultKey<E> keyFor(Object key, Class<E> valueType) {
-			return new DefaultKey<E>(key, valueType);
-		}
-
-		@SuppressWarnings("unchecked")
-		public static <E> DefaultKey<List<E>> keyForListOf(Object key, Class<E> elementType) {
-			return new DefaultKey<List<E>>(key, (Class<List<E>>) ((Object) List.class));
-		}
-
 		@Override
 		public Object getKey() {
 			return key;
@@ -139,6 +130,35 @@ public class TypedMap implements Cloneable {
 		public String toString() {
 			return "key[" + getKey() + ",valueType=" + getValueType() + "]";
 		}
+	}
+
+	/**
+	 * Creates and returns a key for the specified key object and value type.
+	 * 
+	 * @param key
+	 *            object used to make the key distinguishable from other keys,
+	 *            in particular from other keys with the same value type
+	 * @param valueType
+	 *            type of values associated with the returned key in a typed map
+	 */
+	public static <E> DefaultKey<E> keyFor(Object key, Class<E> valueType) {
+		return new DefaultKey<E>(key, valueType);
+	}
+
+	/**
+	 * Creates and returns a key for the specified key object and values of type
+	 * {@link List} containing elements of the given {@code elementType}.
+	 * 
+	 * @param key
+	 *            object used to make the key distinguishable from other keys,
+	 *            in particular from other keys with the same value type
+	 * @param elementType
+	 *            type of elements in the list associated with the returned key
+	 *            in a typed map
+	 */
+	@SuppressWarnings("unchecked")
+	public static <E> DefaultKey<List<E>> keyForListOf(Object key, Class<E> elementType) {
+		return new DefaultKey<List<E>>(key, (Class<List<E>>) ((Object) List.class));
 	}
 
 	/**

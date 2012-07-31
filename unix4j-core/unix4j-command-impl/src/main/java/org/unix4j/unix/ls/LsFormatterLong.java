@@ -5,7 +5,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import org.unix4j.io.Output;
+import org.unix4j.line.LineProcessor;
+import org.unix4j.line.SimpleLine;
 import org.unix4j.util.FileUtil;
 import org.unix4j.util.Java7Util;
 import org.unix4j.util.StringUtil;
@@ -49,15 +50,17 @@ class LsFormatterLong implements LsFormatter {
 	}
 
 	@Override
-	public void writeFormatted(File relativeTo, File file, LsArgs args, Output output) {
-		output.writeLine(
-					getFilePermissions(file, args) + ' ' +
-							getOwner(file, args) + ' ' +
-							getGroup(file, args) + ' ' +
-							getSize(file, args) + ' ' +
-							getDateTime(file, args) + ' ' +
-							getName(relativeTo, file, args)
-					);
+	public void writeFormatted(File relativeTo, File file, LsArgs args, LineProcessor output) {
+		output.processLine(
+				new SimpleLine(
+						getFilePermissions(file, args) + ' ' +
+								getOwner(file, args) + ' ' +
+								getGroup(file, args) + ' ' +
+								getSize(file, args) + ' ' +
+								getDateTime(file, args) + ' ' +
+								getName(relativeTo, file, args)
+					)
+				);
 	}
 
 	protected String getFilePermissions(File file, LsArgs args) {
@@ -84,6 +87,7 @@ class LsFormatterLong implements LsFormatter {
 	protected long getLastModifiedMS(File file, LsArgs args) {
 		return file.lastModified();
 	}
+
 	protected String getDateTime(File file, LsArgs args) {
 		final Calendar cal = calendar.get();
 		cal.setTimeInMillis(System.currentTimeMillis());
@@ -107,7 +111,7 @@ class LsFormatterLong implements LsFormatter {
 	protected String getName(File relativeTo, File file, LsArgs args) {
 		return FileUtil.getRelativePath(relativeTo, file);
 	}
-	
+
 	static Factory FACTORY = new Factory() {
 		@Override
 		public LsFormatter create(File relativeTo, File directory, List<File> directoryFiles, LsArgs args) {
@@ -115,7 +119,7 @@ class LsFormatterLong implements LsFormatter {
 			fmt.maxSizeStringLength.set(calculateMaxSizeStringLength(directoryFiles, args));
 			return fmt;
 		}
-		
+
 		private int calculateMaxSizeStringLength(List<File> directoryFiles, LsArgs args) {
 			int maxSizeStringLength = 0;
 			for (final File f : directoryFiles) {

@@ -3,7 +3,7 @@ package org.unix4j.unix.ls;
 import java.io.File;
 import java.util.List;
 
-import org.unix4j.io.Output;
+import org.unix4j.line.LineProcessor;
 
 /**
  * Interface used by the different output formats of the ls command.
@@ -24,7 +24,7 @@ interface LsFormatter {
 	 * @param output
 	 *            the output object to write to
 	 */
-	void writeFormatted(File relativeTo, File file, LsArgs args, Output output);
+	void writeFormatted(File relativeTo, File file, LsArgs args, LineProcessor output);
 
 	interface Factory {
 		/**

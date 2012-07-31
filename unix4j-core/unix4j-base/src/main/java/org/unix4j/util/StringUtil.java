@@ -1,9 +1,33 @@
 package org.unix4j.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.unix4j.line.SingleCharSequenceLine;
+import org.unix4j.line.Line;
+
 /**
  * Utility class with static methods for strings.
  */
 public class StringUtil {
+
+	/**
+	 * Operating system dependent line ending taken from the system property
+	 * {@code "line.separator"}. This is usually {@code "\n"} on UNIX systems
+	 * and {@code "\r\n"} on WINDOWS.
+	 */
+	public static final String LINE_ENDING = System.getProperty("line.separator");
+
+	/**
+	 * The line feed (LF) character {@code '\n'} used to encode line endings in
+	 * UNIX.
+	 */
+	public static final char LF = '\n';
+	/**
+	 * The carriage return (CR) character {@code '\r'} used to encode line
+	 * endings in WINDOWS together with {@link #LF}.
+	 */
+	public static final char CR = '\r';
 
 	/**
 	 * Returns the given {@code value} as a string of fixed length {@code size}
@@ -123,6 +147,55 @@ public class StringUtil {
 		} else {
 			return left ? s.substring(0, size) : s.substring(s.length() - size, s.length());
 		}
+	}
+
+	/**
+	 * Splits the given string into lines and returns each line as a separate
+	 * string in the result list. The result list will contain at least one
+	 * entry unless the string is empty.
+	 * <p>
+	 * A trailing newline after the last line is ignored, meaning that no empty
+	 * string is appended as separate line if the string ends with a newline.
+	 * However multiple trailing newlines will still lead to empty line strings
+	 * at the end of the list.
+	 * <p>
+	 * Note that all line ending characters are accepted to split lines, no
+	 * matter what operating system this code is hosted on. More precisely, the
+	 * {@link #LF} and {@link #CR} characters are recognized as line ending
+	 * characters, either as single character or as a pair {@code CR+LF} or
+	 * {@code LF+CR}.
+	 * 
+	 * @param s
+	 *            the string to split
+	 * @return a list with the lines found in {@code s}
+	 */
+	public static final List<Line> splitLines(String s) {
+		final List<Line> lines = new ArrayList<Line>();
+		int start = 0;
+		int index = 0;
+		while (index < s.length()) {
+			final char ch = s.charAt(index);
+			if (ch == LF || ch == CR) {
+				final int lineEndingStart = index;
+				index++;
+				if (index < s.length()) {
+					final char ch2 = s.charAt(index);
+					if (ch2 != ch && (ch2 == LF || ch2 == CR)) {
+						index++;
+					}
+				}
+				final Line line = new SingleCharSequenceLine(s, start, lineEndingStart - start, index - lineEndingStart);
+				lines.add(line);
+				start = index;
+			} else {
+				index++;
+			}
+		}
+		if (start < s.length()) {
+			final Line line = new SingleCharSequenceLine(s, start, s.length() - start, 0);
+			lines.add(line);
+		}
+		return lines;
 	}
 
 	// no instances

@@ -4,46 +4,61 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.unix4j.line.Line;
+import org.unix4j.util.StringUtil;
 
 public class BufferedOutput implements Output {
-	private static final String NEW_LINE = System.getProperty("line.separator");
-	private final List<String> lines = new ArrayList<String>();
+	private final List<Line> buffer;
+
 	public BufferedOutput() {
-		super();
+		this(new ArrayList<Line>());
 	}
+
+	public BufferedOutput(List<Line> buffer) {
+		this.buffer = buffer;
+	}
+
 	@Override
-	public void writeLine(String line) {
-		lines.add(line);
+	public boolean processLine(Line line) {
+		buffer.add(line);
+		return true;
 	}
+
 	@Override
 	public void finish() {
-		//nothing to do
+		// nothing to do
 	}
+
 	@Override
 	public String toString() {
-		return lines.toString();
+		return buffer.toString();
 	}
+
 	public String toMultiLineString() {
 		final StringBuilder sb = new StringBuilder();
-		for (final String line : lines) {
-			if(sb.length() > 0){
-				sb.append(NEW_LINE);
+		for (int i = 0; i < buffer.size(); i++) {
+			final Line line = buffer.get(i);
+			sb.append(line.getContent());
+			if (i + 1 < buffer.size()) {
+				sb.append(line.getLineEndingLength() == 0 ? StringUtil.LINE_ENDING : line.getLineEnding());
 			}
-			sb.append(line);
 		}
 		return sb.toString();
 	}
+
 	public void writeTo(Output output) {
-		for (final String line : lines) {
-			output.writeLine(line);
+		for (final Line line : buffer) {
+			output.processLine(line);
 		}
 		output.finish();
 	}
+
 	public BufferedInput asInput() {
-		return new BufferedInput(new LinkedList<String>(lines));
+		return new BufferedInput(new LinkedList<Line>(buffer));
 	}
+
 	public BufferedOutput clear() {
-		lines.clear();
+		buffer.clear();
 		return this;
 	}
 }

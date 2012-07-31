@@ -1,13 +1,12 @@
 package org.unix4j.unix;
 
-import org.junit.Test;
-import org.unix4j.Unix4j;
-import org.unix4j.io.WriterOutput;
-import org.unix4j.util.MultilineString;
+import static junit.framework.Assert.assertEquals;
 
 import java.io.StringWriter;
 
-import static junit.framework.Assert.assertEquals;
+import org.junit.Test;
+import org.unix4j.Unix4j;
+import org.unix4j.util.MultilineString;
 
 public class HeadTest {
 	private final static String LINE1 = "This is a test blah blah blah";
@@ -146,7 +145,7 @@ public class HeadTest {
 
 	private void assertHead(final MultilineString input, final int lines, final MultilineString expectedOutput){
 		final StringWriter actualOutputStringWriter = new StringWriter();
-		Unix4j.fromInput(input.toInput()).head(lines).toOutput(new WriterOutput(actualOutputStringWriter));
+		Unix4j.fromInput(input.toInput()).head(lines).toWriter(actualOutputStringWriter);
 		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
 		actualOutput.assertMultilineStringEquals(expectedOutput);
 	}

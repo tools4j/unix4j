@@ -1,13 +1,11 @@
 package org.unix4j.unix;
 
-import org.junit.Ignore;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.util.MultilineString;
 
-import static org.junit.Assert.assertEquals;
-
-//@Ignore
 public class CommandChainingTest {
 	private final static MultilineString input;
 	static {
@@ -95,20 +93,19 @@ public class CommandChainingTest {
 		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).head(10).sort().tail(7).sedSubstitute("This", "Dude").grep("Dude").toStringResult());
 	}
 
-	@Ignore	//FIXME make this test work, NOTE mt: this is toFile/batch/finish problem!
 	@Test
 	public void test_headSortSedTailGrepHeadWc() {
 		System.out.println(
-			Unix4j.fromString(input.toString())
-			.head(10)
-			.sort()
-			.tail(7)
-			.sedSubstitute("This", "Dude")
-			.grep("Dude")
-			.head(1)
-			.wcCountWords()
-			.toStringResult());
-		assertEquals("6", /*6 words*/
+				Unix4j.fromString(input.toString())
+						.head(10)
+						.sort()
+						.tail(7)
+						.sedSubstitute("This", "Dude")
+						.grep("Dude")
+						.head(1)
+						.wcCountWords()
+						.toStringResult());
+		assertEquals("6", /* 6 words */
 				Unix4j.fromString(input.toString())
 						.head(10)
 						.sort()

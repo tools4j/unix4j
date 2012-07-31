@@ -1,15 +1,16 @@
 package org.unix4j.unix;
 
-import java.util.regex.Pattern;
-
 import static org.unix4j.util.Assert.assertArgNotNull;
+
+import java.util.regex.Pattern;
 
 import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
-import org.unix4j.io.Input;
 import org.unix4j.io.Output;
+import org.unix4j.line.Line;
+import org.unix4j.line.LineProcessor;
 import org.unix4j.util.TypedMap;
 
 /**
@@ -114,7 +115,7 @@ public final class Grep {
 	 * Arguments and options for the grep command.
 	 */
 	public static class Args extends AbstractArgs<Option, Args> {
-		public static final TypedMap.Key<String> MATCH_STRING = TypedMap.DefaultKey.keyFor("matchString", String.class);
+		public static final TypedMap.Key<String> MATCH_STRING = TypedMap.keyFor("matchString", String.class);
 
 		public Args(String matchString) {
 			super(Option.class);
@@ -174,7 +175,7 @@ public final class Grep {
 	 */
 	public static class Command extends AbstractCommand<Args> {
 		public Command(Args arguments) {
-			super(NAME, Type.LineByLine, arguments);
+			super(NAME, arguments);
 		}
 
 		@Override
@@ -183,45 +184,67 @@ public final class Grep {
 		}
 
 		@Override
-		public void executeBatch(Input input, Output output) {
+		public LineProcessor execute(LineProcessor output) {
+			final Args args = getArguments();
 			if (getArguments().isFixedStrings()) {
-				grepWithFixedStrings(input, output);
+				return new FixedStringsProcessor(args, output);
 			} else {
-				grepWithRegularExpression(input, output);
+				return new RegexpProcessor(args, output);
 			}
 		}
-
-		private void grepWithRegularExpression(Input input, Output output) {
-			final Args args = getArguments();
-			final boolean invert = args.isInvert();
-			final String regex = getArguments().getRegexToRun();
-			final Pattern pattern = Pattern.compile(regex, args.isIgnoreCase() ? Pattern.CASE_INSENSITIVE : 0);
-			while (input.hasMoreLines()) {
-				final String line = input.readLine();
+		
+		private static abstract class AbstractProcessor implements LineProcessor {
+			protected final boolean isIgnoreCase; 
+			protected final boolean isInvert; 
+			protected final LineProcessor output;
+			public AbstractProcessor(Args args, LineProcessor output) {
+				this.isIgnoreCase = args.isIgnoreCase();
+				this.isInvert = args.isInvert();
+				this.output = output;
+			}
+			@Override
+			public void finish() {
+				output.finish();
+			}
+		}
+		private static final class RegexpProcessor extends AbstractProcessor {
+			private final Pattern pattern;
+			public RegexpProcessor(Args args, LineProcessor output) {
+				super(args, output);
+				final String regex = args.getRegexToRun();
+				this.pattern = Pattern.compile(regex, isIgnoreCase ? Pattern.CASE_INSENSITIVE : 0);
+			}
+			@Override
+			public boolean processLine(Line line) {
 				final boolean matches = pattern.matcher(line).matches();
-				if (invert ^ matches) {
-					output.writeLine(line);
+				if (isInvert ^ matches) {
+					output.processLine(line);
 				}
+				return true;
 			}
 		}
-
-		private void grepWithFixedStrings(Input input, Output output) {
-			final Args args = getArguments();
-			final boolean ignoreCase = args.isIgnoreCase();
-			final boolean invert = args.isInvert();
-			String matchString = getArguments().getMatchString();
-			if (ignoreCase) {
-				matchString = matchString.toLowerCase();
+		private static final class FixedStringsProcessor extends AbstractProcessor {
+			private final String matchString;
+			public FixedStringsProcessor(Args args, LineProcessor output) {
+				super(args, output);
+				String matchString = args.getMatchString();
+				if (isIgnoreCase) {
+					matchString = matchString.toLowerCase();
+				}
+				this.matchString = matchString;
 			}
-			while (input.hasMoreLines()) {
-				String line = input.readLine();
-				if (ignoreCase) {
-					line = line.toLowerCase();
+			@Override
+			public boolean processLine(Line line) {
+				final boolean matches;
+				if (isIgnoreCase) {
+					matches = line.toString().toLowerCase().contains(matchString);
+				} else {
+					matches = line.toString().contains(matchString);
 				}
-				final boolean matches = line.contains(matchString);
-				if (invert ^ matches) {
-					output.writeLine(line);
+				if (isInvert ^ matches) {
+					output.processLine(line);
 				}
+				return true;
 			}
 		}
 	}

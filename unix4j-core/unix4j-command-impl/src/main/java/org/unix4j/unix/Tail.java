@@ -7,8 +7,8 @@ import java.util.LinkedList;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
-import org.unix4j.io.Input;
-import org.unix4j.io.Output;
+import org.unix4j.line.Line;
+import org.unix4j.line.LineProcessor;
 import org.unix4j.util.TypedMap;
 
 /**
@@ -105,7 +105,7 @@ public final class Tail {
 	 * Arguments and options for the tail command.
 	 */
 	public static class Args extends AbstractArgs<Option, Args> {
-		public static final TypedMap.Key<Integer> LINES = TypedMap.DefaultKey.keyFor("lines", Integer.class);
+		public static final TypedMap.Key<Integer> LINES = TypedMap.keyFor("lines", Integer.class);
 
 		public Args(int lines) {
 			super(Option.class);
@@ -146,28 +146,35 @@ public final class Tail {
 	 */
 	public static class Command extends AbstractCommand<Args> {
 		public Command(Args arguments) {
-			super(NAME, Type.CompleteInput, arguments);
+			super(NAME, arguments);
 		}
 
 		@Override
 		public Command withArgs(Args arguments) {
 			return new Command(arguments);
 		}
-
+		
 		@Override
-		public void executeBatch(Input input, Output output) {
-			final int linesToOutput = getArguments().getLines();
-			final LinkedList<String> lines = new LinkedList<String>();
-			while (input.hasMoreLines()){
-				lines.add(input.readLine());
-				if (lines.size() > linesToOutput) {
-					lines.removeFirst();
+		public LineProcessor execute(final LineProcessor output) {
+			return new LineProcessor() {
+				final int linesToOutput = getArguments().getLines();
+				private final LinkedList<Line> tailLines = new LinkedList<Line>();//linked list is most efficient to remove first line
+				@Override
+				public boolean processLine(Line line) {
+					tailLines.add(line);
+					if (tailLines.size() > linesToOutput) {
+						tailLines.removeFirst();
+					}
+					return true;
 				}
-			}
-			
-			for (final String line : lines) {
-				output.writeLine(line);
-			}
+				@Override
+				public void finish() {
+					for (final Line line : tailLines) {
+						output.processLine(line);
+					}
+					output.finish();
+				}
+			};
 		}
 	}
 
