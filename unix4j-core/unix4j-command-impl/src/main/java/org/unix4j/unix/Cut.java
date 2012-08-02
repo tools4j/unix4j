@@ -268,18 +268,14 @@ public final class Cut {
 				public boolean processLine(Line line) {
 					switch (getArguments().getType()) {
 					case Fields:
-						cutByFields(line, output);
-						break;
+						return cutByFields(line, output);
 					case Range:
-						cutByRange(line, output);
-						break;
+						return cutByRange(line, output);
 					case Chars:
-						cutByChars(line, output);
-						break;
+						return cutByChars(line, output);
 					default:
 						throw new IllegalArgumentException("unknown type: " + getArguments().getType());
 					}
-					return true;
 				}
 				
 				@Override
@@ -289,7 +285,7 @@ public final class Cut {
 			};
 		}
 
-		private void cutByFields(Line line, LineProcessor output) {
+		private boolean cutByFields(Line line, LineProcessor output) {
 			final Args args = getArguments();
 			final String inputDelim = args.getInputDelimiter();
 			final String outputDelim = args.getOutputDelimiter();
@@ -306,10 +302,10 @@ public final class Cut {
 					sb.append(splitLine[field - 1]);
 				}
 			}
-			output.processLine(new SimpleLine(sb, line.getLineEnding()));
+			return output.processLine(new SimpleLine(sb, line.getLineEnding()));
 		}
 
-		private void cutByRange(Line line, LineProcessor output) {
+		private boolean cutByRange(Line line, LineProcessor output) {
 			final Args args = getArguments();
 			final int start = Math.max(0, args.getRangeStart() - 1);
 			final int end = start + args.getRangeLength();
@@ -319,10 +315,10 @@ public final class Cut {
 			} else {
 				range = "";
 			}
-			output.processLine(new SimpleLine(range, line.getLineEnding()));
+			return output.processLine(new SimpleLine(range, line.getLineEnding()));
 		}
 
-		private void cutByChars(Line line, LineProcessor output) {
+		private boolean cutByChars(Line line, LineProcessor output) {
 			final Args args = getArguments();
 			final StringBuilder sb = new StringBuilder();
 			for (final int charNum : args.getChars()) {
@@ -330,7 +326,7 @@ public final class Cut {
 					sb.append(line.charAt(charNum - 1));
 				}
 			}
-			output.processLine(new SimpleLine(sb, line.getLineEnding()));
+			return output.processLine(new SimpleLine(sb, line.getLineEnding()));
 		}
 	}
 

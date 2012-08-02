@@ -1,10 +1,12 @@
 package org.unix4j.unix;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 import org.unix4j.Unix4j;
+import org.unix4j.io.Input;
+import org.unix4j.io.StringInput;
 import org.unix4j.util.MultilineString;
-
-import static org.junit.Assert.assertEquals;
 
 public class WcTest {
 	private static MultilineString input;
@@ -19,26 +21,26 @@ public class WcTest {
 
 	@Test
 	public void testWcSingleFields() {
-		assertWc(input.toString(), "5", Wc.Option.l);
-		assertWc(input.toString(), "5", Wc.Option.lines);
+		assertWc(input.toInput(), "5", Wc.Option.l);
+		assertWc(input.toInput(), "5", Wc.Option.lines);
 
-		assertWc(input.toString(), "41", Wc.Option.m);
-		assertWc(input.toString(), "41", Wc.Option.chars);
+		assertWc(input.toInput(), "46", Wc.Option.m);		//41 chars + 5 line endings
+		assertWc(input.toInput(), "46", Wc.Option.chars);	//41 chars + 5 line endings
 
-		assertWc(input.toString(), "8", Wc.Option.w);
-		assertWc(input.toString(), "8", Wc.Option.words);
+		assertWc(input.toInput(), "8", Wc.Option.w);
+		assertWc(input.toInput(), "8", Wc.Option.words);
 	}
 
 	@Test
 	public void testDefaultOutputWhenNoOptionsGiven() {
-		assertWc(input.toString(), "   5   8  41");
+		assertWc(input.toInput(), "   5   8  46");
 	}
 
 	@Test
 	public void testMultipleOutputs() {
-		assertWc(input.toString(), "   5   8  41", Wc.Option.l, Wc.Option.w, Wc.Option.m);
-		assertWc(input.toString(), "  5  8", Wc.Option.l, Wc.Option.w);
-		assertWc(input.toString(), "   5   8  41", Wc.Option.l, Wc.Option.w, Wc.Option.m, Wc.Option.l, Wc.Option.w, Wc.Option.m);
+		assertWc(input.toInput(), "   5   8  46", Wc.Option.l, Wc.Option.w, Wc.Option.m);
+		assertWc(input.toInput(), "  5  8", Wc.Option.l, Wc.Option.w);
+		assertWc(input.toInput(), "   5   8  46", Wc.Option.l, Wc.Option.w, Wc.Option.m, Wc.Option.l, Wc.Option.w, Wc.Option.m);
 	}
 
 	@Test
@@ -61,8 +63,12 @@ public class WcTest {
 		assertWc("d ", "  1  1  2");
 	}
 
-	private void assertWc(final String input, final String expectedOutput, Wc.Option... options){
-		final String actualOutput = Unix4j.fromString(input).wc(options).toStringResult();
+	private void assertWc(final String input, final String expectedOutput, Wc.Option... options) {
+		assertWc(new StringInput(input), expectedOutput, options);
+	}
+	
+	private void assertWc(final Input input, final String expectedOutput, Wc.Option... options){
+		final String actualOutput = Unix4j.from(input).wc(options).toStringResult();
 		System.out.println("Asserting: expected:'" + expectedOutput + "' = actual:'" + actualOutput +"'");
 	    assertEquals(expectedOutput, actualOutput);
 	}

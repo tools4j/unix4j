@@ -11,9 +11,9 @@ class LsFormatterShort implements LsFormatter {
 	static final LsFormatterShort INSTANCE = new LsFormatterShort();
 	
 	@Override
-	public void writeFormatted(File relativeTo, File file, LsArgs args, LineProcessor output) {
+	public boolean writeFormatted(File relativeTo, File file, LsArgs args, LineProcessor output) {
 		final String relativePath = FileUtil.getRelativePath(relativeTo, file);
-		output.processLine(new SimpleLine(relativePath));
+		return output.processLine(new SimpleLine(relativePath));
 	}
 	
 	//constructor used only for singleton INSTANCE

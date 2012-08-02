@@ -1,10 +1,5 @@
 package org.unix4j.line;
 
-import java.io.IOException;
-import java.io.Writer;
-
-import org.unix4j.util.StringUtil;
-
 /**
  * A {@link Line} implementation based on two {@link CharSequence}'s, usually
  * two strings one for the contents and one for the line ending characters.
@@ -19,18 +14,18 @@ public class SimpleLine implements Line {
 	private final CharSequence lineEnding;
 
 	/**
-	 * Constructor with contents and operating system dependent line ending
-	 * taken from the system property {@code "line.separator"}. This is usually
-	 * {@code "\n"} on UNIX systems and {@code "\r\n"} on WINDOWS.
+	 * Constructor with contents and default operating system dependent line
+	 * ending as defined by {@link Line#LINE_ENDING}.
 	 * 
 	 * @param content
 	 *            the character sequence containing the {@link #getContent()
 	 *            content} data of the line
 	 * @throws NullPointerException
 	 *             if {@code content} is null
+	 * @see Line#LINE_ENDING
 	 */
 	public SimpleLine(CharSequence content) {
-		this(content, StringUtil.LINE_ENDING);
+		this(content, LINE_ENDING);
 	}
 
 	/**
@@ -102,16 +97,6 @@ public class SimpleLine implements Line {
 	@Override
 	public int getLineEndingLength() {
 		return lineEnding.length();
-	}
-
-	@Override
-	public void write(Writer writer) {
-		try {
-			writer.write(content.toString());
-			writer.write(lineEnding.toString());
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	@Override

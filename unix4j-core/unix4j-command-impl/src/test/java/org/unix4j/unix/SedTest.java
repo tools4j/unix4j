@@ -185,7 +185,7 @@ public class SedTest {
 
 	private void assertSed(final MultilineString input, final String script, final MultilineString expectedOutput){
 		final StringWriter actualOutputStringWriter = new StringWriter();
-		Unix4j.fromInput(input.toInput()).sed(script).toWriter(actualOutputStringWriter);
+		Unix4j.from(input.toInput()).sed(script).toWriter(actualOutputStringWriter);
 		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
 		actualOutput.assertMultilineStringEquals(expectedOutput);
 	}
@@ -193,6 +193,6 @@ public class SedTest {
 	@Test(expected = NullPointerException.class)
 	public void testSed_nullScript() {
 		final StringWriter actualOutputStringWriter = new StringWriter();
-		Unix4j.fromInput(input.toInput()).sed(null).toWriter(actualOutputStringWriter);
+		Unix4j.from(input.toInput()).sed(null).toWriter(actualOutputStringWriter);
 	}
 }
