@@ -23,8 +23,10 @@ interface LsFormatter {
 	 *            arguments possibly used to lookup some formatting options
 	 * @param output
 	 *            the output object to write to
+	 * @return true if the {@code output} object is ready to take more output
+	 *         lines, and false if not
 	 */
-	void writeFormatted(File relativeTo, File file, LsArgs args, LineProcessor output);
+	boolean writeFormatted(File relativeTo, File file, LsArgs args, LineProcessor output);
 
 	interface Factory {
 		/**

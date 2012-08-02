@@ -1,15 +1,11 @@
 package org.unix4j;
 
-import org.unix4j.builder.Unix4jCommandBuilder;
-import org.unix4j.builder.Unix4jCommandBuilderImpl;
-import org.unix4j.io.FileInput;
-import org.unix4j.io.Input;
-import org.unix4j.io.StreamInput;
-import org.unix4j.util.Assert;
-
 import java.io.File;
 import java.io.InputStream;
-import java.net.URL;
+
+import org.unix4j.builder.Unix4jCommandBuilder;
+import org.unix4j.builder.Unix4jCommandBuilderImpl;
+import org.unix4j.io.Input;
 
 /**
  * Utility class with static methods serving as starting point to create a
@@ -20,81 +16,84 @@ public class Unix4j {
 	/**
 	 * Returns a builder to create a command or command chain reading the input
 	 * from the specified file.
-	 *
+	 * 
 	 * @param file
 	 *            the file redirected to the input of the first command
 	 * @return the fromFile to create the command or command chain
 	 */
 	public static Unix4jCommandBuilder fromFile(File file) {
-		return fromInput(new FileInput(file));
+		return create().from(file);
 	}
 
 	/**
 	 * Returns a builder to create a command or command chain reading the input
-	 * from the specified file on the classpath.
-	 *
-	 * @param filePathAndName
-	 *            a path to the file to to redirect to the first command
-	 *            The will need to be on the classpath.  If the file is in the
-	 *            root directory, the filename should be prefixed with a forward
-	 *            slash.  e.g.:
-	 *            <pre>/test-file.txt</pre>
-	 *            If the file is in a package, then the package should be specified
-	 *            prefixed with a forward slash, and with each dot "." replaced
-	 *            with a forward slash.  e.g.:
-	 *            <pre>/org/company/my/package/test-file.txt</pre>
+	 * from the specified resource relative to the classpath. The resource is
+	 * usually a file or URL on the classpath. The resource is read using
+	 * {@link Class#getResourceAsStream(String)}.
+	 * 
+	 * @param resource
+	 *            a path to the file to to redirect to the next command The will
+	 *            need to be on the classpath. If the file is in the root
+	 *            directory, the filename should be prefixed with a forward
+	 *            slash. e.g.:
+	 * 
+	 *            <pre>
+	 * /test-file.txt
+	 * </pre>
+	 * 
+	 *            If the file is in a package, then the package should be
+	 *            specified prefixed with a forward slash, and with each dot "."
+	 *            replaced with a forward slash. e.g.:
+	 * 
+	 *            <pre>
+	 * /org/company/my/package/test-file.txt
+	 * </pre>
 	 * @return the builder to create the command or command chain
 	 */
-	public static Unix4jCommandBuilder fromFileOnClasspath(String filePathAndName) {
-		Assert.assertArgNotNull("filePathAndName must not be null", filePathAndName);
-		URL url = filePathAndName.getClass().getResource(filePathAndName);
-		if(url==null){
-			throw new IllegalArgumentException("filePathAndName:" + filePathAndName + " references a file which does not exist.");
-		}
-		File file = new File(url.getFile());
-		return fromFile(file);
+	public static Unix4jCommandBuilder fromResource(String resource) {
+		return create().fromResource(resource);
 	}
 
 	/**
 	 * Returns a builder to create a command or command chain reading the input
 	 * from the specified input stream.
-	 *
+	 * 
 	 * @param in
 	 *            the input stream redirected to the input of the first command
 	 * @return the builder to create the command or command chain
 	 */
-	public static Unix4jCommandBuilder fromInputStream(InputStream in) {
-		return fromInput(new StreamInput(in));
+	public static Unix4jCommandBuilder from(InputStream input) {
+		return create().from(input);
 	}
 
 	/**
 	 * Returns a builder to create a command or command chain reading from the
 	 * specified input object.
-	 *
+	 * 
 	 * @param in
 	 *            the input passed to the first command
 	 * @return the builder to create the command or command chain
 	 */
-	public static Unix4jCommandBuilder fromInput(Input in) {
-		return new Unix4jCommandBuilderImpl(in);
+	public static Unix4jCommandBuilder from(Input input) {
+		return create().from(input);
 	}
 
 	/**
 	 * Returns a builder to create a command or command chain reading from the
 	 * specified input object.
-	 *
+	 * 
 	 * @param input
 	 *            the String written to the input of the first command
 	 * @return the builder to create the command or command chain
 	 */
 	public static Unix4jCommandBuilder fromString(String input) {
-		return (new Unix4jCommandBuilderImpl()).echo(input);
+		return create().fromString(input);
 	}
 
 	/**
 	 * Returns a builder to create a command or command chain providing no
 	 * input.
-	 *
+	 * 
 	 * @return the builder to create the command or command chain
 	 */
 	public static Unix4jCommandBuilder create() {

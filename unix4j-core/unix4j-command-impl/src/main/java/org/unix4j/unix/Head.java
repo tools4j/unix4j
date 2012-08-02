@@ -160,8 +160,8 @@ public final class Head {
 				@Override
 				public boolean processLine(Line line) {
 					if (counter.getCount() < linesToOutput) {
-						output.processLine(line);
-						return counter.increment() < linesToOutput;
+						final boolean more = output.processLine(line);
+						return counter.increment() < linesToOutput && more;
 					} else {
 						return false;
 					}

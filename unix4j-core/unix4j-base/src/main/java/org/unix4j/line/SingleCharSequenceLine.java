@@ -1,7 +1,5 @@
 package org.unix4j.line;
 
-import java.io.IOException;
-import java.io.Writer;
 
 /**
  * A {@link Line} implementation based on a single {@link CharSequence} such as
@@ -91,7 +89,7 @@ public class SingleCharSequenceLine implements Line {
 
 	@Override
 	public CharSequence subSequence(int start, int end) {
-		return charSequence.subSequence(offset + start, offset + end - start);
+		return charSequence.subSequence(offset + start, offset + end);
 	}
 
 	@Override
@@ -112,15 +110,6 @@ public class SingleCharSequenceLine implements Line {
 	@Override
 	public int getLineEndingLength() {
 		return lineEndingLength;
-	}
-
-	@Override
-	public void write(Writer writer) {
-		try {
-			writer.write(charSequence.toString(), offset, contentLength + lineEndingLength);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	@Override

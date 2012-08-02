@@ -384,8 +384,9 @@ public final class From {
 				@Override
 				public void finish() {
 					final Input input = getArguments().getInput();
-					for (final Line line : input) {
-						output.processLine(line);
+					boolean more = true;
+					while (more && input.hasMoreLines()) {
+						more = output.processLine(input.readLine());
 					}
 					output.finish();
 				}

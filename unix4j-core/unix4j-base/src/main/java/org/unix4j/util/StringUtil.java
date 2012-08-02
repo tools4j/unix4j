@@ -3,32 +3,13 @@ package org.unix4j.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.unix4j.line.SingleCharSequenceLine;
 import org.unix4j.line.Line;
+import org.unix4j.line.SingleCharSequenceLine;
 
 /**
  * Utility class with static methods for strings.
  */
 public class StringUtil {
-
-	/**
-	 * Operating system dependent line ending taken from the system property
-	 * {@code "line.separator"}. This is usually {@code "\n"} on UNIX systems
-	 * and {@code "\r\n"} on WINDOWS.
-	 */
-	public static final String LINE_ENDING = System.getProperty("line.separator");
-
-	/**
-	 * The line feed (LF) character {@code '\n'} used to encode line endings in
-	 * UNIX.
-	 */
-	public static final char LF = '\n';
-	/**
-	 * The carriage return (CR) character {@code '\r'} used to encode line
-	 * endings in WINDOWS together with {@link #LF}.
-	 */
-	public static final char CR = '\r';
-
 	/**
 	 * Returns the given {@code value} as a string of fixed length {@code size}
 	 * padding or truncating the value if necessary.
@@ -175,12 +156,12 @@ public class StringUtil {
 		int index = 0;
 		while (index < s.length()) {
 			final char ch = s.charAt(index);
-			if (ch == LF || ch == CR) {
+			if (ch == Line.LF || ch == Line.CR) {
 				final int lineEndingStart = index;
 				index++;
 				if (index < s.length()) {
 					final char ch2 = s.charAt(index);
-					if (ch2 != ch && (ch2 == LF || ch2 == CR)) {
+					if (ch2 != ch && (ch2 == Line.LF || ch2 == Line.CR)) {
 						index++;
 					}
 				}

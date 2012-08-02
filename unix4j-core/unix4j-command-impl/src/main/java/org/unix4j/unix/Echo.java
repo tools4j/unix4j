@@ -144,8 +144,9 @@ public final class Echo {
 				public void finish() {
 					final String messages = joinMessages();
 					final List<Line> lines = StringUtil.splitLines(messages);
-					for( final Line line: lines){
-						output.processLine(line);
+					boolean more = true;
+					for (int i = 0; more && i < lines.size(); i++) {
+						more = output.processLine(lines.get(i));
 					}
 					output.finish();
 				}

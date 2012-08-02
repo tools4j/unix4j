@@ -203,9 +203,18 @@ public final class Grep {
 				this.output = output;
 			}
 			@Override
+			public boolean processLine(Line line) {
+				final boolean matches = matches(line); 
+				if (isInvert ^ matches) {
+					return output.processLine(line);
+				}
+				return true;
+			}
+			@Override
 			public void finish() {
 				output.finish();
 			}
+			abstract protected boolean matches(Line line);
 		}
 		private static final class RegexpProcessor extends AbstractProcessor {
 			private final Pattern pattern;
@@ -215,36 +224,28 @@ public final class Grep {
 				this.pattern = Pattern.compile(regex, isIgnoreCase ? Pattern.CASE_INSENSITIVE : 0);
 			}
 			@Override
-			public boolean processLine(Line line) {
-				final boolean matches = pattern.matcher(line).matches();
-				if (isInvert ^ matches) {
-					output.processLine(line);
-				}
-				return true;
+			public boolean matches(Line line) {
+				//NOTE: we use content here because . does not match line ending characters, see {@link Pattern#DOTALL}
+				return pattern.matcher(line.getContent()).matches();
 			}
 		}
 		private static final class FixedStringsProcessor extends AbstractProcessor {
 			private final String matchString;
 			public FixedStringsProcessor(Args args, LineProcessor output) {
 				super(args, output);
-				String matchString = args.getMatchString();
 				if (isIgnoreCase) {
-					matchString = matchString.toLowerCase();
+					this.matchString = args.getMatchString().toLowerCase();
+				} else {
+					this.matchString = args.getMatchString();
 				}
-				this.matchString = matchString;
 			}
 			@Override
-			public boolean processLine(Line line) {
-				final boolean matches;
+			public boolean matches(Line line) {
 				if (isIgnoreCase) {
-					matches = line.toString().toLowerCase().contains(matchString);
+					return line.toString().toLowerCase().contains(matchString);
 				} else {
-					matches = line.toString().contains(matchString);
+					return line.toString().contains(matchString);
 				}
-				if (isInvert ^ matches) {
-					output.processLine(line);
-				}
-				return true;
 			}
 		}
 	}

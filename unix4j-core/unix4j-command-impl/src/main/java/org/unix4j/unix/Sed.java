@@ -254,8 +254,7 @@ public final class Sed {
 			return new LineProcessor() {
 				@Override
 				public boolean processLine(Line line) {
-					searchAndReplace(line, output);
-					return true;
+					return searchAndReplace(line, output);
 				}
 				
 				@Override
@@ -264,7 +263,7 @@ public final class Sed {
 				}
 			};
 		}
-		private void searchAndReplace(Line line, LineProcessor output) {
+		private boolean searchAndReplace(Line line, LineProcessor output) {
 			final Args args = getArguments();
 			final String content = line.getContent();//or should sed operate on line with ending?
 			final String changed;
@@ -273,7 +272,7 @@ public final class Sed {
 			} else {
 				changed = content.replaceFirst(args.getSearchExpression(), args.getReplaceExpression());
 			}
-			output.processLine(changed == content ? line : new SimpleLine(changed, line.getLineEnding()));
+			return output.processLine(changed == content ? line : new SimpleLine(changed, line.getLineEnding()));
 		}
 	}
 

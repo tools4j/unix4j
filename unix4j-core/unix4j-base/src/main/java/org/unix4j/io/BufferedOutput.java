@@ -5,15 +5,29 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.unix4j.line.Line;
-import org.unix4j.util.StringUtil;
 
+/**
+ * Output backed by a {@link List} of lines.
+ */
 public class BufferedOutput implements Output {
+
 	private final List<Line> buffer;
 
+	/**
+	 * Constructor using an {@link ArrayList} as backing buffer for the lines.
+	 */
 	public BufferedOutput() {
 		this(new ArrayList<Line>());
 	}
 
+	/**
+	 * Constructor using the specified list as line buffer. The buffer is NOT
+	 * cloned, that is, changes to the buffer affect this {@code BufferedOutput}
+	 * and vice versa.
+	 * 
+	 * @param buffer
+	 *            the line buffer used "as is" without cloning
+	 */
 	public BufferedOutput(List<Line> buffer) {
 		this.buffer = buffer;
 	}
@@ -29,34 +43,91 @@ public class BufferedOutput implements Output {
 		// nothing to do
 	}
 
+	/**
+	 * Returns a list-like representation of the lines contained in this buffer.
+	 * Some users might also consider {@link #toMultiLineString()} instead.
+	 * 
+	 * @return a list-like string representation of the buffered lines
+	 */
 	@Override
 	public String toString() {
 		return buffer.toString();
 	}
 
+	/**
+	 * Returns a multi-line representation of the lines in this buffer. The last
+	 * line is never terminated, all other lines are terminated with guarantee
+	 * even if the line itself has an empty line ending string.
+	 * 
+	 * @return a multi-line string of the buffered lines, without line
+	 *         termination for the last line
+	 */
 	public String toMultiLineString() {
 		final StringBuilder sb = new StringBuilder();
+		Line lastTerminatedLine = Line.EMPTY_LINE;
 		for (int i = 0; i < buffer.size(); i++) {
 			final Line line = buffer.get(i);
 			sb.append(line.getContent());
 			if (i + 1 < buffer.size()) {
-				sb.append(line.getLineEndingLength() == 0 ? StringUtil.LINE_ENDING : line.getLineEnding());
+				if (line.getLineEndingLength() > 0) {
+					sb.append(line.getLineEnding());
+					lastTerminatedLine = line;
+				} else {
+					sb.append(lastTerminatedLine.getLineEnding());
+				}
 			}
 		}
 		return sb.toString();
 	}
 
 	public void writeTo(Output output) {
-		for (final Line line : buffer) {
-			output.processLine(line);
+		boolean more = true;
+		for (int i = 0; i < buffer.size() && more; i++) {
+			more = output.processLine(buffer.get(i));
 		}
 		output.finish();
 	}
 
+	/**
+	 * Returns a {@link BufferedInput} with all lines contained in this
+	 * {@code BufferedOutput}. The lists used as buffer in this
+	 * {@link BufferedOutput} and the returned {@link BufferedInput} are NOT
+	 * shared, meaning that subsequent modifications of this
+	 * {@code BufferedOutput} are not reflected in the returned
+	 * {@code BufferedInput}.
+	 * 
+	 * @return a {@code BufferdInput} object reflecting the current snapshot of
+	 *         lines in this {@code BufferedOutput}
+	 */
 	public BufferedInput asInput() {
 		return new BufferedInput(new LinkedList<Line>(buffer));
 	}
 
+	/**
+	 * Returns a new list with the lines currently stored by this
+	 * {@code BufferdOutput} object.
+	 * 
+	 * @return a new list with the lines of this buffer
+	 */
+	public List<Line> asList() {
+		return new ArrayList<Line>(buffer);
+	}
+
+	/**
+	 * Returns the number of lines currently stored by this
+	 * {@code BufferedOutput} object.
+	 * 
+	 * @return the number of lines in the buffer
+	 */
+	public int size() {
+		return buffer.size();
+	}
+
+	/**
+	 * Clears all lines in this buffer.
+	 * 
+	 * @return this buffer for chained calls
+	 */
 	public BufferedOutput clear() {
 		buffer.clear();
 		return this;
