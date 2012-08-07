@@ -1,21 +1,37 @@
 package org.unix4j.unix;
 
-import java.io.InputStream;
-
 import org.junit.Test;
 import org.unix4j.Unix4j;
-import org.unix4j.io.StringOutput;
 
-public class GrepPerfTest {
-	@Test
-	public void testGrep_simple1() {
-		final String regex = "This";
-		runGrep( regex );
+public class GrepPerfTest extends AbstractPerfTest{
+	/**
+	 * Equivalent unix test:
+	 * time cat 10_Meg_test_file.txt | grep "test" > /dev/null
+	 */
+	@Test(timeout = 2000)
+	public void testGrep_10Meg() {
+		runCommandAndCompareToEquivalentUnixExecutionTimeInMillis(
+			Unix4j.fromFile(file10Meg).grep("test"), 40);
 	}
 
-	private void runGrep(final String expression, final Grep.Option... options){
-		final InputStream testFileAsInputStream = this.getClass().getClassLoader().getResourceAsStream("1.1M_test_file.txt");
-		final StringOutput actualStringOutput = new StringOutput();
-		Unix4j.from(testFileAsInputStream).grep(expression, options).toOutput(actualStringOutput);
+	/**
+	 * Equivalent unix test:
+	 * time cat 10_Meg_test_file.txt | grep "test" | grep "the" > /dev/null
+	 */
+	@Test(timeout = 2000)
+	public void testGrep_10Meg_pipedTwice() {
+		runCommandAndCompareToEquivalentUnixExecutionTimeInMillis(
+			Unix4j.fromFile(file10Meg).grep("test").grep("the"), 35);
+	}
+
+	/**
+	 * Equivalent unix test:
+	 * time cat 10_Meg_test_file.txt | grep -v "test" > /dev/null
+	 */
+	@Test(timeout = 2500)
+	public void testGrep_10Meg_inverseGrep() {
+		runCommandAndCompareToEquivalentUnixExecutionTimeInMillis(
+			Unix4j.fromFile(file10Meg).grep("test", Grep.Option.invert), 76);
 	}
 }
+

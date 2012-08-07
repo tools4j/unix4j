@@ -36,52 +36,64 @@ public class CommandBuilderTest {
 	public void testLs() {
 		unix4j.ls();
 	}
+
 	@Test
 	public void testLsStar() {
 		unix4j.ls("*");
 	}
+
 	@Test
 	public void testLsStarStarStarJava() {
 		unix4j.ls("src/*/*/*/*/*.java", "src/*/*/*/*/*/*.java", "src/*/*/*/*/*/*/*.java");
 //		unix4j.ls("src/*/*/*/*/*.java");
 	}
+
 	@Test
 	public void testLsStarStarStarJavaLA() {
 		unix4j.ls(Ls.Options.l.a, "src/*/*/*/*/*.java", "src/*/*/*/*/*/*.java", "src/*/*/*/*/*/*/*.java");
 //		unix4j.ls(Ls.Options.l.a, "src/*/*/*/*/*.java");
 	}
+
 	@Test
 	public void testLsFile() {
 		unix4j.ls("src");
 	}
+
 	@Test
 	public void testLsSort() {
 		unix4j.ls().sort();
 	}
+
 	@Test
 	public void testLsSortDesc() {
 		unix4j.ls().sort(Sort.Option.descending);
 	}
+
 	@Test
 	public void testEcho() {
 		unix4j.echo("Hello world");
 	}
+
 	@Test
 	public void testEcho2() {
 		unix4j.echo("Hello", "world");
 	}
+
 	@Test
 	public void testEchoGrepMatch() {
 		unix4j.echo("Hello world").grep("world");
 	}
+
 	@Test
 	public void testEchoGrepNoMatch() {
 		unix4j.echo("Hello WORLD").grep("world");
 	}
+
 	@Test
 	public void testEchoGrepMatchIgnoreCase() {
 		unix4j.echo("Hello WORLD").grep("world", Grep.Option.ignoreCase);
 	}
+
 	@Test
 	public void testLsXargsEcho() {
 		unix4j.ls().xargs().echo("XARGS OUTPUT:", Xargs.XARG);
@@ -91,6 +103,7 @@ public class CommandBuilderTest {
 //	public void testFromFile() {
 //		unix4j = Unix4j.fromFile(new File(".classpath")).sort();
 //	}
+
 	@Test
 	public void testToSystemError() {
 		output = new StreamOutput(System.err);
