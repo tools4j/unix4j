@@ -1,15 +1,10 @@
 package org.unix4j.builder;
 
-import java.io.File;
-import java.io.OutputStream;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.unix4j.command.Command;
 import org.unix4j.io.BufferedOutput;
 import org.unix4j.io.FileOutput;
 import org.unix4j.io.Input;
+import org.unix4j.io.NullOutput;
 import org.unix4j.io.Output;
 import org.unix4j.io.StdOutput;
 import org.unix4j.io.StreamOutput;
@@ -17,6 +12,12 @@ import org.unix4j.io.StringOutput;
 import org.unix4j.io.WriterOutput;
 import org.unix4j.line.Line;
 import org.unix4j.redirect.From;
+
+import java.io.File;
+import java.io.OutputStream;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DefaultCommandBuilder implements CommandBuilder {
 
@@ -77,6 +78,10 @@ public class DefaultCommandBuilder implements CommandBuilder {
 	@Override
 	public void toWriter(Writer writer) {
 		toOutput(new WriterOutput(writer));
+	}
+	@Override
+	public void toDevNull() {
+		toOutput(new NullOutput(false));
 	}
 	@Override
 	public String toStringResult() {
