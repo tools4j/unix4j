@@ -12,8 +12,10 @@
 		<module>unix4j-tools</module>
 		<module>unix4j-core</module>
 		<module>unix4j-perf</module>
+		<!--
 		<module>unix4j-examples</module>
 		<module>unix4j-dist</module>
+		-->
 	</modules>
 
 	<dependencies>

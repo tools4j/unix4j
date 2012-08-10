@@ -7,7 +7,7 @@ public enum InputMode {
 	 * command to read the input.
 	 * <p>
 	 * Commands of this type are suitable starting points for command execution.
-	 * A static method is generated in {@link Unix4j} if a command interface
+	 * A static method is generated in {@code Unix4j} if a command interface
 	 * method is annotated with this mode.
 	 */
 	NoInput,
