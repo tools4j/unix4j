@@ -62,9 +62,14 @@ public class WriterOutput implements Output {
 	}
 
 	/**
-	 * Returns true if the last line ending should be written, a
+	 * Returns true if the last line ending should be written.
+	 * <p>
+	 * This default implementation always returns true, but certain subclasses
+	 * such as {@link StringOutput} sometimes return false when the last line
+	 * should <i>not</i> be terminated with a line ending.
 	 * 
-	 * @return
+	 * @return true if the last line ending should be written, and false
+	 *         otherwise
 	 */
 	protected boolean writeLastLineEnding() {
 		return true;

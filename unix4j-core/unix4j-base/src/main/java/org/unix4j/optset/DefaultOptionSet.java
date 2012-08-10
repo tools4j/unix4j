@@ -129,7 +129,7 @@ public class DefaultOptionSet<E extends Enum<E>> implements OptionSet<E>, Iterab
 	}
 	
 	/**
-	 * Returns an iterator over all set options in this {@code OptionSet/
+	 * Returns an iterator over all set options in this {@code OptionSet}.
 	 * 
 	 * @return an iterator over all set options
 	 */
