@@ -15,9 +15,11 @@ import org.unix4j.io.Output;
  * </p>
  * <b>SYNOPSIS</b>
  * <p>
+ * 
  * <pre>
  * ls [-ahlRrt] [file...]
  * </pre>
+ * 
  * </p>
  * <b>DESCRIPTION</b>
  * <p>
@@ -32,12 +34,14 @@ import org.unix4j.io.Output;
  * for each operand that names a file of type symbolic link to a directory,
  * {@code ls} writes the names of files contained within the directory as well
  * as any requested, associated information.
- * </p><p>
+ * </p>
+ * <p>
  * If no operands are specified, {@code ls} writes the contents of the current
  * directory. If more than one operand is specified, {@code ls} writes
  * non-directory operands first; it sorts directory and non-directory operands
  * separately according to the name of the file or directory.
- * </p><p>
+ * </p>
+ * <p>
  * TODO The {@code ls} utility detects infinite loops; that is, entering a
  * previously visited directory that is an ancestor of the last file
  * encountered. When it detects an infinite loop, {@code ls} aborts the
@@ -52,28 +56,95 @@ import org.unix4j.io.Output;
  * <b>OPTIONS</b>
  * <p>
  * The following options are supported:
- * </p><p>
+ * </p>
+ * <p>
  * <table>
- * <tr><td><pre>-a  --allFiles        </pre></td><td>Lists all files in the given directory, including those whose names start with "." (which are hidden files in Unix). By default, these files are excluded from the list.</td></tr>
- * <tr><td><pre>-h  --humanReadable   </pre></td><td>Print sizes in human readable format. (e.g., 1K, 234M, 2G, etc.).</td></tr>
- * <tr><td><pre>-l  --longFormat      </pre></td><td>Long format, displaying Unix file types, permissions, number of hard links, owner, group, size, date, and filename.</td></tr>
- * <tr><td><pre>-r  --reverseOrder    </pre></td><td>Reverses the order of the sort to get reverse collating sequence or oldest first.</td></tr>
- * <tr><td><pre>-R  --recurseSubdirs  </pre></td><td>Recursively lists subdirectories encountered.</td></tr>
- * <tr><td><pre>-t  --timeSorted      </pre></td><td>Sort the list of files by last modification time.</td></tr>
+ * <tr>
+ * <td>
+ * 
+ * <pre>
+ * -a  --allFiles
+ * </pre>
+ * 
+ * </td>
+ * <td>Lists all files in the given directory, including those whose names start
+ * with "." (which are hidden files in Unix). By default, these files are
+ * excluded from the list.</td>
+ * </tr>
+ * <tr>
+ * <td>
+ * 
+ * <pre>
+ * -h  --humanReadable
+ * </pre>
+ * 
+ * </td>
+ * <td>Print sizes in human readable format. (e.g., 1K, 234M, 2G, etc.).</td>
+ * </tr>
+ * <tr>
+ * <td>
+ * 
+ * <pre>
+ * -l  --longFormat
+ * </pre>
+ * 
+ * </td>
+ * <td>Long format, displaying Unix file types, permissions, number of hard
+ * links, owner, group, size, date, and filename.</td>
+ * </tr>
+ * <tr>
+ * <td>
+ * 
+ * <pre>
+ * -r  --reverseOrder
+ * </pre>
+ * 
+ * </td>
+ * <td>Reverses the order of the sort to get reverse collating sequence or
+ * oldest first.</td>
+ * </tr>
+ * <tr>
+ * <td>
+ * 
+ * <pre>
+ * -R  --recurseSubdirs
+ * </pre>
+ * 
+ * </td>
+ * <td>Recursively lists subdirectories encountered.</td>
+ * </tr>
+ * <tr>
+ * <td>
+ * 
+ * <pre>
+ * -t  --timeSorted
+ * </pre>
+ * 
+ * </td>
+ * <td>Sort the list of files by last modification time.</td>
+ * </tr>
  * </table>
  * </p>
- * <b>OPERANDS</b>
- * </p><p>
+ * <b>OPERANDS</b> </p>
+ * <p>
  * The following operand is supported:
  * <table>
- * <tr><td><pre>   file   </pre></td><td>A pathname of a file to be written. Wildcards * and ? are
- * supported</td></tr>
+ * <tr>
+ * <td>
+ * 
+ * <pre>
+ * file
+ * </pre>
+ * 
+ * </td>
+ * <td>A pathname of a file to be written. Wildcards * and ? are supported</td>
+ * </tr>
  * </table>
  * 
  * @param <R>
- *            the return type for all command signature methods, usually a
- *            new command instance or a command fromFile providing methods
- *            for chained invocation of following commands
+ *            the return type for all command signature methods, usually a new
+ *            command instance or a command fromFile providing methods for
+ *            chained invocation of following commands
  */
 @Name(LsInterface.NAME)
 @Options(LsOption.class)
@@ -91,11 +162,11 @@ public interface LsInterface<R> {
 	 * @return the generic type {@code <R>} defined by the implementing class,
 	 *         even if the command itself returns no value and writes its result
 	 *         to an {@link Output} object. This serves implementing classes
-	 *         like the command {@link LsFactory} to return a new
-	 *         {@link Command} instance for the argument values passed to this
-	 *         method. {@link CommandBuilder} extensions also implementing this
-	 *         this command interface usually return an instance to itself
-	 *         facilitating chained invocation of joined commands.
+	 *         like the command {@code FACTORY} to return a new {@link Command}
+	 *         instance for the argument values passed to this method.
+	 *         {@link CommandBuilder} extensions also implementing this this
+	 *         command interface usually return an instance to itself
+	 *         facilitating method chaining to create joined commands.
 	 */
 	R ls();
 
@@ -109,11 +180,11 @@ public interface LsInterface<R> {
 	 * @return the generic type {@code <R>} defined by the implementing class,
 	 *         even if the command itself returns no value and writes its result
 	 *         to an {@link Output} object. This serves implementing classes
-	 *         like the command {@link LsFactory} to return a new
-	 *         {@link Command} instance for the argument values passed to this
-	 *         method. {@link CommandBuilder} extensions also implementing this
-	 *         this command interface usually return an instance to itself
-	 *         facilitating chained invocation of joined commands.
+	 *         like the command {@code FACTORY} to return a new {@link Command}
+	 *         instance for the argument values passed to this method.
+	 *         {@link CommandBuilder} extensions also implementing this this
+	 *         command interface usually return an instance to itself
+	 *         facilitating method chaining to create joined commands.
 	 */
 	R ls(File... files);
 
@@ -127,11 +198,11 @@ public interface LsInterface<R> {
 	 * @return the generic type {@code <R>} defined by the implementing class,
 	 *         even if the command itself returns no value and writes its result
 	 *         to an {@link Output} object. This serves implementing classes
-	 *         like the command {@link LsFactory} to return a new
-	 *         {@link Command} instance for the argument values passed to this
-	 *         method. {@link CommandBuilder} extensions also implementing this
-	 *         this command interface usually return an instance to itself
-	 *         facilitating chained invocation of joined commands.
+	 *         like the command {@code FACTORY} to return a new {@link Command}
+	 *         instance for the argument values passed to this method.
+	 *         {@link CommandBuilder} extensions also implementing this this
+	 *         command interface usually return an instance to itself
+	 *         facilitating method chaining to create joined commands.
 	 */
 	R ls(String... files);
 
@@ -145,11 +216,11 @@ public interface LsInterface<R> {
 	 * @return the generic type {@code <R>} defined by the implementing class,
 	 *         even if the command itself returns no value and writes its result
 	 *         to an {@link Output} object. This serves implementing classes
-	 *         like the command {@link LsFactory} to return a new
-	 *         {@link Command} instance for the argument values passed to this
-	 *         method. {@link CommandBuilder} extensions also implementing this
-	 *         this command interface usually return an instance to itself
-	 *         facilitating chained invocation of joined commands.
+	 *         like the command {@code FACTORY} to return a new {@link Command}
+	 *         instance for the argument values passed to this method.
+	 *         {@link CommandBuilder} extensions also implementing this this
+	 *         command interface usually return an instance to itself
+	 *         facilitating method chaining to create joined commands.
 	 */
 	R ls(LsOptions options);
 
@@ -166,11 +237,11 @@ public interface LsInterface<R> {
 	 * @return the generic type {@code <R>} defined by the implementing class,
 	 *         even if the command itself returns no value and writes its result
 	 *         to an {@link Output} object. This serves implementing classes
-	 *         like the command {@link LsFactory} to return a new
-	 *         {@link Command} instance for the argument values passed to this
-	 *         method. {@link CommandBuilder} extensions also implementing this
-	 *         this command interface usually return an instance to itself
-	 *         facilitating chained invocation of joined commands.
+	 *         like the command {@code FACTORY} to return a new {@link Command}
+	 *         instance for the argument values passed to this method.
+	 *         {@link CommandBuilder} extensions also implementing this this
+	 *         command interface usually return an instance to itself
+	 *         facilitating method chaining to create joined commands.
 	 */
 	R ls(LsOptions options, File... files);
 
@@ -187,11 +258,11 @@ public interface LsInterface<R> {
 	 * @return the generic type {@code <R>} defined by the implementing class,
 	 *         even if the command itself returns no value and writes its result
 	 *         to an {@link Output} object. This serves implementing classes
-	 *         like the command {@link LsFactory} to return a new
-	 *         {@link Command} instance for the argument values passed to this
-	 *         method. {@link CommandBuilder} extensions also implementing this
-	 *         this command interface usually return an instance to itself
-	 *         facilitating chained invocation of joined commands.
+	 *         like the command {@code FACTORY} to return a new {@link Command}
+	 *         instance for the argument values passed to this method.
+	 *         {@link CommandBuilder} extensions also implementing this this
+	 *         command interface usually return an instance to itself
+	 *         facilitating method chaining to create joined commands.
 	 */
 	R ls(LsOptions options, String... files);
 }

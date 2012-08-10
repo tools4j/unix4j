@@ -58,7 +58,7 @@ public class Unix4j {
 	 * Returns a builder to create a command or command chain reading the input
 	 * from the specified input stream.
 	 * 
-	 * @param in
+	 * @param input
 	 *            the input stream redirected to the input of the first command
 	 * @return the builder to create the command or command chain
 	 */
@@ -70,7 +70,7 @@ public class Unix4j {
 	 * Returns a builder to create a command or command chain reading from the
 	 * specified input object.
 	 * 
-	 * @param in
+	 * @param input
 	 *            the input passed to the first command
 	 * @return the builder to create the command or command chain
 	 */
@@ -80,7 +80,7 @@ public class Unix4j {
 
 	/**
 	 * Returns a builder to create a command or command chain reading from the
-	 * specified input object.
+	 * specified input string.
 	 * 
 	 * @param input
 	 *            the String written to the input of the first command
