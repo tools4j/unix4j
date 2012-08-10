@@ -142,9 +142,9 @@ public class StringUtil {
 	 * <p>
 	 * Note that all line ending characters are accepted to split lines, no
 	 * matter what operating system this code is hosted on. More precisely, the
-	 * {@link #LF} and {@link #CR} characters are recognized as line ending
-	 * characters, either as single character or as a pair {@code CR+LF} or
-	 * {@code LF+CR}.
+	 * {@link Line#LF LF} and {@link Line#CR CR} characters are recognized as
+	 * line ending characters, either as single character or as a pair
+	 * {@code CR+LF} or {@code LF+CR}.
 	 * 
 	 * @param s
 	 *            the string to split

@@ -52,10 +52,10 @@ public interface Command<A extends Arguments<A>> {
 	 * input.
 	 * <p>
 	 * Note that some commands may use a slightly different interpretation of
-	 * "joining a command". The {@link Xargs xargs} command for instance uses
-	 * its joined command as target command; the values collected by xargs on
-	 * its input stream are passed to the target command as arguments instead of
-	 * as input.
+	 * "joining a command". The {@code xargs} command for instance uses its
+	 * joined command as target command; the values collected by {@code xargs}
+	 * on its input stream are passed to the target command as arguments instead
+	 * of as input.
 	 * 
 	 * @param next
 	 *            the next command to join to this command
@@ -71,7 +71,7 @@ public interface Command<A extends Arguments<A>> {
 	 * {@code LineProcessor} object. The command execution is terminated by
 	 * calling {@link LineProcessor#finish()}.
 	 * <p>
-	 * The command writes its output to the specified {@link output} object.
+	 * The command writes its output to the specified {@code output} object.
 	 * Depending on the command implementation, the output is written when lines
 	 * are passed to the {@code LineProcessor} returned by this method, or when
 	 * the execution terminates with the {@code finish()} call.

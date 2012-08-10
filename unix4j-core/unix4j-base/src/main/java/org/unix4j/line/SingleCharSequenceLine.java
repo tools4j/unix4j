@@ -36,7 +36,7 @@ public class SingleCharSequenceLine implements Line {
 	}
 
 	/**
-	 * Constructor with character sequence with the data and {@link offset}
+	 * Constructor with character sequence with the data and {@code offset}
 	 * pointing to the first content character of the line. The
 	 * {@code contentLength} and {@code lineEndingLength} parameters define the
 	 * respective parts in {@code buffer}.
