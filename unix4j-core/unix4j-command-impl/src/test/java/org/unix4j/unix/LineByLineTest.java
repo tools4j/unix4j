@@ -1,6 +1,5 @@
 package org.unix4j.unix;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.io.IoTestStub;
@@ -10,7 +9,6 @@ import org.unix4j.io.IoTestStub;
  * use a mock framework.  Couldn't get it working quickly so wrote a manual
  * stubbing tool.
  */
-@Ignore
 public class LineByLineTest {
 
 	@Test
@@ -38,7 +36,6 @@ public class LineByLineTest {
 				.finish();
 	}
 
-	@Ignore
 	@Test
 	public void testLineByLine_headOnlyFirstTwoLines() throws Exception {
 
@@ -58,8 +55,6 @@ public class LineByLineTest {
 				.finish();
 	}
 
-
-	@Ignore
 	@Test
 	public void testLineByLine_headPipedIntoHead() throws Exception {
 
@@ -85,7 +80,6 @@ public class LineByLineTest {
 				.finish();
 	}
 
-	@Ignore
 	@Test
 	public void testLineByLine_headPipedIntoGrep() throws Exception {
 
@@ -111,7 +105,6 @@ public class LineByLineTest {
 				.finish();
 	}
 
-	@Ignore
 	@Test
 	public void testLineByLine_grepPipedIntoHead() throws Exception {
 

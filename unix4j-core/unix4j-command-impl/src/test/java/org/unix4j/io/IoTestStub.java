@@ -4,7 +4,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -56,7 +55,7 @@ public class IoTestStub extends AbstractInput implements Output {
 	}
 
 	public static class RecordedActions{
-		private static final List<Action> actions = new ArrayList<Action>();
+		private static final List<Action> actions = new LinkedList<Action>();
 		private void recordAction(final IoTestStub instance, final ActionType actionType, final Line line){
 			actions.add(new Action(instance, actionType, line));
 		}
@@ -104,7 +103,7 @@ public class IoTestStub extends AbstractInput implements Output {
 	public Line readLine() {
 		final Line line = lines.remove(0);
 		if(recording) recordedActions.recordAction(this, ActionType.READ, line);
-		return new SimpleLine(line);
+		return line;
 	}
 
 	@Override
