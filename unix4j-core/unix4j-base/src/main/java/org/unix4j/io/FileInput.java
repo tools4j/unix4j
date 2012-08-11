@@ -8,7 +8,7 @@ import java.io.FileReader;
 import java.io.InputStreamReader;
 
 /**
- * Input device based on a {@link File}.
+ * Input device reading from a {@link File}.
  */
 public class FileInput extends ReaderInput {
 

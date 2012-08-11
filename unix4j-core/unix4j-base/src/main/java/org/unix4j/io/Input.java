@@ -5,7 +5,7 @@ import java.util.Iterator;
 import org.unix4j.line.Line;
 
 /**
- * Represents a line based input device.
+ * Represents a line-by-line input device.
  */
 public interface Input extends Iterable<Line> {
 	/**
