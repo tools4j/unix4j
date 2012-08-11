@@ -3,10 +3,13 @@ package org.unix4j.io;
 import java.io.IOException;
 import java.io.Reader;
 
-import org.unix4j.line.SingleCharSequenceLine;
 import org.unix4j.line.Line;
+import org.unix4j.line.SingleCharSequenceLine;
 
-
+/**
+ * Input device based on a {@link Reader}. This class is the base for most input
+ * devices and handles the parsing and recognition of lines.
+ */
 public class ReaderInput extends AbstractInput {
 	
 	private final Reader reader;
@@ -14,6 +17,11 @@ public class ReaderInput extends AbstractInput {
 	private int length;
 	private int offset;
 	
+	/**
+	 * Constructor with reader.
+	 * 
+	 * @param reader the reader forming the basis of this input device.
+	 */
 	public ReaderInput(Reader reader) {
 		this.reader = reader;
 		readBuffer();

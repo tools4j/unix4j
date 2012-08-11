@@ -3,7 +3,8 @@ package org.unix4j.io;
 import java.io.InputStream;
 
 /**
- * Input from a resource read using {@link Class#getResourceAsStream(String)}.
+ * Input device reading a resource using
+ * {@link Class#getResourceAsStream(String)}.
  */
 public class ResourceInput extends StreamInput {
 	/**

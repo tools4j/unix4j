@@ -4,7 +4,9 @@ import org.unix4j.line.Line;
 import org.unix4j.line.LineProcessor;
 
 /**
- * Line-oriented output destination for a command.
+ * Represents a line-by-line output device. This interface does not add any
+ * functionality but refines the documentation for the generally defined methods
+ * from {@link LineProcessor}.
  */
 public interface Output extends LineProcessor {
 	/**

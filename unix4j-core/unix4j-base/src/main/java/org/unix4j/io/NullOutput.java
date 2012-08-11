@@ -14,21 +14,36 @@ import org.unix4j.line.Line;
 public class NullOutput implements Output {
 
 	/**
-	 * An instance which returns true when {@link #processLine(Line)} is called
-	 * making sure that all lines are passed to the output object. With this, no
-	 * desired side effects are suppressed.
+	 * Default instance returning true when {@link #processLine(Line)} is
+	 * called. This ensures that a command does not abort early and it is
+	 * guaranteed that no (possibly important) side effects are missed.
 	 */
 	public static final NullOutput DEFAULT = new NullOutput(false);
 	/**
-	 * An instance which returns false when {@link #processLine(Line)} is called
-	 * which usually causes the program execution to abort and terminate
-	 * immediately. Note that this is more efficient but possibly suppresses
-	 * desired side effects.
+	 * Aborting instance returning false when {@link #processLine(Line)} is
+	 * called. Note that most commands will abort their execution early with
+	 * this output device and some (possibly important) side effects could be
+	 * missed.
 	 */
 	public static final NullOutput ABORT = new NullOutput(true);
 
 	private final boolean processLines;
 
+	/**
+	 * NOTE: application code should normally use the {@link #DEFAULT} or
+	 * {@link #ABORT} constants instead of this constructor.
+	 * <p>
+	 * The {@code abort} flag passed to this constructor indicates whether the
+	 * process can be aborted early or not; {@code abort=true} means that the
+	 * method {@link #processLine(Line)} returns false indicating that this
+	 * device does not expect any more input lines. Most commands will abort
+	 * their execution early in this case, which means that (possibly important)
+	 * side effects are missed.
+	 * 
+	 * @param abort
+	 *            a flag indicating whether command execution can be aborted
+	 *            early
+	 */
 	public NullOutput(boolean abort) {
 		this.processLines = !abort;
 	}
@@ -43,4 +58,8 @@ public class NullOutput implements Output {
 		// ignore
 	}
 
+	@Override
+	public String toString() {
+		return processLines ? "/dev/null" : "/dev/null(abort)";
+	}
 }

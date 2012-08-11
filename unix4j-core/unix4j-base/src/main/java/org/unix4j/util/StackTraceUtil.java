@@ -1,14 +1,14 @@
 package org.unix4j.util;
 
 /**
- * The <code>StackTraceUtil</code> class determines the
- * {@link StackTraceElement} of any of the calling methods.
+ * Utility class to evaluate the {@link StackTraceElement} corresponding to a
+ * calling method in the caller stack.
  */
 public class StackTraceUtil {
 
 	/**
-	 * Returns the stack trace element belonging to the direct caller method,
-	 * that is the method which invokes this method.
+	 * Returns the stack trace element corresponding to the direct caller
+	 * method, that is, the method which calls this method.
 	 */
 	public static StackTraceElement getCurrentMethodStackTraceElement() {
 		return internalGetCurrentMethodStackTraceElement(1);
@@ -16,12 +16,16 @@ public class StackTraceUtil {
 
 	/**
 	 * Returns the stack trace element belonging to the
-	 * <code>callerOffset<code><sup>th</sup> caller of the calling 
-	 * method.
+	 * <code>callerOffset<sup>th</sup></code> caller of the calling method.
+	 * <p>
+	 * For example, {@code callerOffset=0} returns the stack trace element of
+	 * the direct caller of this method; {@code callerOffset=1} corresponds to
+	 * the method calling the direct caller method, etc.
 	 * 
 	 * @param callerOffset
-	 *            The index of the caller of the method which invokes this
-	 *            method
+	 *            the index of the stack trace element in the caller stack,
+	 *            where {@code callerOffset=0} corresponds to the direct caller
+	 *            of this method
 	 */
 	public static StackTraceElement getCurrentMethodStackTraceElement(int callerOffset) {
 		return internalGetCurrentMethodStackTraceElement(callerOffset + 1);

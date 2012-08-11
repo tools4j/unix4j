@@ -3,7 +3,7 @@ package org.unix4j.io;
 import java.io.StringWriter;
 
 /**
- * Writes the output lines to a string.
+ * Output device writing the output lines to a string.
  */
 public class StringOutput extends WriterOutput {
 
