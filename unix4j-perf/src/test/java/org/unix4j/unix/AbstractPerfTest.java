@@ -24,11 +24,13 @@ public class AbstractPerfTest {
 	private final static String DEFAULT_PROPERTIES_FILE = "/unix4j-perf-expectedResults-default.properties"; 
 	private final static String FILE_1_MEG_PATH = "/1_Meg_test_file.txt";
 	private final static String FILE_10_MEG_PATH = "/10_Meg_test_file.txt";
+	private final static String FILE_100_MEG_PATH = "/100_Meg_test_file.txt";
 
 	private long timeStarted;
 
 	protected File file1Meg;
 	protected File file10Meg;
+	protected File file100Meg;
 
 	public void startTimer() {
 		System.out.println("Starting timer...");
@@ -62,7 +64,7 @@ public class AbstractPerfTest {
 		System.out.println("Execution time.................." + executionTime + " millis");
 		System.out.println("Equivalent Linux execution time." + equivalentUnixTimeMillis + " millis");
 		System.out.println("Unix4j to Linux Difference......" + (equivalentUnixTimeMillis - executionTime) + "millis");
-		System.out.println("Unix4j to Linux %..............." + ((executionTime / equivalentUnixTimeMillis) * 100) + "%");
+		System.out.println("Unix4j to Linux %..............." + ((1.0f * executionTime / equivalentUnixTimeMillis) * 100) + "%");
 		System.out.println();
 	}
 
@@ -84,6 +86,9 @@ public class AbstractPerfTest {
 
 		this.file10Meg = new File(file1Meg.getParent(), FILE_10_MEG_PATH);
 		createLargeFileIfItDoesntExist(file10Meg, 10);
+
+		this.file100Meg = new File(file1Meg.getParent(), FILE_100_MEG_PATH);
+		createLargeFileIfItDoesntExist(file100Meg, 100);
 	}
 
 	private void createLargeFileIfItDoesntExist(final File destinationFile, int multiplesOfSmallFile) throws IOException {
