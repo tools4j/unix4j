@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.net.URL;
 
 /**
- * Input read from an {@link URL}.
+ * Input device based on a {@link URL}.
  */
 public class URLInput extends StreamInput {
 	

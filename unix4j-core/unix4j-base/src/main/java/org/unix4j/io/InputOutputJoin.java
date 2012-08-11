@@ -19,22 +19,45 @@ public class InputOutputJoin {
 	private final BufferedInput input = new BufferedInput(buffer);
 	private final BufferedOutput output = new BufferedOutput(buffer);
 
+	/**
+	 * Default constructor.
+	 */
 	public InputOutputJoin() {
 		super();
 	}
 
+	/**
+	 * Returns the underlying line buffer.
+	 * 
+	 * @return the list storing the lines
+	 */
 	public List<Line> getBuffer() {
 		return buffer;
 	}
 
+	/**
+	 * Returns the input device based on the {@link #getBuffer() buffer}.
+	 * 
+	 * @return the buffered input device
+	 */
 	public BufferedInput getInput() {
 		return input;
 	}
 
+	/**
+	 * Returns the output device based on the {@link #getBuffer() buffer}.
+	 * 
+	 * @return the buffered output device
+	 */
 	public BufferedOutput getOutput() {
 		return output;
 	}
-	
+
+	/**
+	 * Returns true if the {@link #getBuffer() buffer} is empty.
+	 * 
+	 * @return true if the buffer is empty
+	 */
 	public boolean isEmpty() {
 		return buffer.isEmpty();
 	}

@@ -5,6 +5,9 @@ import java.io.Writer;
 
 import org.unix4j.line.Line;
 
+/**
+ * Output device based on a {@link Writer}.
+ */
 public class WriterOutput implements Output {
 
 	private final Writer writer;

@@ -5,9 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.unix4j.line.Line;
+import org.unix4j.util.LineUtil;
 
 /**
- * Output backed by a {@link List} of lines.
+ * Output device storing all written lines in memory in a {@link List}.
  */
 public class BufferedOutput implements Output {
 
@@ -61,25 +62,20 @@ public class BufferedOutput implements Output {
 	 * 
 	 * @return a multi-line string of the buffered lines, without line
 	 *         termination for the last line
+	 * @see LineUtil#toMultiLineString(List)
 	 */
 	public String toMultiLineString() {
-		final StringBuilder sb = new StringBuilder();
-		Line lastTerminatedLine = Line.EMPTY_LINE;
-		for (int i = 0; i < buffer.size(); i++) {
-			final Line line = buffer.get(i);
-			sb.append(line.getContent());
-			if (i + 1 < buffer.size()) {
-				if (line.getLineEndingLength() > 0) {
-					sb.append(line.getLineEnding());
-					lastTerminatedLine = line;
-				} else {
-					sb.append(lastTerminatedLine.getLineEnding());
-				}
-			}
-		}
-		return sb.toString();
+		return LineUtil.toMultiLineString(buffer);
 	}
 
+	/**
+	 * Writes the buffered output lines to the specified {@code output} device.
+	 * This buffered output devices does not change, that is, all lines will
+	 * still be contained in the buffer after calling this method.
+	 * 
+	 * @param output
+	 *            the output device to write to
+	 */
 	public void writeTo(Output output) {
 		boolean more = true;
 		for (int i = 0; i < buffer.size() && more; i++) {

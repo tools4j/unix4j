@@ -6,8 +6,8 @@ import org.unix4j.line.Line;
 import org.unix4j.util.StringUtil;
 
 /**
- * Input from a string. If the string contains line-ending code (UNIX or DOS),
- * it is split into multiple lines.
+ * Input device reading the input from a string. If the string contains
+ * line-ending code (UNIX or DOS), it is split into multiple lines.
  */
 public class StringInput extends BufferedInput {
 
@@ -21,6 +21,7 @@ public class StringInput extends BufferedInput {
 	public StringInput(String... lines) {
 		super(toList(lines));
 	}
+
 	/**
 	 * Constructor with lines. Each line is tested for new line characters and
 	 * possibly split into multiple lines.
@@ -39,6 +40,7 @@ public class StringInput extends BufferedInput {
 		}
 		return list;
 	}
+
 	private static LinkedList<Line> toList(Iterable<String> lines) {
 		final LinkedList<Line> list = new LinkedList<Line>();
 		for (String line : lines) {

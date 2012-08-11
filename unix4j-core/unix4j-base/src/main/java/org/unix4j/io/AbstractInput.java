@@ -6,11 +6,11 @@ import java.util.NoSuchElementException;
 import org.unix4j.line.Line;
 
 /**
- * Base implementation for {@link Input} providing the {@link #iterator()} 
- * method.
+ * Base implementation for {@link Input} essentially providing the
+ * {@link #iterator()} method.
  */
 abstract public class AbstractInput implements Input {
-	
+
 	@Override
 	public Iterator<Line> iterator() {
 		return new Iterator<Line>() {
@@ -18,6 +18,7 @@ abstract public class AbstractInput implements Input {
 			public boolean hasNext() {
 				return hasMoreLines();
 			}
+
 			@Override
 			public Line next() {
 				final Line line = readLine();
@@ -26,10 +27,12 @@ abstract public class AbstractInput implements Input {
 				}
 				throw new NoSuchElementException();
 			}
+
 			@Override
 			public void remove() {
 				throw new UnsupportedOperationException("remove is not supported");
 			}
 		};
-	}	
+	}
+
 }
