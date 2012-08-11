@@ -81,7 +81,7 @@ public class DefaultCommandBuilder implements CommandBuilder {
 	}
 	@Override
 	public void toDevNull() {
-		toOutput(new NullOutput(false));
+		toOutput(NullOutput.DEFAULT);
 	}
 	@Override
 	public String toStringResult() {
