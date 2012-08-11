@@ -3,8 +3,8 @@ package org.unix4j.io;
 import org.unix4j.line.Line;
 
 /**
- * Output object writing to {@code /dev/null}, which means that all lines
- * written to this output are ignored.
+ * Output device writing to {@code /dev/null}, which means that all lines
+ * written to this device are ignored.
  * <p>
  * Two instances are available, the {@link #ABORT} instance which returns false
  * when {@link #processLine(Line)} which usually causes the program execution to

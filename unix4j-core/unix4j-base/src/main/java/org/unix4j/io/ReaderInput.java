@@ -7,20 +7,21 @@ import org.unix4j.line.Line;
 import org.unix4j.line.SingleCharSequenceLine;
 
 /**
- * Input device based on a {@link Reader}. This class is the base for most input
- * devices and handles the parsing and recognition of lines.
+ * Input device based on a {@link Reader} forming the base for most input
+ * devices; handles parsing and recognition of {@link Line lines}.
  */
 public class ReaderInput extends AbstractInput {
-	
+
 	private final Reader reader;
 	private final char[] buffer = new char[1024];
 	private int length;
 	private int offset;
-	
+
 	/**
 	 * Constructor with reader.
 	 * 
-	 * @param reader the reader forming the basis of this input device.
+	 * @param reader
+	 *            the reader forming the basis of this input device.
 	 */
 	public ReaderInput(Reader reader) {
 		this.reader = reader;
@@ -40,10 +41,10 @@ public class ReaderInput extends AbstractInput {
 		if (length > offset) {
 			return makeLine(null);
 		}
-		//no more lines
+		// no more lines
 		return null;
 	}
-	
+
 	private Line makeLine(StringBuilder lineBuilder) {
 		int len = length;
 		int index = offset;
@@ -54,7 +55,7 @@ public class ReaderInput extends AbstractInput {
 					int contentEnd = index;
 					index++;
 					if (index < len) {
-						final char ch1 = buffer[index]; 
+						final char ch1 = buffer[index];
 						if ((ch1 == '\n' || ch1 == '\r') && ch0 != ch1) {
 							index++;
 						}
@@ -86,8 +87,9 @@ public class ReaderInput extends AbstractInput {
 			index = offset;
 			len = length;
 		} while (index < len);
-		
-		//eof, no newline, return rest as a line if there is something to return 
+
+		// eof, no newline, return rest as a line if there is something to
+		// return
 		return lineBuilder.length() > 0 ? new SingleCharSequenceLine(lineBuilder, 0) : null;
 	}
 
@@ -115,5 +117,5 @@ public class ReaderInput extends AbstractInput {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 }

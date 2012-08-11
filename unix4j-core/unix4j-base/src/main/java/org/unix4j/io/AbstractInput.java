@@ -7,7 +7,7 @@ import org.unix4j.line.Line;
 
 /**
  * Base implementation for {@link Input} essentially providing the
- * {@link #iterator()} method.
+ * {@link #iterator() iterator()} method.
  */
 abstract public class AbstractInput implements Input {
 
