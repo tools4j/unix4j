@@ -23,7 +23,7 @@ public interface Input extends Iterable<Line> {
 	Line readLine();
 
 	/**
-	 * Returns an immutable iterator over all liens returned by this input
+	 * Returns an immutable iterator over all lines returned by this input
 	 * object.
 	 * 
 	 * @return an immutable line iterator
