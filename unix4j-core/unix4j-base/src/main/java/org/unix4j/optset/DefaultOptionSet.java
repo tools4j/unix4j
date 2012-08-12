@@ -4,9 +4,11 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Iterator;
 
-public class DefaultOptionSet<E extends Enum<E>> implements OptionSet<E>, Iterable<E>, Cloneable {
+public class DefaultOptionSet<E extends Enum<E> & Option<E>> implements OptionSet<E>, Iterable<E>, Cloneable {
+
 	private final Class<E> optionType;
 	private EnumSet<E> options;
+	private boolean useAcronym;
 
 	public DefaultOptionSet(E option) {
 		this.optionType = option.getDeclaringClass();
@@ -100,9 +102,10 @@ public class DefaultOptionSet<E extends Enum<E>> implements OptionSet<E>, Iterab
 	public boolean isSet(E option) {
 		return options.contains(option);
 	}
-	
+
 	/**
 	 * Returns the number of set options in this {@code OptionSet}
+	 * 
 	 * @return the number of set options
 	 */
 	public int size() {
@@ -111,6 +114,7 @@ public class DefaultOptionSet<E extends Enum<E>> implements OptionSet<E>, Iterab
 
 	/**
 	 * Returns true if no option is set.
+	 * 
 	 * @return true if no option is set.
 	 */
 	public boolean isEmpty() {
@@ -127,7 +131,7 @@ public class DefaultOptionSet<E extends Enum<E>> implements OptionSet<E>, Iterab
 	public EnumSet<E> asSet() {
 		return options;
 	}
-	
+
 	/**
 	 * Returns an iterator over all set options in this {@code OptionSet}.
 	 * 
@@ -172,6 +176,24 @@ public class DefaultOptionSet<E extends Enum<E>> implements OptionSet<E>, Iterab
 	@Override
 	public String toString() {
 		return options.toString();
+	}
+
+	@Override
+	public boolean useAcronym() {
+		return useAcronym;
+	}
+
+	/**
+	 * Sets the flag indicating whether string representations of this option
+	 * set should use option {@link Option#acronym() acronyms} instead of the
+	 * long option {@link Option#name() names}.
+	 * 
+	 * @param useAcronym
+	 *            new flag value to set, true if option acronyms should be used
+	 *            for string representations of this option set
+	 */
+	public void setUseAcronym(boolean useAcronym) {
+		this.useAcronym = useAcronym;
 	}
 
 }

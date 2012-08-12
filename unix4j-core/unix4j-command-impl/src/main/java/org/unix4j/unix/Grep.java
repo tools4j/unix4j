@@ -25,7 +25,7 @@ public final class Grep {
 
 	/**
 	 * Interface defining all method signatures for the grep command.
-	 *
+	 * 
 	 * @param <R>
 	 *            the return type for all command signature methods, usually a
 	 *            new command instance or a command fromFile providing methods
@@ -36,7 +36,7 @@ public final class Grep {
 		 * Filters the input lines and writes the matching lines to the output.
 		 * A line matches if it contains the given {@code matchString} using
 		 * case-sensitive string comparison.
-		 *
+		 * 
 		 * @param matchString
 		 *            the string to be matched by the lines
 		 * @return the generic type {@code <R>} defined by the implementing
@@ -55,7 +55,7 @@ public final class Grep {
 		 * Filters the input lines and writes the matching lines to the output.
 		 * Whether or not a line matches the given {@code matchString} depends
 		 * on the specified {@code options}.
-		 *
+		 * 
 		 * @param matchString
 		 *            the string to be matched by the lines
 		 * @param options
@@ -76,39 +76,33 @@ public final class Grep {
 	/**
 	 * Option flags for the grep command.
 	 */
-	public static enum Option {
+	public static enum Option implements org.unix4j.optset.Option<Option> {
 		/**
-		 * Match lines ignoring the case when comparing the strings, equivalent
-		 * to option {@link #ignoreCase}.
+		 * Match lines ignoring the case when comparing the strings, also know
+		 * from Unix with its acronym 'i'.
 		 */
-		i,
+		ignoreCase('i'),
 		/**
-		 * Match lines ignoring the case when comparing the strings, equivalent
-		 * to option {@link #i}.
+		 * Invert the match result, that is, a non-matching line is written to
+		 * the output and a matching line is not. This option is also known from
+		 * Unix with its acronym 'v'.
 		 */
-		ignoreCase,
-		/**
-		 * Invert the match result, that is, a non-matching line is writen to
-		 * the output and a matching line is not. This option is equivalent to
-		 * the {@link #invert} option.
-		 */
-		v,
-		/**
-		 * Invert the match result, that is, a non-matching line is writen to
-		 * the output and a matching line is not. This option is equivalent to
-		 * the {@link #v} option.
-		 */
-		invert,
+		invert('v'),
 		/**
 		 * Uses fixed-strings matching instead of regular expressions. This
-		 * option is equivalent to the {@link #fixedStrings} option.
+		 * option is also known from Unix with its acronym 'f'.
 		 */
-		f,
-		/**
-		 * Uses fixed-strings matching instead of regular expressions. This
-		 * option is equivalent to the {@link #f} option.
-		 */
-		fixedStrings;
+		fixedStrings('f');
+		private final char acronym;
+
+		private Option(char acronym) {
+			this.acronym = acronym;
+		}
+
+		@Override
+		public char acronym() {
+			return acronym;
+		}
 	}
 
 	/**
@@ -133,15 +127,15 @@ public final class Grep {
 		}
 
 		public boolean isIgnoreCase() {
-			return hasOpt(Option.i) || hasOpt(Option.ignoreCase);
+			return hasOpt(Option.ignoreCase);
 		}
 
 		public boolean isFixedStrings() {
-			return hasOpt(Option.f) || hasOpt(Option.fixedStrings);
+			return hasOpt(Option.fixedStrings);
 		}
 
 		public boolean isInvert() {
-			return hasOpt(Option.v) || hasOpt(Option.invert);
+			return hasOpt(Option.invert);
 		}
 
 		public String getRegexToRun() {
@@ -192,45 +186,55 @@ public final class Grep {
 				return new RegexpProcessor(args, output);
 			}
 		}
-		
+
 		private static abstract class AbstractProcessor implements LineProcessor {
-			protected final boolean isIgnoreCase; 
-			protected final boolean isInvert; 
+			protected final boolean isIgnoreCase;
+			protected final boolean isInvert;
 			protected final LineProcessor output;
+
 			public AbstractProcessor(Args args, LineProcessor output) {
 				this.isIgnoreCase = args.isIgnoreCase();
 				this.isInvert = args.isInvert();
 				this.output = output;
 			}
+
 			@Override
 			public boolean processLine(Line line) {
-				final boolean matches = matches(line); 
+				final boolean matches = matches(line);
 				if (isInvert ^ matches) {
 					return output.processLine(line);
 				}
 				return true;
 			}
+
 			@Override
 			public void finish() {
 				output.finish();
 			}
+
 			abstract protected boolean matches(Line line);
 		}
+
 		private static final class RegexpProcessor extends AbstractProcessor {
 			private final Pattern pattern;
+
 			public RegexpProcessor(Args args, LineProcessor output) {
 				super(args, output);
 				final String regex = args.getRegexToRun();
 				this.pattern = Pattern.compile(regex, isIgnoreCase ? Pattern.CASE_INSENSITIVE : 0);
 			}
+
 			@Override
 			public boolean matches(Line line) {
-				//NOTE: we use content here because . does not match line ending characters, see {@link Pattern#DOTALL}
+				// NOTE: we use content here because . does not match line
+				// ending characters, see {@link Pattern#DOTALL}
 				return pattern.matcher(line.getContent()).matches();
 			}
 		}
+
 		private static final class FixedStringsProcessor extends AbstractProcessor {
 			private final String matchString;
+
 			public FixedStringsProcessor(Args args, LineProcessor output) {
 				super(args, output);
 				if (isIgnoreCase) {
@@ -239,6 +243,7 @@ public final class Grep {
 					this.matchString = args.getMatchString();
 				}
 			}
+
 			@Override
 			public boolean matches(Line line) {
 				if (isIgnoreCase) {

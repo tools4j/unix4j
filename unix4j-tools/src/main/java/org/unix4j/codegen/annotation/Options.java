@@ -12,5 +12,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Options {
+	String ACRONYM_METHOD_NAME = "acronym";
 	Class<? extends Enum<?>> value();
 }

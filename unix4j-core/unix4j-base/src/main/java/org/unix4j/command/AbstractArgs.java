@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.unix4j.optset.Option;
 import org.unix4j.optset.OptionSet;
 import org.unix4j.util.TypedMap;
 import org.unix4j.util.TypedMap.Key;
@@ -21,7 +22,7 @@ import org.unix4j.util.Variables;
  * @param <A>
  *            the concrete command specific arguments type
  */
-abstract public class AbstractArgs<O extends Enum<O>, A extends AbstractArgs<O, A>> implements Arguments<A>, Cloneable {
+abstract public class AbstractArgs<O extends Enum<O> & Option<O>, A extends AbstractArgs<O, A>> implements Arguments<A>, Cloneable {
 	private TypedMap args;
 	private EnumSet<O> opts;
 
