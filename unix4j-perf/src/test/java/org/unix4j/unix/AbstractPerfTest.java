@@ -21,7 +21,7 @@ import static org.junit.Assert.assertTrue;
  * User: ben
  */
 public class AbstractPerfTest {
-	private final static String DEFAULT_PROPERTIES_FILE = "/unix4j-perf-expectedResults-default.properties"; 
+	private final static String DEFAULT_PROPERTIES_FILE = "/unix4j-perf-expectedResults-default.properties";
 	private final static String FILE_1_MEG_PATH = "/1_Meg_test_file.txt";
 	private final static String FILE_10_MEG_PATH = "/10_Meg_test_file.txt";
 	private final static String FILE_100_MEG_PATH = "/100_Meg_test_file.txt";
@@ -39,7 +39,7 @@ public class AbstractPerfTest {
 
 	protected void runCommandAndCompareToEquivalentUnixExecutionTimeInMillis(
 			Unix4jCommandBuilder command) {
-		final StackTraceElement callerStackTraceElement = StackTraceUtil.getCurrentMethodStackTraceElement(1); 
+		final StackTraceElement callerStackTraceElement = StackTraceUtil.getCurrentMethodStackTraceElement(1);
 		final String callerClass  = callerStackTraceElement.getClassName();
 		final String callerMethod = callerStackTraceElement.getMethodName();
 		final String propertyName = callerClass + "." + callerMethod + "." + "equivalentUnixTimeMillis";
@@ -62,9 +62,9 @@ public class AbstractPerfTest {
 		System.out.println("=========================================");
 		System.out.println("Command........................." + command.toString());
 		System.out.println("Execution time.................." + executionTime + " millis");
-		System.out.println("Equivalent Linux execution time." + equivalentUnixTimeMillis + " millis");
-		System.out.println("Unix4j to Linux Difference......" + (equivalentUnixTimeMillis - executionTime) + "millis");
-		System.out.println("Unix4j to Linux %..............." + ((1.0f * executionTime / equivalentUnixTimeMillis) * 100) + "%");
+		System.out.println("Equivalent Unix execution time.." + equivalentUnixTimeMillis + " millis");
+		System.out.println("Unix4j to Unix Difference......." + (equivalentUnixTimeMillis - executionTime) + "millis");
+		System.out.println("Unix4j to Unix %................" + ((1.0f * executionTime / equivalentUnixTimeMillis) * 100) + "%");
 		System.out.println();
 	}
 
@@ -73,13 +73,13 @@ public class AbstractPerfTest {
 	}
 
 	@Before
-	public void checkIfLargeFileExists() throws IOException {
+	public void ensurePerfTestFilesExists() throws IOException {
 		// Ensure that the small test file exists
 		final URL file1MUrl = AbstractPerfTest.class.getResource(FILE_1_MEG_PATH);
 		final String SMALL_FILE_MUST_EXIST_MESSAGE = "To run perf tests, " + FILE_1_MEG_PATH + " must exist on the classpath.  Usually this" +
 				"should exist in the unix4j-perf/src/test/resources directory.  It should then be copied" +
 				"to the target/test-classes directory.  This file will be used during perf testing to" +
-				"create the 1 Gigabyte test file which is also used for perf testing...";
+				"create the larger test files which are also used for perf testing...";
 
 		assertTrue(SMALL_FILE_MUST_EXIST_MESSAGE, (file1MUrl != null));
 		this.file1Meg = new File(file1MUrl.getFile());
