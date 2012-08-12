@@ -3,8 +3,10 @@ package org.unix4j.codegen;
 import java.util.List;
 
 import org.unix4j.codegen.annotation.Options;
-import org.unix4j.codegen.loader.OptionModelLoader;
-import org.unix4j.codegen.model.option.OptionDef;
+import org.unix4j.codegen.loader.ClassBasedDataLoader;
+import org.unix4j.codegen.loader.ClassInspectionDataLoader;
+import org.unix4j.codegen.model.option.OptionSetDef;
+import org.unix4j.codegen.model.option.OptionModelLoader;
 
 import fmpp.Engine;
 import freemarker.template.ObjectWrapper;
@@ -41,7 +43,7 @@ public class OptionDataLoader extends ClassInspectionDataLoader {
 			return null;
 		}
 		private TemplateModel loadOptionDef(Class<?> commandClass, Class<? extends Enum<?>> optionClass) {
-			final OptionDef optionDef = create(commandClass, optionClass);
+			final OptionSetDef optionDef = create(commandClass, optionClass);
 			System.out.println(optionDef.toString("......"));
 			try {
 				return ObjectWrapper.DEFAULT_WRAPPER.wrap(optionDef);
@@ -50,7 +52,7 @@ public class OptionDataLoader extends ClassInspectionDataLoader {
 			}
 		}
 		@SuppressWarnings({ "unchecked", "rawtypes" })
-		private OptionDef create(Class<?> commandClass, Class<? extends Enum> optionClass) {
+		private OptionSetDef create(Class<?> commandClass, Class<? extends Enum> optionClass) {
 			return new OptionModelLoader().create(commandClass, optionClass);
 		}
 	};

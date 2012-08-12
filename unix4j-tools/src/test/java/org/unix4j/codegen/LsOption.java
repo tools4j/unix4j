@@ -1,6 +1,5 @@
 package org.unix4j.codegen;
 
-import org.unix4j.codegen.annotation.Acronym;
 import org.unix4j.codegen.annotation.Javadoc;
 
 @Javadoc("Option flags for the {@code ls} command.")
@@ -8,25 +7,26 @@ public enum LsOption {
 	@Javadoc("Lists all files in the given directory, including hidden files " +
 	"(those whose names start with \".\" in Unix). By default, these files " +
 	"are excluded from the list.")
-	@Acronym('a')
-	allFiles,
+	allFiles('a'),
 	@Javadoc("Print sizes in human readable format. (e.g., 1K, 234M, 2G, etc.)")
-	@Acronym('h')
-	humanReadable,
+	humanReadable('h'),
 	@Javadoc("Long format, displaying file types, permissions, number of hard " +
 	"links, owner, group, size, date, and filename.")
-	@Acronym('l')
-	longFormat,
+	longFormat('l'),
 	@Javadoc("Recursively lists subdirectories encountered.")
-	@Acronym('R')
-	recurseSubdirs,
+	recurseSubdirs('R'),
 	@Javadoc("Reverses the order of the sort to get reverse collating sequence " +
 	"or oldest first.")
-	@Acronym('r')
-	reverseOrder,
+	reverseOrder('r'),
 	@Javadoc("Sorts with the primary key being time modified (most recently " +
 	"modified first) and the secondary key being filename in the collating " +
 	"sequence.")
-	@Acronym('t')
-	timeSorted;
+	timeSorted('t');
+	private final char acronym;
+	private LsOption(char acronym) {
+		this.acronym = acronym;
+	}
+	public char acronym() {
+		return acronym;
+	}
 }

@@ -261,8 +261,19 @@ public final class From {
 	/**
 	 * Option flags for the from command.
 	 */
-	public static enum Option {
+	public static enum Option implements org.unix4j.optset.Option<Option> {
 		// no options?
+		;
+		private final char acronym;
+
+		private Option(char acronym) {
+			this.acronym = acronym;
+		}
+
+		@Override
+		public char acronym() {
+			return acronym;
+		}
 	}
 
 	/**
@@ -371,16 +382,16 @@ public final class From {
 		public Command withArgs(Args arguments) {
 			return new Command(arguments);
 		}
-		
+
 		@Override
 		public LineProcessor execute(final LineProcessor output) {
 			return new LineProcessor() {
 				@Override
 				public boolean processLine(Line line) {
-					//ignore input, we ARE the redirected input
-					return false;//no more lines expected
+					// ignore input, we ARE the redirected input
+					return false;// no more lines expected
 				}
-				
+
 				@Override
 				public void finish() {
 					final Input input = getArguments().getInput();
