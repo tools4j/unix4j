@@ -80,21 +80,17 @@ public class DefaultOptionSet<E extends Enum<E> & Option<E>> implements OptionSe
 	 * returns this {@code OptionSet} for following chained operations. Only
 	 * options that were not already set before will alter this
 	 * {@code OptionSet}.
+	 * <p>
+	 * Note that also the {@link #useAcronym()} flag is also inherited from the 
+	 * specified {@code optionSet}.
 	 * 
 	 * @param optionSet
 	 *            the optionSet with options to be set in this {@code OptionSet}
 	 * @return this {@code OptionSet} for following chained operations
 	 */
 	public DefaultOptionSet<E> setAll(OptionSet<E> optionSet) {
-		if (optionSet instanceof DefaultOptionSet) {
-			options.addAll(((DefaultOptionSet<E>) optionSet).asSet());
-		} else {
-			for (final E option : optionType.getEnumConstants()) {
-				if (optionSet.isSet(option)) {
-					set(option);
-				}
-			}
-		}
+		options.addAll(optionSet.asSet());
+		setUseAcronym(optionSet.useAcronym());
 		return this;
 	}
 
