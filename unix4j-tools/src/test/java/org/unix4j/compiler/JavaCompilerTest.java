@@ -1,11 +1,13 @@
 package org.unix4j.compiler;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+@Ignore
 public class JavaCompilerTest {
 
 	@Test
