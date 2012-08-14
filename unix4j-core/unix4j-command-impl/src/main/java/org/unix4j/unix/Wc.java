@@ -186,8 +186,19 @@ public final class Wc {
 	/**
 	 * Option flags for the wc command.
 	 */
-	public static enum Option {
-		l, lines, m, chars, w, words;
+	public static enum Option implements org.unix4j.optset.Option<Option> {
+		lines('l'), chars('m'), words('w');
+		;
+		private final char acronym;
+
+		private Option(char acronym) {
+			this.acronym = acronym;
+		}
+
+		@Override
+		public char acronym() {
+			return acronym;
+		}
 	}
 
 	/**
@@ -201,15 +212,15 @@ public final class Wc {
 		}
 
 		public boolean isCountChars() {
-			return hasOpt(Option.m) || hasOpt(Option.chars);
+			return hasOpt(Option.chars);
 		}
 
 		public boolean isCountLines() {
-			return hasOpt(Option.l) || hasOpt(Option.lines);
+			return hasOpt(Option.lines);
 		}
 
 		public boolean isCountWords() {
-			return hasOpt(Option.w) || hasOpt(Option.words);
+			return hasOpt(Option.words);
 		}
 
 		public boolean isNoCountTypeSpecified() {

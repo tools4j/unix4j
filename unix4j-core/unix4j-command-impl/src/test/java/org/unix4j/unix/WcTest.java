@@ -21,13 +21,10 @@ public class WcTest {
 
 	@Test
 	public void testWcSingleFields() {
-		assertWc(input.toInput(), "5", Wc.Option.l);
 		assertWc(input.toInput(), "5", Wc.Option.lines);
 
-		assertWc(input.toInput(), "46", Wc.Option.m);		//41 chars + 5 line endings
 		assertWc(input.toInput(), "46", Wc.Option.chars);	//41 chars + 5 line endings
 
-		assertWc(input.toInput(), "8", Wc.Option.w);
 		assertWc(input.toInput(), "8", Wc.Option.words);
 	}
 
@@ -38,9 +35,9 @@ public class WcTest {
 
 	@Test
 	public void testMultipleOutputs() {
-		assertWc(input.toInput(), "   5   8  46", Wc.Option.l, Wc.Option.w, Wc.Option.m);
-		assertWc(input.toInput(), "  5  8", Wc.Option.l, Wc.Option.w);
-		assertWc(input.toInput(), "   5   8  46", Wc.Option.l, Wc.Option.w, Wc.Option.m, Wc.Option.l, Wc.Option.w, Wc.Option.m);
+		assertWc(input.toInput(), "   5   8  46", Wc.Option.lines, Wc.Option.words, Wc.Option.chars);
+		assertWc(input.toInput(), "  5  8", Wc.Option.lines, Wc.Option.words);
+		assertWc(input.toInput(), "   5   8  46", Wc.Option.lines, Wc.Option.words, Wc.Option.chars, Wc.Option.lines, Wc.Option.words, Wc.Option.chars);
 	}
 
 	@Test

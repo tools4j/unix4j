@@ -143,8 +143,18 @@ public final class Sed {
 	/**
 	 * Option flags for the sed command.
 	 */
-	public static enum Option {
-		GlobalSearchAndReplace
+	public static enum Option implements org.unix4j.optset.Option<Option> {
+		GlobalSearchAndReplace('g');//TODO really an option? not in original sed command
+		private final char acronym;
+
+		private Option(char acronym) {
+			this.acronym = acronym;
+		}
+
+		@Override
+		public char acronym() {
+			return acronym;
+		}
 	}
 
 	/**
