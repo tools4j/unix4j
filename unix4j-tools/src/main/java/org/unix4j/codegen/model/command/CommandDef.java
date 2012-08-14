@@ -14,14 +14,14 @@ public class CommandDef extends AbstractModelElement {
 	public CommandDef(String commandName, String className, String commandPackage, String name, String synopsis) {
 		this.commandName = commandName;
 		this.command = new TypeDef(className);
-		this.commandPackage = new PackageDef(commandPackage);
+		this.pkg = new PackageDef(commandPackage);
 		this.name = name;
 		this.synopsis = synopsis;
 	}
 
 	public final String commandName;		//the command name, such as "ls"
 	public final TypeDef command;			//the comand type, e.g. org.unix4j.unix.Ls
-	public final PackageDef commandPackage;	//package with command specific classes, e.g. org.unix4j.unix.ls
+	public final PackageDef pkg;	//package with command specific classes, e.g. org.unix4j.unix.ls
 	public final String name;				//e.g. ls - list directory contents
 	public final String synopsis;			//e.g. ls [-ahlRrt] [file...]
 	public final List<String> notes = new ArrayList<String>();

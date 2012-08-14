@@ -261,7 +261,7 @@ public final class From {
 	/**
 	 * Option flags for the from command.
 	 */
-	public static enum Option implements org.unix4j.optset.Option<Option> {
+	public static enum Option implements org.unix4j.optset.Option {
 		// no options?
 		;
 		private final char acronym;

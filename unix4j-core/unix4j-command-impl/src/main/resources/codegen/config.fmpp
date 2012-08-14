@@ -4,67 +4,11 @@ modes: [
     copy(**/*) 
 ] 
 data: {
+	commandDefs: org.unix4j.codegen.CommandDefinitionDataLoader(
+    	/ls.xml
+	)
     optionDefs: org.unix4j.codegen.OptionSetDefinitionDataLoader(
     	/ls.xml
     )
-    optionDefsOld: org.unix4j.codegen.OptionDataLoader(
-    	org.unix4j.unix.ls.LsInterface
-    )
-    optionDefsPlain: [
-	    {
-			command: {
-				name:			ls
-				packageName:	org.unix4j.unix
-				className:		Ls
-			}
-			packagePath:		org/unix4j/unix/ls
-			packageName:		org.unix4j.unix.ls
-			optionClassName:	LsOption
-			optionSetClassName:	LsOptionSet
-			options: {l:longFormat,a:allFiles,h:humanReadable}
-			optionSets: [
-				{
-					name:		OptionSet_alh
-					active:		[a,l,h]
-					next:		{}
-				}
-				{
-					name:		OptionSet_lh
-					active:		[l,h]
-					next:		{a:OptionSet_alh}
-				}
-				{
-					name:		OptionSet_al
-					active:		[a,l]
-					next:		{h:OptionSet_alh}
-				}
-				{
-					name:		OptionSet_ah
-					active:		[a,h]
-					next:		{l:OptionSet_alh}
-				}
-				{
-					name:		OptionSet_l
-					active:		[l]
-					next:		{a:OptionSet_al, h:OptionSet_lh}
-				}	
-				{
-					name:		OptionSet_a
-					active:		[a]
-					next:		{l:OptionSet_al, h:OptionSet_ah}
-				}	
-				{
-					name:		OptionSet_h
-					active:		[h]
-					next:		{l:OptionSet_lh, a:OptionSet_ah}
-				}	
-				{
-					name:		OptionSet
-					active:		[]
-					next:		{l:OptionSet_l, a:OptionSet_a, h:OptionSet_h}
-				}	
-			]	
-		}
-	]
 }
 
