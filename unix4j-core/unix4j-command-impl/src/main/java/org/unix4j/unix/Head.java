@@ -16,33 +16,37 @@ import org.unix4j.util.TypedMap;
  * head - output the first part of an input
  * <p>
  * <b>SYNOPSIS</b>
- *
+ * 
  * <pre>
  * head -lines n
  * </pre>
- *
+ * 
  * <b>DESCRIPTION</b>
  * <p>
- * The head utility shall copy its input to the output, ending the output for each file at a designated point.
- * Copying shall end at the point indicated by the -n (lines) number option. The option-argument number
- * shall be counted in units of lines.
+ * The head utility shall copy its input to the output, ending the output for
+ * each file at a designated point. Copying shall end at the point indicated by
+ * the -n (lines) number option. The option-argument number shall be counted in
+ * units of lines.
  * </p>
  * <b>NOTES</b>
  * <p>
  * <ul>
- * <li>Currently only supports input from other commands, not from a specified files.</li>
+ * <li>Currently only supports input from other commands, not from a specified
+ * files.</li>
  * </ul>
  * </p>
  * <b>OPTIONS</b>
  * <p>
  * The following options are supported:
+ * 
  * <pre>
  * -n	 --lines	The first number lines of each input shall be copied to output. The application shall ensure that the number option-argument is a positive decimal integer.
  * </pre>
  * <p>
- * When a file contains less than number lines, it shall be copied to standard output in its entirety.
- * This shall not be an error.
- * </p><p>
+ * When a file contains less than number lines, it shall be copied to standard
+ * output in its entirety. This shall not be an error.
+ * </p>
+ * <p>
  * If no options are specified, head shall act as if -n 10 had been specified.
  * </p>
  */
@@ -51,7 +55,7 @@ public final class Head {
 
 	/**
 	 * Interface defining all method signatures for the head command.
-	 *
+	 * 
 	 * @param <R>
 	 *            the return type for all command signature methods, usually a
 	 *            new command instance or a command fromFile providing methods
@@ -60,18 +64,19 @@ public final class Head {
 	public static interface Interface<R> extends CommandInterface<R> {
 		/**
 		 * @param lines
-		 *            the number of lines to send to the input.  If a negative
-		 *            value is given, an IllegalArgumentException will be thrown.
-		 *            If the number of lines specified is greater than the number
-		 *            of lines in the input, the application will not error. All
-		 *            lines of the input will be sent to the output.
-		 *
+		 *            the number of lines to send to the input. If a negative
+		 *            value is given, an IllegalArgumentException will be
+		 *            thrown. If the number of lines specified is greater than
+		 *            the number of lines in the input, the application will not
+		 *            error. All lines of the input will be sent to the output.
+		 * 
 		 * @return the generic type {@code <R>} defined by the implementing
 		 *         class, even if the command itself returns no value and writes
-		 *         its result to an {@link org.unix4j.io.Output} object. This serves
-		 *         implementing classes like the command {@link Factory} to
-		 *         return a new {@link Command} instance for the argument values
-		 *         passed to this method. {@link org.unix4j.builder.CommandBuilder} extensions also
+		 *         its result to an {@link org.unix4j.io.Output} object. This
+		 *         serves implementing classes like the command {@link Factory}
+		 *         to return a new {@link Command} instance for the argument
+		 *         values passed to this method.
+		 *         {@link org.unix4j.builder.CommandBuilder} extensions also
 		 *         implementing this this command interface usually return an
 		 *         instance to itself facilitating chained invocation of joined
 		 *         commands.
@@ -81,10 +86,11 @@ public final class Head {
 		/**
 		 * @return the generic type {@code <R>} defined by the implementing
 		 *         class, even if the command itself returns no value and writes
-		 *         its result to an {@link org.unix4j.io.Output} object. This serves
-		 *         implementing classes like the command {@link Factory} to
-		 *         return a new {@link Command} instance for the argument values
-		 *         passed to this method. {@link org.unix4j.builder.CommandBuilder} extensions also
+		 *         its result to an {@link org.unix4j.io.Output} object. This
+		 *         serves implementing classes like the command {@link Factory}
+		 *         to return a new {@link Command} instance for the argument
+		 *         values passed to this method.
+		 *         {@link org.unix4j.builder.CommandBuilder} extensions also
 		 *         implementing this this command interface usually return an
 		 *         instance to itself facilitating chained invocation of joined
 		 *         commands.
@@ -95,8 +101,19 @@ public final class Head {
 	/**
 	 * Option flags for the head command.
 	 */
-	public static enum Option {
-		// no options
+	public static enum Option implements org.unix4j.optset.Option<Option> {
+		// no options?
+		;
+		private final char acronym;
+
+		private Option(char acronym) {
+			this.acronym = acronym;
+		}
+
+		@Override
+		public char acronym() {
+			return acronym;
+		}
 	}
 
 	/**
@@ -157,6 +174,7 @@ public final class Head {
 			return new LineProcessor() {
 				private final int linesToOutput = getArguments().getLines();
 				private final Counter counter = new Counter();
+
 				@Override
 				public boolean processLine(Line line) {
 					if (counter.getCount() < linesToOutput) {
@@ -166,7 +184,7 @@ public final class Head {
 						return false;
 					}
 				}
-				
+
 				@Override
 				public void finish() {
 					output.finish();

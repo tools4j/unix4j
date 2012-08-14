@@ -1,4 +1,4 @@
-package org.unix4j.codegen.loader;
+package org.unix4j.codegen.model.option;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -6,19 +6,16 @@ import java.util.EnumSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.unix4j.codegen.annotation.Acronym;
 import org.unix4j.codegen.annotation.Javadoc;
 import org.unix4j.codegen.annotation.Name;
+import org.unix4j.codegen.annotation.Options;
 import org.unix4j.codegen.model.TypeDef;
-import org.unix4j.codegen.model.option.Command;
-import org.unix4j.codegen.model.option.OptionDef;
-import org.unix4j.codegen.model.option.OptionSet;
 
 public class OptionModelLoader {
 
-	public <E extends Enum<E>> OptionDef create(Class<?> commandClass, Class<E> optionClass) {
+	public <E extends Enum<E>> OptionSetDef create(Class<?> commandClass, Class<E> optionClass) {
 		final Command cmd = defineCommand(commandClass);
-		final OptionDef def = new OptionDef(cmd, new TypeDef(optionClass), optionClass.getPackage().getName());
+		final OptionSetDef def = new OptionSetDef(cmd, new TypeDef(optionClass), optionClass.getPackage().getName());
 		defineOptions(optionClass, def);
 		defineOptionSets(optionClass, def);
 		return def;
@@ -29,10 +26,10 @@ public class OptionModelLoader {
 		return new Command(name != null ? name.value() : commandClass.getSimpleName(), commandClass);
 	}
 
-	private <E extends Enum<E>> void defineOptions(Class<E> optionClass, OptionDef def) {
+	private <E extends Enum<E>> void defineOptions(Class<E> optionClass, OptionSetDef def) {
 		final E[] options = optionClass.getEnumConstants();
 		for (int i = 0; i < options.length; i++) {
-			final String name = getOptionName(options[i]);
+			final String name = getOptionAcronym(options[i]);
 			def.options.put(name, options[i].name());
 			String javadoc;
 			try {
@@ -49,14 +46,14 @@ public class OptionModelLoader {
 		}
 	}
 
-	private <E extends Enum<E>> void defineOptionSets(Class<E> optionClass, OptionDef def) {
+	private <E extends Enum<E>> void defineOptionSets(Class<E> optionClass, OptionSetDef def) {
 		defineOptionSetsRecursive(optionClass, def, Collections.singletonList(EnumSet.allOf(optionClass)));
 	}
 
-	private <E extends Enum<E>> void defineOptionSetsRecursive(Class<E> optionClass, OptionDef def, Collection<EnumSet<E>> thisLevelActiveOptions) {
+	private <E extends Enum<E>> void defineOptionSetsRecursive(Class<E> optionClass, OptionSetDef def, Collection<EnumSet<E>> thisLevelActiveOptions) {
 		final Set<EnumSet<E>> nextLevelActiveOptions = new LinkedHashSet<EnumSet<E>>();
 		for (final EnumSet<E> active : thisLevelActiveOptions) {
-			final OptionSet optionSet = defineOptionSet(def.optionSetType.className, active);
+			final OptionSet optionSet = defineOptionSet(def.optionSetType.simpleName, active);
 			def.optionSets.add(optionSet);
 			for (final E newInactive : active) {
 				final EnumSet<E> nextActive = EnumSet.copyOf(active);
@@ -72,13 +69,13 @@ public class OptionModelLoader {
 		final String name = getOptionSetName(optionSetClassName, activeOptions);
 		final OptionSet set = new OptionSet(name);
 		for (final E active : activeOptions) {
-			set.active.add(getOptionName(active));
+			set.active.add(getOptionAcronym(active));
 		}
 		final EnumSet<E> inactiveOptions = EnumSet.complementOf(activeOptions);
 		for (final E inactive : inactiveOptions) {
 			activeOptions.add(inactive);
 			final String nextName = getOptionSetName(optionSetClassName, activeOptions);
-			set.next.put(getOptionName(inactive), nextName);
+			set.next.put(getOptionAcronym(inactive), nextName);
 			activeOptions.remove(inactive);
 		}
 		return set;
@@ -87,17 +84,17 @@ public class OptionModelLoader {
 	private <E extends Enum<E>> String getOptionSetName(String baseName, EnumSet<E> active) {
 		final StringBuilder sb = new StringBuilder(baseName);
 		for (final E act : active) {
-			sb.append('_').append(getOptionName(act));
+			sb.append('_').append(getOptionAcronym(act));
 		}
 		return sb.toString();
 	}
-	private <E extends Enum<E>> String getOptionName(E option) {
+	private <E extends Enum<E>> String getOptionAcronym(E option) {
 		try {
-			final Acronym acronym = option.getClass().getField(option.name()).getAnnotation(Acronym.class);
-			return String.valueOf(acronym.value());
+			final Object acronym = option.getClass().getMethod(Options.ACRONYM_METHOD_NAME).invoke(option);
+			return acronym.toString();
 		} catch (Exception e) {
 			//ignore
-			System.err.println(e);
+			System.err.println("could not evaluate acronym for option " + option + " in class " + option.getClass().getName() + ", e=" + e);
 		}
 		//fallback: simply the option name
 		return option.name();

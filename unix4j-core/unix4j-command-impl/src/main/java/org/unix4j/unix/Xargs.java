@@ -32,7 +32,7 @@ public final class Xargs {
 	 * Encoded variable for <code>i<sup>th</sup></code> "xarg" value, where
 	 * {@code i} specifies the column index of the value on the input line. Can
 	 * be used as argument value in the command following xargs.
-	 *
+	 * 
 	 * @param i
 	 *            the zero-based column index of the value in the input line
 	 * @throws IndexOutOfBoundsException
@@ -44,7 +44,7 @@ public final class Xargs {
 
 	/**
 	 * Interface defining all method signatures for the xargs command.
-	 *
+	 * 
 	 * @param <R>
 	 *            the return type for all command signature methods, usually a
 	 *            new command instance or a command fromFile providing methods
@@ -58,7 +58,7 @@ public final class Xargs {
 		 * <p>
 		 * The arguments from xargs can be passed to the next command as string
 		 * argument values using {@link Xargs#XARG} and {@link Xargs#xarg(int)}.
-		 *
+		 * 
 		 * @return the generic type {@code <R>} defined by the implementing
 		 *         class, even if the command itself returns no value and writes
 		 *         its result to an {@link Output} object. This serves
@@ -75,8 +75,19 @@ public final class Xargs {
 	/**
 	 * Option flags for the xargs command.
 	 */
-	public static enum Option {
+	public static enum Option implements org.unix4j.optset.Option<Option> {
 		// no options for now
+		;
+		private final char acronym;
+
+		private Option(char acronym) {
+			this.acronym = acronym;
+		}
+
+		@Override
+		public char acronym() {
+			return acronym;
+		}
 	}
 
 	/**
@@ -121,12 +132,12 @@ public final class Xargs {
 		public Command withArgs(Args arguments) {
 			return new Command(arguments);
 		}
-		
+
 		@Override
 		public LineProcessor execute(LineProcessor output) {
-			return output;//does not much if not joined to the next command
+			return output;// does not much if not joined to the next command
 		}
-		
+
 		@Override
 		public org.unix4j.command.Command<?> join(org.unix4j.command.Command<?> next) {
 			return join(this, next);
@@ -141,16 +152,21 @@ public final class Xargs {
 						public boolean processLine(Line line) {
 							return output.processLine(line);
 						}
+
 						@Override
 						public void finish() {
-							//don't finish yet
+							// don't finish yet
 						}
 					};
 					return new LineProcessor() {
 						private final Map<String, String> xargs = new HashMap<String, String>();
+
 						@Override
 						public boolean processLine(Line line) {
-							final A2 args = second.getArguments().clone(true /* deep clone */);
+							final A2 args = second.getArguments().clone(true /*
+																			 * deep
+																			 * clone
+																			 */);
 							xargs.clear();
 							final String[] words = line.getContent().split("\\s+");
 							for (int i = 0; i < words.length; i++) {
@@ -159,9 +175,9 @@ public final class Xargs {
 							args.resolve(xargs);
 							final LineProcessor processor = second.withArgs(args).execute(noFinishOutput);
 							processor.finish();
-							return true;//we want more lines
+							return true;// we want more lines
 						}
-						
+
 						@Override
 						public void finish() {
 							output.finish();
@@ -171,7 +187,7 @@ public final class Xargs {
 
 				@Override
 				public org.unix4j.command.Command<A1> withArgs(A1 arguments) {
-					return this;//FIXME dodgy
+					return this;// FIXME dodgy
 				}
 			};
 		}

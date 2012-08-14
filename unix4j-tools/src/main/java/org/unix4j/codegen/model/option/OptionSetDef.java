@@ -8,14 +8,14 @@ import java.util.Map;
 import org.unix4j.codegen.model.AbstractModelElement;
 import org.unix4j.codegen.model.TypeDef;
 
-public class OptionDef extends AbstractModelElement {
-	public <E extends Enum<?>> OptionDef(String commandName, Class<?> commandClass, Class<? extends E> optionClass, String optionSetPackage) {
+public class OptionSetDef extends AbstractModelElement {
+	public <E extends Enum<?>> OptionSetDef(String commandName, Class<?> commandClass, Class<? extends E> optionClass, String optionSetPackage) {
 		this(new Command(commandName, commandClass), new TypeDef(optionClass), optionSetPackage);
 	}
-	public <E extends Enum<?>> OptionDef(Command command, TypeDef optionType, String optionSetPackage) {
-		this(command, optionType, new TypeDef(optionType.className + "Set", optionSetPackage));
+	public <E extends Enum<?>> OptionSetDef(Command command, TypeDef optionType, String optionSetPackage) {
+		this(command, optionType, new TypeDef(optionType.simpleName + "Set", optionSetPackage));
 	}
-	public <E extends Enum<?>> OptionDef(Command command, TypeDef optionType, TypeDef optionSetType) {
+	public <E extends Enum<?>> OptionSetDef(Command command, TypeDef optionType, TypeDef optionSetType) {
 		this.command = command;
 		this.optionType = optionType;
 		this.optionSetType = optionSetType;

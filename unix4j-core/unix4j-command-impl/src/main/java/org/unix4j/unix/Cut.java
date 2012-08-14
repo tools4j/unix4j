@@ -140,8 +140,19 @@ public final class Cut {
 	/**
 	 * Option flags for the cut command.
 	 */
-	public static enum Option {
+	public static enum Option implements org.unix4j.optset.Option<Option> {
 		// no options?
+		;
+		private final char acronym;
+
+		private Option(char acronym) {
+			this.acronym = acronym;
+		}
+
+		@Override
+		public char acronym() {
+			return acronym;
+		}
 	}
 
 	/**

@@ -4,10 +4,13 @@ modes: [
     copy(**/*) 
 ] 
 data: {
-    optionDefs: org.unix4j.codegen.OptionDataLoader(
+    optionDefs: org.unix4j.codegen.OptionSetDefinitionDataLoader(
+    	/ls.xml
+    )
+    optionDefsOld: org.unix4j.codegen.OptionDataLoader(
     	org.unix4j.unix.ls.LsInterface
     )
-    optionDefsOld: [
+    optionDefsPlain: [
 	    {
 			command: {
 				name:			ls

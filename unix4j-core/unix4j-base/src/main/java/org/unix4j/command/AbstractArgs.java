@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.unix4j.optset.DefaultOptionSet;
+import org.unix4j.optset.Option;
 import org.unix4j.optset.OptionSet;
 import org.unix4j.util.TypedMap;
 import org.unix4j.util.TypedMap.Key;
@@ -21,9 +23,9 @@ import org.unix4j.util.Variables;
  * @param <A>
  *            the concrete command specific arguments type
  */
-abstract public class AbstractArgs<O extends Enum<O>, A extends AbstractArgs<O, A>> implements Arguments<A>, Cloneable {
+abstract public class AbstractArgs<O extends Enum<O> & Option<O>, A extends AbstractArgs<O, A>> implements Arguments<A>, Cloneable {
 	private TypedMap args;
-	private EnumSet<O> opts;
+	private DefaultOptionSet<O> opts;
 
 	/**
 	 * Constructor with enum class defining the options for the command
@@ -33,7 +35,7 @@ abstract public class AbstractArgs<O extends Enum<O>, A extends AbstractArgs<O, 
 	 */
 	public AbstractArgs(Class<O> optClass) {
 		args = new TypedMap();
-		opts = EnumSet.noneOf(optClass);
+		opts = new DefaultOptionSet<O>(optClass);
 	}
 
 	/**
@@ -92,7 +94,7 @@ abstract public class AbstractArgs<O extends Enum<O>, A extends AbstractArgs<O, 
 	 *            the option to be set
 	 */
 	public void setOpt(O opt) {
-		opts.add(opt);
+		opts.set(opt);
 	}
 
 	/**
@@ -118,7 +120,7 @@ abstract public class AbstractArgs<O extends Enum<O>, A extends AbstractArgs<O, 
 	 *            the options to be set
 	 */
 	public void setOpts(Set<? extends O> opts) {
-		this.opts.addAll(opts);
+		this.opts.setAll(opts);
 	}
 
 	/**
@@ -129,7 +131,7 @@ abstract public class AbstractArgs<O extends Enum<O>, A extends AbstractArgs<O, 
 	 *            the options to be set
 	 */
 	public void setOpts(OptionSet<O> opts) {
-		this.opts.addAll(opts.asSet());
+		this.opts.setAll(opts);
 	}
 
 	/**
@@ -140,7 +142,7 @@ abstract public class AbstractArgs<O extends Enum<O>, A extends AbstractArgs<O, 
 	 * @return true if the given option is set
 	 */
 	public boolean hasOpt(O opt) {
-		return opts.contains(opt);
+		return opts.isSet(opt);
 	}
 
 	/**
@@ -148,8 +150,8 @@ abstract public class AbstractArgs<O extends Enum<O>, A extends AbstractArgs<O, 
 	 * 
 	 * @return the modifiable options set.
 	 */
-	public Set<O> getOpts() {
-		return opts;
+	public EnumSet<O> getOpts() {
+		return opts.asSet();
 	}
 
 	@Override
@@ -212,24 +214,19 @@ abstract public class AbstractArgs<O extends Enum<O>, A extends AbstractArgs<O, 
 
 	private String getOptionString() {
 		final StringBuilder sb = new StringBuilder();
-		//first all one char options
-		for (final O opt : opts) {
-			final String name = opt.name();
-			if (name.length() == 1) {
+		if (opts.useAcronym()) {
+			for (final O opt : opts) {
 				if (sb.length() == 0) {
 					sb.append("-");
 				}
-				sb.append(name);
+				sb.append(opt.acronym());
 			}
-		}
-		//now all options with a long name
-		for (final O opt : opts) {
-			final String name = opt.name();
-			if (name.length() != 1) {
-				if (sb.length() > 0) {
+		} else {
+			for (final O opt : opts) {
+				if (sb.length() != 0) {
 					sb.append(" ");
 				}
-				sb.append("--").append(name);
+				sb.append("--").append(opt.name());
 			}
 		}
 		return sb.toString();

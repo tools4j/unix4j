@@ -25,7 +25,7 @@ public final class Echo {
 
 	/**
 	 * Interface defining all method signatures for the echo command.
-	 *
+	 * 
 	 * @param <R>
 	 *            the return type for all command signature methods, usually a
 	 *            new command instance or a command fromFile providing methods
@@ -34,7 +34,7 @@ public final class Echo {
 	public static interface Interface<R> extends CommandInterface<R> {
 		/**
 		 * Echos the given input argument to the output.
-		 *
+		 * 
 		 * @param message
 		 *            the message to echo
 		 * @return the generic type {@code <R>} defined by the implementing
@@ -52,7 +52,7 @@ public final class Echo {
 		/**
 		 * Echos the given input arguments to the output. The input arguments
 		 * are separated with a single space character.
-		 *
+		 * 
 		 * @param messages
 		 *            the messages to echo
 		 * @return the generic type {@code <R>} defined by the implementing
@@ -71,8 +71,19 @@ public final class Echo {
 	/**
 	 * Option flags for the echo command.
 	 */
-	public static enum Option {
+	public static enum Option implements org.unix4j.optset.Option<Option> {
 		// no options?
+		;
+		private final char acronym;
+
+		private Option(char acronym) {
+			this.acronym = acronym;
+		}
+
+		@Override
+		public char acronym() {
+			return acronym;
+		}
 	}
 
 	/**
@@ -138,8 +149,9 @@ public final class Echo {
 			return new LineProcessor() {
 				@Override
 				public boolean processLine(Line line) {
-					return false;//we want no input
+					return false;// we want no input
 				}
+
 				@Override
 				public void finish() {
 					final String messages = joinMessages();
