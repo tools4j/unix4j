@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Iterator;
 
-public class DefaultOptionSet<E extends Enum<E> & Option<E>> implements OptionSet<E>, Iterable<E>, Cloneable {
+public class DefaultOptionSet<E extends Enum<E> & Option> implements OptionSet<E>, Iterable<E>, Cloneable {
 
 	private final Class<E> optionType;
 	private EnumSet<E> options;

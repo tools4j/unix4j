@@ -9,7 +9,7 @@ import java.util.Set;
  *            the recursive type definition for the implementing option, usually
  *            an enum
  */
-public interface OptionSet<O extends Option<O>> {
+public interface OptionSet<O extends Option> {
 	/**
 	 * Returns true if the specified {@code option} is set and false otherwise
 	 * 

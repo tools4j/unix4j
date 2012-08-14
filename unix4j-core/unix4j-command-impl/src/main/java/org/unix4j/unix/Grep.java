@@ -76,7 +76,7 @@ public final class Grep {
 	/**
 	 * Option flags for the grep command.
 	 */
-	public static enum Option implements org.unix4j.optset.Option<Option> {
+	public static enum Option implements org.unix4j.optset.Option {
 		/**
 		 * Match lines ignoring the case when comparing the strings, also know
 		 * from Unix with its acronym 'i'.

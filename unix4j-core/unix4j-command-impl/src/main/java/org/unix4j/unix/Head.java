@@ -101,7 +101,7 @@ public final class Head {
 	/**
 	 * Option flags for the head command.
 	 */
-	public static enum Option implements org.unix4j.optset.Option<Option> {
+	public static enum Option implements org.unix4j.optset.Option {
 		// no options?
 		;
 		private final char acronym;

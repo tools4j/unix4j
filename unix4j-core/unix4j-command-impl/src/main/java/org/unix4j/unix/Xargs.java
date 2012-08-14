@@ -75,7 +75,7 @@ public final class Xargs {
 	/**
 	 * Option flags for the xargs command.
 	 */
-	public static enum Option implements org.unix4j.optset.Option<Option> {
+	public static enum Option implements org.unix4j.optset.Option {
 		// no options for now
 		;
 		private final char acronym;

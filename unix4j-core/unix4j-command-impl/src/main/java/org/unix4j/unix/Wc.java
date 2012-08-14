@@ -186,7 +186,7 @@ public final class Wc {
 	/**
 	 * Option flags for the wc command.
 	 */
-	public static enum Option implements org.unix4j.optset.Option<Option> {
+	public static enum Option implements org.unix4j.optset.Option {
 		lines('l'), chars('m'), words('w');
 		;
 		private final char acronym;

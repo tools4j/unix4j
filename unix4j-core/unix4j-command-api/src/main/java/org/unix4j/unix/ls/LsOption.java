@@ -4,7 +4,7 @@ import org.unix4j.codegen.annotation.Javadoc;
 import org.unix4j.optset.Option;
 
 @Javadoc("Option flags for the {@code ls} command.")
-public enum LsOption implements Option<LsOption> {
+public enum LsOption implements Option {
 	@Javadoc("Lists all files in the given directory, including hidden files " +
 	"(those whose names start with \".\" in Unix). By default, these files " +
 	"are excluded from the list.")

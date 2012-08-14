@@ -22,8 +22,8 @@ public class OptionSetDefLoader {
 
 	private OptionSetDef createOptionSetDef(CommandDef commandDef) {
 		final Command cmd = new Command(commandDef.commandName, commandDef.command.simpleName, commandDef.command.pkg.name);
-		final TypeDef optionType = new TypeDef(commandDef.command.simpleName + "Option", commandDef.commandPackage.name);
-		final OptionSetDef def = new OptionSetDef(cmd, optionType, commandDef.commandPackage.name);
+		final TypeDef optionType = new TypeDef(commandDef.command.simpleName + "Option", commandDef.pkg.name);
+		final OptionSetDef def = new OptionSetDef(cmd, optionType, commandDef.pkg.name);
 		return def;
 	}
 

@@ -103,7 +103,7 @@ public final class Tail {
 	/**
 	 * Option flags for the tail command.
 	 */
-	public static enum Option implements org.unix4j.optset.Option<Option> {
+	public static enum Option implements org.unix4j.optset.Option {
 		// no options?
 		;
 		private final char acronym;

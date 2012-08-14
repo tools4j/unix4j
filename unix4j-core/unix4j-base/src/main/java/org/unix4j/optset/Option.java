@@ -1,13 +1,9 @@
 package org.unix4j.optset;
 
 /**
- * Interface implemented by option enums.
- * 
- * @param <O>
- *            the recursive type definition for the implementing option, usually
- *            an enum
+ * Interface usually implemented by option enums.
  */
-public interface Option<O extends Option<O>> {
+public interface Option {
 	/**
 	 * Returns the option name, usually the same as the enum constant name.
 	 * 

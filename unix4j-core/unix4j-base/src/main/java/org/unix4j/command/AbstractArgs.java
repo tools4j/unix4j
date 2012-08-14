@@ -23,7 +23,7 @@ import org.unix4j.util.Variables;
  * @param <A>
  *            the concrete command specific arguments type
  */
-abstract public class AbstractArgs<O extends Enum<O> & Option<O>, A extends AbstractArgs<O, A>> implements Arguments<A>, Cloneable {
+abstract public class AbstractArgs<O extends Enum<O> & Option, A extends AbstractArgs<O, A>> implements Arguments<A>, Cloneable {
 	private TypedMap args;
 	private DefaultOptionSet<O> opts;
 
