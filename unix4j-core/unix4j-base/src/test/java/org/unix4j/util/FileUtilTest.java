@@ -1,9 +1,10 @@
 package org.unix4j.util;
 
-import java.io.File;
-
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
+
+import java.io.File;
 
 
 public class FileUtilTest {
@@ -38,6 +39,7 @@ public class FileUtilTest {
 		Assert.assertEquals("../../smith/public/holidays.pdf", actual2);
 	}
 	@Test
+	@Ignore
 	public void testRelativePath_5_noCommonAncestor() {
 		final String actual = FileUtil.getRelativePath(new File("/home/john"), new File("/var/tmp/test.out"));
 		Assert.assertEquals("/var/tmp/test.out", actual);
