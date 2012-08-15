@@ -2,18 +2,20 @@
 <#list commandDefs as def> 
 <#global cmd=def.command>
 <#global simpleName=cmd.simpleName+"Option">
+<#global optionsName=cmd.simpleName+"Options">
 <@pp.changeOutputFile name=pp.pathTo(def.pkg.path+"/"+simpleName+".java")/> 
 package ${def.pkg.name};
 
 import java.util.EnumSet;
 import org.unix4j.optset.Option;
-import org.unix4j.optset.OptionSet;
 
 /**
  * Options for the {@link ${cmd.pkg.name}.${cmd.simpleName} ${def.commandName}} command.
- * Application code should normally use {@link ${cmd.pkg.name}.${cmd.simpleName}#Options ${cmd.simpleName}.Options} instead.
+ * <p>
+ * For most applications, it may be more convenient to use {@link ${cmd.pkg.name}.${cmd.simpleName}#Options ${cmd.simpleName}.Options} 
+ * instead of the option constants defined here.
  */
-public enum ${simpleName} implements Option, OptionSet<${simpleName}> {
+public enum ${simpleName} implements Option, ${optionsName} {
 	<#foreach opt in def.options?values>
 	/**
 	 * Option <b>{@code --${opt.name}}</b>, <b>{@code -${opt.acronym}}</b>: 
