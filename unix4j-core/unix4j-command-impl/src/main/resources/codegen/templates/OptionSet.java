@@ -3,6 +3,7 @@
 <#global cmdDef=def.command> 
 <#global optDef=def.optionType> 
 <#global setDef=def.optionSetType> 
+<#global optionsName=cmdDef.simpleName+"Options">
 <@pp.changeOutputFile name=pp.pathTo(setDef.pkg.path+"/"+setDef.simpleName+".java")/> 
 package ${setDef.pkg.name};
 
@@ -31,7 +32,6 @@ package ${setDef.pkg.name};
 import java.util.EnumSet;
 import java.util.Arrays;
 import org.unix4j.optset.Option;
-import org.unix4j.optset.OptionSet;
 
 import ${cmdDef.pkg.name}.${cmdDef.simpleName};
 import ${optDef.pkg.name}.${optDef.simpleName};
@@ -53,7 +53,7 @@ import ${optDef.pkg.name}.${optDef.simpleName};
 </#if></#if></#if></#if>
  * </pre>
  */
-public enum ${setDef.simpleName} implements OptionSet<${optDef.simpleName}> {
+public enum ${setDef.simpleName} implements ${optionsName} {
 	<#foreach set in def.optionSets>
 	<#foreach useAcronym in [true,false]>
 	<#if useAcronym || set.active?size != 0><#-- no long version for empty set -->
