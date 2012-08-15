@@ -28,11 +28,11 @@ import ${def.pkg.name}.${optionsName};
  * <p>
  * <b>SYNOPSIS</b>
  * <p>
- * <pre>
+ * <table>
 <#foreach method in def.methods>
- *    {@code ${method.name}<#foreach arg in method.args> <@synopsisArg def arg/></#foreach>}
+ * <tr><td width="10px"></td><td nowrap="nowrap">{@code ${method.name}<#foreach arg in method.args> <@synopsisArg def arg/></#foreach>}</td></tr>
 </#foreach>
- * </pre>
+ * </table>
  * <p>
  * <b>DESCRIPTION</b>
  * <p>
@@ -50,17 +50,21 @@ import ${def.pkg.name}.${optionsName};
  * <p>
  * The following options are supported:
  * <p>
- * <table><#foreach opt in def.options?values>
- * <tr><td nowrap="nowrap">{@code -${opt.acronym}}</td><td>&nbsp;&nbsp;</td><td nowrap="nowrap"><tt>{@code --${opt.name}}</td><td>${opt.desc}</td></tr>
- * </#foreach></table>
+ * <table>
+<#foreach opt in def.options?values>
+ * <tr><td width="10px"></td><td nowrap="nowrap">{@code -${opt.acronym}}</td><td>&nbsp;&nbsp;</td><td nowrap="nowrap">{@code --${opt.name}}</td><td>&nbsp;</td><td>${opt.desc}</td></tr>
+</#foreach>
+ * </table>
  * <p>
  * <b>OPERANDS</b>
  * <p>
  * The following operands are supported:
  * <p>
- * <table><#foreach opd in def.operands?values>
- * <tr><td nowrap="nowrap">{@code <${opd.name}>}</td><td>&nbsp;:&nbsp;</td><td nowrap="nowrap">{@code ${opd.type}}</td><td>${opd.desc}</td></tr>
- * </#foreach></table>
+ * <table>
+<#foreach opd in def.operands?values>
+ * <tr><td width="10px"></td><td nowrap="nowrap">{@code <${opd.name}>}</td><td>&nbsp;:&nbsp;</td><td nowrap="nowrap">{@code ${opd.type}}</td><td>&nbsp;</td><td>${opd.desc}</td></tr>
+</#foreach>
+ * </table>
  */
 public final class ${cmd.simpleName} {
 	/**
