@@ -35,7 +35,7 @@ public class ResourceDataLoader implements DataLoader {
 		for (int i = 0; i < args.size(); i++) {
 			final InputStream resource = loadResource(args.get(i));
 			if (resource != null) {
-				final TemplateModel templateModel = templateLoader.load(resource);
+				final TemplateModel templateModel = templateLoader.load(engine, resource);
 				if (templateModel != null) {
 					templateModels.add(templateModel);
 				}

@@ -32,7 +32,7 @@ public class CommandDefinitionDataLoader extends ResourceDataLoader {
 	
 	public static final ResourceBasedDataLoader TEMPLATE_LOADER = new ResourceBasedDataLoader() {
 		@Override
-		public TemplateModel load(InputStream resource) {
+		public TemplateModel load(Engine engine, InputStream resource) {
 			final CommandDef commandDef = new CommandDefinitionLoader().load(resource);
 			System.out.println(commandDef.toString("......"));
 			try {

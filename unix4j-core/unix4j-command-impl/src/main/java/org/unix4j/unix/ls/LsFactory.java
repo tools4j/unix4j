@@ -38,21 +38,21 @@ public final class LsFactory implements Interface<LsCommand> {
 	}
 
 	@Override
-	public LsCommand ls(LsOptionSet options) {
+	public LsCommand ls(LsOptions options) {
 		final LsArgs args = new LsArgs();
 		args.setOpts(options);
 		return new LsCommand(args);
 	}
 
 	@Override
-	public LsCommand ls(LsOptionSet options, File... files) {
+	public LsCommand ls(LsOptions options, File... files) {
 		final LsArgs args = new LsArgs(files);
 		args.setOpts(options);
 		return new LsCommand(args);
 	}
 
 	@Override
-	public LsCommand ls(LsOptionSet options, String... files) {
+	public LsCommand ls(LsOptions options, String... files) {
 		final LsArgs args = new LsArgs(files);
 		args.setOpts(options);
 		return new LsCommand(args);

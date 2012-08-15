@@ -1,6 +1,10 @@
 package org.unix4j.codegen.model.command;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -22,7 +26,7 @@ public class CommandDefinitionLoader {
 		operands, operand
 	}
 	private static enum XmlAttribtue {
-		class_, package_, args, name, acronym, type
+		class_, package_, ref, args, name, acronym, type
 	}
 	public CommandDef load(InputStream commandDefinition) {
 		try {
@@ -34,20 +38,30 @@ public class CommandDefinitionLoader {
 		}
 	}
 
-	public CommandDef load(Document commandDefinition) {
+	public CommandDef load(Document commandDefinition) throws IOException {
 		final Element elCommand = commandDefinition.getDocumentElement();
 		final String commandName = elCommand.getNodeName();
 		final String className = XmlUtil.getRequiredAttribute(elCommand, XmlAttribtue.class_);
 		final String packageName = XmlUtil.getRequiredAttribute(elCommand, XmlAttribtue.package_);
 		final String name = XmlUtil.getRequiredElementText(elCommand, XmlElement.name);
 		final String synopsis = XmlUtil.getRequiredElementText(elCommand, XmlElement.synopsis);
-		final CommandDef def = new CommandDef(commandName, className, packageName, name, synopsis);
+		final String description = loadDescription(elCommand);
+		final CommandDef def = new CommandDef(commandName, className, packageName, name, synopsis, description);
 		loadOptions(def, elCommand);
 		loadOperands(def, elCommand);
 		loadMethods(def, elCommand);
 		return def;
 	}
 
+	private String loadDescription(Element elCommand) throws IOException {
+		final Element elDescription = XmlUtil.getSingleChildElement(elCommand, XmlElement.description);
+		final String ref = XmlUtil.getRequiredAttribute(elDescription, XmlAttribtue.ref);
+		final InputStream descFile = CommandDefinitionLoader.class.getResourceAsStream(ref);
+		if (descFile != null) {
+			return readDescriptionFile(descFile);
+		}
+		throw new FileNotFoundException("cannot find description file '" + ref + "' for command " + elCommand.getNodeName());
+	}
 	private void loadOptions(CommandDef def, Element elCommand) {
 		final Element elOptions = XmlUtil.getSingleChildElement(elCommand, XmlElement.options);
 		final List<Element> list = XmlUtil.getChildElements(elOptions, XmlElement.option);
@@ -98,5 +112,28 @@ public class CommandDefinitionLoader {
 			}
 		}
 	}
+	
+	private static final String BODY_TAG_START	= "<body>";
+	private static final String BODY_TAG_END	= "</body>";
+	private String readDescriptionFile(InputStream commandDescription) throws IOException {
+		final BufferedReader reader = new BufferedReader(new InputStreamReader(commandDescription));
+		final StringBuilder description = new StringBuilder();
+		String line = reader.readLine();
+		while (line != null) {
+			description.append(line);
+			line = reader.readLine();
+		}
+		reader.close();
+		final int start = description.indexOf(BODY_TAG_START);
+		if (start < 0) {
+			throw new IllegalArgumentException("body start tag " + BODY_TAG_START + " not found in html command description file");
+		}
+		final int end = description.indexOf(BODY_TAG_END, start);
+		if (end < 0) {
+			throw new IllegalArgumentException("body end tag " + BODY_TAG_END + " not found in html command description file");
+		}
+		return description.substring(start + BODY_TAG_START.length(), end);
+	}
+
 
 }
