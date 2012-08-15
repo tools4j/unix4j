@@ -103,13 +103,13 @@ public enum ${setDef.simpleName} implements OptionSet<${optDef.simpleName}> {
 		return EnumSet.copyOf(options);
 	}
 	/**
-	 * Returns true if the string representation of this option set should use
-	 * option {@link Option#acronym() acronyms} instead of the long option
-	 * {@link Option#name() names}.
+	 * Returns true if the {@link Option#acronym() acronym} should be used in
+	 * for the specified {@code option} string representations. 
 <#if def.options?keys?size != 0>
 	 * <p>
-	 * In particular, this option set returns true if the last option added to 
-	 * this set was an acronym, and false if it was a long option name. 
+	 * In particular and independent from the {@code option} argument, this 
+	 * option set returns true if the last option added to this set was an 
+	 * acronym, and false if it was a long option name. 
 	 * <p>
 	 * For instance, the set defined as
 	 * <pre>
@@ -117,10 +117,11 @@ public enum ${setDef.simpleName} implements OptionSet<${optDef.simpleName}> {
 	 	>   ${setDef.simpleName}.${def.options?values[0]}.${def.options?keys[1]};<#else
 	 	>   ${setDef.simpleName}.${def.options?keys[0]};</#if>
 	 * </pre>
-	 * uses acronyms, that is, this method returns true for the above set. 
+	 * uses acronyms, that is, this method always returns true for the above 
+	 * set. 
 	 * <p>
-	 * On the other hand, long option names are used and this method returns 
-	 * false for the set
+	 * On the other hand, long option names are used and this method always 
+	 * returns false for the set
 	 * <pre>
 	 * <#if def.options?keys?size != 1
 	 	>   ${setDef.simpleName}.${def.options?keys[0]}.${def.options?values[1]};<#else
@@ -137,13 +138,16 @@ public enum ${setDef.simpleName} implements OptionSet<${optDef.simpleName}> {
 	 	>   ${setDef.simpleName}.${def.options?keys[0]}.${def.options?values[0]};</#if>
 	 * </pre>
 	 * <p>
-	 * This method returns true for the empty set with no active options.
+	 * This method always returns true for the empty set with no active options.
 	 *  
+	 * @param option
+	 *            the option of interest, has no impact on the result returned
+	 *            by this method
 	 * @return true if option acronyms should be used for string representations
-	 *         of this option set
+	 *         of any option of this option set
 	 */
 	@Override
-	public boolean useAcronym() {
+	public boolean useAcronymFor(${optDef.simpleName} option) {
 		return useAcronym;
 	}
 }

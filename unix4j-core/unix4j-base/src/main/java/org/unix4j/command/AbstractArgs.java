@@ -214,15 +214,18 @@ abstract public class AbstractArgs<O extends Enum<O> & Option, A extends Abstrac
 
 	private String getOptionString() {
 		final StringBuilder sb = new StringBuilder();
-		if (opts.useAcronym()) {
-			for (final O opt : opts) {
+		//first, the options with acronym
+		for (final O opt : opts) {
+			if (opts.useAcronymFor(opt)) {
 				if (sb.length() == 0) {
 					sb.append("-");
 				}
 				sb.append(opt.acronym());
 			}
-		} else {
-			for (final O opt : opts) {
+		}
+		//now all options with long names
+		for (final O opt : opts) {
+			if (!opts.useAcronymFor(opt)) {
 				if (sb.length() != 0) {
 					sb.append(" ");
 				}
