@@ -58,16 +58,18 @@ public enum ${simpleName} implements Option, OptionSet<${simpleName}> {
 		return EnumSet.of(this);
 	}
 	/**
-	 * Returns true if the string representation of this option set should use
-	 * option {@link #acronym() acronyms} instead of the long option {@link Option#name() names}.
+	 * Returns true if the {@link Option#acronym() acronym} should be used in
+	 * for the specified {@code option} string representations. 
 	 * <p>
-	 * This method returns always true.
+	 * This method returns always true for all options.
 	 *  
-	 * @return always true indicating that option acronyms should be used for 
-	 * 			string representations of this option set
+	 * @param option
+	 *            the option of interest
+	 * @return always true indicating that option acronyms should be used in
+	 * 			string representations for all options
 	 */
 	@Override
-	public boolean useAcronym() {
+	public boolean useAcronymFor(${simpleName} option) {
 		return true;
 	}
 }

@@ -8,21 +8,24 @@ public class DefaultOptionSet<E extends Enum<E> & Option> implements OptionSet<E
 
 	private final Class<E> optionType;
 	private EnumSet<E> options;
-	private boolean useAcronym;
+	private EnumSet<E> useAcronym;
 
 	public DefaultOptionSet(E option) {
 		this.optionType = option.getDeclaringClass();
 		this.options = EnumSet.of(option);
+		this.useAcronym = EnumSet.noneOf(optionType);
 	}
 
 	public DefaultOptionSet(E first, E... rest) {
 		this.optionType = first.getDeclaringClass();
 		this.options = EnumSet.of(first, rest);
+		this.useAcronym = EnumSet.noneOf(optionType);
 	}
 
 	public DefaultOptionSet(Class<E> optionType) {
 		this.optionType = optionType;
 		this.options = EnumSet.noneOf(optionType);
+		this.useAcronym = EnumSet.noneOf(optionType);
 	}
 
 	public Class<E> optionType() {
@@ -81,8 +84,8 @@ public class DefaultOptionSet<E extends Enum<E> & Option> implements OptionSet<E
 	 * options that were not already set before will alter this
 	 * {@code OptionSet}.
 	 * <p>
-	 * Note that also the {@link #useAcronym()} flag is also inherited from the 
-	 * specified {@code optionSet}.
+	 * Note that also the {@link #useAcronymFor(Option)} flags are also 
+	 * inherited from the specified {@code optionSet}.
 	 * 
 	 * @param optionSet
 	 *            the optionSet with options to be set in this {@code OptionSet}
@@ -90,7 +93,9 @@ public class DefaultOptionSet<E extends Enum<E> & Option> implements OptionSet<E
 	 */
 	public DefaultOptionSet<E> setAll(OptionSet<E> optionSet) {
 		options.addAll(optionSet.asSet());
-		setUseAcronym(optionSet.useAcronym());
+		for (E option : optionType.getEnumConstants()) {
+			setUseAcronymFor(option, optionSet.useAcronymFor(option));
+		}
 		return this;
 	}
 
@@ -159,6 +164,7 @@ public class DefaultOptionSet<E extends Enum<E> & Option> implements OptionSet<E
 			@SuppressWarnings("unchecked")
 			final DefaultOptionSet<E> clone = (DefaultOptionSet<E>) super.clone();
 			clone.options = clone.options.clone();
+			clone.useAcronym = clone.useAcronym.clone();
 			return clone;
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException("should be cloneable", e);
@@ -175,21 +181,46 @@ public class DefaultOptionSet<E extends Enum<E> & Option> implements OptionSet<E
 	}
 
 	@Override
-	public boolean useAcronym() {
-		return useAcronym;
+	public boolean useAcronymFor(E option) {
+		return useAcronym.contains(option);
 	}
 
 	/**
-	 * Sets the flag indicating whether string representations of this option
-	 * set should use option {@link Option#acronym() acronyms} instead of the
-	 * long option {@link Option#name() names}.
+	 * Sets the flag indicating whether string representations should use the
+	 * {@link Option#acronym() acronym} instead of the long option
+	 * {@link Option#name() name} for all options.
 	 * 
 	 * @param useAcronym
-	 *            new flag value to set, true if option acronyms should be used
-	 *            for string representations of this option set
+	 *            new flag value to set, true if the option acronym should be
+	 *            used for all options
+	 * @see #setUseAcronymFor(Enum, boolean)           
 	 */
-	public void setUseAcronym(boolean useAcronym) {
-		this.useAcronym = useAcronym;
+	public void setUseAcronymForAll(boolean useAcronym) {
+		if (useAcronym) {
+			this.useAcronym.addAll(EnumSet.complementOf(this.useAcronym));
+		} else {
+			this.useAcronym.removeAll(EnumSet.copyOf(this.useAcronym));
+		}
+	}
+
+	/**
+	 * Sets the flag indicating whether string representations should use the
+	 * {@link Option#acronym() acronym} instead of the long option
+	 * {@link Option#name() name} for the specified {@code option}.
+	 * 
+	 * @param option
+	 *            the option for which this flag is set
+	 * @param useAcronym
+	 *            new flag value to set, true if the option acronym should be
+	 *            used for the specified {@code option}
+	 * @see #setUseAcronymForAll(boolean)
+	 */
+	public void setUseAcronymFor(E option, boolean useAcronym) {
+		if (useAcronym) {
+			this.useAcronym.add(option);
+		} else {
+			this.useAcronym.remove(option);
+		}
 	}
 
 }

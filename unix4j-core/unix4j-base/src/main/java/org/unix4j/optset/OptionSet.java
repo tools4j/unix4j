@@ -29,12 +29,15 @@ public interface OptionSet<O extends Option> {
 	Set<O> asSet();
 
 	/**
-	 * Returns true if the string representation of this option set should use
-	 * option {@link Option#acronym() acronyms} instead of the long option
-	 * {@link Option#name() names}.
+	 * Returns true if the {@link Option#acronym() acronym} should be used in
+	 * for the specified {@code option} string representations. Note that some
+	 * implementations may return the same value for all options.
 	 * 
-	 * @return true if option acronyms should be used for string representations
-	 *         of this option set
+	 * @param option
+	 *            the option of interest
+	 * 
+	 * @return true if the acronym should be used in string representations for
+	 *         the specified {@code option}
 	 */
-	boolean useAcronym();
+	boolean useAcronymFor(O option);
 }
