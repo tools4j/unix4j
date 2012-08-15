@@ -2,7 +2,7 @@
 <ls class="org.unix4j.unix.Ls" package="org.unix4j.unix.ls">
 	<name>ls - list directory contents</name>
 	<synopsis>ls [-ahlRrt] [file...]</synopsis>
-	<description ref="ls.html"/>
+	<description ref="/ls.html"/>
 	<notes>
 		<note>Infinite loop detection is currently NOT implemented.</note>
 	</notes>
@@ -69,7 +69,7 @@
 			The files or directories used as starting point for the listing; 
 			wildcards * and ? are supported.		
 		</operand>
-		<operand name="options" type="LsOptionSet">
+		<operand name="options" type="LsOptions">
 			The options defining the output format.
 		</operand>
 	</operands>

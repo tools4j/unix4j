@@ -34,7 +34,7 @@ public class OptionSetDefinitionDataLoader extends ResourceDataLoader {
 	
 	public static final ResourceBasedDataLoader TEMPLATE_LOADER = new ResourceBasedDataLoader() {
 		@Override
-		public TemplateModel load(InputStream resource) {
+		public TemplateModel load(Engine engine, InputStream resource) {
 			final CommandDef commandDef = new CommandDefinitionLoader().load(resource);
 			final OptionSetDef optionSetDef = new OptionSetDefLoader().create(commandDef);
 			System.out.println(optionSetDef.toString("......"));
