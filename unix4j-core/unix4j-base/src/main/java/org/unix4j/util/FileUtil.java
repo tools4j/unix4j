@@ -12,6 +12,14 @@ import java.util.regex.Pattern;
  * Utility class with static methods involving files.
  */
 public class FileUtil {
+	
+	public static final String ROOT_UNIX = "/";
+	public static final String ROOT_WINDOWS = "C:\\";//absolute prefix also: \\\\ i.e. actually \\ for network drive
+	public static final String ROOT = isWindows() ? ROOT_WINDOWS : ROOT_UNIX;
+	
+	private static boolean isWindows() {
+		return OS.Windows.equals(OS.current());
+	}
 
 	/**
 	 * Returns the user's current working directory taken from the system
@@ -91,7 +99,7 @@ public class FileUtil {
 			common++;
 		}
 		if (common == 0) {
-			return file.getAbsolutePath();
+			return file.getAbsolutePath().replace('\\', '/');
 		}
 		final StringBuilder sb = new StringBuilder();
 		if (common < rootParts.size()) {
