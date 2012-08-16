@@ -38,7 +38,7 @@ public class LsFormatterLong7 extends LsFormatterLong {
 			final PosixFileAttributeView view = Files.getFileAttributeView(file.toPath(), PosixFileAttributeView.class);
 			final String group = view.readAttributes().group().getName();
 			return StringUtil.fixSizeString(7, true, group);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			return super.getGroup(file, args);
 		}
 	}
@@ -57,7 +57,7 @@ public class LsFormatterLong7 extends LsFormatterLong {
 				(perms.contains(PosixFilePermission.OTHERS_READ) ? 'r' : '-') + 
 				(perms.contains(PosixFilePermission.OTHERS_WRITE) ? 'w' : '-') + 
 				(perms.contains(PosixFilePermission.OTHERS_EXECUTE) ? 'x' : '-');
-		} catch (IOException e) {
+		} catch (Exception e) {
 			return super.getFilePermissions(file, args);
 		}
 	}

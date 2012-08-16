@@ -6,9 +6,14 @@ import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.io.Input;
 import org.unix4j.io.StringInput;
+import org.unix4j.line.Line;
 import org.unix4j.util.MultilineString;
 
 public class WcTest {
+	
+	/** OS line ending length */
+	private static final int LEL = Line.LINE_ENDING.length();
+	
 	private static MultilineString input;
 	static{
 		input = new MultilineString();
@@ -23,21 +28,21 @@ public class WcTest {
 	public void testWcSingleFields() {
 		assertWc(input.toInput(), "5", Wc.Option.lines);
 
-		assertWc(input.toInput(), "46", Wc.Option.chars);	//41 chars + 5 line endings
+		assertWc(input.toInput(), "" + (41 + 5 * LEL), Wc.Option.chars);	//41 chars + 5 line endings
 
 		assertWc(input.toInput(), "8", Wc.Option.words);
 	}
 
 	@Test
 	public void testDefaultOutputWhenNoOptionsGiven() {
-		assertWc(input.toInput(), "   5   8  46");
+		assertWc(input.toInput(), "   5   8  " + (41 + 5 * LEL));
 	}
 
 	@Test
 	public void testMultipleOutputs() {
-		assertWc(input.toInput(), "   5   8  46", Wc.Option.lines, Wc.Option.words, Wc.Option.chars);
+		assertWc(input.toInput(), "   5   8  " + (41 + 5 * LEL), Wc.Option.lines, Wc.Option.words, Wc.Option.chars);
 		assertWc(input.toInput(), "  5  8", Wc.Option.lines, Wc.Option.words);
-		assertWc(input.toInput(), "   5   8  46", Wc.Option.lines, Wc.Option.words, Wc.Option.chars, Wc.Option.lines, Wc.Option.words, Wc.Option.chars);
+		assertWc(input.toInput(), "   5   8  " + (41 + 5 * LEL), Wc.Option.lines, Wc.Option.words, Wc.Option.chars, Wc.Option.lines, Wc.Option.words, Wc.Option.chars);
 	}
 
 	@Test
