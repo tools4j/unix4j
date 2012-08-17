@@ -1,6 +1,9 @@
 package org.unix4j.codegen.loader;
 
-import java.io.InputStream;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,22 +36,35 @@ public class ResourceDataLoader implements DataLoader {
 	private SimpleSequence loadDataModel(Engine engine, List<?> args) throws Exception {
 		final List<TemplateModel> templateModels = new ArrayList<TemplateModel>();
 		for (int i = 0; i < args.size(); i++) {
-			final InputStream resource = loadResource(args.get(i));
+			final String resourceName = args.get(i).toString();
+			final URL resource = loadResource(engine, resourceName);
 			if (resource != null) {
-				final TemplateModel templateModel = templateLoader.load(engine, resource);
+				final TemplateModel templateModel = templateLoader.load(resource);
 				if (templateModel != null) {
 					templateModels.add(templateModel);
 				}
 			} else {
-				throw new IllegalArgumentException("resource[" + i + "] not found: " + args.get(i));
+				throw new IllegalArgumentException("resource[" + i + "] not found: " + resourceName);
 			}
 		}
 		return new SimpleSequence(templateModels);
 	}
 
-	private InputStream loadResource(Object resourceName) {
+	public static URL loadResource(Engine engine, String resourceName) throws URISyntaxException, MalformedURLException {
 		if (resourceName != null) {
-			return ResourceDataLoader.class.getResourceAsStream(resourceName.toString());
+			final URL url = ResourceDataLoader.class.getResource(resourceName);
+			if (url != null) {
+				return url;
+			} else {
+				File file = new File(resourceName);
+				if (file.canRead()) {
+					return file.toURI().toURL();
+				}
+				file = new File(engine.getDataRoot(), resourceName);
+				if (file.canRead()) {
+					return file.toURI().toURL();
+				}
+			}
 		}
 		return null;
 	}

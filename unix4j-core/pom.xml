@@ -10,8 +10,7 @@
 	
 	<modules>
 		<module>unix4j-base</module>
-		<module>unix4j-command-api</module>
-		<module>unix4j-command-impl</module>
+		<module>unix4j-command</module>
 	</modules>
 
 	<dependencies>

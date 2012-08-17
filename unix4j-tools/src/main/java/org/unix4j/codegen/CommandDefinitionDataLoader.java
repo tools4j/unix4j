@@ -1,6 +1,6 @@
 package org.unix4j.codegen;
 
-import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
 
 import org.unix4j.codegen.loader.ResourceBasedDataLoader;
@@ -32,7 +32,7 @@ public class CommandDefinitionDataLoader extends ResourceDataLoader {
 	
 	public static final ResourceBasedDataLoader TEMPLATE_LOADER = new ResourceBasedDataLoader() {
 		@Override
-		public TemplateModel load(Engine engine, InputStream resource) {
+		public TemplateModel load(URL resource) {
 			final CommandDef commandDef = new CommandDefinitionLoader().load(resource);
 			System.out.println(commandDef.toString("......"));
 			try {
