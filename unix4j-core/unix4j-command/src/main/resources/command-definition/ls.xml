@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<ls class="org.unix4j.unix.Ls" package="org.unix4j.unix.ls">
+	<name>ls - list directory contents</name>
+	<synopsis>ls [-ahlRrt] [file...]</synopsis>
+	<description ref="ls.html"/>
+	<notes>
+		<note>Infinite loop detection is currently NOT implemented.</note>
+	</notes>
+	<methods>
+		<method>
+			Lists all files and directories in the user's current working 
+			directory and writes them to the output.
+		</method>
+		<method args="files">
+			Prints the name of the given files and lists all files contained in 
+			directories for every directory in {@code files}.
+		</method>
+		<method args="paths">
+			Prints the name of the given files and lists all files contained in 
+			directories for every directory in {@code files}.
+		</method>
+		<method args="options">
+			Lists all files and directories in the user's current working 
+			directory and writes them to the output using the given options 
+			specifying the details of the output format.
+		</method>
+		<method args="options,files">
+			Prints the name of the given files and lists all files contained in
+			directories for every directory in {@code files}. The given options
+			define the details of the output format.
+		</method>
+		<method args="options,paths">
+			Prints the name of the given files and lists all files contained in
+			directories for every directory in {@code files}. The given options
+			define the details of the output format.
+		</method>
+	</methods>
+	<options>
+		<option name="allFiles" acronym="a">
+			Lists all files in the given directory, including hidden files
+			(those whose names start with \".\" in Unix). By default, these 
+			files are excluded from the list.
+		</option>
+		<option name="humanReadable" acronym="h">
+			Print sizes in human readable format. (e.g., 1K, 234M, 2G, etc.)
+		</option>
+		<option name="longFormat" acronym="l">
+			Long format, displaying file types, permissions, number of hard 
+			links, owner, group, size, date, and filename.
+		</option>
+		<option name="recurseSubdirs" acronym="R">
+			Recursively lists subdirectories encountered.
+		</option>
+		<option name="reverseOrder" acronym="r">
+			Reverses the order of the sort to get reverse collating sequence or 
+			oldest first.
+		</option>
+		<option name="timeSorted" acronym="t">
+			Sorts with the primary key being time modified (most recently 
+			modified first) and the secondary key being filename in the 
+			collating sequence.
+		</option>
+	</options>
+	<operands>
+		<operand name="files" type="java.io.File...">
+			The files or directories used as starting point for the listing.		
+		</operand>
+		<operand name="paths" type="String...">
+			The files or directories used as starting point for the listing; 
+			wildcards * and ? are supported.		
+		</operand>
+		<operand name="options" type="LsOptions">
+			The options defining the output format.
+		</operand>
+	</operands>
+</ls>

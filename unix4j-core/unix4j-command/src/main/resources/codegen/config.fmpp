@@ -1,0 +1,13 @@
+# Configuration file for freemarker/fmpp code generation 
+modes: [ 
+    execute(**/*.java, **/*.txt) 
+    copy(**/*) 
+] 
+data: {
+	commandDefs: org.unix4j.codegen.CommandDefinitionDataLoader(
+    	../../command-definition/ls.xml
+	)
+    optionDefs: org.unix4j.codegen.OptionSetDefinitionDataLoader(
+    	../../command-definition/ls.xml
+    )
+}
