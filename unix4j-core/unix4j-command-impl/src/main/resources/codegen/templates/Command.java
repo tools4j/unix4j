@@ -105,12 +105,12 @@ public final class ${cmd.simpleName} {
 	}
 	
 	/**
-	 * Options for the ${commandName} command.
+	 * Options for the "${commandName}" command: <#foreach opt in def.options?values>{@link ${optionSetName}#${opt.acronym} ${opt.acronym}}={@link ${optionSetName}#${opt.name} ${opt.name}}<#if opt_has_next>, </#if></#foreach>.
 	 */
 	public static final ${optionSetName} Options = ${optionSetName}.${optionSetName};
 
 	/**
-	 * Singleton {@link ${factoryName} factory} instance for the ${commandName} command.
+	 * Singleton {@link ${factoryName} factory} instance for the "${commandName}" command.
 	 */
 	public static final ${factoryName} FACTORY = ${factoryName}.INSTANCE;
 
