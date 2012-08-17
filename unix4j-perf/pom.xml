@@ -15,13 +15,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.unix4j</groupId>
-			<artifactId>unix4j-command-api</artifactId>
-			<version>0.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.unix4j</groupId>
-			<artifactId>unix4j-command-impl</artifactId>
+			<artifactId>unix4j-command</artifactId>
 			<version>0.1</version>
 			<scope>test</scope>
 		</dependency>

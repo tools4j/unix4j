@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -28,24 +29,24 @@ public class CommandDefinitionLoader {
 	private static enum XmlAttribtue {
 		class_, package_, ref, args, name, acronym, type
 	}
-	public CommandDef load(InputStream commandDefinition) {
+	public CommandDef load(URL commandDefinition) {
 		try {
 			final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			final Document doc = builder.parse(commandDefinition);
-			return load(doc);
+			final Document doc = builder.parse(commandDefinition.openStream());
+			return load(commandDefinition, doc);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	public CommandDef load(Document commandDefinition) throws IOException {
+	public CommandDef load(URL commandDefinitionURL, Document commandDefinition) throws IOException {
 		final Element elCommand = commandDefinition.getDocumentElement();
 		final String commandName = elCommand.getNodeName();
 		final String className = XmlUtil.getRequiredAttribute(elCommand, XmlAttribtue.class_);
 		final String packageName = XmlUtil.getRequiredAttribute(elCommand, XmlAttribtue.package_);
 		final String name = XmlUtil.getRequiredElementText(elCommand, XmlElement.name);
 		final String synopsis = XmlUtil.getRequiredElementText(elCommand, XmlElement.synopsis);
-		final String description = loadDescription(elCommand);
+		final String description = loadDescription(commandDefinitionURL, elCommand);
 		final CommandDef def = new CommandDef(commandName, className, packageName, name, synopsis, description);
 		loadOptions(def, elCommand);
 		loadOperands(def, elCommand);
@@ -53,10 +54,13 @@ public class CommandDefinitionLoader {
 		return def;
 	}
 
-	private String loadDescription(Element elCommand) throws IOException {
+	private String loadDescription(URL commandDefinitionURL, Element elCommand) throws IOException {
+		final String path = commandDefinitionURL.toString();
+		final int lastDash = path == null ? -1 : path.lastIndexOf('/');
+		final String parentPath = lastDash < 0 ? "" : path.substring(0, lastDash + 1);
 		final Element elDescription = XmlUtil.getSingleChildElement(elCommand, XmlElement.description);
 		final String ref = XmlUtil.getRequiredAttribute(elDescription, XmlAttribtue.ref);
-		final InputStream descFile = CommandDefinitionLoader.class.getResourceAsStream(ref);
+		final InputStream descFile = new URL(parentPath + ref).openStream();
 		if (descFile != null) {
 			return readDescriptionFile(descFile);
 		}
