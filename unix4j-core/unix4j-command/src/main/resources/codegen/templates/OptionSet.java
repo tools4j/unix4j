@@ -29,8 +29,10 @@ package ${setDef.pkg.name};
 	useAcronym>${name}<#else>${name}_long</#if
 ></#macro>
 
-import java.util.EnumSet;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Iterator;
 import org.unix4j.optset.Option;
 
 import ${cmdDef.pkg.name}.${cmdDef.simpleName};
@@ -101,6 +103,14 @@ public enum ${setDef.simpleName} implements ${optionsName} {
 	@Override
 	public EnumSet<${optDef.simpleName}> asSet() {
 		return EnumSet.copyOf(options);
+	}
+	/**
+	 * Returns an immutable iterator with the active options of this option set.
+	 * 
+	 * @return an immutable iterator for over the active options
+	 */
+	public Iterator<${optDef.simpleName}> iterator() {
+		return Collections.unmodifiableSet(options).iterator();
 	}
 	/**
 	 * Returns true if the {@link Option#acronym() acronym} should be used in

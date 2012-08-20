@@ -201,7 +201,7 @@ abstract public class AbstractArgs<O extends Enum<O> & Option, A extends Abstrac
 		}
 		final StringBuilder sb = new StringBuilder();
 		if (!opts.isEmpty()) {
-			sb.append(getOptionString());
+			sb.append(DefaultOptionSet.toString(opts));
 		}
 		for (Map.Entry<TypedMap.Key<?>, ?> e : args.asMap().entrySet()) {
 			if (sb.length() > 0)
@@ -212,26 +212,4 @@ abstract public class AbstractArgs<O extends Enum<O> & Option, A extends Abstrac
 		return sb.toString();
 	}
 
-	private String getOptionString() {
-		final StringBuilder sb = new StringBuilder();
-		//first, the options with acronym
-		for (final O opt : opts) {
-			if (opts.useAcronymFor(opt)) {
-				if (sb.length() == 0) {
-					sb.append("-");
-				}
-				sb.append(opt.acronym());
-			}
-		}
-		//now all options with long names
-		for (final O opt : opts) {
-			if (!opts.useAcronymFor(opt)) {
-				if (sb.length() != 0) {
-					sb.append(" ");
-				}
-				sb.append("--").append(opt.name());
-			}
-		}
-		return sb.toString();
-	}
 }

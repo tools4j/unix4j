@@ -6,7 +6,9 @@
 <@pp.changeOutputFile name=pp.pathTo(def.pkg.path+"/"+simpleName+".java")/> 
 package ${def.pkg.name};
 
+import java.util.Collections;
 import java.util.EnumSet;
+import java.util.Iterator;
 import org.unix4j.optset.Option;
 
 /**
@@ -59,6 +61,17 @@ public enum ${simpleName} implements Option, ${optionsName} {
 	public EnumSet<${simpleName}> asSet() {
 		return EnumSet.of(this);
 	}
+	
+	/**
+	 * Returns an immutable iterator returning o single element: {@code this} 
+	 * option.
+	 * 
+	 * @return an immutable iterator with {@code this} active option.
+	 */
+	public Iterator<${simpleName}> iterator() {
+		return Collections.singleton(this).iterator();
+	}
+	
 	/**
 	 * Returns true if the {@link Option#acronym() acronym} should be used in
 	 * for the specified {@code option} string representations. 
