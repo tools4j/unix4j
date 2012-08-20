@@ -74,6 +74,7 @@ public class DefaultOptionSet<E extends Enum<E> & Option> implements OptionSet<E
 	public DefaultOptionSet<E> setAll(Collection<? extends E> options) {
 		for (final E option : options) {
 			set(option);
+			setUseAcronymFor(option, false);
 		}
 		return this;
 	}
@@ -132,9 +133,10 @@ public class DefaultOptionSet<E extends Enum<E> & Option> implements OptionSet<E
 	public EnumSet<E> asSet() {
 		return options;
 	}
-
+	
 	/**
-	 * Returns an iterator over all set options in this {@code OptionSet}.
+	 * Returns an iterator over all set options in this {@code OptionSet}. 
+	 * Removing an option from the 
 	 * 
 	 * @return an iterator over all set options
 	 */
@@ -176,13 +178,14 @@ public class DefaultOptionSet<E extends Enum<E> & Option> implements OptionSet<E
 	}
 
 	@Override
-	public String toString() {
-		return options.toString();
-	}
-
-	@Override
 	public boolean useAcronymFor(E option) {
-		return useAcronym.contains(option);
+		if (useAcronym.contains(option)) {
+			if (options.contains(option)) {
+				return true;
+			}
+			useAcronym.remove(option);
+		}
+		return false;
 	}
 
 	/**
@@ -223,4 +226,30 @@ public class DefaultOptionSet<E extends Enum<E> & Option> implements OptionSet<E
 		}
 	}
 
+	@Override
+	public String toString() {
+		return toString(this);
+	}
+	public static <O extends Option> String toString(OptionSet<O> optionSet) {
+		final StringBuilder sb = new StringBuilder();
+		//first, the options with acronym
+		for (final O opt : optionSet) {
+			if (optionSet.useAcronymFor(opt)) {
+				if (sb.length() == 0) {
+					sb.append("-");
+				}
+				sb.append(opt.acronym());
+			}
+		}
+		//now all options with long names
+		for (final O opt : optionSet) {
+			if (!optionSet.useAcronymFor(opt)) {
+				if (sb.length() != 0) {
+					sb.append(" ");
+				}
+				sb.append("--").append(opt.name());
+			}
+		}
+		return sb.toString();
+	}
 }
