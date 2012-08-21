@@ -1,5 +1,6 @@
 package org.unix4j.optset;
 
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -27,6 +28,18 @@ public interface OptionSet<O extends Option> extends Iterable<O> {
 	 * @return an set containing all active options
 	 */
 	Set<O> asSet();
+
+	/**
+	 * Returns an iterator over the active options in this option set.
+	 * <p>
+	 * It depends on the implementation whether the returned iterator is
+	 * modifiable or not, that is, whether it supports the {@code remove()}
+	 * method.
+	 * 
+	 * @return an iterator over all active options
+	 */
+	@Override
+	Iterator<O> iterator();
 
 	/**
 	 * Returns true if the {@link Option#acronym() acronym} should be used in

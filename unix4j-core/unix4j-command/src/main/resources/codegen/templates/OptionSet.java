@@ -109,6 +109,7 @@ public enum ${setDef.simpleName} implements ${optionsName} {
 	 * 
 	 * @return an immutable iterator for over the active options
 	 */
+	@Override
 	public Iterator<${optDef.simpleName}> iterator() {
 		return Collections.unmodifiableSet(options).iterator();
 	}
