@@ -68,6 +68,7 @@ public enum ${simpleName} implements Option, ${optionsName} {
 	 * 
 	 * @return an immutable iterator with {@code this} active option.
 	 */
+	@Override
 	public Iterator<${simpleName}> iterator() {
 		return Collections.singleton(this).iterator();
 	}
