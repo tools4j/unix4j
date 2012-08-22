@@ -1,17 +1,18 @@
 package org.unix4j.unix;
 
 import org.junit.Test;
+import org.unix4j.AbstractPerfTest;
+import org.unix4j.LargeTestFiles;
 import org.unix4j.Unix4j;
 
-public class GrepPerfTest extends AbstractPerfTest{
+public class GrepPerfTest extends AbstractPerfTest {
 	/**
 	 * Equivalent unix test:
 	 * time cat 10_Meg_test_file.txt | grep "test" > /dev/null
 	 */
 	@Test(timeout = 2000)
 	public void testGrep_10Meg() {
-		runCommandAndCompareToEquivalentUnixExecutionTimeInMillis(
-			Unix4j.fromFile(file10Meg).grep("test", Grep.Option.fixedStrings));
+		run(Unix4j.fromFile(LargeTestFiles.FILE_10_MEG.getFile()).grep("test", Grep.Option.fixedStrings));
 	}
 
 	/**
@@ -20,8 +21,7 @@ public class GrepPerfTest extends AbstractPerfTest{
 	 */
 	@Test(timeout = 5000)
 	public void testGrep_100Meg() {
-		runCommandAndCompareToEquivalentUnixExecutionTimeInMillis(
-			Unix4j.fromFile(file100Meg).grep("test", Grep.Option.fixedStrings));
+		run(Unix4j.fromFile(LargeTestFiles.FILE_100_MEG.getFile()).grep("test", Grep.Option.fixedStrings));
 	}
 
 	/**
@@ -30,8 +30,7 @@ public class GrepPerfTest extends AbstractPerfTest{
 	 */
 	@Test(timeout = 2000)
 	public void testGrep_10Meg_pipedTwice() {
-		runCommandAndCompareToEquivalentUnixExecutionTimeInMillis(
-			Unix4j.fromFile(file10Meg).grep("test", Grep.Option.fixedStrings).grep("the", Grep.Option.fixedStrings));
+		run(Unix4j.fromFile(LargeTestFiles.FILE_10_MEG.getFile()).grep("test", Grep.Option.fixedStrings).grep("the", Grep.Option.fixedStrings));
 	}
 
 	/**
@@ -40,8 +39,7 @@ public class GrepPerfTest extends AbstractPerfTest{
 	 */
 	@Test(timeout = 5000)
 	public void testGrep_100Meg_pipedTwice() {
-		runCommandAndCompareToEquivalentUnixExecutionTimeInMillis(
-			Unix4j.fromFile(file100Meg).grep("test", Grep.Option.fixedStrings).grep("the", Grep.Option.fixedStrings));
+		run(Unix4j.fromFile(LargeTestFiles.FILE_100_MEG.getFile()).grep("test", Grep.Option.fixedStrings).grep("the", Grep.Option.fixedStrings));
 	}
 
 	/**
@@ -50,8 +48,7 @@ public class GrepPerfTest extends AbstractPerfTest{
 	 */
 	@Test(timeout = 2500)
 	public void testGrep_10Meg_inverseGrep() {
-		runCommandAndCompareToEquivalentUnixExecutionTimeInMillis(
-			Unix4j.fromFile(file10Meg).grep("test", Grep.Option.invert, Grep.Option.fixedStrings));
+		run(Unix4j.fromFile(LargeTestFiles.FILE_10_MEG.getFile()).grep("test", Grep.Option.invert, Grep.Option.fixedStrings));
 	}
 
 	/**
@@ -60,8 +57,7 @@ public class GrepPerfTest extends AbstractPerfTest{
 	 */
 	@Test(timeout = 5000)
 	public void testGrep_100Meg_inverseGrep() {
-		runCommandAndCompareToEquivalentUnixExecutionTimeInMillis(
-			Unix4j.fromFile(file100Meg).grep("test", Grep.Option.invert, Grep.Option.fixedStrings));
+		run(Unix4j.fromFile(LargeTestFiles.FILE_100_MEG.getFile()).grep("test", Grep.Option.invert, Grep.Option.fixedStrings));
 	}
 }
 
