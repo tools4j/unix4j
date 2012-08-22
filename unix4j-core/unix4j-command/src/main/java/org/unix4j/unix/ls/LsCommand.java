@@ -43,7 +43,6 @@ class LsCommand extends AbstractCommand<LsArgs> {
 		};
 	}
 
-
 	private void listFiles(File relativeTo, File parent, List<File> files, LineProcessor output) {
 		final LsArgs args = getArguments();
 		final Comparator<File> comparator = getComparator(relativeTo);

@@ -5,18 +5,23 @@
 <#global optionsName=cmd.simpleName+"Options">
 <#global optionSetName=cmd.simpleName+"OptionSet">
 <#global factoryName=cmd.simpleName+"Factory">
+<#global varName=cmd.simpleName+"Var">
 <@pp.changeOutputFile name=pp.pathTo(cmd.pkg.path+"/"+cmd.simpleName+".java")/> 
 package ${cmd.pkg.name};
 
 import org.unix4j.command.CommandInterface;
-import org.unix4j.unix.ls.LsFactory;
+import org.unix4j.variable.Literal;
 
-import ${def.pkg.name}.${optionSetName};
+import ${def.pkg.name}.${factoryName};
 import ${def.pkg.name}.${optionsName};
+import ${def.pkg.name}.${optionSetName};
+import ${def.pkg.name}.${varName};
 
+<#function isOptionsArg def arg>
+	<#return def.operands[arg].type == optionsName>
+</#function>
 <#macro synopsisArg def arg><#if 
-	def.operands[arg].type == optionsName
-	>[-<#foreach opt in def.options?values>${opt.acronym}</#foreach>]<#else
+	isOptionsArg(def, arg)>[-<#foreach opt in def.options?values>${opt.acronym}</#foreach>]<#else
 	><${arg}></#if
 ></#macro>
 /**
@@ -103,6 +108,21 @@ public final class ${cmd.simpleName} {
 		R ${method.name}(<#foreach arg in method.args>${def.operands[arg].type} ${arg}<#if arg_has_next>, </#if></#foreach>);
 </#foreach>
 	}
+
+	/**
+	 * Very similar to {@link Interface} but defines all method signatures for 
+	 * the "${commandName}" command when variables are used in form of a
+	 * {@link Literal}.
+	 * 
+	 * @param <R>
+	 *            the generic return type for all command signature methods
+	 *            to support different implementor types; the command
+	 *            {@link ${cmd.simpleName}#FACTORY FACTORY} for instance returns a
+	 *            new command instance; command builders can also implement this
+	 *            interface and return an instance to itself allowing for
+	 *            chained method invocations to create joined commands.
+	 */
+	public static interface Interface$<R> extends ${varName}.Interface<R> {}
 	
 	/**
 	 * Options for the "${commandName}" command: <#foreach opt in def.options?values>{@link ${optionSetName}#${opt.acronym} ${opt.acronym}}={@link ${optionSetName}#${opt.name} ${opt.name}}<#if opt_has_next>, </#if></#foreach>.
