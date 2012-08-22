@@ -20,7 +20,7 @@ public class ResultsFile {
 	public ResultsFile()  {
 		try {
 			final File outputDir = getOutputDirectoryGivenClass(this.getClass());
-			filename = format("%s/unix4j-perf-results-%s.properties", outputDir.getPath(), USERNAME);
+			filename = format("%s/" + TestBaseline.Factory.UNIX4J.getUserFilename(), outputDir.getPath());
 			properties = new Properties();
 
 			if((new File(filename)).exists()){
@@ -36,7 +36,7 @@ public class ResultsFile {
 			properties.put(key, value);
 			properties.store(new FileOutputStream(filename), null);
 			System.out.println(format("Execution time written to: %s", filename));
-			System.out.println(format("Save and check-in this file to unix4j-perf/src/test/resources/unix4j-perf-baseline-%s.properties to create a new baseline file.", USERNAME));
+			System.out.println(format("Save and check-in this file to unix4j-perf/src/test/resources/%s to create a new baseline file.", TestBaseline.Factory.UNIX4J.getUserFilename()));
 		} catch (IOException e) {
 			new RuntimeException(e);
 		}

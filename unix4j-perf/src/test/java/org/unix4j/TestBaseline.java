@@ -8,6 +8,7 @@ import static org.junit.Assert.fail;
  * User: ben
  */
 public class TestBaseline {
+	private final static String USERNAME = System.getProperty("user.name");
 	public enum Factory{
 		UNIX4J("/perf-baseline-unix4j-default.properties"),
 		LINUX("/perf-baseline-linux-default.properties");
@@ -16,6 +17,9 @@ public class TestBaseline {
 
 		public TestBaseline create(final String testName){
 			return new TestBaseline(testName, defaultFilename);
+		}
+		public String getUserFilename() {
+			return defaultFilename.replace("default", USERNAME);
 		}
 
 		private Factory(final String defaultFilename) {
