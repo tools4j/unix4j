@@ -42,7 +42,7 @@ public class ResultsFile {
 		}
 	}
 
-	private File getOutputDirectoryGivenClass(final Class clazz){
+	private File getOutputDirectoryGivenClass(final Class<?> clazz){
 		final String resource = "/" + clazz.getName().replace(".", "/") + ".class";
 		final URL classFileURL = clazz.getResource(resource);
 		final int packageDepth = clazz.getName().split("\\.").length;
