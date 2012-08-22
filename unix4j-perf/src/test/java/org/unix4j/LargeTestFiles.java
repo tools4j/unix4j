@@ -55,7 +55,7 @@ public enum LargeTestFiles {
 
 	private void createLargeFileIfItDoesntExist(final File destinationFile, final File smallFile, int multiplesOfSmallFile) {
 		try{
-			if(destinationFile.exists()){
+			if (!destinationFile.exists()){
 				System.out.println("Large file does not exist, creating.");
 				final String file1MegContents = readFile(smallFile);
 
