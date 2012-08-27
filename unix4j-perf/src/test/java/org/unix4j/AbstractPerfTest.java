@@ -14,7 +14,8 @@ import static org.junit.Assert.fail;
  */
 public class AbstractPerfTest {
 	private final static ResultsFile resultsFile = new ResultsFile();
-	private final static double MAX_EXECUTION_TIME_TO_BASELINE = 1.5d;
+	private final static double MAX_EXECUTION_TIME_TO_BASELINE = 3.0d;
+	private final static LinuxTestScriptCreator linuxTestScriptCreator = new LinuxTestScriptCreator();
 
 	private long timeStarted;
 
@@ -23,13 +24,14 @@ public class AbstractPerfTest {
 		LargeTestFiles.load();
 	}
 
-	protected void run(final Unix4jCommandBuilder command) {
+	protected void run(final Unix4jCommandBuilder command, final String linuxEquivalentCommand) {
 		final String testName = getTestName();
 
 		final long executionTime = runCommand(command);
 		System.out.println(testName + ".executionTime=" + executionTime);
 		System.out.println("");
 
+		linuxTestScriptCreator.writeCommandTest(testName, linuxEquivalentCommand);
 		resultsFile.write(testName + ".executionTime", ""+executionTime);
 
 		final TestBaseline unix4jBaseline = TestBaseline.Factory.UNIX4J.create(testName);
