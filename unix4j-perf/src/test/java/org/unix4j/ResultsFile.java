@@ -32,9 +32,9 @@ public class ResultsFile {
 		}
 	}
 
-	public void write(final String key, final String value){
+	public void write(final String testName, final String executionTimeInMillis){
 		try {
-			properties.put(key, value);
+			properties.put(testName, executionTimeInMillis);
 			properties.store(new FileOutputStream(filename), null);
 			System.out.println(format("Execution time written to: %s", filename));
 			System.out.println(format("Save and check-in this file to unix4j-perf/src/test/resources%s to create a new baseline file.", TestBaseline.Factory.UNIX4J.getUserFilename()));
