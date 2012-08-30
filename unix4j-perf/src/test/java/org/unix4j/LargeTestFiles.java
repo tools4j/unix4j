@@ -15,6 +15,7 @@ import static org.junit.Assert.assertTrue;
  * User: ben
  */
 public enum LargeTestFiles {
+	FILE_1_MEG("/1_Meg_test_file.txt", 1),
 	FILE_10_MEG("/10_Meg_test_file.txt", 10),
 	FILE_100_MEG("/100_Meg_test_file.txt", 100);
 
