@@ -38,13 +38,13 @@ public final class ${simpleName} {
 	public static final ${simpleName} INSTANCE = new ${simpleName}();
 
 	<#global grp = def.initialGroup>
-	<#foreach activeSet in grp.levelActiveSets[0]?values>
-	<#global opt = activeSet.active[0]>
-	<#global optType = grp.optionToNextGroup[opt].groupType>
-	<@optionJavadocAcronym grp.options[opt] false/>
-	public final ${optType.simpleName} ${grp.options[opt].acronym} = ${optType.simpleName}.${activeSet.name};  
-	<@optionJavadocLong grp.options[opt] false/>
-	public final ${optType.simpleName} ${grp.options[opt].name} = ${optType.simpleName}.${activeSet.name}_long;  
+	<#foreach opt in grp.options?values>
+	<#global optType = grp.optionToNextGroup[opt.name].groupType>
+	<#global activeSetName = "Active_" + opt.acronym>
+	<@optionJavadocAcronym opt false/>
+	public final ${optType.simpleName} ${opt.acronym} = ${optType.simpleName}.${activeSetName};  
+	<@optionJavadocLong opt false/>
+	public final ${optType.simpleName} ${opt.name} = ${optType.simpleName}.${activeSetName}_long;  
 	</#foreach>
 	
 }
