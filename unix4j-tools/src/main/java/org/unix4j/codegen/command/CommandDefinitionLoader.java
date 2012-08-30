@@ -1,4 +1,4 @@
-package org.unix4j.codegen.model.command;
+package org.unix4j.codegen.command;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -6,11 +6,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.unix4j.codegen.command.def.CommandDef;
+import org.unix4j.codegen.command.def.MethodDef;
+import org.unix4j.codegen.command.def.OperandDef;
+import org.unix4j.codegen.command.def.OptionDef;
 import org.unix4j.codegen.xml.XmlUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -27,7 +35,7 @@ public class CommandDefinitionLoader {
 		operands, operand
 	}
 	private static enum XmlAttribtue {
-		class_, package_, ref, args, name, acronym, type
+		class_, package_, ref, args, name, acronym, type, exclusiveGroup
 	}
 	public CommandDef load(URL commandDefinition) {
 		try {
@@ -69,12 +77,34 @@ public class CommandDefinitionLoader {
 	private void loadOptions(CommandDef def, Element elCommand) {
 		final Element elOptions = XmlUtil.getSingleChildElement(elCommand, XmlElement.options);
 		final List<Element> list = XmlUtil.getChildElements(elOptions, XmlElement.option);
+		final Map<String, Set<OptionDef>> exclusiveGroupByName = new LinkedHashMap<String, Set<OptionDef>>();
 		for (final Element elOption : list) {
 			final String name = XmlUtil.getRequiredAttribute(elOption, XmlAttribtue.name);
 			final String acronym = XmlUtil.getRequiredAttribute(elOption, XmlAttribtue.acronym);
-			final String desc = XmlUtil.getRequiredElementText(elOption);
+			final String desc = formatDesc(XmlUtil.getRequiredElementText(elOption));
 			final OptionDef optDef = new OptionDef(name, acronym, desc);
 			def.options.put(name, optDef);
+			
+			//the exclusive group
+			final String exclusiveGroup = XmlUtil.getAttribute(elOption, XmlAttribtue.exclusiveGroup);
+			if (exclusiveGroup != null) {
+				Set<OptionDef> members = exclusiveGroupByName.get(exclusiveGroup);
+				if (members == null) {
+					members = new LinkedHashSet<OptionDef>();
+					exclusiveGroupByName.put(exclusiveGroup, members);
+				}
+				members.add(optDef);
+			}
+		}
+		//add exclusive groups to option defs
+		for (final Map.Entry<String, Set<OptionDef>> e : exclusiveGroupByName.entrySet()) {
+			for (final OptionDef opt : e.getValue()) {
+				for (final OptionDef excl : e.getValue()) {
+					if (opt != excl) {
+						opt.excludes.add(excl.name);
+					}
+				}
+			}
 		}
 	}
 
@@ -84,7 +114,7 @@ public class CommandDefinitionLoader {
 		for (final Element elOperand : list) {
 			final String name = XmlUtil.getRequiredAttribute(elOperand, XmlAttribtue.name);
 			final String type = XmlUtil.getRequiredAttribute(elOperand, XmlAttribtue.type);
-			final String desc = XmlUtil.getRequiredElementText(elOperand);
+			final String desc = formatDesc(XmlUtil.getRequiredElementText(elOperand));
 			final OperandDef opDef = new OperandDef(name, type, desc);
 			def.operands.put(name, opDef);
 		}
@@ -96,7 +126,7 @@ public class CommandDefinitionLoader {
 		for (final Element elMethod : list) {
 			final String name = XmlUtil.getAttribute(elMethod, XmlAttribtue.name, def.commandName);
 			final String args = XmlUtil.getAttribute(elMethod, XmlAttribtue.args);
-			final String desc = XmlUtil.getRequiredElementText(elMethod);
+			final String desc = formatDesc(XmlUtil.getRequiredElementText(elMethod));
 			final MethodDef methodDef;
 			if (args == null) {
 				methodDef = new MethodDef(name, desc);
@@ -115,6 +145,10 @@ public class CommandDefinitionLoader {
 				throw new IllegalArgumentException("method argument '" + arg + "' is missing in the operands list of the '" + def.commandName + "' command");
 			}
 		}
+	}
+	
+	private static String formatDesc(String desc) {
+		return desc.replaceAll("\n(\\s*)\n", "\n$1<p>\n");
 	}
 	
 	private static final String BODY_TAG_START	= "<body>";
@@ -136,7 +170,7 @@ public class CommandDefinitionLoader {
 		if (end < 0) {
 			throw new IllegalArgumentException("body end tag " + BODY_TAG_END + " not found in html command description file");
 		}
-		return description.substring(start + BODY_TAG_START.length(), end);
+		return formatDesc(description.substring(start + BODY_TAG_START.length(), end));
 	}
 
 

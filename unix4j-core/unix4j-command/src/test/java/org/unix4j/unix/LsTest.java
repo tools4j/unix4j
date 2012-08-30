@@ -30,21 +30,21 @@ public class LsTest {
 
 	@Test
 	public void testLsLong() {
-		unix4j.ls(Ls.Options.l);
+		unix4j.ls(Ls.OPTIONS.l);
 	}
 
 	@Test
 	public void testLsAllLong() {
-		unix4j.ls(Ls.Options.longFormat.allFiles);
+		unix4j.ls(Ls.OPTIONS.longFormat.allFiles);
 	}
 
 	@Test
 	public void testLsALH() {
-		unix4j.ls(Ls.Options.l.a.h, FileUtil.getUserDir());
+		unix4j.ls(Ls.OPTIONS.l.a.h, FileUtil.getUserDir());
 	}
 
 	@Test
 	public void testLsLARTH() {
-		unix4j.ls(Ls.Options.l.a.r.t.h, FileUtil.getUserDir());
+		unix4j.ls(Ls.OPTIONS.l.a.r.t.h, FileUtil.getUserDir());
 	}
 }

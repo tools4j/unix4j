@@ -1,0 +1,20 @@
+<#macro optionJavadoc myName aliasName myPre aliasPre javadoc setComment> 
+	/**
+	 * Option {@code "${myPre}${myName}"}: ${javadoc}
+	 * <p>
+	 * The option {@code "${myPre}${myName}"} is equivalent to the {@code "${aliasPre}}{@link #${aliasName} ${aliasName}}{@code "} option.
+<#if setComment>
+	 * <p>
+	 * Technically speaking, this field points to a set with the options of the 
+	 * current set plus the option {@code "${myPre}${myName}"}. If the option {@code "${myPre}${myName}"}
+	 * is already set, the field {@code ${myName}} points to the enum constant itself
+	 * as it already represents the current set of options.
+</#if> 
+	 */
+</#macro>
+<#macro optionJavadocLong opt setComment> 
+	<@optionJavadoc opt.name opt.acronym "--" "-" opt.desc setComment/>
+</#macro>
+<#macro optionJavadocAcronym opt setComment> 
+	<@optionJavadoc opt.acronym opt.name "-" "--" opt.desc setComment/>
+</#macro>

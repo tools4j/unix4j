@@ -19,7 +19,6 @@ import org.unix4j.unix.Sort;
 import org.unix4j.unix.Tail;
 import org.unix4j.unix.Wc;
 import org.unix4j.unix.Xargs;
-import org.unix4j.unix.ls.LsOptions;
 
 public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements Unix4jCommandBuilder {
 
@@ -119,19 +118,19 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 	}
 
 	@Override
-	public Unix4jCommandBuilder ls(LsOptions options) {
+	public Unix4jCommandBuilder ls(Ls.Options options) {
 		join(Ls.FACTORY.ls(options));
 		return this;
 	}
 
 	@Override
-	public Unix4jCommandBuilder ls(LsOptions options, File... files) {
+	public Unix4jCommandBuilder ls(Ls.Options options, File... files) {
 		join(Ls.FACTORY.ls(options, files));
 		return this;
 	}
 
 	@Override
-	public Unix4jCommandBuilder ls(LsOptions options, String... files) {
+	public Unix4jCommandBuilder ls(Ls.Options options, String... files) {
 		join(Ls.FACTORY.ls(options, files));
 		return this;
 	}

@@ -2,19 +2,20 @@
 <#list commandDefs as def> 
 <#global cmd=def.command>
 <#global commandName=def.commandName>
+<#global optionName=cmd.simpleName+"Option">
 <#global optionsName=cmd.simpleName+"Options">
-<#global optionSetName=cmd.simpleName+"OptionSet">
 <#global factoryName=cmd.simpleName+"Factory">
 <#global varName=cmd.simpleName+"Var">
-<@pp.changeOutputFile name=pp.pathTo(cmd.pkg.path+"/"+cmd.simpleName+".java")/> 
+<@pp.changeOutputFile name=pp.pathTo("/"+cmd.pkg.path+"/"+cmd.simpleName+".java")/> 
 package ${cmd.pkg.name};
 
 import org.unix4j.command.CommandInterface;
+import org.unix4j.optset.OptionSet;
 import org.unix4j.variable.Literal;
 
 import ${def.pkg.name}.${factoryName};
+import ${def.pkg.name}.${optionName};
 import ${def.pkg.name}.${optionsName};
-import ${def.pkg.name}.${optionSetName};
 import ${def.pkg.name}.${varName};
 
 <#function isOptionsArg def arg>
@@ -125,9 +126,22 @@ public final class ${cmd.simpleName} {
 	public static interface Interface$<R> extends ${varName}.Interface<R> {}
 	
 	/**
-	 * Options for the "${commandName}" command: <#foreach opt in def.options?values>{@link ${optionSetName}#${opt.acronym} ${opt.acronym}}={@link ${optionSetName}#${opt.name} ${opt.name}}<#if opt_has_next>, </#if></#foreach>.
+	 * Interface implemented by all option sets for the {@link ${cmd.pkg.name}.${cmd.simpleName} ${def.commandName}} command.
+	 * <p>
+	 * This interface serves as an alias for the extended interface to simplify the
+	 * command signature methods by avoiding generic parameters.
 	 */
-	public static final ${optionSetName} Options = ${optionSetName}.${optionSetName};
+	public static interface Options extends OptionSet<${optionName}> {}
+
+	/**
+	 * Options for the "${commandName}" command: 
+	 * <table>
+	<#foreach opt in def.options?values>
+	 * <tr><td width="10px"></td><td nowrap="nowrap">{@code -${opt.acronym}}</td><td>&nbsp;&nbsp;</td><td nowrap="nowrap">{@code --${opt.name}}</td><td>&nbsp;</td><td>${opt.desc}</td></tr>
+	</#foreach>
+	 * </table>
+	 */
+	public static final ${optionsName} OPTIONS = ${optionsName}.INSTANCE;
 
 	/**
 	 * Singleton {@link ${factoryName} factory} instance for the "${commandName}" command.
@@ -135,7 +149,7 @@ public final class ${cmd.simpleName} {
 	public static final ${factoryName} FACTORY = ${factoryName}.INSTANCE;
 
 	// no instances
-	private Ls() {
+	private ${cmd.simpleName}() {
 		super();
 	}
 }

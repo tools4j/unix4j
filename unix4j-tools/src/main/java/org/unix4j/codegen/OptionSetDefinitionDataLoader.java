@@ -3,12 +3,12 @@ package org.unix4j.codegen;
 import java.net.URL;
 import java.util.List;
 
+import org.unix4j.codegen.command.CommandDefinitionLoader;
+import org.unix4j.codegen.command.def.CommandDef;
 import org.unix4j.codegen.loader.ResourceBasedDataLoader;
 import org.unix4j.codegen.loader.ResourceDataLoader;
-import org.unix4j.codegen.model.command.CommandDef;
-import org.unix4j.codegen.model.command.CommandDefinitionLoader;
-import org.unix4j.codegen.model.option.OptionSetDef;
-import org.unix4j.codegen.model.option.OptionSetDefLoader;
+import org.unix4j.codegen.optset.OptionSetDefinitionLoader;
+import org.unix4j.codegen.optset.def.OptionSetDef;
 
 import fmpp.Engine;
 import freemarker.template.ObjectWrapper;
@@ -36,7 +36,7 @@ public class OptionSetDefinitionDataLoader extends ResourceDataLoader {
 		@Override
 		public TemplateModel load(URL resource) {
 			final CommandDef commandDef = new CommandDefinitionLoader().load(resource);
-			final OptionSetDef optionSetDef = new OptionSetDefLoader().create(commandDef);
+			final OptionSetDef optionSetDef = new OptionSetDefinitionLoader().create(commandDef);
 			System.out.println(optionSetDef.toString("......"));
 			try {
 				return ObjectWrapper.DEFAULT_WRAPPER.wrap(optionSetDef);

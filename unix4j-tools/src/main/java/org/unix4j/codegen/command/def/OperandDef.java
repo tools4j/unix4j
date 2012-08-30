@@ -1,8 +1,8 @@
-package org.unix4j.codegen.model.command;
+package org.unix4j.codegen.command.def;
 
-import org.unix4j.codegen.model.AbstractModelElement;
+import org.unix4j.codegen.def.AbstractElementDef;
 
-public class OperandDef extends AbstractModelElement {
+public class OperandDef extends AbstractElementDef {
 	public OperandDef(String name, String type, String desc) {
 		this.name = name;
 		this.type = type;

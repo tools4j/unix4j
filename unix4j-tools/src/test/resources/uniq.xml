@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<uniq class="org.unix4j.unix.Uniq" package="org.unix4j.unix.uniq">
+	<name>
+		uniq - report or filter out repeated lines in a usually pre-sorted file
+	</name>
+	<synopsis>
+		ORIGINAL: uniq [-c|-d|-u][-f fields][-s char][input_file [output_file]]
+		CURRENT: uniq [-c|-d|-u][-g][input_file]
+	</synopsis>
+	<description ref="uniq.html"/>
+	<notes>
+		<!-- none -->
+	</notes>
+	<methods>
+		<method>
+			Reads from the standard input and compares adjacent lines, writing
+			one copy  of each input line on the output. The second and 
+			succeeding copies of repeated adjacent input lines are not written
+			to the output.
+			
+			Note that repeated lines in the input are not detected if they are 
+			not adjacent (see --global or -g option); sorted input lines always
+			result in unique output lines. 
+		</method>
+		<method args="file">
+			Reads from the specified input {@code file} and compares adjacent
+			lines, writing one copy of each input line on the output. The 
+			second and succeeding copies of repeated adjacent input lines are 
+			not written to the output.
+			
+			Note that repeated lines in the input are not detected if they are 
+			not adjacent (see --global or -g option); sorted input lines always
+			result in unique output lines. 
+		</method>
+		<method args="path">
+			Reads the file specified by its {@code path} and compares adjacent
+			lines, writing one copy of each input line on the output. The 
+			second and succeeding copies of repeated adjacent input lines are 
+			not written to the output.
+			
+			Note that repeated lines in the input are not detected if they are 
+			not adjacent (see --global or -g option); sorted input lines always
+			result in unique output lines. 
+		</method>
+		<method args="options">
+			Reads from the standard input and compares adjacent lines, writing
+			one copy  of each input line on the output. The second and 
+			succeeding copies of repeated adjacent input lines are not written
+			to the output.
+			
+			Note that repeated non-adjacent lines in the input are only detected
+			with the --global or -g option. In other words, unique output lines
+			are guaranteed only if either (a) the --global or -g option is
+			specified, or (b) the input lines are sorted.
+		</method>
+		<method args="options,file">
+			Reads from the specified input {@code file} and compares adjacent
+			lines, writing one copy of each input line on the output. The 
+			second and succeeding copies of repeated adjacent input lines are 
+			not written to the output.
+			
+			Note that repeated non-adjacent lines in the input are only detected
+			with the --global or -g option. In other words, unique output lines
+			are guaranteed only if either (a) the --global or -g option is
+			specified, or (b) the input lines are sorted.
+		</method>
+		<method args="options,path">
+			Reads the file specified by its {@code path} and compares adjacent
+			lines, writing one copy of each input line on the output. The 
+			second and succeeding copies of repeated adjacent input lines are 
+			not written to the output.
+			
+			Note that repeated non-adjacent lines in the input are only detected
+			with the --global or -g option. In other words, unique output lines
+			are guaranteed only if either (a) the --global or -g option is
+			specified, or (b) the input lines are sorted.
+		</method>
+	</methods>
+	<options>
+		[-c|-d|-u][-f fields][-s char]
+		<option name="count" acronym="c" exclusiveGroup="cdu">
+			Precedes each output line with a count of the number of times the
+			line occurred in the input.
+		</option>
+		<option name="duplicatedOnly" acronym="d" exclusiveGroup="cdu">
+			Suppresses the writing of lines that are not repeated in the input.
+		</option>
+		<option name="uniqueOnly" acronym="u" exclusiveGroup="cdu">
+			Suppresses the writing of lines that are repeated in the input.
+		</option>
+		<option name="global" acronym="g">
+			Suppresses repeated lines globally, that is, if lines are 
+			non-adjacent. This option guarantees unique output lines even if the
+			input lines are not sorted.
+		</option>
+	</options>
+	<operands>
+		<operand name="file" type="java.io.File">
+			The files or directories used as starting point for the listing.		
+		</operand>
+		<operand name="path" type="String">
+			The files or directories used as starting point for the listing; 
+			wildcards * and ? are supported.		
+		</operand>
+		<operand name="options" type="UniqOptions">
+			The options defining the uniqueness details for the output lines.
+		</operand>
+	</operands>
+</uniq>

@@ -1,91 +1,104 @@
+<#include "include/macros.fmpp">
+
 <@pp.dropOutputFile /> 
-<#list optionDefs as def> 
+<#list optionSetDefs as def>
 <#global cmdDef=def.command> 
+<#global cmd=cmdDef.command> 
+<#global commandName=cmdDef.commandName> 
 <#global optDef=def.optionType> 
-<#global setDef=def.optionSetType> 
-<#global optionsName=cmdDef.simpleName+"Options">
-<@pp.changeOutputFile name=pp.pathTo(setDef.pkg.path+"/"+setDef.simpleName+".java")/> 
-package ${setDef.pkg.name};
+<#global optionsName=cmd.simpleName+"Options">
+<#list def.groups as grp> 
+<#global grpDef=grp.groupType> 
+<#global options=grp.options> 
+<@pp.changeOutputFile name=pp.pathTo("/"+grpDef.pkg.path+"/"+grpDef.simpleName+".java")/> 
+package ${grpDef.pkg.name};
 
-<#macro optionJavadoc myName aliasName myPre aliasPre javadoc> 
-	/**
-	 * Option {@code "${myPre}${myName}"}: ${javadoc}
-	 * <p>
-	 * The option {@code "${myPre}${myName}"} is equivalent to the {@code "${aliasPre}}{@link #${aliasName} ${aliasName}}{@code "} option.
-	 * <p>
-	 * Technically speaking, this field points to a set with the options of the 
-	 * current set plus the option {@code "${myPre}${myName}"}. If the option {@code "${myPre}${myName}"}
-	 * is already set, the field {@code ${myName}} points to the enum constant itself
-	 * as it already represents the current set of options. 
-	 */
-</#macro>
-<#macro optionJavadocLong acronym optionName javadoc> 
-	<@optionJavadoc optionName acronym "--" "-" javadoc/>
-</#macro>
-<#macro optionJavadocAcronym acronym optionName javadoc> 
-	<@optionJavadoc acronym optionName "-" "--" javadoc/>
-</#macro>
-<#macro setName name useAcronym><#if 
-	useAcronym>${name}<#else>${name}_long</#if
-></#macro>
-
+<#function activeSetName activeSet useAcronym>
+	<#if useAcronym>
+		<#return activeSet.name>
+	<#else>
+		<#return activeSet.name + "_long">
+	</#if>
+</#function>
+<#function activeSetRef grp opt activeSet useAcronym>
+	<#local optGroup = grp.optionToNextGroup[opt.name]>
+	<#if grp.groupType.simpleName = optGroup.groupType.simpleName>
+		<#return activeSetName(activeSet.next[opt.name], useAcronym)>
+	<#else>
+		<#return optGroup.groupType.simpleName + "." + activeSetName(activeSet.next[opt.name], useAcronym)>
+	</#if>
+</#function>
+<#function groupForOption grp opt>
+	<#if grp.optionToNextGroup[opt.name]??>
+		<#return grp.optionToNextGroup[opt.name]>
+	<#else>
+		<#return grp>
+	</#if>
+</#function>
+<#function nextSetNotNull grp optGroup opt varName>
+	<#if grp.groupType.simpleName = optGroup.groupType.simpleName>
+		<#return varName + " == null ? this : " + varName>
+	<#else>
+		<#return "notNull(" + varName + ")">
+	</#if>
+</#function>
+<#function hasRefToOtherGroup grp>
+	<#foreach otherGroup in grp.optionToNextGroup?values>
+		<#if grp.groupType.simpleName != otherGroup.groupType.simpleName>
+			<#return true>
+		</#if>
+	</#foreach>
+	<#return false>
+</#function>
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Iterator;
 import org.unix4j.optset.Option;
 
-import ${cmdDef.pkg.name}.${cmdDef.simpleName};
-import ${optDef.pkg.name}.${optDef.simpleName};
+import ${cmd.pkg.name}.${cmd.simpleName};
 
 /**
- * Option sets for the {@link ${cmdDef.simpleName} ${cmdDef.name}} command with 
- * the following options: <#foreach opt in def.options?keys>{@link #${opt} ${opt}}<#if opt_has_next>, </#if></#foreach>.
- * Note that each option has also a long name: <#foreach opt in def.options?keys>{@code ${opt}:}{@link #${def.options[opt]} ${def.options[opt]}}<#if opt_has_next>, </#if></#foreach>.
+ * Option sets for the {@link ${cmd.simpleName} ${commandName}} command with 
+ * the following options: <#foreach opt in options?values>{@link #${opt.acronym} ${opt.acronym}}<#if opt_has_next>, </#if></#foreach>.
  * <p>
- * Every possible {@code ${cmdDef.name}} option permutation is reflected by one
- * of the {@code ${setDef.simpleName}} constants. With this explicit expansion
- * of all possible option combinations, options can be passed to the command in
- * a very compact form, such as:
- * <pre>
-<#if def.options?keys?size != 0> * ${cmdDef.name}(${setDef.simpleName}.${def.options?keys[0]}, ...);
-<#if def.options?keys?size != 1> * ${cmdDef.name}(${setDef.simpleName}.${def.options?keys[0]}.${def.options?keys[1]}, ...);
-<#if def.options?keys?size != 2> * ...
-<#if def.options?keys?size != 2> * ${cmdDef.name}(${setDef.simpleName}<#foreach o in def.options?keys>.${o}</#foreach>, ...);
-</#if></#if></#if></#if>
- * </pre>
+ * Application code does normally not directly refer to this class;
+ * {@link ${cmd.simpleName}#OPTIONS} should be used instead to specify command 
+ * options. See also {@link ${cmdDef.pkg.name}.${optionsName}} for more information.
  */
-public enum ${setDef.simpleName} implements ${optionsName} {
-	<#foreach set in def.optionSets>
+public enum ${grpDef.simpleName} implements ${cmd.simpleName}.Options {
+	<#foreach levelSets in grp.levelActiveSets?reverse>
+	<#foreach activeSet in levelSets?values>
 	<#foreach useAcronym in [true,false]>
-	<#if useAcronym || set.active?size != 0><#-- no long version for empty set -->
-	/** <#if set.active?size==0>Empty option set without active options<#else>Option set with the following active options: <#foreach opt in set.active>{@link #${opt} ${opt}}<#if opt_has_next>, </#if></#foreach></#if>.*/
-	<@setName set.name useAcronym/>(
-		<#foreach opt in def.options?keys><#if set.next[opt]??><@setName set.next[opt] true/>, <@setName set.next[opt] false/><#else>null/*already set*/, null/*already set*/</#if>, </#foreach>
-		${useAcronym?string}<#if set.active?size != 0>, </#if>
-		/*active:*/<#foreach opt in set.active>${optDef.simpleName}.${def.options[opt]}<#if opt_has_next>, </#if></#foreach>
-	)<#if set.active?size != 0>,<#else>;</#if>
-	</#if>
+	/** <#if activeSet.active?size==0>Empty option set without active options<#else>Option set with the following active options: <#foreach opt in activeSet.active>{@link #${opt} ${options[opt].acronym}}<#if opt_has_next>, </#if></#foreach></#if>.*/
+	${activeSetName(activeSet, useAcronym)}(
+		<#foreach opt in options?values><#if activeSet.next[opt.name]??>/*${opt.acronym}:*/${activeSetRef(grp, opt, activeSet, true)}, /*${opt.name}:*/${activeSetRef(grp, opt, activeSet, false)}, <#else>/*${opt.acronym}:*/null /*already set*/, /*${opt.name}:*/null /*already set*/, </#if></#foreach>
+		${useAcronym?string}<#if activeSet.active?size != 0>, </#if>
+		/*active:*/<#foreach opt in activeSet.active>${optDef.simpleName}.${options[opt].name}<#if opt_has_next>, </#if></#foreach>
+	)<#if useAcronym_has_next || activeSet_has_next || levelSets_has_next>,<#else>;</#if>
 	</#foreach>
 	</#foreach>
-	private ${setDef.simpleName}(
-		<#foreach opt in def.options?keys>${setDef.simpleName} ${opt}, ${setDef.simpleName} ${opt}_long, </#foreach>
+	</#foreach>
+	private ${grpDef.simpleName}(
+		<#foreach opt in options?values><#global optGroup = groupForOption(grp, opt)>${optGroup.groupType.simpleName} ${opt.acronym}, ${optGroup.groupType.simpleName} ${opt.name}, </#foreach>
 		boolean useAcronym,
 		${optDef.simpleName}... activeOptions
 	) {
-		<#foreach opt in def.options?keys>
-		this.${opt} = ${opt} == null ? this : ${opt};
-		this.${def.options[opt]} = ${opt}_long == null ? this : ${opt}_long;
+		<#foreach opt in options?values>
+		<#global optGroup = groupForOption(grp, opt)>
+		this.${opt.acronym} = ${nextSetNotNull(grp, optGroup, opt, opt.acronym)};
+		this.${opt.name} = ${nextSetNotNull(grp, optGroup, opt, opt.name)};
 		</#foreach>
 		this.useAcronym = useAcronym;
 		this.options = activeOptions.length == 0 ? EnumSet.noneOf(${optDef.simpleName}.class) : EnumSet.copyOf(Arrays.asList(activeOptions));
 	}
 	private final boolean useAcronym;
-	<#foreach opt in def.options?keys>
-	<@optionJavadocAcronym opt def.options[opt] def.javadoc[opt]/>
-	public final ${setDef.simpleName} ${opt};
-	<@optionJavadocLong opt def.options[opt] def.javadoc[opt]/>
-	public final ${setDef.simpleName} ${def.options[opt]};
+	<#foreach opt in options?values>
+	<@optionJavadocAcronym opt true/>
+	<#global optGroup = groupForOption(grp, opt)>
+	public final ${optGroup.groupType.simpleName} ${opt.acronym};
+	<@optionJavadocLong opt true/>
+	public final ${optGroup.groupType.simpleName} ${opt.name};
 	</#foreach>
 	private final EnumSet<${optDef.simpleName}> options;
 	//inherit javadoc
@@ -93,6 +106,20 @@ public enum ${setDef.simpleName} implements ${optionsName} {
 	public boolean isSet(${optDef.simpleName} option) {
 		return options.contains(option);
 	}
+<#if hasRefToOtherGroup(grp)>
+	/** 
+	 * Checks that the given {@code value} is not null and throws an exception 
+	 * otherwise.
+	 * 
+	 * @param the value to check
+	 * @return the given {@code value} if it is not null
+	 * @throws NullPointerException if {@code value==null} 
+	 */
+	private static <T> T notNull(T value) {
+		if (value != null) return value;
+		throw new NullPointerException();
+	}
+</#if>
 	/**
 	 * Returns the set with the active options. The returned set a new defensive
 	 * copy instance created when this method is called, modifications of this
@@ -116,7 +143,7 @@ public enum ${setDef.simpleName} implements ${optionsName} {
 	/**
 	 * Returns true if the {@link Option#acronym() acronym} should be used in
 	 * for the specified {@code option} string representations. 
-<#if def.options?keys?size != 0>
+<#if options?size != 0>
 	 * <p>
 	 * In particular and independent from the {@code option} argument, this 
 	 * option set returns true if the last option added to this set was an 
@@ -124,9 +151,9 @@ public enum ${setDef.simpleName} implements ${optionsName} {
 	 * <p>
 	 * For instance, the set defined as
 	 * <pre>
-	 * <#if def.options?keys?size != 1
-	 	>   ${setDef.simpleName}.${def.options?values[0]}.${def.options?keys[1]};<#else
-	 	>   ${setDef.simpleName}.${def.options?keys[0]};</#if>
+	 * <#if options?size != 1
+	 	>   ${grpDef.simpleName}.${options?values[0].name}.${options?values[1].acronym};<#else
+	 	>   ${grpDef.simpleName}.${options?values[0].acronym};</#if>
 	 * </pre>
 	 * uses acronyms, that is, this method always returns true for the above 
 	 * set. 
@@ -134,9 +161,9 @@ public enum ${setDef.simpleName} implements ${optionsName} {
 	 * On the other hand, long option names are used and this method always 
 	 * returns false for the set
 	 * <pre>
-	 * <#if def.options?keys?size != 1
-	 	>   ${setDef.simpleName}.${def.options?keys[0]}.${def.options?values[1]};<#else
-	 	>   ${setDef.simpleName}.${def.options?values[0]};</#if>
+	 * <#if options?size != 1
+	 	>   ${grpDef.simpleName}.${options?values[0].acronym}.${options?values[1].name};<#else
+	 	>   ${grpDef.simpleName}.${options?values[0].name};</#if>
 	 * </pre>
 	 * <p>
 </#if>
@@ -144,9 +171,9 @@ public enum ${setDef.simpleName} implements ${optionsName} {
 	 * For instance, the first and last option of the following set are 
 	 * equivalent and acronyms are used:
 	 * <pre>
-	 * <#if def.options?keys?size != 1
-	 	>   ${setDef.simpleName}.${def.options?keys[0]}.${def.options?keys[1]}.${def.options?values[0]};<#else
-	 	>   ${setDef.simpleName}.${def.options?keys[0]}.${def.options?values[0]};</#if>
+	 * <#if options?size != 1
+	 	>   ${grpDef.simpleName}.${options?values[0].acronym}.${options?values[1].acronym}.${options?values[0].name};<#else
+	 	>   ${grpDef.simpleName}.${options?values[0].acronym}.${options?values[0].name};</#if>
 	 * </pre>
 	 * <p>
 	 * This method always returns true for the empty set with no active options.
@@ -162,4 +189,5 @@ public enum ${setDef.simpleName} implements ${optionsName} {
 		return useAcronym;
 	}
 }
+</#list>
 </#list>

@@ -1,4 +1,4 @@
-package org.unix4j.codegen.model;
+package org.unix4j.codegen.def;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -10,28 +10,32 @@ import freemarker.template.TemplateHashModel;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
 
-abstract public class AbstractModelElement implements TemplateHashModel {
+/**
+ * Abstract base class for all element definitions. Public fields define visible
+ * properties or nested elements.
+ */
+abstract public class AbstractElementDef implements TemplateHashModel {
 
 	private final Map<String, Field> fields = new LinkedHashMap<String, Field>();
-	
-	public AbstractModelElement() {
+
+	public AbstractElementDef() {
 		for (final Field field : getClass().getFields()) {
 			if (0 == (field.getModifiers() & Modifier.STATIC)) {
 				fields.put(field.getName(), field);
 			}
 		}
 	}
-	
+
 	@Override
 	public boolean isEmpty() throws TemplateModelException {
 		return fields.isEmpty();
 	}
-	
+
 	@Override
 	public TemplateModel get(String key) throws TemplateModelException {
 		final Object value = getFieldValue(key);
 		if (value instanceof TemplateModel) {
-			return (TemplateModel)value;
+			return (TemplateModel) value;
 		}
 		return value == null ? null : ObjectWrapper.DEFAULT_WRAPPER.wrap(value);
 	}
@@ -49,18 +53,20 @@ abstract public class AbstractModelElement implements TemplateHashModel {
 	public String toString() {
 		return toMap().toString();
 	}
-	public Map<String,Object> toMap() {
+
+	public Map<String, Object> toMap() {
 		final Map<String, Object> map = new LinkedHashMap<String, Object>();
 		for (final String name : fields.keySet()) {
 			map.put(name, getFieldValue(name));
 		}
 		return map;
 	}
+
 	public String toString(String indent) {
 		return toMultiLineString(indent, toMap());
 	}
-	
-	protected static String toMultiLineString(String indent, Map<String,?> map) {
+
+	protected static String toMultiLineString(String indent, Map<String, ?> map) {
 		final StringBuilder sb = new StringBuilder();
 		int maxKeyLen = 0;
 		for (final String key : map.keySet()) {

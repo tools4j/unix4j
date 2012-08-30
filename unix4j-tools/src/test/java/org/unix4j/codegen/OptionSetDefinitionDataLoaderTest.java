@@ -7,8 +7,10 @@ import org.junit.Test;
 public class OptionSetDefinitionDataLoaderTest {
 
 	@Test
-	public void testLoadCommandDefinition() throws Exception {
-		final Object mdl = new OptionSetDefinitionDataLoader().load(null, Collections.singletonList("/ls.xml"));
-		System.out.println(mdl);
+	public void testOptionSetDefinition() throws Exception {
+		final Object ls = new OptionSetDefinitionDataLoader().load(null, Collections.singletonList("/ls.xml"));
+		System.out.println(ls);
+		final Object uniq = new OptionSetDefinitionDataLoader().load(null, Collections.singletonList("/uniq.xml"));
+		System.out.println(uniq);
 	}
 }

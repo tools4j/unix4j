@@ -4,7 +4,7 @@
 <#global commandName=def.commandName>
 <#global optionsName=cmd.simpleName+"Options">
 <#global varName=cmd.simpleName+"Var">
-<@pp.changeOutputFile name=pp.pathTo(def.pkg.path+"/"+varName+".java")/> 
+<@pp.changeOutputFile name=pp.pathTo("/"+def.pkg.path+"/"+varName+".java")/> 
 package ${def.pkg.name};
 
 import org.unix4j.command.CommandInterface;
