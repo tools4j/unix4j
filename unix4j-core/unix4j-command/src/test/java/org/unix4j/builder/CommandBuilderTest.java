@@ -50,8 +50,8 @@ public class CommandBuilderTest {
 
 	@Test
 	public void testLsStarStarStarJavaLA() {
-		unix4j.ls(Ls.Options.l.a, "src/*/*/*/*/*.java", "src/*/*/*/*/*/*.java", "src/*/*/*/*/*/*/*.java");
-//		unix4j.ls(Ls.Options.l.a, "src/*/*/*/*/*.java");
+		unix4j.ls(Ls.OPTIONS.l.a, "src/*/*/*/*/*.java", "src/*/*/*/*/*/*.java", "src/*/*/*/*/*/*/*.java");
+//		unix4j.ls(Ls.OPTIONS.l.a, "src/*/*/*/*/*.java");
 	}
 
 	@Test

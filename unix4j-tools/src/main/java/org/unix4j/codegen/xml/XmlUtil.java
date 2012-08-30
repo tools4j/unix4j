@@ -28,6 +28,9 @@ public class XmlUtil {
 		}
 		throw new IllegalArgumentException("attribute " + getXmlName(attribute) + " is missing or empty in XML element " + element.getNodeName());
 	}
+	/**
+	 * Returns the attribute value or {@code defaultValue} if it does not exist.
+	 */
 	public static String getAttribute(Element element, Enum<?> attribute, String defaultValue) {
 		final String value = getAttribute(element, attribute);
 		if (value != null) {
@@ -35,6 +38,10 @@ public class XmlUtil {
 		}
 		return defaultValue;
 	}
+	
+	/**
+	 * Returns the attribute value or {@code null} if it does not exist.
+	 */
 	public static String getAttribute(Element element, Enum<?> attribute) {
 		final String attName = getXmlName(attribute);
 		final String attValue = element.getAttribute(attName);

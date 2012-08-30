@@ -1,8 +1,11 @@
-package org.unix4j.codegen.model.command;
+package org.unix4j.codegen.command.def;
 
-import org.unix4j.codegen.model.AbstractModelElement;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-public class OptionDef extends AbstractModelElement {
+import org.unix4j.codegen.def.AbstractElementDef;
+
+public class OptionDef extends AbstractElementDef {
 	public OptionDef(String name, String acronym, String desc) {
 		if (acronym.length() != 1) {
 			throw new IllegalArgumentException("acronym must be one character, but was '" + acronym + "' for option " + name); 
@@ -13,5 +16,6 @@ public class OptionDef extends AbstractModelElement {
 	}
 	public final String name;
 	public final String acronym;
+	public final Set<String> excludes = new LinkedHashSet<String>();	//option (long) name
 	public final String desc;
 }

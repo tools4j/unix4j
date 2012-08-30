@@ -1,6 +1,6 @@
-package org.unix4j.codegen.model;
+package org.unix4j.codegen.def;
 
-public class PackageDef extends AbstractModelElement {
+public class PackageDef extends AbstractElementDef {
 	
 	public PackageDef(Package pkg) {
 		this(pkg.getName());

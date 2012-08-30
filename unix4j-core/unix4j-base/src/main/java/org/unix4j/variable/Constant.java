@@ -16,7 +16,7 @@ public class Constant<V> extends AbstractLiteral<V> {
 		final Class<? extends V> valueType = (Class<? extends V>)value.getClass();
 		return ofValue(name, valueType, value);
 	}
-	private static <T extends V, V> Constant<T> ofValue(String name, Class<T> type, V value) {
+	private static <V, T extends V> Constant<T> ofValue(String name, Class<T> type, V value) {
 		return of(name, type, type.cast(value));
 	}
 	

@@ -3,10 +3,10 @@ package org.unix4j.codegen;
 import java.net.URL;
 import java.util.List;
 
+import org.unix4j.codegen.command.CommandDefinitionLoader;
+import org.unix4j.codegen.command.def.CommandDef;
 import org.unix4j.codegen.loader.ResourceBasedDataLoader;
 import org.unix4j.codegen.loader.ResourceDataLoader;
-import org.unix4j.codegen.model.command.CommandDef;
-import org.unix4j.codegen.model.command.CommandDefinitionLoader;
 
 import fmpp.Engine;
 import freemarker.template.ObjectWrapper;

@@ -1,17 +1,19 @@
-package org.unix4j.codegen.model;
+package org.unix4j.codegen.def;
 
 
-public class TypeDef extends AbstractModelElement {
+public class TypeDef extends AbstractElementDef {
 	
 	public TypeDef(Class<?> type) {
-		this.pkg = new PackageDef(type.getPackage());
-		this.simpleName = type.getSimpleName();
+		this(type.getSimpleName(), new PackageDef(type.getPackage()));
 	}
 	public TypeDef(String fullyQualifiedClassName) {
 		this(getTypeName(fullyQualifiedClassName), getPackageName(fullyQualifiedClassName));
 	}
 	public TypeDef(String typeName, String packageName) {
-		this.pkg = new PackageDef(packageName);
+		this(typeName, new PackageDef(packageName));
+	}
+	public TypeDef(String typeName, PackageDef pkg) {
+		this.pkg = pkg;
 		this.simpleName = typeName;
 	}
 	private static String getTypeName(String fullyQualifiedClassName) {
