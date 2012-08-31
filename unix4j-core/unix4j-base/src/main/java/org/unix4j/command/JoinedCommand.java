@@ -93,12 +93,16 @@ public class JoinedCommand<A extends Arguments<A>> implements Command<A> {
 	 * command, with the effect that the first command provides its output to
 	 * the second command as input.
 	 * 
+	 * @param context
+	 *            context object providing access to the current directory,
+	 *            environment variables and other information useful for the
+	 *            commands during their execution
 	 * @param output
 	 *            the output for the second command
 	 */
 	@Override
-	public LineProcessor execute(LineProcessor output) {
-		return getFirst().execute(getSecond().execute(output));
+	public LineProcessor execute(ExecutionContext context, LineProcessor output) {
+		return getFirst().execute(context, getSecond().execute(context, output));
 	}
 
 	/**

@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.unix4j.command.AbstractCommand;
+import org.unix4j.command.ExecutionContext;
 import org.unix4j.line.Line;
 import org.unix4j.line.LineProcessor;
 import org.unix4j.unix.Ls;
@@ -26,7 +27,7 @@ class LsCommand extends AbstractCommand<LsArgs> {
 	}
 
 	@Override
-	public LineProcessor execute(final LineProcessor output) {
+	public LineProcessor execute(final ExecutionContext context, final LineProcessor output) {
 		return new LineProcessor() {
 			@Override
 			public boolean processLine(Line line) {
@@ -37,7 +38,7 @@ class LsCommand extends AbstractCommand<LsArgs> {
 				final LsArgs args = getArguments();
 				final List<File> files = args.getFiles();
 				final List<File> expanded = FileUtil.expandFiles(files);
-				listFiles(FileUtil.getUserDir(), null, expanded, output);
+				listFiles(context.getCurrentDirectory(), null, expanded, output);
 				output.finish();
 			}
 		};

@@ -5,6 +5,7 @@ import static org.unix4j.util.Assert.assertArgGreaterThanOrEqualTo;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
+import org.unix4j.command.ExecutionContext;
 import org.unix4j.line.Line;
 import org.unix4j.line.LineProcessor;
 import org.unix4j.util.Counter;
@@ -101,7 +102,7 @@ public final class Head {
 	/**
 	 * Option flags for the head command.
 	 */
-	public static enum Option implements org.unix4j.optset.Option {
+	public static enum Option implements org.unix4j.option.Option {
 		// no options?
 		;
 		private final char acronym;
@@ -170,7 +171,7 @@ public final class Head {
 		}
 
 		@Override
-		public LineProcessor execute(final LineProcessor output) {
+		public LineProcessor execute(ExecutionContext context, final LineProcessor output) {
 			return new LineProcessor() {
 				private final int linesToOutput = getArguments().getLines();
 				private final Counter counter = new Counter();

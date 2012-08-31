@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.unix4j.optset.DefaultOptionSet;
-import org.unix4j.optset.Option;
-import org.unix4j.optset.OptionSet;
+import org.unix4j.option.DefaultOptionSet;
+import org.unix4j.option.Option;
+import org.unix4j.option.OptionSet;
 import org.unix4j.util.TypedMap;
 import org.unix4j.util.TypedMap.Key;
 import org.unix4j.util.Variables;

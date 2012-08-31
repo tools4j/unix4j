@@ -12,6 +12,7 @@ import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
+import org.unix4j.command.ExecutionContext;
 import org.unix4j.io.Output;
 import org.unix4j.line.Line;
 import org.unix4j.line.LineProcessor;
@@ -105,7 +106,7 @@ public final class Sort {
 	/**
 	 * Option flags for the sort command.
 	 */
-	public static enum Option implements org.unix4j.optset.Option {
+	public static enum Option implements org.unix4j.option.Option {
 		//TODO the real options are different, e.g. 'reverse' for descending
 		/**
 		 * Sort in ascending order (the default).
@@ -186,7 +187,7 @@ public final class Sort {
 		}
 
 		@Override
-		public LineProcessor execute(final LineProcessor output) {
+		public LineProcessor execute(ExecutionContext context, final LineProcessor output) {
 			final boolean isAsc = getArguments().hasOpt(Option.ascending);
 			final boolean isDesc = getArguments().hasOpt(Option.descending);
 			assertArgFalse("Options " + Option.ascending + " and " + Option.descending + " cannot be specified at the same time", (isAsc && isDesc));

@@ -8,6 +8,7 @@ import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
+import org.unix4j.command.ExecutionContext;
 import org.unix4j.io.Output;
 import org.unix4j.line.Line;
 import org.unix4j.line.LineProcessor;
@@ -76,7 +77,7 @@ public final class Grep {
 	/**
 	 * Option flags for the grep command.
 	 */
-	public static enum Option implements org.unix4j.optset.Option {
+	public static enum Option implements org.unix4j.option.Option {
 		/**
 		 * Match lines ignoring the case when comparing the strings, also know
 		 * from Unix with its acronym 'i'.
@@ -178,7 +179,7 @@ public final class Grep {
 		}
 
 		@Override
-		public LineProcessor execute(LineProcessor output) {
+		public LineProcessor execute(ExecutionContext context, LineProcessor output) {
 			final Args args = getArguments();
 			if (getArguments().isFixedStrings()) {
 				return new FixedStringsProcessor(args, output);

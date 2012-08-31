@@ -10,7 +10,7 @@
 package ${cmd.pkg.name};
 
 import org.unix4j.command.CommandInterface;
-import org.unix4j.optset.OptionSet;
+import org.unix4j.option.OptionSet;
 import org.unix4j.variable.Literal;
 
 import ${def.pkg.name}.${factoryName};
@@ -134,7 +134,8 @@ public final class ${cmd.simpleName} {
 	public static interface Options extends OptionSet<${optionName}> {}
 
 	/**
-	 * Options for the "${commandName}" command: 
+	 * Options for the "${commandName}" command: <#foreach opt in def.options?values>{@link #${opt.acronym} ${opt.acronym}}<#if opt_has_next>, </#if></#foreach>.
+	 * <p> 
 	 * <table>
 	<#foreach opt in def.options?values>
 	 * <tr><td width="10px"></td><td nowrap="nowrap">{@code -${opt.acronym}}</td><td>&nbsp;&nbsp;</td><td nowrap="nowrap">{@code --${opt.name}}</td><td>&nbsp;</td><td>${opt.desc}</td></tr>

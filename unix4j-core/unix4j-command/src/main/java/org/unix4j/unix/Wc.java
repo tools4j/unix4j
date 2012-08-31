@@ -9,6 +9,7 @@ import java.util.List;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
+import org.unix4j.command.ExecutionContext;
 import org.unix4j.io.Output;
 import org.unix4j.line.Line;
 import org.unix4j.line.LineProcessor;
@@ -186,7 +187,7 @@ public final class Wc {
 	/**
 	 * Option flags for the wc command.
 	 */
-	public static enum Option implements org.unix4j.optset.Option {
+	public static enum Option implements org.unix4j.option.Option {
 		lines('l'), chars('m'), words('w');
 		;
 		private final char acronym;
@@ -290,7 +291,7 @@ public final class Wc {
 		}
 
 		@Override
-		public LineProcessor execute(final LineProcessor output) {
+		public LineProcessor execute(ExecutionContext context, final LineProcessor output) {
 			final Args args = getArguments();
 			assertArgFalse("No count type specified. At least one count type required.", args.isNoCountTypeSpecified());
 			return new LineProcessor() {

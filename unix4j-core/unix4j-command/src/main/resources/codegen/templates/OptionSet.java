@@ -54,7 +54,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Iterator;
-import org.unix4j.optset.Option;
+import org.unix4j.option.Option;
 
 import ${cmd.pkg.name}.${cmd.simpleName};
 

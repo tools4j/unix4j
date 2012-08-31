@@ -6,6 +6,7 @@ import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
+import org.unix4j.command.ExecutionContext;
 import org.unix4j.io.Output;
 import org.unix4j.line.Line;
 import org.unix4j.line.LineProcessor;
@@ -140,7 +141,7 @@ public final class Cut {
 	/**
 	 * Option flags for the cut command.
 	 */
-	public static enum Option implements org.unix4j.optset.Option {
+	public static enum Option implements org.unix4j.option.Option {
 		// no options?
 		;
 		private final char acronym;
@@ -272,7 +273,7 @@ public final class Cut {
 		}
 
 		@Override
-		public LineProcessor execute(final LineProcessor output) {
+		public LineProcessor execute(ExecutionContext context, final LineProcessor output) {
 			return new LineProcessor() {
 				
 				@Override

@@ -5,8 +5,9 @@ import org.unix4j.line.LineProcessor;
 /**
  * A command is an executable unit defined by the command {@link #getName()
  * name} and the command line {@link #getArguments() arguments}. To execute a
- * command, {@link #execute(LineProcessor)} is called which returns a
- * {@link LineProcessor} object to perform the line-by-line command execution.
+ * command, {@link #execute(ExecutionContext, LineProcessor)} is called which
+ * returns a {@link LineProcessor} object to perform the line-by-line command
+ * execution.
  * <p>
  * Commands can be {@link #join(Command) joined} to other commands which usually
  * means that the first command's output forms the input of the second command.
@@ -76,13 +77,17 @@ public interface Command<A extends Arguments<A>> {
 	 * are passed to the {@code LineProcessor} returned by this method, or when
 	 * the execution terminates with the {@code finish()} call.
 	 * 
+	 * @param context
+	 *            context object providing access to the current directory,
+	 *            environment variables and other information useful for the
+	 *            command during its execution
 	 * @param output
 	 *            the output to write to
 	 * @return true if another invocation with more input is expected, and false
 	 *         if this command has completed and no other invocation is
 	 *         required.
 	 */
-	LineProcessor execute(LineProcessor output);
+	LineProcessor execute(ExecutionContext context, LineProcessor output);
 
 	/**
 	 * Returns a string representation of the command instance including the

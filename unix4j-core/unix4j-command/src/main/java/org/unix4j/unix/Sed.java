@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
+import org.unix4j.command.ExecutionContext;
 import org.unix4j.line.Line;
 import org.unix4j.line.LineProcessor;
 import org.unix4j.line.SimpleLine;
@@ -143,7 +144,7 @@ public final class Sed {
 	/**
 	 * Option flags for the sed command.
 	 */
-	public static enum Option implements org.unix4j.optset.Option {
+	public static enum Option implements org.unix4j.option.Option {
 		GlobalSearchAndReplace('g');//TODO really an option? not in original sed command
 		private final char acronym;
 
@@ -260,7 +261,7 @@ public final class Sed {
 		}
 
 		@Override
-		public LineProcessor execute(final LineProcessor output) {
+		public LineProcessor execute(ExecutionContext context, final LineProcessor output) {
 			return new LineProcessor() {
 				@Override
 				public boolean processLine(Line line) {
