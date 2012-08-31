@@ -19,7 +19,7 @@ public class LsTest {
 	@After
 	public void afterEach() {
 		unix4j.toStdOut();
-		System.out.println("*** EOF: " + unix4j);
+		System.out.println("*** THIS WAS COMMAND: " + unix4j);
 		System.out.println();
 	}
 

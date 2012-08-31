@@ -106,6 +106,11 @@ public enum ${grpDef.simpleName} implements ${cmd.simpleName}.Options {
 	public boolean isSet(${optDef.simpleName} option) {
 		return options.contains(option);
 	}
+	//inherit javadoc
+	@Override
+	public int size() {
+		return options.size();
+	}
 <#if hasRefToOtherGroup(grp)>
 	/** 
 	 * Checks that the given {@code value} is not null and throws an exception 

@@ -23,7 +23,7 @@ public class LsFormatterLong7 extends LsFormatterLong {
 	}
 
 	@Override
-	protected String getOwner(File file, LsArgs args) {
+	protected String getOwner(File file, LsArguments args) {
 		try {
 			final String group = Files.getOwner(file.toPath()).getName();
 			return StringUtil.fixSizeString(7, true, group);
@@ -33,7 +33,7 @@ public class LsFormatterLong7 extends LsFormatterLong {
 	}
 
 	@Override
-	protected String getGroup(File file, LsArgs args) {
+	protected String getGroup(File file, LsArguments args) {
 		try {
 			final PosixFileAttributeView view = Files.getFileAttributeView(file.toPath(), PosixFileAttributeView.class);
 			final String group = view.readAttributes().group().getName();
@@ -44,7 +44,7 @@ public class LsFormatterLong7 extends LsFormatterLong {
 	}
 
 	@Override
-	protected String getFilePermissions(File file, LsArgs args) {
+	protected String getFilePermissions(File file, LsArguments args) {
 		try {
 			final Set<PosixFilePermission> perms = Files.getPosixFilePermissions(file.toPath());
 			return (file.isDirectory() ? "d" : "-") +
@@ -63,7 +63,7 @@ public class LsFormatterLong7 extends LsFormatterLong {
 	}
 	
 	@Override
-	protected long getLastModifiedMS(File file, LsArgs args) {
+	protected long getLastModifiedMS(File file, LsArguments args) {
 		try {
 			return Files.getLastModifiedTime(file.toPath()).toMillis();
 		} catch (Exception e) {
@@ -72,14 +72,14 @@ public class LsFormatterLong7 extends LsFormatterLong {
 	}
 	
 	@Override
-	protected String getSize(File file, LsArgs args) {
+	protected String getSize(File file, LsArguments args) {
 		final long size;
 		try {
 			size = Files.size(file.toPath());
 		} catch (Exception e) {
 			return super.getSize(file, args);
 		}
-		final String sizeString = args.getSizeString(size);
+		final String sizeString = LsCommand.getSizeString(args, size);
 		return StringUtil.fixSizeString(maxSizeStringLength.get(), false, sizeString);
 	}
 }

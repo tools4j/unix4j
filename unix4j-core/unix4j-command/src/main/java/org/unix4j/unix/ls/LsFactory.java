@@ -25,37 +25,39 @@ public final class LsFactory implements Interface<LsCommand> {
 
 	@Override
 	public LsCommand ls() {
-		return new LsCommand(new LsArgs());
+		return new LsCommand(new LsArguments());
 	}
 
 	@Override
 	public LsCommand ls(File... files) {
-		return new LsCommand(new LsArgs(files));
+		final LsArguments args = new LsArguments();
+		args.setFiles(files);
+		return new LsCommand(args);
 	}
 
 	@Override
-	public LsCommand ls(String... files) {
-		return new LsCommand(new LsArgs(files));
+	public LsCommand ls(String... paths) {
+		final LsArguments args = new LsArguments();
+		args.setPaths(paths);
+		return new LsCommand(args);
 	}
 
 	@Override
 	public LsCommand ls(Ls.Options options) {
-		final LsArgs args = new LsArgs();
-		args.setOpts(options);
-		return new LsCommand(args);
+		return new LsCommand(new LsArguments(options));
 	}
 
 	@Override
 	public LsCommand ls(Ls.Options options, File... files) {
-		final LsArgs args = new LsArgs(files);
-		args.setOpts(options);
+		final LsArguments args = new LsArguments(options);
+		args.setFiles(files);
 		return new LsCommand(args);
 	}
 
 	@Override
-	public LsCommand ls(Ls.Options options, String... files) {
-		final LsArgs args = new LsArgs(files);
-		args.setOpts(options);
+	public LsCommand ls(Ls.Options options, String... paths) {
+		final LsArguments args = new LsArguments(options);
+		args.setPaths(paths);
 		return new LsCommand(args);
 	}
 

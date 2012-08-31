@@ -154,7 +154,6 @@ abstract public class AbstractArgs<O extends Enum<O> & Option, A extends Abstrac
 		return opts.asSet();
 	}
 
-	@Override
 	public void resolve(Map<String, String> variables) {
 		for (final Map.Entry<Key<?>, ?> e : args.asMap().entrySet()) {
 			if (String.class.equals(e.getKey().getValueType())) {
@@ -179,7 +178,6 @@ abstract public class AbstractArgs<O extends Enum<O> & Option, A extends Abstrac
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
 	public A clone(boolean cloneDeep) {
 		try {
 			final A clone = (A) super.clone();

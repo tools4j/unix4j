@@ -26,7 +26,7 @@ interface LsFormatter {
 	 * @return true if the {@code output} object is ready to take more output
 	 *         lines, and false if not
 	 */
-	boolean writeFormatted(File relativeTo, File file, LsArgs args, LineProcessor output);
+	boolean writeFormatted(File relativeTo, File file, LsArguments args, LineProcessor output);
 
 	interface Factory {
 		/**
@@ -46,7 +46,7 @@ interface LsFormatter {
 		 * @param args
 		 *            arguments possibly used to lookup some formatting options
 		 */
-		LsFormatter create(File relativeTo, File directory, List<File> directoryFiles, LsArgs args);
+		LsFormatter create(File relativeTo, File directory, List<File> directoryFiles, LsArguments args);
 	}
 
 }

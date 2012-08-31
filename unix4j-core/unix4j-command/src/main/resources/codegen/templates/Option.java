@@ -75,8 +75,18 @@ public enum ${simpleName} implements Option, ${cmd.simpleName}.Options {
 	}
 	
 	/**
-	 * Returns true if the {@link Option#acronym() acronym} should be used in
-	 * for the specified {@code option} string representations. 
+	 * Returns 1 as this is a set with a single element: {@code this} option
+	 * 
+	 * @return one
+	 */
+	@Override
+	public int size() {
+		return 1;
+	}
+
+	/**
+	 * Returns true if the {@link Option#acronym() acronym} should be used for
+	 * the specified {@code option} in string representations. 
 	 * <p>
 	 * This method returns always true for all options.
 	 *  

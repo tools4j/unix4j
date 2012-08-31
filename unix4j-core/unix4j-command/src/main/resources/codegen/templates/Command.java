@@ -134,7 +134,7 @@ public final class ${cmd.simpleName} {
 	public static interface Options extends OptionSet<${optionName}> {}
 
 	/**
-	 * Options for the "${commandName}" command: <#foreach opt in def.options?values>{@link #${opt.acronym} ${opt.acronym}}<#if opt_has_next>, </#if></#foreach>.
+	 * Options for the "${commandName}" command: <#foreach opt in def.options?values>{@link ${optionName}#${opt.name} ${opt.acronym}}<#if opt_has_next>, </#if></#foreach>.
 	 * <p> 
 	 * <table>
 	<#foreach opt in def.options?values>

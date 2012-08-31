@@ -1,3 +1,5 @@
+<#include "include/macros.fmpp">
+
 <@pp.dropOutputFile /> 
 <#list commandDefs as def> 
 <#global cmd=def.command>
@@ -11,13 +13,6 @@ import org.unix4j.command.CommandInterface;
 import org.unix4j.variable.Literal;
 import ${cmd.pkg.name}.${cmd.simpleName};
 
-<#function normalizeVarArgType operand>
-	<#if operand.type?ends_with("...")>
-		<#return operand.type?substring(0, operand.type?length-3)+"[]">
-	<#else>
-		<#return operand.type>
-	</#if>
-</#function>
 <#function varType operand>
 	<#if operand.type?ends_with("...")>
 		<#local name=operand.type?substring(0, operand.type?length-3)>
@@ -48,9 +43,9 @@ public class ${varName} {
 <#foreach opd in def.operands?values>
 	/**
 	 * Literal for {@code <${opd.name}>} operand, for instance representing a 
-	 * variable or named constant holding a value of the type {@code ${normalizeVarArgType(opd)}}.
+	 * variable or named constant holding a value of the type {@code ${normalizeVarArgType(opd.type)}}.
 	 */
-	public interface ${varType(opd)} extends Literal<${normalizeVarArgType(opd)}>{}
+	public interface ${varType(opd)} extends Literal<${normalizeVarArgType(opd.type)}>{}
 </#foreach>
 	
 	/**

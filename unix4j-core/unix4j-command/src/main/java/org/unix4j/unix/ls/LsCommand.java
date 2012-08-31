@@ -1,6 +1,7 @@
 package org.unix4j.unix.ls;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -16,16 +17,53 @@ import org.unix4j.util.ReverseOrderComparator;
 /**
  * Ls command implementation.
  */
-class LsCommand extends AbstractCommand<LsArgs> {
-	public LsCommand(LsArgs arguments) {
+class LsCommand extends AbstractCommand<LsArguments> {
+	public LsCommand(LsArguments arguments) {
 		super(Ls.NAME, arguments);
 	}
 
 	@Override
-	public LsCommand withArgs(LsArgs arguments) {
+	public LsCommand withArgs(LsArguments arguments) {
 		return new LsCommand(arguments);
 	}
+	
+	private List<File> getArgumentFiles(ExecutionContext context) {
+		final LsArguments args = getArguments();
+		final List<File> files = new ArrayList<File>();
+		if (args.isFilesSet()) {
+			for (final File file : args.getFiles()) {
+				files.add(file);
+			}
+		} else if (args.isPathsSet()) {
+			for (final String path : args.getPaths()) {
+				files.add(new File(path));
+			}
+		} else {
+			files.add(context.getCurrentDirectory());
+		}
+		return files;
+	}
 
+	/*package*/ static String getSizeString(LsArguments args, long bytes) {
+		if (args.isHumanReadable()) {
+			final String units = "BKMG";
+			int unit = 0;
+			int fraction = 0;
+			while (bytes > 1000 && (unit + 1) < units.length()) {
+				bytes /= 100;
+				fraction = (int) (bytes % 10);
+				bytes /= 10;
+				unit++;
+			}
+			if (bytes < 10) {
+				return bytes + "." + fraction + units.charAt(unit);
+			} else {
+				return (bytes < 100 ? " " : "") + bytes + units.charAt(unit);
+			}
+		}
+		return String.valueOf(bytes);
+	}
+	
 	@Override
 	public LineProcessor execute(final ExecutionContext context, final LineProcessor output) {
 		return new LineProcessor() {
@@ -35,8 +73,7 @@ class LsCommand extends AbstractCommand<LsArgs> {
 			}
 			@Override
 			public void finish() {
-				final LsArgs args = getArguments();
-				final List<File> files = args.getFiles();
+				final List<File> files = getArgumentFiles(context);
 				final List<File> expanded = FileUtil.expandFiles(files);
 				listFiles(context.getCurrentDirectory(), null, expanded, output);
 				output.finish();
@@ -45,12 +82,12 @@ class LsCommand extends AbstractCommand<LsArgs> {
 	}
 
 	private void listFiles(File relativeTo, File parent, List<File> files, LineProcessor output) {
-		final LsArgs args = getArguments();
+		final LsArguments args = getArguments();
 		final Comparator<File> comparator = getComparator(relativeTo);
-		final boolean allFiles = args.hasOpt(LsOption.allFiles);
-		final boolean longFormat = args.hasOpt(LsOption.longFormat);
+		final boolean allFiles = args.isAllFiles();
+		final boolean longFormat = args.isLongFormat();
 		final LsFormatter formatter = longFormat ? LsFormatterLong.FACTORY.create(relativeTo, parent, files, args) : LsFormatterShort.INSTANCE;
-		final boolean recurseSubdirs = parent == null || args.hasOpt(LsOption.recurseSubdirs);
+		final boolean recurseSubdirs = parent == null || args.isRecurseSubdirs();
 
 		//add special directories . and ..
 		if (parent != null && allFiles) {
@@ -83,9 +120,9 @@ class LsCommand extends AbstractCommand<LsArgs> {
 	}
 
 	private Comparator<File> getComparator(File relativeTo) {
-		final LsArgs args = getArguments();
-		final Comparator<File> comparator = args.hasOpt(LsOption.timeSorted) ? FileComparators.timeAndRelativeFileName(relativeTo) : FileComparators.typeAndRelativeFileName(relativeTo);
-		return args.hasOpt(LsOption.reverseOrder) ? ReverseOrderComparator.reverse(comparator) : comparator;
+		final LsArguments args = getArguments();
+		final Comparator<File> comparator = args.isTimeSorted() ? FileComparators.timeAndRelativeFileName(relativeTo) : FileComparators.typeAndRelativeFileName(relativeTo);
+		return args.isReverseOrder() ? ReverseOrderComparator.reverse(comparator) : comparator;
 	}
 
 }
