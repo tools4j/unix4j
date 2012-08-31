@@ -11,6 +11,7 @@ import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
+import org.unix4j.command.ExecutionContext;
 import org.unix4j.io.FileInput;
 import org.unix4j.io.Input;
 import org.unix4j.io.Output;
@@ -261,7 +262,7 @@ public final class From {
 	/**
 	 * Option flags for the from command.
 	 */
-	public static enum Option implements org.unix4j.optset.Option {
+	public static enum Option implements org.unix4j.option.Option {
 		// no options?
 		;
 		private final char acronym;
@@ -384,7 +385,7 @@ public final class From {
 		}
 
 		@Override
-		public LineProcessor execute(final LineProcessor output) {
+		public LineProcessor execute(final ExecutionContext context, final LineProcessor output) {
 			return new LineProcessor() {
 				@Override
 				public boolean processLine(Line line) {

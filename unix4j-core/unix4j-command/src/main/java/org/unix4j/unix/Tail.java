@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.CommandInterface;
+import org.unix4j.command.ExecutionContext;
 import org.unix4j.line.Line;
 import org.unix4j.line.LineProcessor;
 import org.unix4j.util.TypedMap;
@@ -103,7 +104,7 @@ public final class Tail {
 	/**
 	 * Option flags for the tail command.
 	 */
-	public static enum Option implements org.unix4j.optset.Option {
+	public static enum Option implements org.unix4j.option.Option {
 		// no options?
 		;
 		private final char acronym;
@@ -172,19 +173,11 @@ public final class Tail {
 		}
 
 		@Override
-		public LineProcessor execute(final LineProcessor output) {
+		public LineProcessor execute(ExecutionContext context, final LineProcessor output) {
 			return new LineProcessor() {
+				// linked list is most efficient to remove first line
+				private final LinkedList<Line> tailLines = new LinkedList<Line>();
 				final int linesToOutput = getArguments().getLines();
-				private final LinkedList<Line> tailLines = new LinkedList<Line>();// linked
-																					// list
-																					// is
-																					// most
-																					// efficient
-																					// to
-																					// remove
-																					// first
-																					// line
-
 				@Override
 				public boolean processLine(Line line) {
 					tailLines.add(line);

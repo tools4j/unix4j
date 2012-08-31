@@ -8,6 +8,7 @@ import org.unix4j.command.AbstractArgs;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.Arguments;
 import org.unix4j.command.CommandInterface;
+import org.unix4j.command.ExecutionContext;
 import org.unix4j.io.Output;
 import org.unix4j.line.Line;
 import org.unix4j.line.LineProcessor;
@@ -75,7 +76,7 @@ public final class Xargs {
 	/**
 	 * Option flags for the xargs command.
 	 */
-	public static enum Option implements org.unix4j.optset.Option {
+	public static enum Option implements org.unix4j.option.Option {
 		// no options for now
 		;
 		private final char acronym;
@@ -134,7 +135,7 @@ public final class Xargs {
 		}
 
 		@Override
-		public LineProcessor execute(LineProcessor output) {
+		public LineProcessor execute(ExecutionContext context, LineProcessor output) {
 			return output;// does not much if not joined to the next command
 		}
 
@@ -146,7 +147,7 @@ public final class Xargs {
 		private static <A1 extends Arguments<A1>, A2 extends Arguments<A2>> org.unix4j.command.Command<A1> join(org.unix4j.command.Command<A1> first, final org.unix4j.command.Command<A2> second) {
 			return new AbstractCommand<A1>(NAME + " " + second.getName(), first.getArguments()) {
 				@Override
-				public LineProcessor execute(final LineProcessor output) {
+				public LineProcessor execute(final ExecutionContext context, final LineProcessor output) {
 					final LineProcessor noFinishOutput = new LineProcessor() {
 						@Override
 						public boolean processLine(Line line) {
@@ -163,17 +164,14 @@ public final class Xargs {
 
 						@Override
 						public boolean processLine(Line line) {
-							final A2 args = second.getArguments().clone(true /*
-																			 * deep
-																			 * clone
-																			 */);
+							final A2 args = second.getArguments().clone(true /* deep clone */);
 							xargs.clear();
 							final String[] words = line.getContent().split("\\s+");
 							for (int i = 0; i < words.length; i++) {
 								xargs.put(xarg(i), words[i]);
 							}
 							args.resolve(xargs);
-							final LineProcessor processor = second.withArgs(args).execute(noFinishOutput);
+							final LineProcessor processor = second.withArgs(args).execute(context, noFinishOutput);
 							processor.finish();
 							return true;// we want more lines
 						}
