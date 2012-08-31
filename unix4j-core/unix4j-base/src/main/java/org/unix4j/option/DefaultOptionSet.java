@@ -110,6 +110,7 @@ public class DefaultOptionSet<E extends Enum<E> & Option> implements OptionSet<E
 	 * 
 	 * @return the number of set options
 	 */
+	@Override
 	public int size() {
 		return options.size();
 	}

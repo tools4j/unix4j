@@ -40,6 +40,13 @@ public interface OptionSet<O extends Option> extends Iterable<O> {
 	 */
 	@Override
 	Iterator<O> iterator();
+	
+	/**
+	 * Returns the number of active options in this option set.
+	 * 
+	 * @return the number of active options
+	 */
+	int size();
 
 	/**
 	 * Returns true if the {@link Option#acronym() acronym} should be used in

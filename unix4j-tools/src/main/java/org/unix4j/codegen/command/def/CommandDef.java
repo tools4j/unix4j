@@ -31,4 +31,8 @@ public class CommandDef extends AbstractElementDef {
 	public final Map<String, OptionDef> options = new LinkedHashMap<String, OptionDef>();		//by (long) name
 	public final Map<String, OperandDef> operands = new LinkedHashMap<String, OperandDef>();	//by name
 	
+	@Override
+	public String toString() {
+		return toString("\t");
+	}
 }

@@ -11,6 +11,12 @@
 <@pp.changeOutputFile name=pp.pathTo("/"+cmdDef.pkg.path+"/"+simpleName+".java")/> 
 package ${cmdDef.pkg.name};
 
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Set;
+
+import org.unix4j.option.Option;
+
 import ${cmd.pkg.name}.${cmd.simpleName};
 import ${cmdDef.pkg.name}.${optionName};
 
@@ -36,6 +42,59 @@ public final class ${simpleName} {
 	 * The singleton instance.
 	 */
 	public static final ${simpleName} INSTANCE = new ${simpleName}();
+	
+	/**
+	 * Constant for an empty option set.
+	 */
+	public static final ${cmd.simpleName}.Options NO_OPTIONS = new ${cmd.simpleName}.Options() {
+		@Override
+		public boolean isSet(${optionName} option) {
+			return false;
+		}
+		/**
+		 * Returns 0 as this is a set with no active options.
+		 * 
+		 * @return zero
+		 */
+		@Override
+		public int size() {
+			return 0;
+		}
+		/**
+		 * Returns an immutable empty set.
+		 * 
+		 * @return an immutable empty set.
+		 */
+		@Override
+		public Set<${optionName}> asSet() {
+			return Collections.emptySet();
+		}
+		
+		/**
+		 * Returns an iterator returning no elements. 
+		 * 
+		 * @return an immutable iterator with no elements.
+		 */
+		@Override
+		public Iterator<${optionName}> iterator() {
+			return asSet().iterator();
+		}
+		
+		/**
+		 * Returns true if the {@link Option#acronym() acronym} should be used
+		 * for the specified {@code option} in string representations. 
+		 * <p>
+		 * This method returns always true;
+		 *  
+		 * @param option
+		 *            the option of interest
+		 * @return always true
+		 */
+		@Override
+		public boolean useAcronymFor(${optionName} option) {
+			return true;
+		}
+	};
 
 	<#global grp = def.initialGroup>
 	<#foreach opt in grp.options?values>

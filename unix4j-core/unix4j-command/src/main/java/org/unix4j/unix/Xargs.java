@@ -164,14 +164,17 @@ public final class Xargs {
 
 						@Override
 						public boolean processLine(Line line) {
-							final A2 args = second.getArguments().clone(true /* deep clone */);
+							//FIXME
+//							final A2 args = second.getArguments().clone(true /* deep clone */);
 							xargs.clear();
 							final String[] words = line.getContent().split("\\s+");
 							for (int i = 0; i < words.length; i++) {
 								xargs.put(xarg(i), words[i]);
 							}
-							args.resolve(xargs);
-							final LineProcessor processor = second.withArgs(args).execute(context, noFinishOutput);
+							//FIXME
+//							args.resolve(xargs);
+//							final LineProcessor processor = second.withArgs(args).execute(context, noFinishOutput);
+							final LineProcessor processor = second.execute(context, noFinishOutput);
 							processor.finish();
 							return true;// we want more lines
 						}

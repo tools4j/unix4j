@@ -50,7 +50,7 @@ class LsFormatterLong implements LsFormatter {
 	}
 
 	@Override
-	public boolean writeFormatted(File relativeTo, File file, LsArgs args, LineProcessor output) {
+	public boolean writeFormatted(File relativeTo, File file, LsArguments args, LineProcessor output) {
 		return output.processLine(
 				new SimpleLine(
 						getFilePermissions(file, args) + ' ' +
@@ -63,7 +63,7 @@ class LsFormatterLong implements LsFormatter {
 				);
 	}
 
-	protected String getFilePermissions(File file, LsArgs args) {
+	protected String getFilePermissions(File file, LsArguments args) {
 		return (file.isDirectory() ? 'd' : '-') +
 					"?--?--" +
 					(file.canRead() ? 'r' : '-') +
@@ -71,24 +71,24 @@ class LsFormatterLong implements LsFormatter {
 					(file.canExecute() ? 'x' : '-');
 	}
 
-	protected String getOwner(File file, LsArgs args) {
+	protected String getOwner(File file, LsArguments args) {
 		return StringUtil.fixSizeString(7, true, "???");
 	}
 
-	protected String getGroup(File file, LsArgs args) {
+	protected String getGroup(File file, LsArguments args) {
 		return StringUtil.fixSizeString(7, true, "???");
 	}
 
-	protected String getSize(File file, LsArgs args) {
-		final String sizeString = args.getSizeString(file.length());
+	protected String getSize(File file, LsArguments args) {
+		final String sizeString = LsCommand.getSizeString(args, file.length());
 		return StringUtil.fixSizeString(maxSizeStringLength.get(), false, sizeString);
 	}
 
-	protected long getLastModifiedMS(File file, LsArgs args) {
+	protected long getLastModifiedMS(File file, LsArguments args) {
 		return file.lastModified();
 	}
 
-	protected String getDateTime(File file, LsArgs args) {
+	protected String getDateTime(File file, LsArguments args) {
 		final Calendar cal = calendar.get();
 		cal.setTimeInMillis(System.currentTimeMillis());
 		final int curYear = cal.get(Calendar.YEAR);
@@ -108,24 +108,24 @@ class LsFormatterLong implements LsFormatter {
 		}
 	}
 
-	protected String getName(File relativeTo, File file, LsArgs args) {
+	protected String getName(File relativeTo, File file, LsArguments args) {
 		return FileUtil.getRelativePath(relativeTo, file);
 	}
 
 	static Factory FACTORY = new Factory() {
 		@Override
-		public LsFormatter create(File relativeTo, File directory, List<File> directoryFiles, LsArgs args) {
+		public LsFormatter create(File relativeTo, File directory, List<File> directoryFiles, LsArguments args) {
 			final LsFormatterLong fmt = Java7Util.newInstance(LsFormatterLong.class, new LsFormatterLong());
 			fmt.maxSizeStringLength.set(calculateMaxSizeStringLength(directoryFiles, args));
 			return fmt;
 		}
 
-		private int calculateMaxSizeStringLength(List<File> directoryFiles, LsArgs args) {
+		private int calculateMaxSizeStringLength(List<File> directoryFiles, LsArguments args) {
 			int maxSizeStringLength = 0;
 			for (final File f : directoryFiles) {
 				if (f.isFile()) {
 					if (f.isFile()) {
-						final String sizeString = args.getSizeString(f.length());
+						final String sizeString = LsCommand.getSizeString(args, f.length());
 						maxSizeStringLength = Math.max(maxSizeStringLength, sizeString.length());
 					}
 				}

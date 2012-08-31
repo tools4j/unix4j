@@ -18,3 +18,11 @@
 <#macro optionJavadocAcronym opt setComment> 
 	<@optionJavadoc opt.acronym opt.name "-" "--" opt.desc setComment/>
 </#macro>
+
+<#function normalizeVarArgType type>
+	<#if type?ends_with("...")>
+		<#return type?substring(0, type?length-3)+"[]">
+	<#else>
+		<#return type>
+	</#if>
+</#function>
