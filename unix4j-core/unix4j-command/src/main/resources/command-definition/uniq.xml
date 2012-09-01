@@ -1,5 +1,9 @@
 <?xml version="1.0"?>
-<uniq class="org.unix4j.unix.Uniq" package="org.unix4j.unix.uniq">
+<command-def	xmlns="http://www.unix4j.org/command-def" 
+				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xsi:schemaLocation="http://www.unix4j.org/command-def command-def.xsd">
+	
+	<command name="uniq" class="org.unix4j.unix.Uniq" package="org.unix4j.unix.uniq"/>
 	<name>
 		uniq - report or filter out repeated lines in a usually pre-sorted file
 	</name>
@@ -8,9 +12,7 @@
 		CURRENT: uniq [-c|-d|-u][-g][input_file]
 	</synopsis>
 	<description ref="uniq.html"/>
-	<notes>
-		<!-- none -->
-	</notes>
+	<notes/>
 	<methods>
 		<method>
 			Reads from the standard input and compares adjacent lines, writing
@@ -106,4 +108,4 @@
 			The options defining the uniqueness details for the output lines.
 		</operand>
 	</operands>
-</uniq>
+</command-def>

@@ -1,5 +1,9 @@
 <?xml version="1.0"?>
-<ls class="org.unix4j.unix.Ls" package="org.unix4j.unix.ls">
+<command-def	xmlns="http://www.unix4j.org/command-def" 
+				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xsi:schemaLocation="http://www.unix4j.org/command-def command-def.xsd">
+	
+	<command name="ls" class="org.unix4j.unix.Ls" package="org.unix4j.unix.ls"/>
 	<name>ls - list directory contents</name>
 	<synopsis>ls [-ahlRrt] [file...]</synopsis>
 	<description ref="ls.html"/>
@@ -73,4 +77,4 @@
 			The options defining the output format.
 		</operand>
 	</operands>
-</ls>
+</command-def>
