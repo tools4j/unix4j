@@ -9,6 +9,7 @@ import org.unix4j.unix.Ls;
 import org.unix4j.unix.Sed;
 import org.unix4j.unix.Sort;
 import org.unix4j.unix.Tail;
+import org.unix4j.unix.Uniq;
 import org.unix4j.unix.Wc;
 import org.unix4j.unix.Xargs;
 
@@ -24,5 +25,6 @@ public interface Unix4jCommandBuilder
 		Wc.Interface<Unix4jCommandBuilder>,
 		Head.Interface<Unix4jCommandBuilder>,
 		Tail.Interface<Unix4jCommandBuilder>,
+		Uniq.Interface<Unix4jCommandBuilder>,
 		Xargs.Interface<Unix4jCommandBuilder>{
 }

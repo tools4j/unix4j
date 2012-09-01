@@ -17,6 +17,8 @@ import org.unix4j.unix.Ls;
 import org.unix4j.unix.Sed;
 import org.unix4j.unix.Sort;
 import org.unix4j.unix.Tail;
+import org.unix4j.unix.Uniq;
+import org.unix4j.unix.Uniq.Options;
 import org.unix4j.unix.Wc;
 import org.unix4j.unix.Xargs;
 
@@ -300,6 +302,38 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 	@Override
 	public Unix4jCommandBuilder tail() {
 		join(Tail.FACTORY.tail());
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder uniq() {
+		join(Uniq.FACTORY.uniq());
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder uniq(File file) {
+		join(Uniq.FACTORY.uniq(file));
+		return this;
+	}
+	@Override
+	public Unix4jCommandBuilder uniq(String path) {
+		join(Uniq.FACTORY.uniq(path));
+		return this;
+	}
+	@Override
+	public Unix4jCommandBuilder uniq(Options options) {
+		join(Uniq.FACTORY.uniq(options));
+		return this;
+	}
+	@Override
+	public Unix4jCommandBuilder uniq(Options options, File file) {
+		join(Uniq.FACTORY.uniq(options, file));
+		return this;
+	}
+	@Override
+	public Unix4jCommandBuilder uniq(Options options, String path) {
+		join(Uniq.FACTORY.uniq(options, path));
 		return this;
 	}
 }

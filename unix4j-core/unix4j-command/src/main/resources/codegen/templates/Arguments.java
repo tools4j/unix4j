@@ -32,7 +32,7 @@ import ${cmd.pkg.name}.${cmd.simpleName};
 	<#return operand.type == cmd.simpleName + ".Options">
 </#function>
 /**
- * Arguments and options for the {@code ${cmd.simpleName} ${commandName}} command.
+ * Arguments and options for the {@link ${cmd.simpleName} ${commandName}} command.
  */
 public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	
@@ -74,7 +74,7 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	<#foreach operand in def.operands?values>
 	<#if !isOptions(operand)>
 	/**
-	 * Returns {@code <${operand.name}>}: ${operand.desc}.
+	 * Returns {@code <${operand.name}>}: ${operand.desc}
 	 * 
 	 * @return the {@code <${operand.name}>} operand value
 	 */
@@ -82,7 +82,7 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 		return ${operand.name};
 	}
 	/**
-	 * Returns true if the {@code <${operand.name}>} has been set. 
+	 * Returns true if the {@code <${operand.name}>} operand has been set. 
 	 * <p>
 	 * Note that this method returns true if {@link #${setter(operand)}(${normalizeVarArgType(operand.type)})}
 	 * has been called at least once even if {@link #${getter(operand)}()} returns
@@ -95,7 +95,7 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 		return ${operand.name}IsSet;
 	}
 	/**
-	 * Sets {@code <${operand.name}>}: ${operand.desc}.
+	 * Sets {@code <${operand.name}>}: ${operand.desc}
 	 * 
 	 * @param ${operand.name} the value for the {@code <${operand.name}>} operand
 	 */
@@ -110,8 +110,10 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	/**
 	 * Returns true if the {@code --}{@link ${optionName}#${opt.name} ${opt.name}} option
 	 * is set. The option is also known as {@code -}${opt.acronym} option.
+	 * <p>
+	 * Description: ${opt.desc}
 	 * 
-	 * @return if the {@code --${opt.name}} or {@code -${opt.acronym}} option is set
+	 * @return true if the {@code --${opt.name}} or {@code -${opt.acronym}} option is set
 	 */
 	public boolean ${isOptionSet(opt)}() {
 		return options.isSet(${optionName}.${opt.name});
