@@ -49,8 +49,16 @@ public class XmlUtil {
 	}
 	
 	public static String getXmlName(Enum<?> node) {
-		final String name = node.name();
-		return name.replaceAll("_*", "");
+		String name = node.name();
+		
+		//remove leading or trailing underscore, it is used if a name conflicts with a Java keyword
+		if (name.length() > 0 && name.charAt(0) == '_') {
+			name = name.substring(1);
+		}
+		if (name.length() > 0 && name.charAt(name.length() - 1) == '_') {
+			name = name.substring(0, name.length() - 1);
+		}
+		return name.replace('_', '-');//use dashes instead of underscores in XML
 	}
 
 	public static Element getSingleChildElement(Element parent, Enum<?> child) {

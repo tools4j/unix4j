@@ -29,6 +29,7 @@ import org.w3c.dom.Element;
  */
 public class CommandDefinitionLoader {
 	private static enum XmlElement {
+		command_def, command, 
 		name, synopsis, description, notes, 
 		methods, method,
 		options, option,
@@ -48,17 +49,18 @@ public class CommandDefinitionLoader {
 	}
 
 	public CommandDef load(URL commandDefinitionURL, Document commandDefinition) throws IOException {
-		final Element elCommand = commandDefinition.getDocumentElement();
-		final String commandName = elCommand.getNodeName();
+		final Element elCommandDef = commandDefinition.getDocumentElement();
+		final Element elCommand = XmlUtil.getSingleChildElement(elCommandDef, XmlElement.command);
+		final String commandName = XmlUtil.getRequiredAttribute(elCommand, XmlAttribtue.name);
 		final String className = XmlUtil.getRequiredAttribute(elCommand, XmlAttribtue.class_);
 		final String packageName = XmlUtil.getRequiredAttribute(elCommand, XmlAttribtue.package_);
-		final String name = XmlUtil.getRequiredElementText(elCommand, XmlElement.name);
-		final String synopsis = XmlUtil.getRequiredElementText(elCommand, XmlElement.synopsis);
-		final String description = loadDescription(commandDefinitionURL, elCommand);
+		final String name = XmlUtil.getRequiredElementText(elCommandDef, XmlElement.name);
+		final String synopsis = XmlUtil.getRequiredElementText(elCommandDef, XmlElement.synopsis);
+		final String description = loadDescription(commandDefinitionURL, elCommandDef);
 		final CommandDef def = new CommandDef(commandName, className, packageName, name, synopsis, description);
-		loadOptions(def, elCommand);
-		loadOperands(def, elCommand);
-		loadMethods(def, elCommand);
+		loadOptions(def, elCommandDef);
+		loadOperands(def, elCommandDef);
+		loadMethods(def, elCommandDef);
 		return def;
 	}
 
