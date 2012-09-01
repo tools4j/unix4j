@@ -57,8 +57,8 @@ public class Unix4jCommandBuilder extends DefaultCommandBuilder
 	 * ${method.desc}
 	 * <p>
 	 * Note that the method returns {@code this} builder to allow for command 
-	 * chaining. The command is returned by the {@link #build()} method. See
-	 * {@link Unix4jCommandBuilder class comments} for more information.
+	 * chaining. The command itself is returned by the {@link #build()} method. 
+	 * See {@link Unix4jCommandBuilder class comments} for more information.
 	 *
 <#foreach arg in method.args>
 	 * @param ${arg} ${def.operands[arg].desc}

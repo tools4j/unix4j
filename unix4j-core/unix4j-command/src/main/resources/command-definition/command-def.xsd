@@ -48,6 +48,7 @@
   <xs:element name="method">
     <xs:complexType mixed="true">
       <xs:attribute name="args"/>
+      <xs:attribute name="input" type="xs:boolean" use="required"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="options">
