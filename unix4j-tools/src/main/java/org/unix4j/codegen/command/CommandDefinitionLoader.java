@@ -36,7 +36,7 @@ public class CommandDefinitionLoader {
 		operands, operand
 	}
 	private static enum XmlAttribtue {
-		class_, package_, ref, args, name, acronym, type, exclusiveGroup
+		class_, package_, ref, name, args, input, acronym, type, exclusiveGroup
 	}
 	public CommandDef load(URL commandDefinition) {
 		try {
@@ -128,13 +128,14 @@ public class CommandDefinitionLoader {
 		for (final Element elMethod : list) {
 			final String name = XmlUtil.getAttribute(elMethod, XmlAttribtue.name, def.commandName);
 			final String args = XmlUtil.getAttribute(elMethod, XmlAttribtue.args);
+			final String input = XmlUtil.getRequiredAttribute(elMethod, XmlAttribtue.input);
 			final String desc = formatDesc(XmlUtil.getRequiredElementText(elMethod));
 			final MethodDef methodDef;
 			if (args == null) {
-				methodDef = new MethodDef(name, desc);
+				methodDef = new MethodDef(name, desc, Boolean.parseBoolean(input));
 			} else {
 				final String[] splitArgs = args.split(",");
-				methodDef = new MethodDef(name, desc, splitArgs);
+				methodDef = new MethodDef(name, desc, Boolean.parseBoolean(input), splitArgs);
 				validateMethodArgs(def, methodDef);
 			}
 			def.methods.add(methodDef);
