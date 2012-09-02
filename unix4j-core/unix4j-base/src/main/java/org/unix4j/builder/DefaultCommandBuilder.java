@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.unix4j.command.Command;
 import org.unix4j.command.DefaultExecutionContext;
+import org.unix4j.command.NoOp;
 import org.unix4j.io.BufferedOutput;
 import org.unix4j.io.FileOutput;
 import org.unix4j.io.Input;
@@ -23,7 +24,7 @@ import org.unix4j.redirect.From;
 public class DefaultCommandBuilder implements CommandBuilder {
 
 	protected Input input = null;
-	protected Command<?> command = null;
+	protected Command<?> command = NoOp.INSTANCE;
 
 	public DefaultCommandBuilder() {
 		super();
@@ -32,19 +33,19 @@ public class DefaultCommandBuilder implements CommandBuilder {
 		this.input = input;
 	}
 	public CommandBuilder join(Command<?> command) {
-		this.command = this.command == null ? command : this.command.join(command);
+		if (command == null) {
+			throw new NullPointerException("command argument cannot be null");
+		}
+		this.command = this.command.join(command);
 		return this;
 	}
 	@Override
 	public Command<?> build() {
-		if (command == null) {
-			throw new IllegalStateException("no command has been built yet");
-		}
 		return command;
 	}
 	@Override
 	public String toString() {
-		return command == null ? "nop" : command.toString();
+		return command.toString();
 	}
 	@Override
 	public void toStdOut() {
