@@ -16,7 +16,11 @@ import ${def.command.pkg.name}.${def.command.simpleName};
  * <p>
  * Note that the command creation methods do not return a new command instance.
  * Instead, the builder stores the created commands and only returns a 
- * {@link Command} object when the {@link #build()} method is invoked. 
+ * {@link Command} object when the {@link #build()} method is invoked. Most
+ * applications, however, need not to call {@code build()} explicitly. The
+ * command can be built and executed in a single step by calling one of the 
+ * {@code toXXX(..)} methods, such as {@link #toStdOut()}, 
+ * {@link #toFile(String)} or {@link #toStringResult()}. 
  * <p>
  * The {@link Command} object returned by the {@link #build()} method can
  * represent a single command or a chain of commands. In a command chain, the
