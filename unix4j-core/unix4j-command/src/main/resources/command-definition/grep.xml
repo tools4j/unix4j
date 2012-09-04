@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<command-def xmlns="http://www.unix4j.org/command-def"
+			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			 xsi:schemaLocation="http://www.unix4j.org/command-def command-def.xsd">
+
+	<command name="grep" class="org.unix4j.unix.Grep" package="org.unix4j.unix.grep"/>
+	<name>grep - print lines matching a pattern</name>
+	<synopsis>grep [-ivf] pattern</synopsis>
+	<description ref="grep.html"/>
+	<notes>
+	</notes>
+	<methods>
+		<method args="pattern" input="false">
+			Filters the input lines and writes the matching lines to the output.
+			A line matches if it contains the given {@code pattern} using
+			case-sensitive string comparison.
+		</method>
+		<method args="options,pattern" input="false">
+			Filters the input lines and writes the matching lines to the output.iles contained in
+			Whether or not a line matches the given {@code pattern} depends
+			on the specified {@code options}.method.
+		</method>
+	</methods>
+	<options>
+		<option name="ignoreCase" acronym="i">
+			Match lines ignoring the case when comparing the strings, also known
+			from Unix with its acronym 'i'.
+		</option>
+		<option name="invert" acronym="v">
+			Invert the match result, that is, a non-matching line is written to
+			the output and a matching line is not. This option is also known from
+			Unix with its acronym 'v'.
+		</option>
+		<option name="fixedStrings" acronym="f">
+			Uses fixed-strings matching instead of regular expressions. This
+			option is also known from Unix with its acronym 'f'.
+		</option>
+	</options>
+	<operands>
+		<operand name="pattern" type="String">
+			Lines will be printed which match the given pattern
+		</operand>
+		<operand name="options" type="Grep.Options">
+			The options defining command behaviour.
+		</operand>
+	</operands>
+</command-def>

@@ -1,26 +1,16 @@
 package org.unix4j.builder;
 
+import org.unix4j.command.Command;
+import org.unix4j.io.Input;
+import org.unix4j.redirect.From;
+import org.unix4j.unix.*;
+import org.unix4j.unix.Uniq.Options;
+
 import java.io.File;
 import java.io.InputStream;
 import java.io.Reader;
 import java.net.URL;
 import java.util.Collection;
-
-import org.unix4j.command.Command;
-import org.unix4j.io.Input;
-import org.unix4j.redirect.From;
-import org.unix4j.unix.Cut;
-import org.unix4j.unix.Echo;
-import org.unix4j.unix.Grep;
-import org.unix4j.unix.Head;
-import org.unix4j.unix.Ls;
-import org.unix4j.unix.Sed;
-import org.unix4j.unix.Sort;
-import org.unix4j.unix.Tail;
-import org.unix4j.unix.Uniq;
-import org.unix4j.unix.Uniq.Options;
-import org.unix4j.unix.Wc;
-import org.unix4j.unix.Xargs;
 
 public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements Unix4jCommandBuilder {
 
@@ -138,14 +128,14 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 	}
 
 	@Override
-	public Unix4jCommandBuilder grep(String matchString) {
-		join(Grep.FACTORY.grep(matchString));
+	public Unix4jCommandBuilder grep(String pattern) {
+		join(Grep.FACTORY.grep(pattern));
 		return this;
 	}
 
 	@Override
-	public Unix4jCommandBuilder grep(String matchString, Grep.Option... options) {
-		join(Grep.FACTORY.grep(matchString, options));
+	public Unix4jCommandBuilder grep(Grep.Options options, String pattern) {
+		join(Grep.FACTORY.grep(options, pattern));
 		return this;
 	}
 
@@ -304,13 +294,13 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 		join(Tail.FACTORY.tail());
 		return this;
 	}
-	
+
 	@Override
 	public Unix4jCommandBuilder uniq() {
 		join(Uniq.FACTORY.uniq());
 		return this;
 	}
-	
+
 	@Override
 	public Unix4jCommandBuilder uniq(File file) {
 		join(Uniq.FACTORY.uniq(file));
