@@ -47,6 +47,7 @@
   </xs:element>
   <xs:element name="method">
     <xs:complexType mixed="true">
+      <xs:attribute name="name"/>
       <xs:attribute name="args"/>
       <xs:attribute name="input" type="xs:boolean" use="required"/>
     </xs:complexType>
@@ -75,7 +76,7 @@
   <xs:element name="operand">
     <xs:complexType mixed="true">
       <xs:attribute name="name" use="required" type="xs:NCName"/>
-      <xs:attribute name="type" use="required" type="xs:NCName"/>
+      <xs:attribute name="type" use="required" type="xs:string"/>
     </xs:complexType>
   </xs:element>
 </xs:schema>
