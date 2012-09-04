@@ -1,10 +1,11 @@
 package org.unix4j.unix;
 
-import java.io.StringWriter;
-
 import org.junit.Test;
 import org.unix4j.Unix4j;
+import org.unix4j.unix.grep.GrepOption;
 import org.unix4j.util.MultilineString;
+
+import java.io.StringWriter;
 
 /**
  * Unit test for simple App.
@@ -130,7 +131,7 @@ public class GrepTest {
 				// .appendLine(EMPTY_LINE)
 				// .appendLine(TWO);
 		final String regex = "THIS";
-		assertGrep( input, regex, expectedOutput, Grep.Option.ignoreCase );
+		assertGrep( input, regex, expectedOutput, GrepOption.ignoreCase );
 	}
 
 	@Test
@@ -142,11 +143,11 @@ public class GrepTest {
 				// .appendLine(THIS_IS_A_TEST_ONE_TWO_THREE);
 				.appendLine(ONE)
 				.appendLine(A)
-				.appendLine(EMPTY_LINE
-				).appendLine(TWO)
+				.appendLine(EMPTY_LINE)
+				.appendLine(TWO)
 				.appendLine(COUNT);
 		final String regex = "This";
-		assertGrep( input, regex, expectedOutput, Grep.Option.invert );
+		assertGrep( input, regex, expectedOutput, GrepOption.invert );
 	}
 
 	@Test
@@ -162,7 +163,7 @@ public class GrepTest {
 				// .appendLine(TWO);
 				.appendLine(COUNT);
 		final String regex = "t";
-		assertGrep( input, regex, expectedOutput, Grep.Option.invert );
+		assertGrep( input, regex, expectedOutput, GrepOption.invert );
 	}
 
 	@Test
@@ -194,14 +195,14 @@ public class GrepTest {
 				// .appendLine(TWO);
 				.appendLine(COUNT);
 		final String regex = "def\\d123";
-		assertGrep( input, regex, expectedOutput, Grep.Option.fixedStrings );
+		assertGrep( input, regex, expectedOutput, GrepOption.fixedStrings );
 	}
 
 	@Test
 	public void testGrep_fixedStringButWithWrongCase() {
 		final MultilineString expectedOutput = MultilineString.EMPTY;
 		final String regex = "DEF\\d123";
-		assertGrep( input, regex, expectedOutput, Grep.Option.fixedStrings );
+		assertGrep( input, regex, expectedOutput, GrepOption.fixedStrings );
 	}
 
 	@Test
@@ -216,12 +217,19 @@ public class GrepTest {
 				// .appendLine(TWO);
 				.appendLine(COUNT);
 		final String regex = "DEF\\d123";
-		assertGrep( input, regex, expectedOutput, Grep.Option.fixedStrings, Grep.Option.ignoreCase );
+		assertGrep( input, regex, expectedOutput, Grep.OPTIONS.fixedStrings.ignoreCase);
 	}
 
-	private void assertGrep(final MultilineString input, final String expression, final MultilineString expectedOutput, Grep.Option... options){
+	private void assertGrep(final MultilineString input, final String expression, final MultilineString expectedOutput){
 		final StringWriter actualOutputStringWriter = new StringWriter();
-		Unix4j.from(input.toInput()).grep(expression, options).toWriter(actualOutputStringWriter);
+		Unix4j.from(input.toInput()).grep(expression).toWriter(actualOutputStringWriter);
+		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
+		actualOutput.assertMultilineStringEquals(expectedOutput);
+	}
+
+	private void assertGrep(final MultilineString input, final String expression, final MultilineString expectedOutput, Grep.Options options){
+		final StringWriter actualOutputStringWriter = new StringWriter();
+		Unix4j.from(input.toInput()).grep(options, expression).toWriter(actualOutputStringWriter);
 		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
 		actualOutput.assertMultilineStringEquals(expectedOutput);
 	}

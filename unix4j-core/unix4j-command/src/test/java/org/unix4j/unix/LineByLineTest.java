@@ -3,6 +3,7 @@ package org.unix4j.unix;
 import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.io.IoTestStub;
+import org.unix4j.unix.grep.GrepOption;
 
 /**
  * Not the most elegant way of asserting order.  Probably better to
@@ -89,7 +90,7 @@ public class LineByLineTest {
 		input.addLine("1").addLine("2").addLine("3").addLine("4").addLine("5");
 		IoTestStub.startRecording();
 
-		Unix4j.from(input).head(5).grep("blah", Grep.Option.invert).toOutput(output);
+		Unix4j.from(input).head(5).grep(GrepOption.invert, "blah").toOutput(output);
 
 		IoTestStub.stopRecordingAndVerify()
 				.expect(input,  IoTestStub.ActionType.READ,  "1")
@@ -114,7 +115,7 @@ public class LineByLineTest {
 		input.addLine("1").addLine("2").addLine("3").addLine("4").addLine("5");
 		IoTestStub.startRecording();
 
-		Unix4j.from(input).grep("blah", Grep.Option.invert).head(5).toOutput(output);
+		Unix4j.from(input).grep(GrepOption.invert, "blah").head(5).toOutput(output);
 
 		IoTestStub.stopRecordingAndVerify()
 				.expect(input,  IoTestStub.ActionType.READ,  "1")
