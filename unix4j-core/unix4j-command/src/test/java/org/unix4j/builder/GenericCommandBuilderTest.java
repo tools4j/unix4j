@@ -8,6 +8,7 @@ import org.unix4j.io.Output;
 import org.unix4j.io.StreamOutput;
 import org.unix4j.redirect.From;
 import org.unix4j.unix.*;
+import org.unix4j.unix.grep.GrepOption;
 
 import java.io.File;
 
@@ -71,7 +72,7 @@ public class GenericCommandBuilderTest {
 	}
 	@Test
 	public void testEchoGrepMatchIgnoreCase() {
-		unix4j.echo("Hello WORLD").grep("world", Grep.Option.ignoreCase);
+		unix4j.echo("Hello WORLD").grep(GrepOption.ignoreCase, "world");
 	}
 	@Test
 	public void testLsXargsEcho() {
@@ -85,6 +86,6 @@ public class GenericCommandBuilderTest {
 	@Test
 	public void testToSystemError() {
 		output = new StreamOutput(System.err);
-		unix4j.echo("Hello ERROR").grep("error", Grep.Option.ignoreCase);
+		unix4j.echo("Hello ERROR").grep(GrepOption.ignoreCase, "error");
 	}
 }
