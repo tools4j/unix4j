@@ -141,11 +141,6 @@ public final class Echo {
 		}
 
 		@Override
-		public Command withArgs(Args arguments) {
-			return new Command(arguments);
-		}
-
-		@Override
 		public LineProcessor execute(ExecutionContext context, final LineProcessor output) {
 			return new LineProcessor() {
 				@Override

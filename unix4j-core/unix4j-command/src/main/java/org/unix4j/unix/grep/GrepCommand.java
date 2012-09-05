@@ -17,11 +17,6 @@ public class GrepCommand extends AbstractCommand<GrepArguments> {
 	}
 
 	@Override
-	public GrepCommand withArgs(GrepArguments arguments) {
-		return new GrepCommand(arguments);
-	}
-
-	@Override
 	public LineProcessor execute(ExecutionContext context, LineProcessor output) {
 		final GrepArguments args = getArguments();
 		if (getArguments().isFixedStrings()) {

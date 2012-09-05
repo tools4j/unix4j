@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 /**
  * Forwards calls to another {@link Comparator} but reverses the order. The
- * class provides static {@link #reverse(Comparator)} method but no public
+ * class provides a static {@link #reverse(Comparator)} method but no public
  * constructor.
  */
 public final class ReverseOrderComparator<T> implements Comparator<T> {
@@ -40,6 +40,6 @@ public final class ReverseOrderComparator<T> implements Comparator<T> {
 
 	@Override
 	public int compare(T o1, T o2) {
-		return -comparator.compare(o1, o2);
+		return comparator.compare(o2, o1);//swap args to reverse order
 	}
 }

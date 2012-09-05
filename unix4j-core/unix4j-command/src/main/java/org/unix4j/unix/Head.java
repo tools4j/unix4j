@@ -166,11 +166,6 @@ public final class Head {
 		}
 
 		@Override
-		public Command withArgs(Args arguments) {
-			return new Command(arguments);
-		}
-
-		@Override
 		public LineProcessor execute(ExecutionContext context, final LineProcessor output) {
 			return new LineProcessor() {
 				private final int linesToOutput = getArguments().getLines();

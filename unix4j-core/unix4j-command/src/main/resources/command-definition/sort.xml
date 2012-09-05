@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+<command-def	xmlns="http://www.unix4j.org/command-def" 
+				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xsi:schemaLocation="http://www.unix4j.org/command-def command-def.xsd">
+	
+	<command name="sort" class="org.unix4j.unix.Sort" package="org.unix4j.unix.sort"/>
+	<name>
+		sort - sort, merge, or sequence check text files
+	</name>
+	<synopsis>
+		ORIGINAL:	sort [-m][-o output][-bdfinru][-t char][-k keydef]... [file...]
+					sort -c [-bdfinru][-t char][-k keydef][file]
+		CURRENT: 
+	</synopsis>
+	<description ref="sort.html"/>
+	<notes>
+		<note>
+		A &lt;newline&gt; is added to the end of an input line if it is not
+		properly terminated with a line ending (usually the last line in a file)
+		</note>
+	</notes>
+	<methods>
+		<method input="true">
+			Sorts the lines 
+		</method>
+		<method args="files" input="false">
+			TODO
+		</method>
+		<method args="paths" input="false">
+			TODO
+		</method>
+		<method args="options" input="true">
+			TODO
+		</method>
+		<method args="options,files" input="false">
+			TODO
+		</method>
+		<method args="options,paths" input="false">
+			TODO
+		</method>
+	</methods>
+	<options>
+		sort [-m][-o output][-bdfinru][-t char][-k keydef]... [file...]
+		sort -c [-bdfinru][-t char][-k keydef][file]
+		<option name="check" acronym="c" exclusiveGroup="cm">
+			Checks that the single input file is ordered as specified by the
+			arguments and the collating sequence of the current locale. No 
+			output is produced; only the exit code is affected.
+		</option>
+		<option name="merge" acronym="m" exclusiveGroup="cm">
+			Merge only; the input file are assumed to be already sorted.
+		</option>
+		<option name="unique" acronym="u">
+			Unique: suppress all but one in each set of lines having equal keys.
+			If used with the {@code -c} option, checks that there are no lines 
+			with duplicate keys, in addition to checking that the input file is 
+			sorted.
+		</option>
+		<option name="ignoreLeadingBlanks" acronym="b">
+			Ignore leading blanks.
+		</option>
+		<option name="dictionaryOrder" acronym="d">
+			Consider only blanks and alphanumeric characters.
+		</option>
+		<option name="ignoreCase" acronym="f">
+			Consider all lowercase characters that have uppercase equivalents to
+			be the uppercase equivalent for the purposes of comparison.
+		</option>
+		<option name="numericSort" acronym="n">
+			Restrict the sort key to an initial numeric string, consisting of 
+			optional &lt;blank&gt;s, optional minus sign, and zero or more 
+			digits with an optional radix character and thousands separators 
+			(as defined in the current locale), which is sorted by arithmetic
+			value. An empty digit string is treated as zero. Leading zeros and
+			signs on zeros do not affect ordering.
+		</option>
+		<!--
+		<option name="generalNumericSort" acronym="g">
+			compare according to general numerical value
+		</option>
+		<option name="monthSort" acronym="m">
+			compare (unknown) &lt; `JAN' &lt; ... &lt; `DEC'
+		</option>
+		<option name="ignoreNonPrinting" acronym="i">
+			Consider only printable characters
+		</option>
+		-->
+		<option name="reverse" acronym="r">
+			Reverse the sense of comparisons.
+		</option>
+	</options>
+	<operands>
+		<operand name="paths" type="String...">
+			Pathnames of the files to be sorted, merged, or checked; wildcards * 
+			and ? are supported.
+		</operand>
+		<operand name="files" type="java.io.File...">
+			The files to be sorted or merged.
+		</operand>
+		<!-- 
+		<operand name="keydef" type="Keydef">
+			The files to be sorted or merged.
+		</operand>
+		<operand name="comparator" type="java.util.Comparator&lt;? super org.unix4j.line.Line>">
+			The files to be sorted or merged.
+		</operand>
+		 -->
+		<!--
+		<operand name="separatorChars" type="String">
+			Use {@code separatorChars} as the field separator; 
+			{@code separatorChars} is not considered to be part of a field 
+			(although it can be included in a sort key). Each occurrence of
+			{@code separatorChars} is significant (for example, two consecutive 
+			{@code separatorChars} delimit an empty field). If not specified, 
+			whilespace characters (tabs, spaces) are used as default field 
+			separators; each maximal non-empty sequence of whitespace chars that
+			follows a non-whitespace char is a field separator.
+		</operand>
+		<operand name="fieldStart" type="int">
+			Define a key field that begins at {@code fieldStart} and ends at
+			{@code fieldEnd} inclusive, unless {@code fieldStart} falls beyond 
+			the end of the line or after {@code fieldEnd}, in which case the key
+			field is empty.
+			
+			A field comprises a maximal sequence of non-separating characters 
+			and, in the absence of a {@code separatorChar}, any preceding field
+			separator.
+		</operand>
+		<operand name="fieldEnd" type="int">
+			Define a key field that begins at {@code fieldStart} and ends at
+			{@code fieldEnd} inclusive, unless {@code fieldStart} falls beyond 
+			the end of the line or after {@code fieldEnd}, in which case the key
+			field is empty. A missing {@code fieldEnd} means the last character
+			of the line.		
+
+			A field comprises a maximal sequence of non-separating characters 
+			and, in the absence of a {@code separatorChar}, any preceding field
+			separator.
+		</operand>
+		<operand name="fieldType" type="FieldType">
+			A modifier similar to the options 'b', 'd', 'f', 'i', 'n', 'r' 
+			defined for sort, but applies only to the key field to which they
+			are attached. 
+		</operand>
+		<operand name="keydef" type="Keydef">
+			The keydef argument is a restricted sort key field definition. When
+			there are multiple key fields, later keys are compared only after
+			all earlier keys compare equal. Except when the -u option is 
+			specified, lines that otherwise compare equal are ordered as if none
+			of the options -d, -f, -i, -n, or -k were present (but with -r still 
+			in effect, if it was specified) and with all bytes in the lines 
+			significant to the comparison. The order in which lines that still 
+			compare equal are written is unspecified.		
+		</operand>
+		-->
+		<operand name="options" type="Sort.Options">
+			The options for the sort command.
+		</operand>
+	</operands>
+</command-def>

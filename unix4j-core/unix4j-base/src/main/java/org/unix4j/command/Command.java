@@ -44,6 +44,7 @@ public interface Command<A extends Arguments<A>> {
 	 * @return a new command of the same type as this command using the
 	 *         specified {@code arguments}
 	 */
+	@Deprecated
 	Command<A> withArgs(A arguments);
 
 	/**

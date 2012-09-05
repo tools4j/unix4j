@@ -12,10 +12,10 @@ import org.unix4j.line.LineProcessor;
  * when the {@link UniqOption#global global} option is selected. The actual
  * processors are member classes of this abstract base class.
  */
-abstract class GlobalLineProcessor extends AbstractLineProcessor {
+abstract class GlobalLineProcessor extends UniqLineProcessor {
 	protected final Map<Line, Long> lineToCount = new LinkedHashMap<Line, Long>();
-	public GlobalLineProcessor(UniqArguments args, ExecutionContext context, LineProcessor output) {
-		super(args, context, output);
+	public GlobalLineProcessor(UniqCommand command, ExecutionContext context, LineProcessor output) {
+		super(command, context, output);
 	}
 	
 	/**
@@ -23,16 +23,17 @@ abstract class GlobalLineProcessor extends AbstractLineProcessor {
 	 * case when only the {@link UniqOption#global global} option is selected.
 	 */
 	public static class Normal extends GlobalLineProcessor {
-		public Normal(UniqArguments args, ExecutionContext context, LineProcessor output) {
-			super(args, context, output);
+		public Normal(UniqCommand command, ExecutionContext context, LineProcessor output) {
+			super(command, context, output);
 		}
 		@Override
-		public boolean processLine(Line line) {
+		protected boolean processLine(Line line, LineProcessor output) {
 			lineToCount.put(line, null);//we don't really need the count
 			return true;// we want all input
 		}
 		@Override
 		public void finish() {
+			final LineProcessor output = getOutput();
 			for (final Line line : lineToCount.keySet()) {
 				output.processLine(line);
 			}
@@ -47,11 +48,11 @@ abstract class GlobalLineProcessor extends AbstractLineProcessor {
 	abstract protected static class UniqueDuplicateCount extends GlobalLineProcessor {
 		private static final Long ONE = Long.valueOf(1);
 		private long maxCount = 0;
-		public UniqueDuplicateCount(UniqArguments args, ExecutionContext context, LineProcessor output) {
-			super(args, context, output);
+		public UniqueDuplicateCount(UniqCommand command, ExecutionContext context, LineProcessor output) {
+			super(command, context, output);
 		}
 		@Override
-		public boolean processLine(Line line) {
+		protected boolean processLine(Line line, LineProcessor output) {
 			Long count = lineToCount.put(line, ONE);
 			if (count != null) {
 				count++;
@@ -64,15 +65,16 @@ abstract class GlobalLineProcessor extends AbstractLineProcessor {
 		}
 		@Override
 		public void finish() {
+			final LineProcessor output = getOutput();
 			final int maxDigits = String.valueOf(maxCount).length();
 			for (final Map.Entry<Line, Long> e : lineToCount.entrySet()) {
-				writeLine(e.getKey(), e.getValue(), maxDigits);
+				writeLine(e.getKey(), e.getValue(), maxDigits, output);
 			}
 			lineToCount.clear();
 			maxCount = 0;
 			output.finish();
 		}
-		abstract protected void writeLine(Line line, long count, int maxCountDigits);
+		abstract protected void writeLine(Line line, long count, int maxCountDigits, LineProcessor output);
 	}
 	/**
 	 * Line processor implementing the actual uniq command execution for the 
@@ -80,11 +82,11 @@ abstract class GlobalLineProcessor extends AbstractLineProcessor {
 	 * with the {@link UniqOption#uniqueOnly uniqueOnly} option.
 	 */
 	public static class UniqueOnly extends UniqueDuplicateCount {
-		public UniqueOnly(UniqArguments args, ExecutionContext context, LineProcessor output) {
-			super(args, context, output);
+		public UniqueOnly(UniqCommand command, ExecutionContext context, LineProcessor output) {
+			super(command, context, output);
 		}
 		@Override
-		protected void writeLine(Line line, long count, int maxCountDigits) {
+		protected void writeLine(Line line, long count, int maxCountDigits, LineProcessor output) {
 			if (count == 1) {
 				output.processLine(line);
 			}
@@ -96,11 +98,11 @@ abstract class GlobalLineProcessor extends AbstractLineProcessor {
 	 * with the {@link UniqOption#duplicatedOnly duplicatedOnly} option.
 	 */
 	public static class DuplicateOnly extends UniqueDuplicateCount {
-		public DuplicateOnly(UniqArguments args, ExecutionContext context, LineProcessor output) {
-			super(args, context, output);
+		public DuplicateOnly(UniqCommand command, ExecutionContext context, LineProcessor output) {
+			super(command, context, output);
 		}
 		@Override
-		protected void writeLine(Line line, long count, int maxCountDigits) {
+		protected void writeLine(Line line, long count, int maxCountDigits, LineProcessor output) {
 			if (count > 1) {
 				output.processLine(line);
 			}
@@ -112,12 +114,12 @@ abstract class GlobalLineProcessor extends AbstractLineProcessor {
 	 * with the {@link UniqOption#count count} option.
 	 */
 	public static class Count extends UniqueDuplicateCount {
-		public Count(UniqArguments args, ExecutionContext context, LineProcessor output) {
-			super(args, context, output);
+		public Count(UniqCommand command, ExecutionContext context, LineProcessor output) {
+			super(command, context, output);
 		}
 		@Override
-		protected void writeLine(Line line, long count, int maxCountDigits) {
-			writeCountLine(line, count, Math.max(3, maxCountDigits));
+		protected void writeLine(Line line, long count, int maxCountDigits, LineProcessor output) {
+			UniqCommand.writeCountLine(line, count, Math.max(3, maxCountDigits), output);
 		}
 	}
 	

@@ -380,11 +380,6 @@ public final class From {
 		}
 
 		@Override
-		public Command withArgs(Args arguments) {
-			return new Command(arguments);
-		}
-
-		@Override
 		public LineProcessor execute(final ExecutionContext context, final LineProcessor output) {
 			return new LineProcessor() {
 				@Override

@@ -21,11 +21,6 @@ class LsCommand extends AbstractCommand<LsArguments> {
 	public LsCommand(LsArguments arguments) {
 		super(Ls.NAME, arguments);
 	}
-
-	@Override
-	public LsCommand withArgs(LsArguments arguments) {
-		return new LsCommand(arguments);
-	}
 	
 	private List<File> getArgumentFiles(ExecutionContext context) {
 		final LsArguments args = getArguments();

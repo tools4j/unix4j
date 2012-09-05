@@ -17,7 +17,7 @@ public class SortPerfTest extends AbstractPerfTest {
 
 	@Test(timeout = 5000)
 	public void testSort_1Meg_descending() {
-		final Unix4jCommandBuilder command = Unix4j.fromFile(LargeTestFiles.FILE_1_MEG.getFile()).sortDescending();
+		final Unix4jCommandBuilder command = Unix4j.fromFile(LargeTestFiles.FILE_1_MEG.getFile()).sort(Sort.OPTIONS.reverse);
 		final String equivalentUnixTest = "cat 1_Meg_test_file.txt | sort -r";
 		run(command, equivalentUnixTest);
 	}
