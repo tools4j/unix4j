@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<command-def xmlns="http://www.unix4j.org/command-def"
+			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			 xsi:schemaLocation="http://www.unix4j.org/command-def command-def.xsd">
+
+	<command name="wc" class="org.unix4j.unix.Wc" package="org.unix4j.unix.wc"/>
+	<name>wc - word, line, and byte or character count</name>
+	<synopsis>wc [-lwm]</synopsis>
+	<description ref="wc.html"/>
+	<notes>
+	</notes>
+	<methods>
+		<method args="" input="false">
+			Executes a count of lines, words and chars in the given input and
+			writes them to the output
+		</method>
+		<method args="options" input="false">
+			Executes a one or more counts, depending on the given options, and
+			writes them to the output.
+		</method>
+		<method name="wcCountLinesWordsAndChars" args="" input="false">
+			Executes a count of lines, words and chars in the given input and
+			writes them to the output
+		</method>
+		<method name="wcCountLines" args="" input="false">
+			Executes a count of lines in the given input and writes them to the output
+		</method>
+		<method name="wcCountChars" args="" input="false">
+			Executes a count of chars in the given input and writes them to the output
+		</method>
+		<method name="wcCountWords" args="" input="false">
+			Executes a count of words in the given input and writes them to the output
+		</method>
+	</methods>
+	<options>
+		<option name="lines" acronym="l">
+			Executes a count of lines and writes this count to the output.
+		</option>
+		<option name="chars" acronym="m">
+			Executes a count of chars and writes this count to the output.
+		</option>
+		<option name="words" acronym="w">
+			Executes a count of chars and writes this count to the output.
+		</option>
+	</options>
+	<operands>
+		<operand name="options" type="Wc.Options">
+			The options defining command behaviour.
+		</operand>
+	</operands>
+</command-def>

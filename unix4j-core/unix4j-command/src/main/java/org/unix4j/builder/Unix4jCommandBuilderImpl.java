@@ -263,15 +263,21 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 		return this;
 	}
 
+//	@Override
+//	public Unix4jCommandBuilder wcCountLinesWordsAndChars() {
+//		join(Wc.FACTORY.wcCountLinesWordsAndChars());
+//		return this;
+//	}
+
 	@Override
-	public Unix4jCommandBuilder wcCountLinesWordsAndChars() {
-		join(Wc.FACTORY.wcCountLinesWordsAndChars());
+	public Unix4jCommandBuilder wc(Wc.Options options) {
+		join(Wc.FACTORY.wc(options));
 		return this;
 	}
 
 	@Override
-	public Unix4jCommandBuilder wc(Wc.Option... options) {
-		join(Wc.FACTORY.wc(options));
+	public Unix4jCommandBuilder wcCountLinesWordsAndChars() {
+		join(Wc.FACTORY.wcCountLinesWordsAndChars());
 		return this;
 	}
 
