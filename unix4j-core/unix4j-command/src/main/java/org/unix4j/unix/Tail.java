@@ -168,11 +168,6 @@ public final class Tail {
 		}
 
 		@Override
-		public Command withArgs(Args arguments) {
-			return new Command(arguments);
-		}
-
-		@Override
 		public LineProcessor execute(ExecutionContext context, final LineProcessor output) {
 			return new LineProcessor() {
 				// linked list is most efficient to remove first line

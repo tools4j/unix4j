@@ -65,8 +65,8 @@ public class CommandBuilderTest {
 	}
 
 	@Test
-	public void testLsSortDesc() {
-		unix4j.ls().sort(Sort.Option.descending);
+	public void testLsSortReverse() {
+		unix4j.ls().sort(Sort.OPTIONS.reverse);
 	}
 
 	@Test

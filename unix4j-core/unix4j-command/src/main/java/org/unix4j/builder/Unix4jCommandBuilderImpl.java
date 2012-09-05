@@ -1,16 +1,26 @@
 package org.unix4j.builder;
 
-import org.unix4j.command.Command;
-import org.unix4j.io.Input;
-import org.unix4j.redirect.From;
-import org.unix4j.unix.*;
-import org.unix4j.unix.Uniq.Options;
-
 import java.io.File;
 import java.io.InputStream;
 import java.io.Reader;
 import java.net.URL;
 import java.util.Collection;
+
+import org.unix4j.command.Command;
+import org.unix4j.io.Input;
+import org.unix4j.redirect.From;
+import org.unix4j.unix.Cut;
+import org.unix4j.unix.Echo;
+import org.unix4j.unix.Grep;
+import org.unix4j.unix.Head;
+import org.unix4j.unix.Ls;
+import org.unix4j.unix.Sed;
+import org.unix4j.unix.Sort;
+import org.unix4j.unix.Tail;
+import org.unix4j.unix.Uniq;
+import org.unix4j.unix.Uniq.Options;
+import org.unix4j.unix.Wc;
+import org.unix4j.unix.Xargs;
 
 public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements Unix4jCommandBuilder {
 
@@ -158,23 +168,35 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 	}
 
 	@Override
-	public Unix4jCommandBuilder sort(Sort.Option... options) {
+	public Unix4jCommandBuilder sort(File... files) {
+		join(Sort.FACTORY.sort(files));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder sort(String... paths) {
+		join(Sort.FACTORY.sort(paths));
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder sort(Sort.Options options) {
 		join(Sort.FACTORY.sort(options));
 		return this;
 	}
 
 	@Override
-	public Unix4jCommandBuilder sortAscending() {
-		join(Sort.FACTORY.sortAscending());
+	public Unix4jCommandBuilder sort(org.unix4j.unix.Sort.Options options, File... files) {
+		join(Sort.FACTORY.sort(options, files));
 		return this;
 	}
-
+	
 	@Override
-	public Unix4jCommandBuilder sortDescending() {
-		join(Sort.FACTORY.sortDescending());
+	public Unix4jCommandBuilder sort(org.unix4j.unix.Sort.Options options, String... paths) {
+		join(Sort.FACTORY.sort(options, paths));
 		return this;
 	}
-
+	
 	@Override
 	public Unix4jCommandBuilder cut(int fieldIndex) {
 		join(Cut.FACTORY.cut(fieldIndex));

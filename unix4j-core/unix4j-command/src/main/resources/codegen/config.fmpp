@@ -6,13 +6,15 @@ modes: [
 ]
 data: {
 	commandDefs: org.unix4j.codegen.CommandDefinitionDataLoader(
-    	../../command-definition/ls.xml
-    	../../command-definition/uniq.xml
-    	../../command-definition/grep.xml
+		../../command-definition/grep.xml
+		../../command-definition/ls.xml
+		../../command-definition/sort.xml
+		../../command-definition/uniq.xml
 	)
     optionSetDefs: org.unix4j.codegen.OptionSetDefinitionDataLoader(
-    	../../command-definition/ls.xml
-    	../../command-definition/uniq.xml
-    	../../command-definition/grep.xml
+		../../command-definition/grep.xml
+		../../command-definition/ls.xml
+		../../command-definition/sort.xml
+		../../command-definition/uniq.xml
     )
 }

@@ -286,11 +286,6 @@ public final class Wc {
 		}
 
 		@Override
-		public Command withArgs(Args arguments) {
-			return new Command(arguments);
-		}
-
-		@Override
 		public LineProcessor execute(ExecutionContext context, final LineProcessor output) {
 			final Args args = getArguments();
 			assertArgFalse("No count type specified. At least one count type required.", args.isNoCountTypeSpecified());

@@ -1,5 +1,6 @@
 package org.unix4j.command;
 
+
 /**
  * Abstract base class suitable for most command implementations. Name and
  * arguments are passed to the constructor.
@@ -40,6 +41,11 @@ abstract public class AbstractCommand<A extends Arguments<A>> implements Command
 	@Override
 	public Command<?> join(Command<?> next) {
 		return JoinedCommand.join(this, next);
+	}
+	
+	@Override
+	public final Command<A> withArgs(A arguments) {
+		throw new IllegalArgumentException("deprecated");
 	}
 
 	@Override

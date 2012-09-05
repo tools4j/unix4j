@@ -130,11 +130,6 @@ public final class Xargs {
 		}
 
 		@Override
-		public Command withArgs(Args arguments) {
-			return new Command(arguments);
-		}
-
-		@Override
 		public LineProcessor execute(ExecutionContext context, LineProcessor output) {
 			return output;// does not much if not joined to the next command
 		}
@@ -184,11 +179,6 @@ public final class Xargs {
 							output.finish();
 						}
 					};
-				}
-
-				@Override
-				public org.unix4j.command.Command<A1> withArgs(A1 arguments) {
-					return this;// FIXME dodgy
 				}
 			};
 		}

@@ -47,9 +47,4 @@ public class NoOp extends AbstractCommand<NoOp.Args> {
 	public LineProcessor execute(ExecutionContext context, LineProcessor output) {
 		return NullOutput.ABORT;
 	}
-
-	@Override
-	public Command<Args> withArgs(Args arguments) {
-		return this;
-	}
 }

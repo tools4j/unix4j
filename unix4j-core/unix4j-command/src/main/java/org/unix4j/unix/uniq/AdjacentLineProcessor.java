@@ -9,11 +9,11 @@ import org.unix4j.line.LineProcessor;
  * when the {@link UniqOption#global global} option is NOT selected. The actual
  * processors are member classes of this abstract base class.
  */
-abstract class AdjacentLineProcessor extends AbstractLineProcessor {
+abstract class AdjacentLineProcessor extends UniqLineProcessor {
 	protected Line curLine = null;
 
-	public AdjacentLineProcessor(UniqArguments args, ExecutionContext context, LineProcessor output) {
-		super(args, context, output);
+	public AdjacentLineProcessor(UniqCommand command, ExecutionContext context, LineProcessor output) {
+		super(command, context, output);
 	}
 
 	/**
@@ -21,12 +21,12 @@ abstract class AdjacentLineProcessor extends AbstractLineProcessor {
 	 * case when no option is selected.
 	 */
 	public static class Normal extends AdjacentLineProcessor {
-		public Normal(UniqArguments args, ExecutionContext context, LineProcessor output) {
-			super(args, context, output);
+		public Normal(UniqCommand command, ExecutionContext context, LineProcessor output) {
+			super(command, context, output);
 		}
 
 		@Override
-		public boolean processLine(Line line) {
+		protected boolean processLine(Line line, LineProcessor output) {
 			if (curLine == null || !curLine.equals(line)) {
 				output.processLine(line);
 				curLine = line;
@@ -37,7 +37,7 @@ abstract class AdjacentLineProcessor extends AbstractLineProcessor {
 		@Override
 		public void finish() {
 			curLine = null;
-			output.finish();
+			getOutput().finish();
 		}
 	}
 
@@ -48,14 +48,14 @@ abstract class AdjacentLineProcessor extends AbstractLineProcessor {
 	abstract protected static class UniqueDuplicateCount extends AdjacentLineProcessor {
 		private long curCount = 0;
 
-		public UniqueDuplicateCount(UniqArguments args, ExecutionContext context, LineProcessor output) {
-			super(args, context, output);
+		public UniqueDuplicateCount(UniqCommand command, ExecutionContext context, LineProcessor output) {
+			super(command, context, output);
 		}
 
 		@Override
-		public boolean processLine(Line line) {
+		protected boolean processLine(Line line, LineProcessor output) {
 			if (curLine == null || !curLine.equals(line)) {
-				writeLine(curLine, curCount);
+				writeLine(curLine, curCount, output);
 				curCount = 1;
 				curLine = line;
 			} else {
@@ -66,13 +66,14 @@ abstract class AdjacentLineProcessor extends AbstractLineProcessor {
 
 		@Override
 		public void finish() {
-			writeLine(curLine, curCount);
+			final LineProcessor output = getOutput();
+			writeLine(curLine, curCount, output);
 			curCount = 0;
 			curLine = null;
 			output.finish();
 		}
 
-		abstract protected void writeLine(Line line, long count);
+		abstract protected void writeLine(Line line, long count, LineProcessor output);
 	}
 
 	/**
@@ -81,12 +82,12 @@ abstract class AdjacentLineProcessor extends AbstractLineProcessor {
 	 * selected.
 	 */
 	public static class UniqueOnly extends UniqueDuplicateCount {
-		public UniqueOnly(UniqArguments args, ExecutionContext context, LineProcessor output) {
-			super(args, context, output);
+		public UniqueOnly(UniqCommand command, ExecutionContext context, LineProcessor output) {
+			super(command, context, output);
 		}
 
 		@Override
-		protected void writeLine(Line line, long count) {
+		protected void writeLine(Line line, long count, LineProcessor output) {
 			if (count == 1) {
 				output.processLine(line);
 			}
@@ -99,12 +100,12 @@ abstract class AdjacentLineProcessor extends AbstractLineProcessor {
 	 * option is selected.
 	 */
 	public static class DuplicateOnly extends UniqueDuplicateCount {
-		public DuplicateOnly(UniqArguments args, ExecutionContext context, LineProcessor output) {
-			super(args, context, output);
+		public DuplicateOnly(UniqCommand command, ExecutionContext context, LineProcessor output) {
+			super(command, context, output);
 		}
 
 		@Override
-		protected void writeLine(Line line, long count) {
+		protected void writeLine(Line line, long count, LineProcessor output) {
 			if (count > 1) {
 				output.processLine(line);
 			}
@@ -116,14 +117,14 @@ abstract class AdjacentLineProcessor extends AbstractLineProcessor {
 	 * case when only the {@link UniqOption#count count} option is selected.
 	 */
 	public static class Count extends UniqueDuplicateCount {
-		public Count(UniqArguments args, ExecutionContext context, LineProcessor output) {
-			super(args, context, output);
+		public Count(UniqCommand command, ExecutionContext context, LineProcessor output) {
+			super(command, context, output);
 		}
 
 		@Override
-		protected void writeLine(Line line, long count) {
+		protected void writeLine(Line line, long count, LineProcessor output) {
 			if (count > 0) {
-				writeCountLine(line, count, 3);
+				UniqCommand.writeCountLine(line, count, 3, output);
 			}
 		}
 	}

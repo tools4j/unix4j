@@ -1,0 +1,33 @@
+<html>
+<body>
+<p>
+	The sort utility performs one of the following functions:
+	<ol>
+		<li>
+			Sort lines of all the named files together and write the result to 
+			the specified output.
+		</li>
+		<li>
+			Merge lines of all the named (presorted) files together and write 
+			the result to the specified output.
+		</li>
+		<li>
+			Check that a single input file is correctly presorted.		
+		</li>
+	</ol>
+</p>
+<p>
+	Comparisons are based on one or more sort keys/fields extracted from each 
+	line of input. If no sort keys/fields are specified, comparisons are based 
+	on the entire line up to, but not including, the terminating 
+	&lt;newline&gt;. All comparisons are performed using the collating sequence 
+	of the current locale.
+</p>
+<p>
+	Sorting is stable, that is, the ordering of input lines is preserved if they
+	are considered equal according to the current comparison criteria (if two 
+	lines originate from different input files, the index of the file in the
+	input arguments list defines the ordering of the lines). 
+</p>
+</body>
+</html>
