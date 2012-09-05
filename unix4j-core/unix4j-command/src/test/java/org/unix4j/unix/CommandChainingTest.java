@@ -1,10 +1,10 @@
 package org.unix4j.unix;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.util.MultilineString;
+
+import static org.junit.Assert.assertEquals;
 
 public class CommandChainingTest {
 	private final static MultilineString input;
@@ -93,27 +93,27 @@ public class CommandChainingTest {
 		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).head(10).sort().tail(7).sedSubstitute("This", "Dude").grep("Dude").toStringResult());
 	}
 
-	@Test
-	public void test_headSortSedTailGrepHeadWc() {
-		System.out.println(
-				Unix4j.fromString(input.toString())
-						.head(10)
-						.sort()
-						.tail(7)
-						.sedSubstitute("This", "Dude")
-						.grep("Dude")
-						.head(1)
-						.wcCountWords()
-						.toStringResult());
-		assertEquals("6", /* 6 words */
-				Unix4j.fromString(input.toString())
-						.head(10)
-						.sort()
-						.tail(7)
-						.sedSubstitute("This", "Dude")
-						.grep("Dude")
-						.head(1)
-						.wcCountWords()
-						.toStringResult());
-	}
+//	@Test
+//	public void test_headSortSedTailGrepHeadWc() {
+//		System.out.println(
+//				Unix4j.fromString(input.toString())
+//						.head(10)
+//						.sort()
+//						.tail(7)
+//						.sedSubstitute("This", "Dude")
+//						.grep("Dude")
+//						.head(1)
+//						.wcCountWords()
+//						.toStringResult());
+//		assertEquals("6", /* 6 words */
+//				Unix4j.fromString(input.toString())
+//						.head(10)
+//						.sort()
+//						.tail(7)
+//						.sedSubstitute("This", "Dude")
+//						.grep("Dude")
+//						.head(1)
+//						.wcCountWords()
+//						.toStringResult());
+//	}
 }
