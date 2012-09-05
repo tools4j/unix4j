@@ -9,10 +9,12 @@ data: {
     	../../command-definition/ls.xml
     	../../command-definition/uniq.xml
     	../../command-definition/grep.xml
+    	../../command-definition/wc.xml
 	)
     optionSetDefs: org.unix4j.codegen.OptionSetDefinitionDataLoader(
     	../../command-definition/ls.xml
     	../../command-definition/uniq.xml
     	../../command-definition/grep.xml
+    	../../command-definition/wc.xml
     )
 }

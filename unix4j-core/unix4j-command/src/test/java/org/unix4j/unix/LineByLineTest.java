@@ -176,7 +176,7 @@ public class LineByLineTest {
 		input.addLine("1").addLine("2").addLine("3").addLine("4").addLine("5");
 		IoTestStub.startRecording();
 
-		Unix4j.from(input).grep("\\d").wcCountLines().toOutput(output);
+		Unix4j.from(input).grep("\\d").wc(Wc.OPTIONS.lines).toOutput(output);
 
 		IoTestStub.stopRecordingAndVerify()
 				.expect(input,  IoTestStub.ActionType.READ,  "1")
