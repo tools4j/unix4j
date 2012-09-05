@@ -1,18 +1,18 @@
 package org.unix4j.unix;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import org.junit.Test;
+import org.unix4j.Unix4j;
 
 import java.io.InputStream;
 
-import org.junit.Test;
-import org.unix4j.Unix4j;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 public class FromInputStream {
 	@Test
 	public void testFromInputStream() {
 		final InputStream inputStream = getClass().getResourceAsStream("/commuting.txt");
-		assertThat(Unix4j.from(inputStream).grep("from").head(4).tail(1).wcCountWords().toStringResult(), is("13"));
+		assertThat(Unix4j.from(inputStream).grep("from").head(4).tail(1).wc(Wc.OPTIONS.words).toStringResult(), is("13"));
 	}
 
 	@Test(expected = NullPointerException.class)

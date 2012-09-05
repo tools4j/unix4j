@@ -1,20 +1,22 @@
 # Configuration file for freemarker/fmpp code generation
 modes: [
-	ignore(**/include/*.*)
+    ignore(**/include/*.*)
     execute(**/*.java, **/*.txt)
     copy(**/*)
 ]
 data: {
-	commandDefs: org.unix4j.codegen.CommandDefinitionDataLoader(
-		../../command-definition/grep.xml
-		../../command-definition/ls.xml
-		../../command-definition/sort.xml
-		../../command-definition/uniq.xml
-	)
+    commandDefs: org.unix4j.codegen.CommandDefinitionDataLoader(
+        ../../command-definition/grep.xml
+        ../../command-definition/ls.xml
+        ../../command-definition/sort.xml
+        ../../command-definition/uniq.xml
+        ../../command-definition/wc.xml
+    )
     optionSetDefs: org.unix4j.codegen.OptionSetDefinitionDataLoader(
-		../../command-definition/grep.xml
-		../../command-definition/ls.xml
-		../../command-definition/sort.xml
-		../../command-definition/uniq.xml
+        ../../command-definition/grep.xml
+        ../../command-definition/ls.xml
+        ../../command-definition/sort.xml
+        ../../command-definition/uniq.xml
+        ../../command-definition/wc.xml
     )
 }

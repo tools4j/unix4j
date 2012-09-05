@@ -7,12 +7,15 @@
 <#global optionName=cmd.simpleName+"Option">
 <#global optionsName=cmd.simpleName+"Options">
 <#global argumentsName=cmd.simpleName+"Arguments">
+<#global hasTrueOperand=def.operands?size != 0 && (def.operands?size != 1 || !isOptions(def.operands?values[0]))>
 <@pp.changeOutputFile name=pp.pathTo("/"+def.pkg.path+"/"+argumentsName+".java")/> 
 package ${def.pkg.name};
 
 import org.unix4j.command.Arguments;
 import org.unix4j.option.DefaultOptionSet;
+<#if hasTrueOperand>
 import org.unix4j.util.ArrayUtil;
+</#if>
 
 import ${cmd.pkg.name}.${cmd.simpleName};
 
@@ -153,11 +156,13 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 		</#foreach>
 		return sb.toString();
 	}
+	<#if hasTrueOperand>
 	private static String toString(Object value) {
 		if (value != null && value.getClass().isArray()) {
 			return ArrayUtil.toString(value);
 		}
 		return String.valueOf(value);
 	}
+	</#if>
 }
 </#list>

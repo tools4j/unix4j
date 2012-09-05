@@ -16,7 +16,7 @@
 			case-sensitive string comparison.
 		</method>
 		<method args="options,pattern" input="false">
-			Filters the input lines and writes the matching lines to the output.iles contained in
+			Filters the input lines and writes the matching lines to the output.
 			Whether or not a line matches the given {@code pattern} depends
 			on the specified {@code options}.method.
 		</method>
