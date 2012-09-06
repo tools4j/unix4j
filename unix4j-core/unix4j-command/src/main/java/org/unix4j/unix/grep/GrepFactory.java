@@ -24,7 +24,7 @@ public class GrepFactory implements Grep.Interface<GrepCommand> {
 	}
 
 	@Override
-	public GrepCommand grep(Grep.Options options, String pattern) {
+	public GrepCommand grep(GrepOptions options, String pattern) {
 		final GrepArguments args = new GrepArguments(options);
 		args.setPattern(pattern);
 		return new GrepCommand(args);

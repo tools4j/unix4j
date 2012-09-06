@@ -32,14 +32,14 @@ import ${cmd.pkg.name}.${cmd.simpleName};
 	<#return "is" + option.name?cap_first>
 </#function>
 <#function isOptions operand>
-	<#return operand.type == cmd.simpleName + ".Options">
+	<#return operand.type == cmd.simpleName + "Options">
 </#function>
 /**
  * Arguments and options for the {@link ${cmd.simpleName} ${commandName}} command.
  */
 public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	
-	private final ${cmd.simpleName}.Options options;
+	private final ${optionsName} options;
 	<#foreach operand in def.operands?values>
 	<#if !isOptions(operand)>
 	
@@ -53,7 +53,7 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	 * Constructor to use if no options are specified.
 	 */
 	public ${argumentsName}() {
-		this(${optionsName}.NO_OPTIONS);
+		this(${optionsName}.EMPTY);
 	}
 
 	/**
@@ -61,7 +61,7 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	 * 
 	 * @param options the selected options
 	 */
-	public ${argumentsName}(${cmd.simpleName}.Options options) {
+	public ${argumentsName}(${optionsName} options) {
 		this.options = options;
 	}
 	
@@ -70,7 +70,7 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	 * 
 	 * @return set with the selected options
 	 */
-	public ${cmd.simpleName}.Options getOptions() {
+	public ${optionsName} getOptions() {
 		return options;
 	}
 	

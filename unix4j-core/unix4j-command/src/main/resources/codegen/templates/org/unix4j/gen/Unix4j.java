@@ -13,7 +13,7 @@ import org.unix4j.builder.gen.Unix4jCommandBuilder;//FIXME remove gen package wh
 
 <#foreach def in commandDefs>
 <#if hasNoInputMethod(def)>
-import ${def.command.pkg.name}.${def.command.simpleName};
+import ${def.pkg.name}.*;
 </#if>
 </#foreach>
 

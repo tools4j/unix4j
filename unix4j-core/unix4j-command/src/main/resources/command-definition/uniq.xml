@@ -104,7 +104,7 @@
 			The files or directories used as starting point for the listing; 
 			wildcards * and ? are supported.		
 		</operand>
-		<operand name="options" type="Uniq.Options">
+		<operand name="options" type="UniqOptions">
 			The options defining the uniqueness details for the output lines.
 		</operand>
 	</operands>

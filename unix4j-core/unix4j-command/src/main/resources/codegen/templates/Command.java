@@ -5,17 +5,18 @@
 <#global optionName=cmd.simpleName+"Option">
 <#global optionsName=cmd.simpleName+"Options">
 <#global factoryName=cmd.simpleName+"Factory">
+<#global optionSetsName=cmd.simpleName+"OptionSets">
 <#global varName=cmd.simpleName+"Var">
 <@pp.changeOutputFile name=pp.pathTo("/"+cmd.pkg.path+"/"+cmd.simpleName+".java")/> 
 package ${cmd.pkg.name};
 
 import org.unix4j.command.CommandInterface;
-import org.unix4j.option.OptionSet;
 import org.unix4j.variable.Literal;
 
 import ${def.pkg.name}.${factoryName};
 import ${def.pkg.name}.${optionName};
 import ${def.pkg.name}.${optionsName};
+import ${def.pkg.name}.${optionSetsName};
 import ${def.pkg.name}.${varName};
 
 <#function isOptionsArg def arg>
@@ -126,14 +127,6 @@ public final class ${cmd.simpleName} {
 	public static interface Interface$<R> extends ${varName}.Interface<R> {}
 	
 	/**
-	 * Interface implemented by all option sets for the {@link ${cmd.pkg.name}.${cmd.simpleName} ${def.commandName}} command.
-	 * <p>
-	 * This interface serves as an alias for the extended interface to simplify the
-	 * command signature methods by avoiding generic parameters.
-	 */
-	public static interface Options extends OptionSet<${optionName}> {}
-
-	/**
 	 * Options for the "${commandName}" command: <#foreach opt in def.options?values>{@link ${optionName}#${opt.name} ${opt.acronym}}<#if opt_has_next>, </#if></#foreach>.
 	 * <p> 
 	 * <table>
@@ -142,7 +135,7 @@ public final class ${cmd.simpleName} {
 	</#foreach>
 	 * </table>
 	 */
-	public static final ${optionsName} OPTIONS = ${optionsName}.INSTANCE;
+	public static final ${optionSetsName} OPTIONS = ${optionSetsName}.INSTANCE;
 
 	/**
 	 * Singleton {@link ${factoryName} factory} instance for the "${commandName}" command.

@@ -61,7 +61,7 @@ public class UniqTest {
 		expectedOutput.appendLine(LINE14);
 		expectedOutput.appendLine(LINE15);
 		expectedOutput.appendLine(LINE16);
-		assertUniq(input, UniqOptions.NO_OPTIONS, expectedOutput);
+		assertUniq(input, UniqOptions.EMPTY, expectedOutput);
 	}
 
 	@Test
@@ -158,7 +158,7 @@ public class UniqTest {
 		return "   " + count + " " + line;
 	}
 
-	private void assertUniq(final MultilineString input, Uniq.Options options, final MultilineString expectedOutput){
+	private void assertUniq(final MultilineString input, UniqOptions options, final MultilineString expectedOutput){
 		final StringWriter actualOutputStringWriter = new StringWriter();
 		Unix4j.from(input.toInput()).uniq(options).toWriter(actualOutputStringWriter);
 		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());

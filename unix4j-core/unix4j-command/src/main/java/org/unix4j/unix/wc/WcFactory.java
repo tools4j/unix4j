@@ -18,7 +18,7 @@ public class WcFactory implements Wc.Interface<WcCommand> {
 	}
 
 	@Override
-	public WcCommand wc(Wc.Options options) {
+	public WcCommand wc(WcOptions options) {
 		final WcArguments args = new WcArguments(options);
 		return new WcCommand(args);
 	}

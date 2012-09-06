@@ -7,6 +7,7 @@ import org.unix4j.unix.Xargs;
 
 <#foreach def in commandDefs> 
 import ${def.command.pkg.name}.${def.command.simpleName};
+import ${def.pkg.name}.*;
 </#foreach>
 
 /**

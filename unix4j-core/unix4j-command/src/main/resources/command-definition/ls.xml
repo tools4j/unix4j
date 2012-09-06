@@ -73,7 +73,7 @@
 			The files or directories used as starting point for the listing; 
 			wildcards * and ? are supported.		
 		</operand>
-		<operand name="options" type="Ls.Options">
+		<operand name="options" type="LsOptions">
 			The options defining the output format.
 		</operand>
 	</operands>
