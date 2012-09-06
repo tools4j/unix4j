@@ -20,6 +20,7 @@ import org.unix4j.unix.Tail;
 import org.unix4j.unix.Uniq;
 import org.unix4j.unix.Wc;
 import org.unix4j.unix.Xargs;
+import org.unix4j.unix.echo.EchoOptions;
 import org.unix4j.unix.grep.GrepOptions;
 import org.unix4j.unix.ls.LsOptions;
 import org.unix4j.unix.sort.SortOptions;
@@ -166,6 +167,18 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 	}
 
 	@Override
+	public Unix4jCommandBuilder echo(EchoOptions options, String message) {
+		join(Echo.FACTORY.echo(message));
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder echo(EchoOptions options, String... messages) {
+		join(Echo.FACTORY.echo(messages));
+		return this;
+	}
+
+	@Override
 	public Unix4jCommandBuilder sort() {
 		join(Sort.FACTORY.sort());
 		return this;
@@ -285,23 +298,23 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 		return this;
 	}
 
-	@Override
-	public Unix4jCommandBuilder wcCountLines() {
-		join(Wc.FACTORY.wcCountLines());
-		return this;
-	}
-
-	@Override
-	public Unix4jCommandBuilder wcCountChars() {
-		join(Wc.FACTORY.wcCountChars());
-		return this;
-	}
-
-	@Override
-	public Unix4jCommandBuilder wcCountWords() {
-		join(Wc.FACTORY.wcCountWords());
-		return this;
-	}
+//	@Override
+//	public Unix4jCommandBuilder wcCountLines() {
+//		join(Wc.FACTORY.wcCountLines());
+//		return this;
+//	}
+//
+//	@Override
+//	public Unix4jCommandBuilder wcCountChars() {
+//		join(Wc.FACTORY.wcCountChars());
+//		return this;
+//	}
+//
+//	@Override
+//	public Unix4jCommandBuilder wcCountWords() {
+//		join(Wc.FACTORY.wcCountWords());
+//		return this;
+//	}
 
 	@Override
 	public Unix4jCommandBuilder head(int lines) {
