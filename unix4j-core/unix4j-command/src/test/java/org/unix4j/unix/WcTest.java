@@ -1,13 +1,14 @@
 package org.unix4j.unix;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.io.Input;
 import org.unix4j.io.StringInput;
 import org.unix4j.line.Line;
+import org.unix4j.unix.wc.WcOptions;
 import org.unix4j.util.MultilineString;
-
-import static org.junit.Assert.assertEquals;
 
 public class WcTest {
 
@@ -93,7 +94,7 @@ public class WcTest {
 		assertEquals(expectedOutput, actualOutput);
 	}
 
-	private void assertWc(final Input input, final String expectedOutput, Wc.Options options){
+	private void assertWc(final Input input, final String expectedOutput, WcOptions options){
 		final String actualOutput = Unix4j.from(input).wc(options).toStringResult();
 		System.out.println("Asserting: expected:'" + expectedOutput + "' = actual:'" + actualOutput +"'");
 	    assertEquals(expectedOutput, actualOutput);

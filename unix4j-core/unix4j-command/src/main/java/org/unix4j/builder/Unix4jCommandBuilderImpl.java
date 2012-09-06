@@ -18,9 +18,13 @@ import org.unix4j.unix.Sed;
 import org.unix4j.unix.Sort;
 import org.unix4j.unix.Tail;
 import org.unix4j.unix.Uniq;
-import org.unix4j.unix.Uniq.Options;
 import org.unix4j.unix.Wc;
 import org.unix4j.unix.Xargs;
+import org.unix4j.unix.grep.GrepOptions;
+import org.unix4j.unix.ls.LsOptions;
+import org.unix4j.unix.sort.SortOptions;
+import org.unix4j.unix.uniq.UniqOptions;
+import org.unix4j.unix.wc.WcOptions;
 
 public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements Unix4jCommandBuilder {
 
@@ -120,19 +124,19 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 	}
 
 	@Override
-	public Unix4jCommandBuilder ls(Ls.Options options) {
+	public Unix4jCommandBuilder ls(LsOptions options) {
 		join(Ls.FACTORY.ls(options));
 		return this;
 	}
 
 	@Override
-	public Unix4jCommandBuilder ls(Ls.Options options, File... files) {
+	public Unix4jCommandBuilder ls(LsOptions options, File... files) {
 		join(Ls.FACTORY.ls(options, files));
 		return this;
 	}
 
 	@Override
-	public Unix4jCommandBuilder ls(Ls.Options options, String... files) {
+	public Unix4jCommandBuilder ls(LsOptions options, String... files) {
 		join(Ls.FACTORY.ls(options, files));
 		return this;
 	}
@@ -144,7 +148,7 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 	}
 
 	@Override
-	public Unix4jCommandBuilder grep(Grep.Options options, String pattern) {
+	public Unix4jCommandBuilder grep(GrepOptions options, String pattern) {
 		join(Grep.FACTORY.grep(options, pattern));
 		return this;
 	}
@@ -180,19 +184,19 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 	}
 
 	@Override
-	public Unix4jCommandBuilder sort(Sort.Options options) {
+	public Unix4jCommandBuilder sort(SortOptions options) {
 		join(Sort.FACTORY.sort(options));
 		return this;
 	}
 
 	@Override
-	public Unix4jCommandBuilder sort(org.unix4j.unix.Sort.Options options, File... files) {
+	public Unix4jCommandBuilder sort(SortOptions options, File... files) {
 		join(Sort.FACTORY.sort(options, files));
 		return this;
 	}
 	
 	@Override
-	public Unix4jCommandBuilder sort(org.unix4j.unix.Sort.Options options, String... paths) {
+	public Unix4jCommandBuilder sort(SortOptions options, String... paths) {
 		join(Sort.FACTORY.sort(options, paths));
 		return this;
 	}
@@ -270,7 +274,7 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 //	}
 
 	@Override
-	public Unix4jCommandBuilder wc(Wc.Options options) {
+	public Unix4jCommandBuilder wc(WcOptions options) {
 		join(Wc.FACTORY.wc(options));
 		return this;
 	}
@@ -340,17 +344,17 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 		return this;
 	}
 	@Override
-	public Unix4jCommandBuilder uniq(Options options) {
+	public Unix4jCommandBuilder uniq(UniqOptions options) {
 		join(Uniq.FACTORY.uniq(options));
 		return this;
 	}
 	@Override
-	public Unix4jCommandBuilder uniq(Options options, File file) {
+	public Unix4jCommandBuilder uniq(UniqOptions options, File file) {
 		join(Uniq.FACTORY.uniq(options, file));
 		return this;
 	}
 	@Override
-	public Unix4jCommandBuilder uniq(Options options, String path) {
+	public Unix4jCommandBuilder uniq(UniqOptions options, String path) {
 		join(Uniq.FACTORY.uniq(options, path));
 		return this;
 	}

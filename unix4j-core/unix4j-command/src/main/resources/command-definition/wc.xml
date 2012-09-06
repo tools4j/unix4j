@@ -44,7 +44,7 @@
 		</option>
 	</options>
 	<operands>
-		<operand name="options" type="Wc.Options">
+		<operand name="options" type="WcOptions">
 			The options defining command behaviour.
 		</operand>
 	</operands>

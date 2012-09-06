@@ -40,7 +40,7 @@
 		<operand name="pattern" type="String">
 			Lines will be printed which match the given pattern
 		</operand>
-		<operand name="options" type="Grep.Options">
+		<operand name="options" type="GrepOptions">
 			The options defining command behaviour.
 		</operand>
 	</operands>

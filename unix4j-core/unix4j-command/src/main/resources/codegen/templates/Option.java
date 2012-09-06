@@ -15,10 +15,10 @@ import ${cmd.pkg.name}.${cmd.simpleName};
 /**
  * Options for the {@link ${cmd.simpleName} ${def.commandName}} command.
  * <p>
- * For most applications, it may be more convenient to use {@link ${cmd.simpleName}.Options ${cmd.simpleName}.Options} 
+ * For most applications, it may be more convenient to use {@link ${cmd.simpleName}#OPTIONS} 
  * instead of the option constants defined here.
  */
-public enum ${simpleName} implements Option, ${cmd.simpleName}.Options {
+public enum ${simpleName} implements Option, ${cmd.simpleName}Options {
 	<#foreach opt in def.options?values>
 	/**
 	 * Option <b>{@code --${opt.name}}</b>, <b>{@code -${opt.acronym}}</b>: 

@@ -66,7 +66,7 @@ import ${cmd.pkg.name}.${cmd.simpleName};
  * {@link ${cmd.simpleName}#OPTIONS} should be used instead to specify command 
  * options. See also {@link ${cmdDef.pkg.name}.${optionsName}} for more information.
  */
-public enum ${grpDef.simpleName} implements ${cmd.simpleName}.Options {
+public enum ${grpDef.simpleName} implements ${cmd.simpleName}Options {
 	<#foreach levelSets in grp.levelActiveSets?reverse>
 	<#foreach activeSet in levelSets?values>
 	<#foreach useAcronym in [true,false]>

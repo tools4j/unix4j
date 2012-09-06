@@ -3,7 +3,6 @@ package org.unix4j.unix.sort;
 import java.io.File;
 
 import org.unix4j.unix.Sort.Interface;
-import org.unix4j.unix.Sort.Options;
 
 /**
  * Factory class returning a new {@link SortCommand} instance from every
@@ -43,20 +42,20 @@ public final class SortFactory implements Interface<SortCommand> {
 	}
 
 	@Override
-	public SortCommand sort(Options options) {
+	public SortCommand sort(SortOptions options) {
 		final SortArguments args = new SortArguments(options);
 		return new SortCommand(args);
 	}
 
 	@Override
-	public SortCommand sort(Options options, File... files) {
+	public SortCommand sort(SortOptions options, File... files) {
 		final SortArguments args = new SortArguments(options);
 		args.setFiles(files);
 		return new SortCommand(args);
 	}
 
 	@Override
-	public SortCommand sort(Options options, String... paths) {
+	public SortCommand sort(SortOptions options, String... paths) {
 		final SortArguments args = new SortArguments(options);
 		args.setPaths(paths);
 		return new SortCommand(args);

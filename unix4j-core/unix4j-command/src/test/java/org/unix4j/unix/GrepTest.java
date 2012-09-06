@@ -1,11 +1,12 @@
 package org.unix4j.unix;
 
+import java.io.StringWriter;
+
 import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.unix.grep.GrepOption;
+import org.unix4j.unix.grep.GrepOptions;
 import org.unix4j.util.MultilineString;
-
-import java.io.StringWriter;
 
 /**
  * Unit test for simple App.
@@ -227,7 +228,7 @@ public class GrepTest {
 		actualOutput.assertMultilineStringEquals(expectedOutput);
 	}
 
-	private void assertGrep(final MultilineString input, final String expression, final MultilineString expectedOutput, Grep.Options options){
+	private void assertGrep(final MultilineString input, final String expression, final MultilineString expectedOutput, GrepOptions options){
 		final StringWriter actualOutputStringWriter = new StringWriter();
 		Unix4j.from(input.toInput()).grep(options, expression).toWriter(actualOutputStringWriter);
 		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());

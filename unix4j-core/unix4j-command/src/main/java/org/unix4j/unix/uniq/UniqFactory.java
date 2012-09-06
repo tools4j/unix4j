@@ -3,7 +3,6 @@ package org.unix4j.unix.uniq;
 import java.io.File;
 
 import org.unix4j.unix.Uniq.Interface;
-import org.unix4j.unix.Uniq.Options;
 
 /**
  * Factory class returning a new {@link UniqCommand} instance from every
@@ -43,19 +42,19 @@ public final class UniqFactory implements Interface<UniqCommand> {
 	}
 
 	@Override
-	public UniqCommand uniq(Options options) {
+	public UniqCommand uniq(UniqOptions options) {
 		return new UniqCommand(new UniqArguments(options));
 	}
 
 	@Override
-	public UniqCommand uniq(Options options, File file) {
+	public UniqCommand uniq(UniqOptions options, File file) {
 		final UniqArguments args = new UniqArguments(options);
 		args.setFile(file);
 		return new UniqCommand(args);
 	}
 
 	@Override
-	public UniqCommand uniq(Options options, String path) {
+	public UniqCommand uniq(UniqOptions options, String path) {
 		final UniqArguments args = new UniqArguments(options);
 		args.setPath(path);
 		return new UniqCommand(args);

@@ -2,7 +2,6 @@ package org.unix4j.unix.ls;
 
 import java.io.File;
 
-import org.unix4j.unix.Ls;
 import org.unix4j.unix.Ls.Interface;
 
 /**
@@ -43,19 +42,19 @@ public final class LsFactory implements Interface<LsCommand> {
 	}
 
 	@Override
-	public LsCommand ls(Ls.Options options) {
+	public LsCommand ls(LsOptions options) {
 		return new LsCommand(new LsArguments(options));
 	}
 
 	@Override
-	public LsCommand ls(Ls.Options options, File... files) {
+	public LsCommand ls(LsOptions options, File... files) {
 		final LsArguments args = new LsArguments(options);
 		args.setFiles(files);
 		return new LsCommand(args);
 	}
 
 	@Override
-	public LsCommand ls(Ls.Options options, String... paths) {
+	public LsCommand ls(LsOptions options, String... paths) {
 		final LsArguments args = new LsArguments(options);
 		args.setPaths(paths);
 		return new LsCommand(args);
