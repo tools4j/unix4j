@@ -15,28 +15,28 @@
 	<notes/>
 	<methods>
 		<method args="string" input="false">
-			 Writes any specified string followed by a newline character to 
-			 the standard output.
+			 Writes any specified string followed by a line ending to the 
+			 standard output.
 		</method>
 		<method args="strings" input="false">
 			 Writes any specified string, separated by single blank 
-			 ({@code ' '}) characters and followed by a newline character, to 
-			 the standard output.
+			 ({@code ' '}) characters and followed by a line ending, to the 
+			 standard output.
 		</method>
 		<method args="options,string" input="false">
 			 Writes any specified string followed by a newline character to 
-			 the standard output suppressing the trailing newline character if
-			 the {@code -n} option is specified.
+			 the standard output suppressing the trailing line ending if the
+			 {@code -n} option is specified.
 		</method>
 		<method args="options,strings" input="false">
 			 Writes any specified string, separated by single blank 
 			 ({@code ' '}) characters to the standard output suppressing the
-			 trailing newline character if the {@code -n} option is specified.
+			 trailing line ending if the {@code -n} option is specified.
 		</method>
 	</methods>
 	<options>
 		<option name="noNewline" acronym="n">
-			Do not print the trailing newline character.
+			Do not print the trailing newline character(s).
 		</option>
 	</options>
 	<operands>
