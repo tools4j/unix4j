@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<command-def	xmlns="http://www.unix4j.org/command-def" 
+				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xsi:schemaLocation="http://www.unix4j.org/command-def command-def.xsd">
+	
+	<command name="echo" class="org.unix4j.unix.Echo" package="org.unix4j.unix.echo"/>
+	<name>
+		echo - write arguments to standard output
+	</name>
+	<synopsis>
+		ORIGINAL: echo [string ...]
+		CURRENT: echo [-n][string ...]
+	</synopsis>
+	<description ref="echo.html"/>
+	<notes/>
+	<methods>
+		<method args="string" input="false">
+			 Writes any specified string followed by a newline character to 
+			 the standard output.
+		</method>
+		<method args="strings" input="false">
+			 Writes any specified string, separated by single blank 
+			 ({@code ' '}) characters and followed by a newline character, to 
+			 the standard output.
+		</method>
+		<method args="options,string" input="false">
+			 Writes any specified string followed by a newline character to 
+			 the standard output suppressing the trailing newline character if
+			 the {@code -n} option is specified.
+		</method>
+		<method args="options,strings" input="false">
+			 Writes any specified string, separated by single blank 
+			 ({@code ' '}) characters to the standard output suppressing the
+			 trailing newline character if the {@code -n} option is specified.
+		</method>
+	</methods>
+	<options>
+		<option name="noNewline" acronym="n">
+			Do not print the trailing newline character.
+		</option>
+	</options>
+	<operands>
+		<operand name="string" type="String">
+			A string to be written to standard output.		
+		</operand>
+		<operand name="strings" type="String...">
+			Strings to be written to standard output, separated by single blank 
+			characters.	
+		</operand>
+		<operand name="options" type="EchoOptions">
+			Options for the echo command.
+		</operand>
+	</operands>
+</command-def>

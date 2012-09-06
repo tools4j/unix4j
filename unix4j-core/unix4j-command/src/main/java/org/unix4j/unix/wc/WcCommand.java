@@ -1,7 +1,5 @@
 package org.unix4j.unix.wc;
 
-import static org.unix4j.util.Assert.assertArgFalse;
-
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
@@ -26,10 +24,11 @@ public class WcCommand extends AbstractCommand<WcArguments> {
 
 	@Override
 	public LineProcessor execute(ExecutionContext context, final LineProcessor output) {
-		assertArgFalse("No count type specified. At least one count type required.", getArguments().getOptions().size() == 0);
+//		assertArgFalse("No count type specified. At least one count type required.", getArguments().getOptions().size() == 0);
 		return new LineProcessor() {
+			private final boolean noOptionSet = !getArguments().isLines() && !getArguments().isWords() && !getArguments().isChars();
 			private final Counter lineCounter = new Counter();
-			private final Counter wordCounter = getArguments().isWords() ? new Counter() : null;
+			private final Counter wordCounter = noOptionSet || getArguments().isWords() ? new Counter() : null;
 			private final Counter charCounter = new Counter();
 			@Override
 			public boolean processLine(Line line) {
@@ -47,12 +46,13 @@ public class WcCommand extends AbstractCommand<WcArguments> {
 					lineCounter.reset();
 				}
 
+				final WcArguments args = getArguments();
 				final List<Long> counts = new ArrayList<Long>();
-				if (getArguments().isLines())
+				if (noOptionSet || args.isLines())
 					counts.add(lineCounter.getCount());
-				if (getArguments().isWords())
+				if (noOptionSet || args.isWords())
 					counts.add(wordCounter.getCount());
-				if (getArguments().isChars())
+				if (noOptionSet || args.isChars())
 					counts.add(charCounter.getCount());
 
 				output.processLine(formatCounts(counts));

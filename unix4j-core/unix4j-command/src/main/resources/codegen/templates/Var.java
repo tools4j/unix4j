@@ -15,9 +15,9 @@ import ${cmd.pkg.name}.${cmd.simpleName};
 
 <#function varType operand>
 	<#if operand.type?ends_with("...")>
-		<#local name=operand.type?substring(0, operand.type?length-3)>
+		<#local name=operand.type?substring(0, operand.type?length-3)+"s">
 	<#elseif operand.type?ends_with("[]")>
-		<#local name=operand.type?substring(0, operand.type?length-2)>
+		<#local name=operand.type?substring(0, operand.type?length-2)+"s">
 	<#else>
 		<#local name=operand.type>
 	</#if>
