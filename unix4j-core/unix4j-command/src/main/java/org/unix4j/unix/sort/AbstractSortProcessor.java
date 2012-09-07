@@ -9,11 +9,11 @@ import org.unix4j.line.LineProcessor;
 import org.unix4j.util.LineComparator;
 import org.unix4j.util.ReverseOrderComparator;
 
-abstract class AbstractSortLineProcessor extends AbstractLineProcessor<SortArguments> {
+abstract class AbstractSortProcessor extends AbstractLineProcessor<SortArguments> {
 	
 	private final Comparator<? super Line> comparator;
 
-	public AbstractSortLineProcessor(SortCommand command, ExecutionContext context, LineProcessor output) {
+	public AbstractSortProcessor(SortCommand command, ExecutionContext context, LineProcessor output) {
 		super(command, context, output);
 		this.comparator = initComparator();
 	}

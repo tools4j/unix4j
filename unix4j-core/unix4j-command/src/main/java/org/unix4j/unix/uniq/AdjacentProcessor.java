@@ -9,10 +9,10 @@ import org.unix4j.line.LineProcessor;
  * when the {@link UniqOption#global global} option is NOT selected. The actual
  * processors are member classes of this abstract base class.
  */
-abstract class AdjacentLineProcessor extends UniqLineProcessor {
+abstract class AdjacentProcessor extends UniqProcessor {
 	protected Line curLine = null;
 
-	public AdjacentLineProcessor(UniqCommand command, ExecutionContext context, LineProcessor output) {
+	public AdjacentProcessor(UniqCommand command, ExecutionContext context, LineProcessor output) {
 		super(command, context, output);
 	}
 
@@ -20,7 +20,7 @@ abstract class AdjacentLineProcessor extends UniqLineProcessor {
 	 * Line processor implementing the actual uniq command execution for the
 	 * case when no option is selected.
 	 */
-	public static class Normal extends AdjacentLineProcessor {
+	public static class Normal extends AdjacentProcessor {
 		public Normal(UniqCommand command, ExecutionContext context, LineProcessor output) {
 			super(command, context, output);
 		}
@@ -45,7 +45,7 @@ abstract class AdjacentLineProcessor extends UniqLineProcessor {
 	 * Abstract base class for member classes {@link UniqueOnly},
 	 * {@link DuplicateOnly} and {@link Count}
 	 */
-	abstract protected static class UniqueDuplicateCount extends AdjacentLineProcessor {
+	abstract protected static class UniqueDuplicateCount extends AdjacentProcessor {
 		private long curCount = 0;
 
 		public UniqueDuplicateCount(UniqCommand command, ExecutionContext context, LineProcessor output) {

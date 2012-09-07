@@ -11,11 +11,11 @@ import org.unix4j.line.LineProcessor;
  * Line processor for normal in-memory sort using an {@link ArrayList} to cache
  * and sort the lines.
  */
-class SortLineProcessor extends AbstractSortLineProcessor {
+class SortProcessor extends AbstractSortProcessor {
 	
 	private ArrayList<Line> lineBuffer = new ArrayList<Line>();
 
-	public SortLineProcessor(SortCommand command, ExecutionContext context, LineProcessor output) {
+	public SortProcessor(SortCommand command, ExecutionContext context, LineProcessor output) {
 		super(command, context, output);
 	}
 

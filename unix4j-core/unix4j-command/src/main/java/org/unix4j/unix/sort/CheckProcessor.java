@@ -5,9 +5,9 @@ import org.unix4j.command.ExecutionContext;
 import org.unix4j.line.Line;
 import org.unix4j.line.LineProcessor;
 
-class CheckLineProcessor extends AbstractLineProcessor<SortArguments> {
+class CheckProcessor extends AbstractLineProcessor<SortArguments> {
 
-	public CheckLineProcessor(SortCommand command, ExecutionContext context, LineProcessor output) {
+	public CheckProcessor(SortCommand command, ExecutionContext context, LineProcessor output) {
 		super(command, context, output);
 		throw new RuntimeException("not impelemented");
 	}
