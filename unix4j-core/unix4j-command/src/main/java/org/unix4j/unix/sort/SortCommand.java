@@ -15,16 +15,16 @@ class SortCommand extends AbstractCommand<SortArguments> {
 	public LineProcessor execute(ExecutionContext context, LineProcessor output) {
 		final SortArguments args = getArguments();
 		if (args.isMerge()) {
-			return new MergeLineProcessor(this, context, output);
+			return new MergeProcessor(this, context, output);
 		} else if (args.isCheck()) {
-			return new CheckLineProcessor(this, context, output);
+			return new CheckProcessor(this, context, output);
 		}
 		
 		//normal sort
 		if (args.isUnique()) {
-			return new UniqueSortLineProcessor(this, context, output);
+			return new UniqueSortProcessor(this, context, output);
 		} else {
-			return new SortLineProcessor(this, context, output);
+			return new SortProcessor(this, context, output);
 		}
 	}
 

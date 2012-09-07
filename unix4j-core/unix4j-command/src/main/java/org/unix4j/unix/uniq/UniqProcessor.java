@@ -5,9 +5,9 @@ import org.unix4j.command.ExecutionContext;
 import org.unix4j.line.Line;
 import org.unix4j.line.LineProcessor;
 
-abstract class UniqLineProcessor extends AbstractLineProcessor<UniqArguments> {
+abstract class UniqProcessor extends AbstractLineProcessor<UniqArguments> {
 
-	public UniqLineProcessor(UniqCommand command, ExecutionContext context, LineProcessor output) {
+	public UniqProcessor(UniqCommand command, ExecutionContext context, LineProcessor output) {
 		super(command, context, output);
 	}
 

@@ -21,22 +21,22 @@ class UniqCommand extends AbstractCommand<UniqArguments> {
 		final UniqArguments args = getArguments();
 		if (args.isGlobal()) {
 			if (args.isUniqueOnly()) {
-				return new GlobalLineProcessor.UniqueOnly(this, context, output);
+				return new GlobalProcessor.UniqueOnly(this, context, output);
 			} else if (args.isDuplicatedOnly()) {
-				return new GlobalLineProcessor.DuplicateOnly(this, context, output);
+				return new GlobalProcessor.DuplicateOnly(this, context, output);
 			} else if (args.isCount()) {
-				return new GlobalLineProcessor.Count(this, context, output);
+				return new GlobalProcessor.Count(this, context, output);
 			}
-			return new GlobalLineProcessor.Normal(this, context, output);
+			return new GlobalProcessor.Normal(this, context, output);
 		} else {
 			if (args.isUniqueOnly()) {
-				return new AdjacentLineProcessor.UniqueOnly(this, context, output);
+				return new AdjacentProcessor.UniqueOnly(this, context, output);
 			} else if (args.isDuplicatedOnly()) {
-				return new AdjacentLineProcessor.DuplicateOnly(this, context, output);
+				return new AdjacentProcessor.DuplicateOnly(this, context, output);
 			} else if (args.isCount()) {
-				return new AdjacentLineProcessor.Count(this, context, output);
+				return new AdjacentProcessor.Count(this, context, output);
 			}
-			return new AdjacentLineProcessor.Normal(this, context, output);
+			return new AdjacentProcessor.Normal(this, context, output);
 		}
 	}
 

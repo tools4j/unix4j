@@ -8,11 +8,11 @@ import org.unix4j.command.ExecutionContext;
 import org.unix4j.line.Line;
 import org.unix4j.line.LineProcessor;
 
-class UniqueSortLineProcessor extends AbstractSortLineProcessor {
+class UniqueSortProcessor extends AbstractSortProcessor {
 	
 	private final NavigableSet<Line> uniqueLines;
 
-	public UniqueSortLineProcessor(SortCommand command, ExecutionContext context, LineProcessor output) {
+	public UniqueSortProcessor(SortCommand command, ExecutionContext context, LineProcessor output) {
 		super(command, context, output);
 		this.uniqueLines = new TreeSet<Line>(getComparator());
 	}

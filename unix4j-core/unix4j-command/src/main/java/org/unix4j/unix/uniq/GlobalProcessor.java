@@ -12,9 +12,9 @@ import org.unix4j.line.LineProcessor;
  * when the {@link UniqOption#global global} option is selected. The actual
  * processors are member classes of this abstract base class.
  */
-abstract class GlobalLineProcessor extends UniqLineProcessor {
+abstract class GlobalProcessor extends UniqProcessor {
 	protected final Map<Line, Long> lineToCount = new LinkedHashMap<Line, Long>();
-	public GlobalLineProcessor(UniqCommand command, ExecutionContext context, LineProcessor output) {
+	public GlobalProcessor(UniqCommand command, ExecutionContext context, LineProcessor output) {
 		super(command, context, output);
 	}
 	
@@ -22,7 +22,7 @@ abstract class GlobalLineProcessor extends UniqLineProcessor {
 	 * Line processor implementing the actual uniq command execution for the 
 	 * case when only the {@link UniqOption#global global} option is selected.
 	 */
-	public static class Normal extends GlobalLineProcessor {
+	public static class Normal extends GlobalProcessor {
 		public Normal(UniqCommand command, ExecutionContext context, LineProcessor output) {
 			super(command, context, output);
 		}
@@ -45,7 +45,7 @@ abstract class GlobalLineProcessor extends UniqLineProcessor {
 	 * Abstract base class for member classes {@link UniqueOnly}, 
 	 * {@link DuplicateOnly} and {@link Count} 
 	 */
-	abstract protected static class UniqueDuplicateCount extends GlobalLineProcessor {
+	abstract protected static class UniqueDuplicateCount extends GlobalProcessor {
 		private static final Long ONE = Long.valueOf(1);
 		private long maxCount = 0;
 		public UniqueDuplicateCount(UniqCommand command, ExecutionContext context, LineProcessor output) {
