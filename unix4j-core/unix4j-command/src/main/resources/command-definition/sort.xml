@@ -132,8 +132,8 @@
 			input and writes the result to the standard output. 
 			
 			Line comparisons are based on the specified {@code comparator}. 
-			All comparison related options except for {@code --reverse} are 
-			ignored.
+			All comparison related options are ignored except for
+			{@code --reverse}.
 			
 			The sort algorithm used is guaranteed to be stable: lines considered
 			equal will not be reordered as a result of the sort.
@@ -185,14 +185,17 @@
 			sorted.
 		</option>
 		<option name="ignoreLeadingBlanks" acronym="b">
-			Ignore leading blanks.
+			Ignore leading blanks. 
+			(This option is ignored if a comparator operand has is present).
 		</option>
 		<option name="dictionaryOrder" acronym="d">
 			Consider only blanks and alphanumeric characters.
+			(This option is ignored if a comparator operand has is present).
 		</option>
 		<option name="ignoreCase" acronym="f">
 			Consider all lowercase characters that have uppercase equivalents to
 			be the uppercase equivalent for the purposes of comparison.
+			(This option is ignored if a comparator operand has is present).
 		</option>
 		<option name="numericSort" acronym="n">
 			Restrict the sort key to an initial numeric string, consisting of 
@@ -201,6 +204,7 @@
 			(as defined in the current locale), which is sorted by arithmetic
 			value. An empty digit string is treated as zero. Leading zeros and
 			signs on zeros do not affect ordering.
+			(This option is ignored if a comparator operand has is present).
 		</option>
 		<!--
 		<option name="generalNumericSort" acronym="g">
