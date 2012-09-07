@@ -5,9 +5,11 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Comparator;
 
 import org.unix4j.command.Command;
 import org.unix4j.io.Input;
+import org.unix4j.line.Line;
 import org.unix4j.redirect.From;
 import org.unix4j.unix.Cut;
 import org.unix4j.unix.Echo;
@@ -197,7 +199,25 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 		join(Sort.FACTORY.sort(paths));
 		return this;
 	}
+	
+	@Override
+	public Unix4jCommandBuilder sort(Comparator<? super Line> comparator) {
+		join(Sort.FACTORY.sort(comparator));
+		return this;
+	}
 
+	@Override
+	public Unix4jCommandBuilder sort(Comparator<? super Line> comparator, File... files) {
+		join(Sort.FACTORY.sort(comparator, files));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder sort(Comparator<? super Line> comparator, String... paths) {
+		join(Sort.FACTORY.sort(comparator, paths));
+		return this;
+	}
+	
 	@Override
 	public Unix4jCommandBuilder sort(SortOptions options) {
 		join(Sort.FACTORY.sort(options));
@@ -216,6 +236,24 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 		return this;
 	}
 	
+	@Override
+	public Unix4jCommandBuilder sort(SortOptions options, Comparator<? super Line> comparator) {
+		join(Sort.FACTORY.sort(options, comparator));
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder sort(SortOptions options, Comparator<? super Line> comparator, File... files) {
+		join(Sort.FACTORY.sort(options, comparator, files));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder sort(SortOptions options, Comparator<? super Line> comparator, String... paths) {
+		join(Sort.FACTORY.sort(options, comparator, paths));
+		return this;
+	}
+
 	@Override
 	public Unix4jCommandBuilder cut(int fieldIndex) {
 		join(Cut.FACTORY.cut(fieldIndex));

@@ -21,10 +21,7 @@ import ${cmd.pkg.name}.${cmd.simpleName};
 	<#else>
 		<#local name=operand.type>
 	</#if>
-	<#if name?contains("<")>
-		<#-- cut off the generic stuff -->
-		<#local name=name.substring(0, name?index_of("<"))>
-	</#if>
+	<#local name=rawType(name)>
 	<#local lastDot=name?last_index_of(".")>
 	<#return name?substring(lastDot+1)?cap_first + "$">
 </#function>
