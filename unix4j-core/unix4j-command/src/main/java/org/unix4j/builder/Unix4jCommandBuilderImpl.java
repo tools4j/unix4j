@@ -22,8 +22,10 @@ import org.unix4j.unix.Wc;
 import org.unix4j.unix.Xargs;
 import org.unix4j.unix.echo.EchoOptions;
 import org.unix4j.unix.grep.GrepOptions;
+import org.unix4j.unix.head.HeadOptions;
 import org.unix4j.unix.ls.LsOptions;
 import org.unix4j.unix.sort.SortOptions;
+import org.unix4j.unix.tail.TailOptions;
 import org.unix4j.unix.uniq.UniqOptions;
 import org.unix4j.unix.wc.WcOptions;
 
@@ -317,26 +319,110 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 //	}
 
 	@Override
-	public Unix4jCommandBuilder head(int lines) {
-		join(Head.FACTORY.head(lines));
-		return this;
-	}
-
-	@Override
 	public Unix4jCommandBuilder head() {
 		join(Head.FACTORY.head());
 		return this;
 	}
 
 	@Override
-	public Unix4jCommandBuilder tail(int lines) {
-		join(Tail.FACTORY.tail(lines));
+	public Unix4jCommandBuilder head(long count) {
+		join(Head.FACTORY.head(count));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder head(long count, File... files) {
+		join(Head.FACTORY.head(count, files));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder head(long count, String... paths) {
+		join(Head.FACTORY.head(count, paths));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder head(File... files) {
+		join(Head.FACTORY.head(files));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder head(String... paths) {
+		join(Head.FACTORY.head(paths));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder head(HeadOptions options, long count) {
+		join(Head.FACTORY.head(options, count));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder head(HeadOptions options, long count, File... files) {
+		join(Head.FACTORY.head(options, count, files));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder head(HeadOptions options, long count, String... paths) {
+		join(Head.FACTORY.head(options, count, paths));
 		return this;
 	}
 
 	@Override
 	public Unix4jCommandBuilder tail() {
 		join(Tail.FACTORY.tail());
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder tail(long count) {
+		join(Tail.FACTORY.tail(count));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder tail(long count, File... files) {
+		join(Tail.FACTORY.tail(count, files));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder tail(long count, String... paths) {
+		join(Tail.FACTORY.tail(count, paths));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder tail(File... files) {
+		join(Tail.FACTORY.tail(files));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder tail(String... paths) {
+		join(Tail.FACTORY.tail(paths));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder tail(TailOptions options, long count) {
+		join(Tail.FACTORY.tail(options, count));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder tail(TailOptions options, long count, File... files) {
+		join(Tail.FACTORY.tail(options, count, files));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder tail(TailOptions options, long count, String... paths) {
+		join(Tail.FACTORY.tail(options, count, paths));
 		return this;
 	}
 

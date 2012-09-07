@@ -45,7 +45,7 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	
 	// operand: <${operand.name}>
 	private boolean ${operand.name}IsSet;
-	private ${normalizeVarArgType(operand.type)} ${operand.name};
+	private ${normalizeVarArgType(operand.type, false)} ${operand.name};
 	</#if>
 	</#foreach>
 	
@@ -81,13 +81,13 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	 * 
 	 * @return the {@code <${operand.name}>} operand value
 	 */
-	public ${normalizeVarArgType(operand.type)} ${getter(operand)}() {
+	public ${normalizeVarArgType(operand.type, false)} ${getter(operand)}() {
 		return ${operand.name};
 	}
 	/**
 	 * Returns true if the {@code <${operand.name}>} operand has been set. 
 	 * <p>
-	 * Note that this method returns true if {@link #${setter(operand)}(${normalizeVarArgType(operand.type)})}
+	 * Note that this method returns true if {@link #${setter(operand)}(${normalizeVarArgType(operand.type, false)})}
 	 * has been called at least once even if {@link #${getter(operand)}()} returns
 	 * {@code null}. 
 	 * 

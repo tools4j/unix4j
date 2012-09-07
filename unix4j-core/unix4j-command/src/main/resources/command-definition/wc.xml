@@ -22,7 +22,7 @@
 			Executes a count of lines, words and chars in the given input and
 			writes them to the output
 		</method>
-		<!-- NOTE: we can only support this with a new "option" attribtue selecting the appropriate option
+		<!-- NOTE: we can only support this with a new "option" attribute selecting the appropriate option
 		<method name="wcCountLines" args="" input="false">
 			Executes a count of lines in the given input and writes them to the output
 		</method>
