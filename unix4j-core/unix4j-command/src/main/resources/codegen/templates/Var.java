@@ -13,13 +13,17 @@ import org.unix4j.command.CommandInterface;
 import org.unix4j.variable.Literal;
 import ${cmd.pkg.name}.${cmd.simpleName};
 
-<#function varType operand>
+<#function varTypeName operand>
 	<#if operand.type?ends_with("...")>
 		<#local name=operand.type?substring(0, operand.type?length-3)+"s">
 	<#elseif operand.type?ends_with("[]")>
 		<#local name=operand.type?substring(0, operand.type?length-2)+"s">
 	<#else>
 		<#local name=operand.type>
+	</#if>
+	<#if name?contains("<")>
+		<#-- cut off the generic stuff -->
+		<#local name=name.substring(0, name?index_of("<"))>
 	</#if>
 	<#local lastDot=name?last_index_of(".")>
 	<#return name?substring(lastDot+1)?cap_first + "$">
@@ -29,7 +33,7 @@ import ${cmd.pkg.name}.${cmd.simpleName};
 </#function>
 <#function fixedOrVarType def arg isVar>
 	<#if isVar>
-		<#return varType(def.operands[arg])>
+		<#return varTypeName(def.operands[arg])>
 	<#else>
 		<#return def.operands[arg].type>
 	</#if>
@@ -43,9 +47,9 @@ public class ${varName} {
 <#foreach opd in def.operands?values>
 	/**
 	 * Literal for {@code <${opd.name}>} operand, for instance representing a 
-	 * variable or named constant holding a value of the type {@code ${normalizeVarArgType(opd.type)}}.
+	 * variable or named constant holding a value of the type {@code ${normalizeVarArgType(opd.type, false)}}.
 	 */
-	public interface ${varType(opd)} extends Literal<${normalizeVarArgType(opd.type)}>{}
+	public interface ${varTypeName(opd)} extends Literal<${normalizeVarArgType(opd.type, true)}>{}
 </#foreach>
 	
 	/**

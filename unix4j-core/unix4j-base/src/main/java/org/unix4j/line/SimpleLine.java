@@ -119,4 +119,57 @@ public class SimpleLine implements Line {
 		}
 		return false;
 	}
+	
+	/**
+	 * Returns a sub-line of the given {@code line}, similar to a substring or
+	 * the method {@link #subSequence(int, int)}. The difference is that the
+	 * result is again a proper line, with or without line ending depending on
+	 * the cutting point and the {@code preserveLineEnding} flag.
+	 * 
+	 * @param line	the line to cut
+	 * @param start	the start index (inclusive), valid from 0 to {@code end}
+	 * @param end	the end index (exclusive), valid from 0 to 
+	 * 				{@code line.length()} if  {@code preserveLineEnding=false}, 
+	 * 				and from 0 to {@code line.getContentLength()} if 
+	 * 				{@code preserveLineEnding=true}
+	 * @param preserveLineEnding	if true, the line's ending is preserved and
+	 * 								copied to the returned line (only the 
+	 * 								content of the line is cut in this case)
+	 * 								
+	 * @return a new line representing a sub-line of the input line
+	 */
+	public static Line subLine(Line line, int start, int end, boolean preserveLineEnding) {
+		if (start == 0 && (end == line.length() || (preserveLineEnding && end == line.getContentLength()))) {
+			return line;
+		}
+		if (start < 0) {
+			throw new IllegalArgumentException("start cannot be negative: " + start);
+		}
+		if (end < 0) {
+			throw new IllegalArgumentException("end cannot be negative: " + end);
+		}
+		if (start > end) {
+			throw new IllegalArgumentException("start cannot be after end: " + start + " > " + end);
+		}
+		if (preserveLineEnding) {
+			if (end > line.getContentLength()) {
+				throw new IllegalArgumentException("start cannot be after line content end: " + end + " > " + line.getContentLength());
+			}
+			return new SimpleLine(line.subSequence(start, end), line.getLineEnding());
+		} else {
+			final int clen = line.getContentLength();
+			if (end > line.length()) {
+				throw new IllegalArgumentException("start cannot be after line end: " + end + " > " + line.length());
+			}
+			if (end <= clen) {
+				return new SimpleLine(line.subSequence(start, end), "");
+			} else {
+				if (start < clen) {
+					return new SimpleLine(line.subSequence(start, clen), line.subSequence(line.getContentLength(), end));
+				} else {
+					return new SimpleLine("", line.subSequence(start, end));
+				}
+			}
+		}
+	}
 }

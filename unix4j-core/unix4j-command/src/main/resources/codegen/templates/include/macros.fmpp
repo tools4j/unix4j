@@ -19,10 +19,29 @@
 	<@optionJavadoc opt.acronym opt.name "-" "--" opt.desc setComment/>
 </#macro>
 
-<#function normalizeVarArgType type>
-	<#if type?ends_with("...")>
-		<#return type?substring(0, type?length-3)+"[]">
+<#function normalizeVarArgType type boxPrimitives>
+	<#if boxPrimitives>
+		<#if type == "int">
+			<#local normalized="Integer">
+		<#elseif type == "long">
+			<#local normalized="Long">
+		<#elseif type == "double">
+			<#local normalized="Double">
+		<#elseif type == "float">
+			<#local normalized="Float">
+		<#elseif type == "char">
+			<#local normalized="Character">
+		<#elseif type == "boolean">
+			<#local normalized="Boolean">
+		<#else>
+			<#local normalized=type>
+		</#if>
 	<#else>
-		<#return type>
+		<#local normalized=type>
+	</#if>
+	<#if normalized?ends_with("...")>
+		<#return normalized?substring(0, normalized?length-3)+"[]">
+	<#else>
+		<#return normalized>
 	</#if>
 </#function>

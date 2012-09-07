@@ -18,14 +18,14 @@ public class Counter {
 	public long increment() {
 		return ++count;
 	}
-	public long increment(int inc) {
+	public long increment(long inc) {
 		count += inc;
 		return count;
 	}
 	public long decrement() {
 		return --count;
 	}
-	public long decrement(int dec) {
+	public long decrement(long dec) {
 		count -= dec;
 		return count;
 	}

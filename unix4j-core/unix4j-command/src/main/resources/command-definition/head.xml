@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<command-def	xmlns="http://www.unix4j.org/command-def" 
+				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xsi:schemaLocation="http://www.unix4j.org/command-def command-def.xsd">
+	
+	<command name="head" class="org.unix4j.unix.Head" package="org.unix4j.unix.head"/>
+	<name>
+		head - display first lines of a file
+	</name>
+	<synopsis>
+		ORIGINAL: head [-n number][file...]
+		CURRENT: head [-cq][file ...]
+	</synopsis>
+	<description ref="head.html"/>
+	<notes/>
+	<methods>
+		<method input="true">
+			Reads the first 10 lines from the standard input and writes them to
+			the standard output.
+		</method>
+		<method args="count" input="true">
+			Reads the first {@code count} lines from the standard input and 
+			writes them to the standard output.
+		</method>
+		<method args="options,count" input="true">
+			Reads the first {@code count} lines or characters from the standard 
+			input and writes them to the standard output.
+		</method>
+		<method args="files" input="false">
+			Reads the first 10 lines from each of the specified files and writes
+			them to the standard output. If more than a single file is 
+			specified, each file is preceded by a header consisting of the 
+			string {@code "==&gt; XXX &lt;=="} where {@code "XXX"} is the name 
+			of the file.
+		</method>
+		<method args="paths" input="false">
+			Reads the first 10 lines from each of the specified files and writes
+			them to the standard output. If more than a single file is 
+			specified, each file is preceded by a header consisting of the 
+			string {@code "==&gt; XXX &lt;=="} where {@code "XXX"} is the name 
+			of the file.
+		</method>
+		<method args="count,files" input="false">
+			Reads the first {@code count} lines from each of the specified files
+			and writes them to the standard output. If more than a single file 
+			is specified, each file is preceded by a header consisting of the 
+			string {@code "==&gt; XXX &lt;=="} where {@code "XXX"} is the name 
+			of the file.
+		</method>
+		<method args="count,paths" input="false">
+			Reads the first {@code count} lines from each of the specified files
+			and writes them to the standard output. If more than a single file 
+			is specified, each file is preceded by a header consisting of the 
+			string {@code "==&gt; XXX &lt;=="} where {@code "XXX"} is the name 
+			of the file.
+		</method>
+		<method args="options,count,files" input="false">
+			Reads the first {@code count} lines or characters from each of the
+			specified files and writes them to the standard output. If more than
+			a single file is specified and the {@code -q} option is not 
+			specified, each file is preceded by a header consisting of the 
+			string {@code "==&gt; XXX &lt;=="} where {@code "XXX"} is the name 
+			of the file.
+		</method>
+		<method args="options,count,paths" input="false">
+			Reads the first {@code count} lines or characters from each of the
+			specified files and writes them to the standard output. If more than
+			a single file is specified and the {@code -q} option is not 
+			specified, each file is preceded by a header consisting of the 
+			string {@code "==&gt; XXX &lt;=="} where {@code "XXX"} is the name 
+			of the file.
+		</method>
+	</methods>
+	<options>
+		<option name="chars" acronym="c">
+			The {@code count} argument is in units of characters instead of 
+			lines. Starts from 1 and includes line ending characters.
+		</option>
+		<option name="suppressHeaders" acronym="q">
+			Suppresses printing of headers when multiple files are being
+			examined.
+		</option>
+	</options>
+	<operands>
+		<operand name="count" type="long">
+			The first {@code count} lines of each input file are
+			copied to standard output, starting from 1 (characters instead of 
+			lines if the {@code -c} option is specified). Must be a non-negative 
+			integer or an exception is thrown. If {@code count} is greater than 
+			the number number of lines (characters) in the input, the
+			application will not error and send the whole file to the output.
+		</operand>
+		<operand name="paths" type="String...">
+			Pathnames of the input files to be filtered; wildcards * and ? are 
+			supported.
+		</operand>
+		<operand name="files" type="java.io.File...">
+			The input files to be filtered.
+		</operand>
+		<operand name="options" type="HeadOptions">
+			Options for the head command.
+		</operand>
+	</operands>
+</command-def>

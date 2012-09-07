@@ -19,7 +19,7 @@
 			 standard output.
 		</method>
 		<method args="strings" input="false">
-			 Writes any specified string, separated by single blank 
+			 Writes any specified strings, separated by single blank 
 			 ({@code ' '}) characters and followed by a line ending, to the 
 			 standard output.
 		</method>
@@ -29,7 +29,7 @@
 			 {@code -n} option is specified.
 		</method>
 		<method args="options,strings" input="false">
-			 Writes any specified string, separated by single blank 
+			 Writes any specified strings, separated by single blank 
 			 ({@code ' '}) characters to the standard output suppressing the
 			 trailing line ending if the {@code -n} option is specified.
 		</method>
