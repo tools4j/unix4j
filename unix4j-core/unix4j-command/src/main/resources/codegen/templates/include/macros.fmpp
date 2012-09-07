@@ -45,3 +45,13 @@
 		<#return normalized>
 	</#if>
 </#function>
+
+<#function rawType type>
+	<#if type?contains("<")>
+		<#-- cut off the generic stuff -->
+		<#return type?substring(0, type?index_of("<"))>
+	<#else>
+		<#return type>
+	</#if>
+</#function>
+

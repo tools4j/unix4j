@@ -21,22 +21,150 @@
 	</notes>
 	<methods>
 		<method input="true">
-			Sorts the lines 
+			Sort the lines read from the standard input and writes the result to
+			the standard output. 
+			
+			Comparisons are based on the entire line without line ending. The 
+			collating sequence of the current locale is used to perform the
+			comparisons. 
+			
+			The sort algorithm used is guaranteed to be stable: lines considered
+			equal will not be reordered as a result of the sort.
 		</method>
 		<method args="files" input="false">
-			TODO
+			Sort the lines of all the specified files together and writes the
+			result to the standard output. 
+			
+			Comparisons are based on the entire line without line ending. The 
+			collating sequence of the current locale is used to perform the
+			comparisons. 
+			
+			The sort algorithm used is guaranteed to be stable: lines considered
+			equal will not be reordered as a result of the sort. If two lines 
+			originate from different input files, the index of the file in the
+			input arguments list defines the ordering of the lines. 
 		</method>
 		<method args="paths" input="false">
-			TODO
+			Sort the lines of all the specified files together and writes the
+			result to the standard output. 
+			
+			Comparisons are based on the entire line without line ending. The 
+			collating sequence of the current locale is used to perform the
+			comparisons. 
+			
+			The sort algorithm used is guaranteed to be stable: lines considered
+			equal will not be reordered as a result of the sort. If two lines 
+			originate from different input files, the index of the file in the
+			input arguments list defines the ordering of the lines. 
+		</method>
+		<method args="comparator" input="true">
+			Sort the lines read from the standard input and writes the result to
+			the standard output. 
+			
+			Line comparisons are based on the specified {@code comparator}.
+			
+			The sort algorithm used is guaranteed to be stable: lines considered
+			equal will not be reordered as a result of the sort.
+		</method>
+		<method args="comparator,files" input="false">
+			Sort the lines of all the specified files together and writes the
+			result to the standard output. 
+			
+			Line comparisons are based on the specified {@code comparator}.
+			
+			The sort algorithm used is guaranteed to be stable: lines considered
+			equal will not be reordered as a result of the sort. If two lines 
+			originate from different input files, the index of the file in the
+			input arguments list defines the ordering of the lines. 
+		</method>
+		<method args="comparator,paths" input="false">
+			Sort the lines of all the specified files together and writes the
+			result to the standard output. 
+			
+			Line comparisons are based on the specified {@code comparator}.
+			
+			The sort algorithm used is guaranteed to be stable: lines considered
+			equal will not be reordered as a result of the sort. If two lines 
+			originate from different input files, the index of the file in the
+			input arguments list defines the ordering of the lines. 
 		</method>
 		<method args="options" input="true">
-			TODO
+			Sorts, merges, or sequence checks the lines read from the standard
+			input and writes the result to the standard output. 
+			
+			Comparisons are based on the entire line without line ending. The 
+			collating sequence of the current locale is used to perform the
+			comparisons. 
+			
+			The sort algorithm used is guaranteed to be stable: lines considered
+			equal will not be reordered as a result of the sort.
 		</method>
 		<method args="options,files" input="false">
-			TODO
+			Sorts, merges, or sequence checks the lines the lines of all the
+			specified files together and writes the result to the standard
+			output. 
+			
+			Comparisons are based on the entire line without line ending. The 
+			collating sequence of the current locale is used to perform the
+			comparisons. 
+			
+			The sort algorithm used is guaranteed to be stable: lines considered
+			equal will not be reordered as a result of the sort. If two lines 
+			originate from different input files, the index of the file in the
+			input arguments list defines the ordering of the lines. 
 		</method>
 		<method args="options,paths" input="false">
-			TODO
+			Sorts, merges, or sequence checks the lines the lines of all the
+			specified files together and writes the result to the standard
+			output. 
+			
+			Comparisons are based on the entire line without line ending. The 
+			collating sequence of the current locale is used to perform the
+			comparisons. 
+			
+			The sort algorithm used is guaranteed to be stable: lines considered
+			equal will not be reordered as a result of the sort. If two lines 
+			originate from different input files, the index of the file in the
+			input arguments list defines the ordering of the lines. 
+		</method>
+		<method args="options,comparator" input="true">
+			Sorts, merges, or sequence checks the lines read from the standard
+			input and writes the result to the standard output. 
+			
+			Line comparisons are based on the specified {@code comparator}. 
+			All comparison related options except for {@code --reverse} are 
+			ignored.
+			
+			The sort algorithm used is guaranteed to be stable: lines considered
+			equal will not be reordered as a result of the sort.
+		</method>
+		<method args="options,comparator,files" input="false">
+			Sorts, merges, or sequence checks the lines the lines of all the
+			specified files together and writes the result to the standard
+			output. 
+			
+			Line comparisons are based on the specified {@code comparator}. 
+			All comparison related options except for {@code --reverse} are 
+			ignored.
+			
+			The sort algorithm used is guaranteed to be stable: lines considered
+			equal will not be reordered as a result of the sort. If two lines 
+			originate from different input files, the index of the file in the
+			input arguments list defines the ordering of the lines. 
+		</method>
+		<method args="options,comparator,paths" input="false">
+			Sorts, merges, or sequence checks the lines the lines of all the
+			specified files together and writes the result to the standard
+			output. 
+			
+			Line comparisons are based on the specified {@code comparator}. 
+			All comparison related options except for {@code --reverse} are 
+			ignored.
+			
+			The sort algorithm used is guaranteed to be stable: lines considered
+			equal will not be reordered as a result of the sort. If two lines 
+			originate from different input files, the index of the file in the
+			input arguments list defines the ordering of the lines. 
 		</method>
 	</methods>
 	<options>
@@ -97,11 +225,11 @@
 		<operand name="files" type="java.io.File...">
 			The files to be sorted or merged.
 		</operand>
+		<operand name="comparator" type="java.util.Comparator&lt;? super org.unix4j.line.Line>">
+			The comparator to use for the line comparisons.
+		</operand>
 		<!-- 
 		<operand name="keydef" type="Keydef">
-			The files to be sorted or merged.
-		</operand>
-		<operand name="comparator" type="java.util.Comparator&lt;? super org.unix4j.line.Line>">
 			The files to be sorted or merged.
 		</operand>
 		 -->

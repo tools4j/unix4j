@@ -87,7 +87,7 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	/**
 	 * Returns true if the {@code <${operand.name}>} operand has been set. 
 	 * <p>
-	 * Note that this method returns true if {@link #${setter(operand)}(${normalizeVarArgType(operand.type, false)})}
+	 * Note that this method returns true if {@link #${setter(operand)}(${normalizeVarArgType(rawType(operand.type), false)})}
 	 * has been called at least once even if {@link #${getter(operand)}()} returns
 	 * {@code null}. 
 	 * 
