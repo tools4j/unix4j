@@ -3,6 +3,9 @@ package org.unix4j.unix.uniq;
 
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.ExecutionContext;
+import org.unix4j.command.InputArgumentLineProcessor;
+import org.unix4j.io.FileInput;
+import org.unix4j.io.Input;
 import org.unix4j.line.Line;
 import org.unix4j.line.LineProcessor;
 import org.unix4j.line.SimpleLine;
@@ -19,25 +22,40 @@ class UniqCommand extends AbstractCommand<UniqArguments> {
 	@Override
 	public LineProcessor execute(final ExecutionContext context, final LineProcessor output) {
 		final UniqArguments args = getArguments();
+		final LineProcessor processor; 
 		if (args.isGlobal()) {
 			if (args.isUniqueOnly()) {
-				return new GlobalProcessor.UniqueOnly(this, context, output);
+				processor = new GlobalProcessor.UniqueOnly(this, context, output);
 			} else if (args.isDuplicatedOnly()) {
-				return new GlobalProcessor.DuplicateOnly(this, context, output);
+				processor = new GlobalProcessor.DuplicateOnly(this, context, output);
 			} else if (args.isCount()) {
-				return new GlobalProcessor.Count(this, context, output);
+				processor = new GlobalProcessor.Count(this, context, output);
+			} else {
+				processor = new GlobalProcessor.Normal(this, context, output);
 			}
-			return new GlobalProcessor.Normal(this, context, output);
 		} else {
 			if (args.isUniqueOnly()) {
-				return new AdjacentProcessor.UniqueOnly(this, context, output);
+				processor = new AdjacentProcessor.UniqueOnly(this, context, output);
 			} else if (args.isDuplicatedOnly()) {
-				return new AdjacentProcessor.DuplicateOnly(this, context, output);
+				processor = new AdjacentProcessor.DuplicateOnly(this, context, output);
 			} else if (args.isCount()) {
-				return new AdjacentProcessor.Count(this, context, output);
+				processor = new AdjacentProcessor.Count(this, context, output);
+			} else {
+				processor = new AdjacentProcessor.Normal(this, context, output);
 			}
-			return new AdjacentProcessor.Normal(this, context, output);
 		}
+		
+		//input from file?
+		if (args.isFileSet()) {
+			final Input input = new FileInput(args.getFile());
+			return new InputArgumentLineProcessor(input, processor);
+		} else if (args.isPathSet()) {
+			final Input input = new FileInput(args.getFile());
+			return new InputArgumentLineProcessor(input, processor);
+		}
+		
+		//no, from standard input
+		return processor;
 	}
 
 	protected static String formatCount(long count, int maxDigitsForCount) {
