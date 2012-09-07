@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 import org.unix4j.line.Line;
 
 /**
- * Base implementation for {@link Input} essentially providing the
+ * Base implementation for {@link Input} providing the 
  * {@link #iterator() iterator()} method.
  */
 abstract public class AbstractInput implements Input {

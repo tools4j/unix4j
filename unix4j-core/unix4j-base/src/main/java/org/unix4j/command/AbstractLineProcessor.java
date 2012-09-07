@@ -6,7 +6,7 @@ import org.unix4j.line.LineProcessor;
  * Abstract base implementation for {@link LineProcessor} returned by the
  * execute method of commands constructed with a reference to the command plus
  * context and output passed to
- * {@link Command#execute(ExecutionContext, LineProcessor)} .
+ * {@link Command#execute(ExecutionContext, LineProcessor)}.
  */
 abstract public class AbstractLineProcessor<A extends Arguments<A>> implements LineProcessor {
 	private final Command<A> command;
