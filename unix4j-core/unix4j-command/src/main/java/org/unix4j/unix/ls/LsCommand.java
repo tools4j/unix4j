@@ -2,6 +2,7 @@ package org.unix4j.unix.ls;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -24,19 +25,15 @@ class LsCommand extends AbstractCommand<LsArguments> {
 	
 	private List<File> getArgumentFiles(ExecutionContext context) {
 		final LsArguments args = getArguments();
-		final List<File> files = new ArrayList<File>();
 		if (args.isFilesSet()) {
-			for (final File file : args.getFiles()) {
-				files.add(file);
-			}
+			return new ArrayList<File>(Arrays.asList(args.getFiles()));
 		} else if (args.isPathsSet()) {
-			for (final String path : args.getPaths()) {
-				files.add(new File(path));
-			}
-		} else {
-			files.add(context.getCurrentDirectory());
+			return FileUtil.expandFiles(args.getPaths());
 		}
-		return files;
+		//no input files or paths ==> use just the current directory
+		final ArrayList<File> list = new ArrayList<File>(1);
+		list.add(context.getCurrentDirectory());
+		return list;
 	}
 
 	/*package*/ static String getSizeString(LsArguments args, long bytes) {
@@ -61,6 +58,7 @@ class LsCommand extends AbstractCommand<LsArguments> {
 	
 	@Override
 	public LineProcessor execute(final ExecutionContext context, final LineProcessor output) {
+		final List<File> files = getArgumentFiles(context);
 		return new LineProcessor() {
 			@Override
 			public boolean processLine(Line line) {
@@ -68,9 +66,7 @@ class LsCommand extends AbstractCommand<LsArguments> {
 			}
 			@Override
 			public void finish() {
-				final List<File> files = getArgumentFiles(context);
-				final List<File> expanded = FileUtil.expandFiles(files);
-				listFiles(context.getCurrentDirectory(), null, expanded, output);
+				listFiles(context.getCurrentDirectory(), null, files, output);
 				output.finish();
 			}
 		};

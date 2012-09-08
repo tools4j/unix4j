@@ -63,12 +63,12 @@ public class FileInput extends ReaderInput {
 	 * 
 	 * @param files the files to combine into a single input object
 	 */
-	public static Input composite(String... files) {
-		if (files.length == 0) return NullInput.INSTANCE;
-		if (files.length == 1) return new FileInput(files[0]);
-		final List<FileInput> inputs = new ArrayList<FileInput>(files.length);
-		for (int i = 0; i < files.length; i++) {
-			inputs.add(new FileInput(files[i]));
+	public static Input composite(List<File> files) {
+		if (files.size() == 0) return NullInput.INSTANCE;
+		if (files.size() == 1) return new FileInput(files.get(0));
+		final List<FileInput> inputs = new ArrayList<FileInput>(files.size());
+		for (int i = 0; i < files.size(); i++) {
+			inputs.add(new FileInput(files.get(i)));
 		}
 		return new CompositeInput(inputs);
 	}

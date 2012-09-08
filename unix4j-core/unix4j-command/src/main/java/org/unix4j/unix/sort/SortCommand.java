@@ -1,5 +1,8 @@
 package org.unix4j.unix.sort;
 
+import java.io.File;
+import java.util.List;
+
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.ExecutionContext;
 import org.unix4j.command.InputArgumentLineProcessor;
@@ -7,6 +10,7 @@ import org.unix4j.io.FileInput;
 import org.unix4j.io.Input;
 import org.unix4j.line.LineProcessor;
 import org.unix4j.unix.Sort;
+import org.unix4j.util.FileUtil;
 
 class SortCommand extends AbstractCommand<SortArguments> {
 
@@ -36,7 +40,8 @@ class SortCommand extends AbstractCommand<SortArguments> {
 				final Input input = FileInput.composite(args.getFiles());
 				return new InputArgumentLineProcessor(input, processor);
 			} else if (args.isPathsSet()) {
-				final Input input = FileInput.composite(args.getPaths());
+				final List<File> files = FileUtil.expandFiles(args.getPaths());
+				final Input input = FileInput.composite(files);
 				return new InputArgumentLineProcessor(input, processor);
 			}
 		}
