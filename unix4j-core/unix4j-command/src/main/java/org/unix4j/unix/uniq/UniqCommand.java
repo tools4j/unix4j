@@ -1,6 +1,9 @@
 package org.unix4j.unix.uniq;
 
 
+import java.io.File;
+import java.util.List;
+
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.ExecutionContext;
 import org.unix4j.command.InputArgumentLineProcessor;
@@ -10,6 +13,7 @@ import org.unix4j.line.Line;
 import org.unix4j.line.LineProcessor;
 import org.unix4j.line.SimpleLine;
 import org.unix4j.unix.Ls;
+import org.unix4j.util.FileUtil;
 
 /**
  * Uniq command implementation.
@@ -50,7 +54,11 @@ class UniqCommand extends AbstractCommand<UniqArguments> {
 			final Input input = new FileInput(args.getFile());
 			return new InputArgumentLineProcessor(input, processor);
 		} else if (args.isPathSet()) {
-			final Input input = new FileInput(args.getFile());
+			final List<File> files = FileUtil.expandFiles(args.getPath());
+			if (files.size() != 1) {
+				throw new IllegalArgumentException("expected 1 input file, but found " + files.size() + " for path '" + args.getPath() + "': " + files);
+			}
+			final Input input = new FileInput(files.get(0));
 			return new InputArgumentLineProcessor(input, processor);
 		}
 		
