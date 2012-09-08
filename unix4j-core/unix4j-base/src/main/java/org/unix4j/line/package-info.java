@@ -1,6 +1,7 @@
 /**
- * Contains {@link org.unix4j.line.Line Line} interface used for line-by-line
- * processing of input data and provides two alternative line implementations. 
+ * Contains the {@link org.unix4j.line.Line Line} interface used for 
+ * line-by-line processing of input data and provides two alternative line 
+ * implementations. 
  * <p>
  * The two variants implementing the {@code Line} interface are:
  * <ul>
