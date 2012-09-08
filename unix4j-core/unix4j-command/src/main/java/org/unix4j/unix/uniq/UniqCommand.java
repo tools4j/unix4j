@@ -6,12 +6,12 @@ import java.util.List;
 
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.ExecutionContext;
-import org.unix4j.command.InputArgumentLineProcessor;
 import org.unix4j.io.FileInput;
 import org.unix4j.io.Input;
 import org.unix4j.line.Line;
-import org.unix4j.line.LineProcessor;
 import org.unix4j.line.SimpleLine;
+import org.unix4j.processor.LineProcessor;
+import org.unix4j.processor.RedirectInputLineProcessor;
 import org.unix4j.unix.Ls;
 import org.unix4j.util.FileUtil;
 
@@ -26,44 +26,41 @@ class UniqCommand extends AbstractCommand<UniqArguments> {
 	@Override
 	public LineProcessor execute(final ExecutionContext context, final LineProcessor output) {
 		final UniqArguments args = getArguments();
-		final LineProcessor processor; 
+		final LineProcessor standardInputProcessor; 
 		if (args.isGlobal()) {
 			if (args.isUniqueOnly()) {
-				processor = new GlobalProcessor.UniqueOnly(this, context, output);
+				standardInputProcessor = new GlobalProcessor.UniqueOnly(this, context, output);
 			} else if (args.isDuplicatedOnly()) {
-				processor = new GlobalProcessor.DuplicateOnly(this, context, output);
+				standardInputProcessor = new GlobalProcessor.DuplicateOnly(this, context, output);
 			} else if (args.isCount()) {
-				processor = new GlobalProcessor.Count(this, context, output);
+				standardInputProcessor = new GlobalProcessor.Count(this, context, output);
 			} else {
-				processor = new GlobalProcessor.Normal(this, context, output);
+				standardInputProcessor = new GlobalProcessor.Normal(this, context, output);
 			}
 		} else {
 			if (args.isUniqueOnly()) {
-				processor = new AdjacentProcessor.UniqueOnly(this, context, output);
+				standardInputProcessor = new AdjacentProcessor.UniqueOnly(this, context, output);
 			} else if (args.isDuplicatedOnly()) {
-				processor = new AdjacentProcessor.DuplicateOnly(this, context, output);
+				standardInputProcessor = new AdjacentProcessor.DuplicateOnly(this, context, output);
 			} else if (args.isCount()) {
-				processor = new AdjacentProcessor.Count(this, context, output);
+				standardInputProcessor = new AdjacentProcessor.Count(this, context, output);
 			} else {
-				processor = new AdjacentProcessor.Normal(this, context, output);
+				standardInputProcessor = new AdjacentProcessor.Normal(this, context, output);
 			}
 		}
 		
 		//input from file?
 		if (args.isFileSet()) {
 			final Input input = new FileInput(args.getFile());
-			return new InputArgumentLineProcessor(input, processor);
+			return new RedirectInputLineProcessor(input, standardInputProcessor);
 		} else if (args.isPathSet()) {
 			final List<File> files = FileUtil.expandFiles(args.getPath());
-			if (files.size() != 1) {
-				throw new IllegalArgumentException("expected 1 input file, but found " + files.size() + " for path '" + args.getPath() + "': " + files);
-			}
-			final Input input = new FileInput(files.get(0));
-			return new InputArgumentLineProcessor(input, processor);
+			final List<FileInput> inputs = FileInput.multiple(files);
+			return new RedirectInputLineProcessor(inputs, standardInputProcessor);
 		}
 		
 		//no, from standard input
-		return processor;
+		return standardInputProcessor;
 	}
 
 	protected static String formatCount(long count, int maxDigitsForCount) {

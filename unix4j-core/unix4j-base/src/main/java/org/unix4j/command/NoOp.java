@@ -2,7 +2,7 @@ package org.unix4j.command;
 
 import org.unix4j.builder.CommandBuilder;
 import org.unix4j.io.NullOutput;
-import org.unix4j.line.LineProcessor;
+import org.unix4j.processor.LineProcessor;
 
 /**
  * A command that performs no operation. Useful as initial command in a

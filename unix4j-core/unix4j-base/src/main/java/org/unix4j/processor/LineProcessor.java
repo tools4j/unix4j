@@ -1,4 +1,6 @@
-package org.unix4j.line;
+package org.unix4j.processor;
+
+import org.unix4j.line.Line;
 
 /**
  * A {@code LineProcessor} is a program or device that processes line based

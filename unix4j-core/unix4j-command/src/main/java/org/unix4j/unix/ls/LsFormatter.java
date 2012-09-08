@@ -3,7 +3,7 @@ package org.unix4j.unix.ls;
 import java.io.File;
 import java.util.List;
 
-import org.unix4j.line.LineProcessor;
+import org.unix4j.processor.LineProcessor;
 
 /**
  * Interface used by the different output formats of the ls command.

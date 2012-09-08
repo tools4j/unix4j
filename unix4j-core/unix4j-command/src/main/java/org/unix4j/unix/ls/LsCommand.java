@@ -10,7 +10,7 @@ import java.util.List;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.ExecutionContext;
 import org.unix4j.line.Line;
-import org.unix4j.line.LineProcessor;
+import org.unix4j.processor.LineProcessor;
 import org.unix4j.unix.Ls;
 import org.unix4j.util.FileUtil;
 import org.unix4j.util.ReverseOrderComparator;

@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Map;
 import java.util.Properties;
 
-import org.unix4j.line.LineProcessor;
+import org.unix4j.processor.LineProcessor;
 
 /**
  * The execution context encapsulates all information relevant during the

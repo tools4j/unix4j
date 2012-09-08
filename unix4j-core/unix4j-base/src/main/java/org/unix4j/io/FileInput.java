@@ -41,6 +41,34 @@ public class FileInput extends ReaderInput {
 	}
 	
 	/**
+	 * Creates a new {@link FileInput} object for each of the specified files
+	 * and resturns a list with all input objects.
+	 * 
+	 * @param files the files for whose to create a {@code FileInput} object
+	 */
+	public static List<FileInput> multiple(File... files) {
+		final List<FileInput> inputs = new ArrayList<FileInput>(files.length);
+		for (int i = 0; i < files.length; i++) {
+			inputs.add(new FileInput(files[i]));
+		}
+		return inputs;
+	}
+
+	/**
+	 * Creates a new {@link FileInput} object for each of the specified files
+	 * and resturns a list with all input objects.
+	 * 
+	 * @param files the files for whose to create a {@code FileInput} object
+	 */
+	public static List<FileInput> multiple(List<File> files) {
+		final List<FileInput> inputs = new ArrayList<FileInput>(files.size());
+		for (int i = 0; i < files.size(); i++) {
+			inputs.add(new FileInput(files.get(i)));
+		}
+		return inputs;
+	}
+
+	/**
 	 * Creates and returns an input composed from the specified files 
 	 * altogether. The resulting input object returns the lines lines of the 
 	 * first file first, then the lines of the second file etc.
@@ -50,11 +78,7 @@ public class FileInput extends ReaderInput {
 	public static Input composite(File... files) {
 		if (files.length == 0) return NullInput.INSTANCE;
 		if (files.length == 1) return new FileInput(files[0]);
-		final List<FileInput> inputs = new ArrayList<FileInput>(files.length);
-		for (int i = 0; i < files.length; i++) {
-			inputs.add(new FileInput(files[i]));
-		}
-		return new CompositeInput(inputs);
+		return new CompositeInput(multiple(files));
 	}
 	/**
 	 * Creates and returns an input composed from the specified files 
@@ -66,11 +90,7 @@ public class FileInput extends ReaderInput {
 	public static Input composite(List<File> files) {
 		if (files.size() == 0) return NullInput.INSTANCE;
 		if (files.size() == 1) return new FileInput(files.get(0));
-		final List<FileInput> inputs = new ArrayList<FileInput>(files.size());
-		for (int i = 0; i < files.size(); i++) {
-			inputs.add(new FileInput(files.get(i)));
-		}
-		return new CompositeInput(inputs);
+		return new CompositeInput(multiple(files));
 	}
 
 	private static FileReader createFileReader(File file) {
@@ -80,9 +100,17 @@ public class FileInput extends ReaderInput {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	/**
+	 * Returns the file info string, for instance a file path or file name.
+	 * @return the file info string, usually the file name or path.
+	 */
+	public String getFileInfo() {
+		return fileInfo;
+	}
 
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + "(fileInfo=" + fileInfo + ")";
+		return getClass().getSimpleName() + "(fileInfo=" + getFileInfo() + ")";
 	}
 }

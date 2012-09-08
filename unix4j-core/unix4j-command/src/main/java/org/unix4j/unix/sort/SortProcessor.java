@@ -5,7 +5,7 @@ import java.util.Collections;
 
 import org.unix4j.command.ExecutionContext;
 import org.unix4j.line.Line;
-import org.unix4j.line.LineProcessor;
+import org.unix4j.processor.LineProcessor;
 
 /**
  * Line processor for normal in-memory sort using an {@link ArrayList} to cache

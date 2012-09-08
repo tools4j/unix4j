@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 import org.unix4j.command.ExecutionContext;
 import org.unix4j.line.Line;
-import org.unix4j.line.LineProcessor;
+import org.unix4j.processor.LineProcessor;
 
 public class TailLinesFromEndProcessor extends AbstractTailProcessor {
 	

@@ -21,7 +21,7 @@ import org.unix4j.io.StreamInput;
 import org.unix4j.io.StringInput;
 import org.unix4j.io.URLInput;
 import org.unix4j.line.Line;
-import org.unix4j.line.LineProcessor;
+import org.unix4j.processor.LineProcessor;
 import org.unix4j.util.TypedMap;
 
 /**

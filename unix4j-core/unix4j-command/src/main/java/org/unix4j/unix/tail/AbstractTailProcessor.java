@@ -1,8 +1,8 @@
 package org.unix4j.unix.tail;
 
-import org.unix4j.command.AbstractLineProcessor;
 import org.unix4j.command.ExecutionContext;
-import org.unix4j.line.LineProcessor;
+import org.unix4j.processor.AbstractLineProcessor;
+import org.unix4j.processor.LineProcessor;
 
 /**
  * Base class for the line processors used by the {@link TailCommand}.

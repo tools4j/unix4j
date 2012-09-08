@@ -5,8 +5,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import org.unix4j.line.LineProcessor;
 import org.unix4j.line.SimpleLine;
+import org.unix4j.processor.LineProcessor;
 import org.unix4j.util.FileUtil;
 import org.unix4j.util.Java7Util;
 import org.unix4j.util.StringUtil;
