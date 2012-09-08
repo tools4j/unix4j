@@ -2,8 +2,8 @@ package org.unix4j.unix.head;
 
 import org.unix4j.command.ExecutionContext;
 import org.unix4j.line.Line;
-import org.unix4j.line.LineProcessor;
 import org.unix4j.line.SimpleLine;
+import org.unix4j.processor.LineProcessor;
 
 final class HeadCharsProcessor extends AbstractHeadProcessor {
 	HeadCharsProcessor(HeadCommand command, ExecutionContext context, LineProcessor output) {

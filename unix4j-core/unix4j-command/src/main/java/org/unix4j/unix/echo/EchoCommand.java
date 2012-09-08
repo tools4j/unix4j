@@ -3,8 +3,8 @@ package org.unix4j.unix.echo;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.ExecutionContext;
 import org.unix4j.line.Line;
-import org.unix4j.line.LineProcessor;
 import org.unix4j.line.SimpleLine;
+import org.unix4j.processor.LineProcessor;
 import org.unix4j.unix.Echo;
 
 /**

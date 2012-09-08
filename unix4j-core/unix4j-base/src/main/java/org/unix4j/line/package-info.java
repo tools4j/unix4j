@@ -1,10 +1,8 @@
 /**
- * Contains {@link org.unix4j.line.Line Line} and 
- * {@link org.unix4j.line.LineProcessor LineProcessor} defining the basic 
- * interfaces for line-by-line input processing. 
+ * Contains {@link org.unix4j.line.Line Line} interface used for line-by-line
+ * processing of input data and provides two alternative line implementations. 
  * <p>
- * The package also contains two alternative implementations for the 
- * {@code Line} interface:
+ * The two variants implementing the {@code Line} interface are:
  * <ul>
  * <li>{@link org.unix4j.line.SimpleLine SimpleLine} which is based on two 
  * strings or character sequences: one for the line <i>contents</i> and one for

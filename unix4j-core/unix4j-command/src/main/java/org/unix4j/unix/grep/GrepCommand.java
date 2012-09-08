@@ -3,7 +3,7 @@ package org.unix4j.unix.grep;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.ExecutionContext;
 import org.unix4j.line.Line;
-import org.unix4j.line.LineProcessor;
+import org.unix4j.processor.LineProcessor;
 import org.unix4j.unix.Grep;
 
 import java.util.regex.Pattern;

@@ -3,8 +3,8 @@ package org.unix4j.unix.ls;
 import java.io.File;
 import java.util.List;
 
-import org.unix4j.line.LineProcessor;
 import org.unix4j.line.SimpleLine;
+import org.unix4j.processor.LineProcessor;
 import org.unix4j.util.FileUtil;
 
 class LsFormatterDirectoryHeader implements LsFormatter {

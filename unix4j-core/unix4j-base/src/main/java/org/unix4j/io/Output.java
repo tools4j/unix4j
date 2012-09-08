@@ -1,7 +1,7 @@
 package org.unix4j.io;
 
 import org.unix4j.line.Line;
-import org.unix4j.line.LineProcessor;
+import org.unix4j.processor.LineProcessor;
 
 /**
  * Represents a line-by-line output device. This interface does not add any

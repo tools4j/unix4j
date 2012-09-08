@@ -1,6 +1,6 @@
 package org.unix4j.command;
 
-import org.unix4j.line.LineProcessor;
+import org.unix4j.processor.LineProcessor;
 
 /**
  * A command is an executable unit defined by the command {@link #getName()

@@ -2,10 +2,10 @@ package org.unix4j.unix.sort;
 
 import java.util.Comparator;
 
-import org.unix4j.command.AbstractLineProcessor;
 import org.unix4j.command.ExecutionContext;
 import org.unix4j.line.Line;
-import org.unix4j.line.LineProcessor;
+import org.unix4j.processor.AbstractLineProcessor;
+import org.unix4j.processor.LineProcessor;
 import org.unix4j.util.LineComparator;
 import org.unix4j.util.ReverseOrderComparator;
 

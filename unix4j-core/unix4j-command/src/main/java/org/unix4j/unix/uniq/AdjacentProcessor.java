@@ -2,7 +2,7 @@ package org.unix4j.unix.uniq;
 
 import org.unix4j.command.ExecutionContext;
 import org.unix4j.line.Line;
-import org.unix4j.line.LineProcessor;
+import org.unix4j.processor.LineProcessor;
 
 /**
  * Line processors implementing the actual uniq command execution for the case

@@ -11,7 +11,7 @@ import org.unix4j.command.CommandInterface;
 import org.unix4j.command.ExecutionContext;
 import org.unix4j.io.Output;
 import org.unix4j.line.Line;
-import org.unix4j.line.LineProcessor;
+import org.unix4j.processor.LineProcessor;
 import org.unix4j.util.Variables;
 
 /**
