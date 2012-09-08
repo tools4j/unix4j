@@ -4,11 +4,11 @@ import org.unix4j.io.Input;
 import org.unix4j.line.Line;
 
 /**
- * An {@code InputProcessor} is a program or device that processes line based
- * data from an {@link Input} device. It is very similar to a
- * {@link LineProcessor} but has an extra {@link #begin(Input, LineProcessor)
- * begin(..)} method and both the input and the output device are passed to
- * every method.
+ * An {@code InputProcessor} is used by a {@link MultipleInputLineProcessor} to
+ * process line based data from multiple {@link Input} devices. It is very
+ * similar to a {@link LineProcessor} but has an extra
+ * {@link #begin(Input, LineProcessor) begin(..)} method and input and output is
+ * passed to every method.
  */
 public interface InputProcessor {
 	/**
