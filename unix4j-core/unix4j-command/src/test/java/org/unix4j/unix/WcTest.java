@@ -34,7 +34,8 @@ public class WcTest {
 
 	@Test
 	public void testWcCountLinesWordsAndChars() {
-		assertEquals("   5   8  " + (41 + 5 * LEL), Unix4j.from(input.toInput()).wcCountLinesWordsAndChars().toStringResult());
+//		assertEquals("   5   8  " + (41 + 5 * LEL), Unix4j.from(input.toInput()).wcCountLinesWordsAndChars().toStringResult());
+		assertEquals("   5   8  " + (41 + 5 * LEL), Unix4j.from(input.toInput()).wc().toStringResult());
 	}
 
 	@Test

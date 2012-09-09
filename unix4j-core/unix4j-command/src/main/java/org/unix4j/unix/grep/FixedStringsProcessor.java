@@ -11,7 +11,7 @@ final class FixedStringsProcessor extends AbstractGrepProcessor {
 	public FixedStringsProcessor(GrepCommand command, ExecutionContext context, LineProcessor output) {
 		super(command, context, output);
 		final GrepArguments args = getArguments();
-		if (args.isIgnoreCase()) {
+		if (args.isIgnoreCase() && !args.isWholeLine()) {
 			this.pattern = args.getPattern().toLowerCase();
 		} else {
 			this.pattern = args.getPattern();
@@ -20,10 +20,20 @@ final class FixedStringsProcessor extends AbstractGrepProcessor {
 
 	@Override
 	public boolean matches(Line line) {
-		if (getArguments().isIgnoreCase()) {
-			return line.toString().toLowerCase().contains(pattern);
+		final GrepArguments args = getArguments();
+		final String content = line.getContent();
+		if (args.isWholeLine()) {
+			if (args.isIgnoreCase()) {
+				return content.equalsIgnoreCase(pattern);
+			} else {
+				return content.equals(pattern);
+			}
 		} else {
-			return line.toString().contains(pattern);
+			if (args.isIgnoreCase()) {
+				return content.toLowerCase().contains(pattern);
+			} else {
+				return content.contains(pattern);
+			}
 		}
 	}
 }

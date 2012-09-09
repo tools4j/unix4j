@@ -10,19 +10,48 @@
 	<notes>
 	</notes>
 	<methods>
-		<method args="" input="false">
-			Executes a count of lines, words and chars in the given input and
-			writes them to the output
+		<method args="" input="true">
+			Executes a count of lines, words and chars contained in the standard
+			input and writes them to the output.
 		</method>
-		<method args="options" input="false">
-			Executes a one or more counts, depending on the given options, and
-			writes them to the output.
+		<method args="files" input="false">
+			Executes a count of lines, words and chars contained in each input
+			file and writes them to the output. If more than one input file is 
+			specified, a line of cumulative counts for all the files is 
+			displayed on a separate line after the output for the last file.
 		</method>
+		<method args="paths" input="false">
+			Executes a count of lines, words and chars contained in each input
+			file and writes them to the output. If more than one input file is 
+			specified, a line of cumulative counts for all the files is 
+			displayed on a separate line after the output for the last file.
+		</method>
+		<method args="options" input="true">
+			Executes a one or more counts, depending on the given options, in
+			the standard input and writes them to the output.
+		</method>
+		<method args="options,files" input="false">
+			Executes a one or more counts, depending on the given options, in
+			each of the given input files and writes them to the output. If more 
+			than one input file is specified, a line of cumulative counts for 
+			all the files is displayed on a separate line after the output for 
+			the last file.
+		</method>
+		<method args="options,paths" input="false">
+			Executes a one or more counts, depending on the given options, in
+			each of the given input files and writes them to the output. If more 
+			than one input file is specified, a line of cumulative counts for 
+			all the files is displayed on a separate line after the output for 
+			the last file.
+		</method>
+		<!-- NOTES: 
+				(a) we can only support this with a new "option" attribute 
+					selecting the appropriate option
+				(b) do we really still need this?
 		<method name="wcCountLinesWordsAndChars" args="" input="false">
 			Executes a count of lines, words and chars in the given input and
 			writes them to the output
 		</method>
-		<!-- NOTE: we can only support this with a new "option" attribute selecting the appropriate option
 		<method name="wcCountLines" args="" input="false">
 			Executes a count of lines in the given input and writes them to the output
 		</method>
@@ -46,8 +75,14 @@
 		</option>
 	</options>
 	<operands>
+		<operand name="paths" type="String...">
+			Pathnames of the input files; wildcards * and ? are supported.
+		</operand>
+		<operand name="files" type="java.io.File...">
+			The input files.
+		</operand>
 		<operand name="options" type="WcOptions">
-			The options defining command behaviour.
+			The options defining command behavior.
 		</operand>
 	</operands>
 </command-def>

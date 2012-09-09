@@ -34,7 +34,8 @@ public class WcPerfTest extends AbstractPerfTest {
 
 	@Test(timeout = 5000)
 	public void testWc_10Meg_countEverything() {
-		final Unix4jCommandBuilder command = Unix4j.fromFile(LargeTestFiles.FILE_10_MEG.getFile()).wcCountLinesWordsAndChars();
+//		final Unix4jCommandBuilder command = Unix4j.fromFile(LargeTestFiles.FILE_10_MEG.getFile()).wcCountLinesWordsAndChars();
+		final Unix4jCommandBuilder command = Unix4j.fromFile(LargeTestFiles.FILE_10_MEG.getFile()).wc();
 		final String equivalentUnixTest = "cat 100_Meg_test_file.txt | wc";
 		run(command, equivalentUnixTest);
 	}

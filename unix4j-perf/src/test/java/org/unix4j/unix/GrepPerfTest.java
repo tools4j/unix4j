@@ -24,7 +24,7 @@ public class GrepPerfTest extends AbstractPerfTest {
 
 	@Test(timeout = 2500)
 	public void testGrep_10Meg_fixed_inverseGrep() {
-		final Unix4jCommandBuilder command = Unix4j.fromFile(LargeTestFiles.FILE_10_MEG.getFile()).grep(Grep.OPTIONS.invert.fixedStrings, "test");
+		final Unix4jCommandBuilder command = Unix4j.fromFile(LargeTestFiles.FILE_10_MEG.getFile()).grep(Grep.OPTIONS.invertMatch.fixedStrings, "test");
 		final String equivalentUnixTest = "cat 10_Meg_test_file.txt | grep -v -F 'test'";
 		run(command, equivalentUnixTest);
 	}
@@ -45,7 +45,7 @@ public class GrepPerfTest extends AbstractPerfTest {
 
 	@Test(timeout = 2500)
 	public void testGrep_10Meg_inverseGrep() {
-		final Unix4jCommandBuilder command = Unix4j.fromFile(LargeTestFiles.FILE_10_MEG.getFile()).grep(Grep.OPTIONS.invert, "test");
+		final Unix4jCommandBuilder command = Unix4j.fromFile(LargeTestFiles.FILE_10_MEG.getFile()).grep(Grep.OPTIONS.invertMatch, "test");
 		final String equivalentUnixTest = "cat 10_Meg_test_file.txt | grep -v 'test'";
 		run(command, equivalentUnixTest);
 	}

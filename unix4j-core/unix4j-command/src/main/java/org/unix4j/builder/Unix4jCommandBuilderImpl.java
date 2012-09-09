@@ -151,10 +151,34 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 		join(Grep.FACTORY.grep(pattern));
 		return this;
 	}
-
+	
+	@Override
+	public Unix4jCommandBuilder grep(String pattern, File... files) {
+		join(Grep.FACTORY.grep(pattern, files));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder grep(String pattern, String... paths) {
+		join(Grep.FACTORY.grep(pattern, paths));
+		return this;
+	}
+	
 	@Override
 	public Unix4jCommandBuilder grep(GrepOptions options, String pattern) {
 		join(Grep.FACTORY.grep(options, pattern));
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder grep(GrepOptions options, String pattern, File... files) {
+		join(Grep.FACTORY.grep(options, pattern, files));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder grep(GrepOptions options, String pattern, String... paths) {
+		join(Grep.FACTORY.grep(options, pattern, paths));
 		return this;
 	}
 
@@ -319,25 +343,43 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 		join(Wc.FACTORY.wc());
 		return this;
 	}
-
-//	@Override
-//	public Unix4jCommandBuilder wcCountLinesWordsAndChars() {
-//		join(Wc.FACTORY.wcCountLinesWordsAndChars());
-//		return this;
-//	}
+	
+	@Override
+	public Unix4jCommandBuilder wc(File... files) {
+		join(Wc.FACTORY.wc(files));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder wc(String... paths) {
+		join(Wc.FACTORY.wc(paths));
+		return this;
+	}
 
 	@Override
 	public Unix4jCommandBuilder wc(WcOptions options) {
 		join(Wc.FACTORY.wc(options));
 		return this;
 	}
-
+	
 	@Override
-	public Unix4jCommandBuilder wcCountLinesWordsAndChars() {
-		join(Wc.FACTORY.wcCountLinesWordsAndChars());
+	public Unix4jCommandBuilder wc(WcOptions options, File... files) {
+		join(Wc.FACTORY.wc(options, files));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder wc(WcOptions options, String... paths) {
+		join(Wc.FACTORY.wc(options, paths));
 		return this;
 	}
 
+//	@Override
+//	public Unix4jCommandBuilder wcCountLinesWordsAndChars() {
+//		join(Wc.FACTORY.wcCountLinesWordsAndChars());
+//		return this;
+//	}
+//
 //	@Override
 //	public Unix4jCommandBuilder wcCountLines() {
 //		join(Wc.FACTORY.wcCountLines());
