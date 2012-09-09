@@ -8,27 +8,33 @@ import org.unix4j.processor.LineProcessor;
 import org.unix4j.util.Counter;
 import org.unix4j.util.StringUtil;
 
+/**
+ * Counters for lines, words and characters with {@link Counter} objects in a
+ * map by {@link CounterType}. It depends on the argument options which counters
+ * are actually maintained. The {@link #update(Line)} method updates the
+ * relevant counters based on a line.
+ */
 public class Counters {
-	
+
 	private final static int MIN_COUNT_PADDING = 2;
 
 	private final EnumMap<CounterType, Counter> counters = new EnumMap<CounterType, Counter>(CounterType.class);
 	private boolean lastLineWasEmpty;
-	
+
 	public Counters(WcArguments args) {
-		for (final CounterType type: CounterType.values()) {
+		for (final CounterType type : CounterType.values()) {
 			if (type.isOptionSet(args)) {
 				counters.put(type, new Counter());
 			}
 		}
 		if (counters.isEmpty()) {
-			//no option is set, count everything
-			for (final CounterType type: CounterType.values()) {
+			// no option is set, count everything
+			for (final CounterType type : CounterType.values()) {
 				counters.put(type, new Counter());
 			}
 		}
 	}
-	
+
 	public void update(Line line) {
 		for (final CounterType type : counters.keySet()) {
 			final Counter counter = counters.get(type);
@@ -38,7 +44,7 @@ public class Counters {
 		}
 		lastLineWasEmpty = line.getContentLength() == 0;
 	}
-	
+
 	public void updateTotal(Counters counters) {
 		for (final CounterType type : this.counters.keySet()) {
 			final Counter total = this.counters.get(type);
@@ -49,14 +55,12 @@ public class Counters {
 		}
 	}
 
-	public Counter getCounter(CounterType type) {
-		return counters.get(type);
+	public void reset() {
+		for (final Counter counter : counters.values()) {
+			counter.reset();
+		}
 	}
-	
-	public boolean isLastLineEmpty() {
-		return lastLineWasEmpty;
-	}
-	
+
 	private int getWidestCount() {
 		int max = 0;
 		for (final Counter counter : counters.values()) {
@@ -64,8 +68,14 @@ public class Counters {
 		}
 		return max;
 	}
-	
+
 	public void writeCountsLine(LineProcessor output) {
+		writeCountsLineWithFileInfo(output, null);
+	}
+
+	public void writeCountsLineWithFileInfo(LineProcessor output, String fileInfo) {
+		dontCountSingleEmptyLine();
+
 		final CharSequence countString;
 		if (counters.size() > 1) {
 			final StringBuilder sb = new StringBuilder();
@@ -80,7 +90,20 @@ public class Counters {
 			final Counter counter = counters.values().iterator().next();
 			countString = String.valueOf(counter.getCount());
 		}
-		output.processLine(new SimpleLine(countString));
+		if (fileInfo == null) {
+			output.processLine(new SimpleLine(countString));
+		} else {
+			output.processLine(new SimpleLine(countString + " " + fileInfo));
+		}
+	}
+
+	private void dontCountSingleEmptyLine() {
+		if (lastLineWasEmpty) {
+			final Counter lineCounter = counters.get(CounterType.Lines);
+			if (lineCounter != null && lineCounter.getCount() == 1) {
+				lineCounter.reset();
+			}
+		}
 	}
 
 }
