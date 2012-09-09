@@ -34,7 +34,7 @@ public class TailCharsFromStartProcessor extends AbstractTailProcessor {
 
 	@Override
 	public void finish() {
+		counter.reset();
 		getOutput().finish();
 	}
-
 }

@@ -11,7 +11,7 @@ import org.unix4j.util.Counter;
 public class TailCharsFromEndProcessor extends AbstractTailProcessor {
 	
 	private final Counter counter = new Counter();
-	private LinkedList<Line> tailLines = new LinkedList<Line>();
+	private final LinkedList<Line> tailLines = new LinkedList<Line>();
 
 	public TailCharsFromEndProcessor(TailCommand command, ExecutionContext context, LineProcessor output) {
 		super(command, context, output);
@@ -44,8 +44,9 @@ public class TailCharsFromEndProcessor extends AbstractTailProcessor {
 		while (!tailLines.isEmpty() && more) {
 			more = output.processLine(tailLines.removeFirst());//remove lines to free space for GC 
 		}
-		tailLines = null;//free for GC
+		counter.reset();
+		tailLines.clear();
 		output.finish();
 	}
-
+	
 }

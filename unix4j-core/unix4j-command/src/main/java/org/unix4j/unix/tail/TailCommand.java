@@ -45,7 +45,7 @@ public class TailCommand extends AbstractCommand<TailArguments> {
 		return getStandardInputProcessor(context, output);
 	}
 	
-	private LineProcessor getStandardInputProcessor(ExecutionContext context, LineProcessor output) {
+	private AbstractTailProcessor getStandardInputProcessor(ExecutionContext context, LineProcessor output) {
 		final TailArguments args = getArguments();
 		if (args.isChars()) {
 			if (args.isCountFromStart()) {
@@ -62,15 +62,15 @@ public class TailCommand extends AbstractCommand<TailArguments> {
 		}
 	}
 	
-	private LineProcessor getFileInputProcessor(List<FileInput> inputs, ExecutionContext context, LineProcessor output) {
-		final LineProcessor standardInputProcessor = getStandardInputProcessor(context, output);
+	private LineProcessor getFileInputProcessor(List<FileInput> inputs, ExecutionContext context, final LineProcessor output) {
+		final AbstractTailProcessor standardInputProcessor = getStandardInputProcessor(context, output);
 		if (inputs.size() <= 1 || getArguments().isSuppressHeaders()) {
 			return new RedirectInputLineProcessor(inputs, standardInputProcessor);
 		} else {
 			//write header line per file
 			final InputProcessor inputProcessor = new DefaultInputProcessor() {
 				@Override
-				public void begin(Input input, LineProcessor output) {
+				public void begin(Input input, LineProcessor standardInputProcessor) {
 					final String fileInfo = input instanceof FileInput ? ((FileInput)input).getFileInfo() : input.toString();
 					output.processLine(new SimpleLine("==> " + fileInfo + " <=="));
 				}

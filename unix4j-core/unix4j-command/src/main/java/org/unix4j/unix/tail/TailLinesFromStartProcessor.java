@@ -24,6 +24,7 @@ public class TailLinesFromStartProcessor extends AbstractTailProcessor {
 
 	@Override
 	public void finish() {
+		counter.reset();
 		getOutput().finish();
 	}
 

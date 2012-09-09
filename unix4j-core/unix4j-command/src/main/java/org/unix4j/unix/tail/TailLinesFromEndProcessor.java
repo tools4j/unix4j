@@ -8,7 +8,7 @@ import org.unix4j.processor.LineProcessor;
 
 public class TailLinesFromEndProcessor extends AbstractTailProcessor {
 	
-	private LinkedList<Line> tailLines = new LinkedList<Line>();
+	private final LinkedList<Line> tailLines = new LinkedList<Line>();
 
 	public TailLinesFromEndProcessor(TailCommand command, ExecutionContext context, LineProcessor output) {
 		super(command, context, output);
@@ -30,8 +30,7 @@ public class TailLinesFromEndProcessor extends AbstractTailProcessor {
 		while (!tailLines.isEmpty() && more) {
 			more = output.processLine(tailLines.removeFirst());//remove lines to free space for GC 
 		}
-		tailLines = null;//free for GC
+		tailLines.clear();
 		output.finish();
 	}
-
 }
