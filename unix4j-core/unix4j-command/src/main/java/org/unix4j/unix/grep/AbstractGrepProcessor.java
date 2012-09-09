@@ -6,19 +6,18 @@ import org.unix4j.processor.AbstractLineProcessor;
 import org.unix4j.processor.LineProcessor;
 
 abstract class AbstractGrepProcessor extends AbstractLineProcessor<GrepArguments> {
-	public AbstractGrepProcessor(GrepCommand command, ExecutionContext context, LineProcessor output) {
+	
+	private final LineMatcher matcher;
+	
+	public AbstractGrepProcessor(GrepCommand command, ExecutionContext context, LineProcessor output, LineMatcher matcher) {
 		super(command, context, output);
+		this.matcher = matcher;
 	}
 
 	@Override
 	public boolean processLine(Line line) {
-		final LineProcessor output = getOutput();
-		final boolean isInvertMatch = getArguments().isInvertMatch();
-		final boolean matches = matches(line);
-		if (isInvertMatch ^ matches) {
-			return output.processLine(line);
-		}
-		return true;
+		final boolean isMatch = matcher.matches(line);
+		return processLine(line, isMatch);
 	}
 
 	@Override
@@ -26,5 +25,5 @@ abstract class AbstractGrepProcessor extends AbstractLineProcessor<GrepArguments
 		getOutput().finish();
 	}
 
-	abstract protected boolean matches(Line line);
+	abstract protected boolean processLine(Line line, boolean isMatch);
 }

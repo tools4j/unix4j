@@ -64,7 +64,7 @@
 			each input file. With the {@code -v}, {@code --invertMatch} option, 
 			count non-matching lines.
 		</option>
-		<option name="listMatchingFiles" acronym="l">
+		<option name="matchingFiles" acronym="l">
 			Suppress normal output; instead print the name of each input file
 			from which output would normally have been printed. The scanning 
 			will stop on the first match.

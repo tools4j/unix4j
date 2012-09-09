@@ -2,17 +2,17 @@ package org.unix4j.unix.grep;
 
 import java.util.regex.Pattern;
 
-import org.unix4j.command.ExecutionContext;
 import org.unix4j.line.Line;
-import org.unix4j.processor.LineProcessor;
 
-final class RegexpProcessor extends AbstractGrepProcessor {
-	
+/**
+ * A matcher using regular expressions to match the pattern with a line. Uses
+ * Java's {@Link Pattern} to do the regexp stuff.
+ */
+class RegexpMatcher implements LineMatcher {
+
 	private final Pattern pattern;
 
-	public RegexpProcessor(GrepCommand command, ExecutionContext context, LineProcessor output) {
-		super(command, context, output);
-		final GrepArguments args = getArguments();
+	public RegexpMatcher(GrepArguments args) {
 		final String regex;
 		if (args.isWholeLine()) {
 			regex = args.getPattern();
