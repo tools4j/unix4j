@@ -4,8 +4,10 @@ import org.unix4j.command.ExecutionContext;
 import org.unix4j.line.Line;
 import org.unix4j.processor.AbstractLineProcessor;
 import org.unix4j.processor.LineProcessor;
-import org.unix4j.util.Counter;
 
+/**
+ * Standard input processor for line, word and char count.
+ */
 final class WcProcessor extends AbstractLineProcessor<WcArguments> {
 
 	private final Counters counters;
@@ -24,12 +26,6 @@ final class WcProcessor extends AbstractLineProcessor<WcArguments> {
 	@Override
 	public void finish() {
 		final LineProcessor output = getOutput();
-		if (counters.isLastLineEmpty()) {
-			final Counter lineCounter = counters.getCounter(CounterType.Lines);
-			if (lineCounter != null && lineCounter.getCount() == 1) {
-				lineCounter.reset();
-			}
-		}
 		counters.writeCountsLine(output);
 		output.finish();
 	}
