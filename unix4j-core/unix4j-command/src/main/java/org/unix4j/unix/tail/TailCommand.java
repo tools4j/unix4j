@@ -7,6 +7,7 @@ import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.ExecutionContext;
 import org.unix4j.io.FileInput;
 import org.unix4j.io.Input;
+import org.unix4j.line.Line;
 import org.unix4j.line.SimpleLine;
 import org.unix4j.processor.DefaultInputProcessor;
 import org.unix4j.processor.InputProcessor;
@@ -69,8 +70,14 @@ public class TailCommand extends AbstractCommand<TailArguments> {
 		} else {
 			//write header line per file
 			final InputProcessor inputProcessor = new DefaultInputProcessor() {
+				private boolean firstFile = true;
 				@Override
 				public void begin(Input input, LineProcessor standardInputProcessor) {
+					if (firstFile) {
+						firstFile = false;
+					} else {
+						output.processLine(Line.EMPTY_LINE);
+					}
 					final String fileInfo = input instanceof FileInput ? ((FileInput)input).getFileInfo() : input.toString();
 					output.processLine(new SimpleLine("==> " + fileInfo + " <=="));
 				}

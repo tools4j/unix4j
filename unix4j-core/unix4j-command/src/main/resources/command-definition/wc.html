@@ -8,7 +8,8 @@ a separate line after the output for the last file.
 </p>
 <p>
 The wc utility considers a word to be a non-zero-length string of characters
-delimited by white space.
+delimited by white space. White space characters are the set of characters for 
+which {@link Character#isWhitespace(char)} returns true.
 </p>
 <p>
 When any option is specified, wc reports only the information requested by
