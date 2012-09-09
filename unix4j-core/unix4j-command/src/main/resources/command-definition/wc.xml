@@ -67,10 +67,12 @@
 		<option name="lines" acronym="l">
 			Executes a count of lines and writes this count to the output.
 		</option>
-		<option name="chars" acronym="m">
-			Executes a count of chars and writes this count to the output.
-		</option>
 		<option name="words" acronym="w">
+			Executes a count of words and writes this count to the output. A
+			word is a non-zero-length string of characters delimited by 
+			{@link Character#isWhitespace(char) white space}.
+		</option>
+		<option name="chars" acronym="m">
 			Executes a count of chars and writes this count to the output.
 		</option>
 	</options>

@@ -21,6 +21,14 @@ public class Counters {
 	private final EnumMap<CounterType, Counter> counters = new EnumMap<CounterType, Counter>(CounterType.class);
 	private boolean lastLineWasEmpty;
 
+	/**
+	 * Constructor initialising all relevant counters depending on the options
+	 * set in {@code args}.
+	 * 
+	 * @param args
+	 *            the arguments with the options indicating which counts are
+	 *            desired
+	 */
 	public Counters(WcArguments args) {
 		for (final CounterType type : CounterType.values()) {
 			if (type.isOptionSet(args)) {
@@ -35,6 +43,12 @@ public class Counters {
 		}
 	}
 
+	/**
+	 * Updates all the relevant counters based on the specified {@code line}.
+	 * 
+	 * @param line
+	 *            the line to incorporate into the counts
+	 */
 	public void update(Line line) {
 		for (final CounterType type : counters.keySet()) {
 			final Counter counter = counters.get(type);
@@ -45,6 +59,14 @@ public class Counters {
 		lastLineWasEmpty = line.getContentLength() == 0;
 	}
 
+	/**
+	 * Updates the totals counter based on some other counter. Adds the counts
+	 * of the specified {@code counters} to the total counts of {@code this}
+	 * counter.
+	 * 
+	 * @param counters
+	 *            the counters with per-file counts
+	 */
 	public void updateTotal(Counters counters) {
 		for (final CounterType type : this.counters.keySet()) {
 			final Counter total = this.counters.get(type);
@@ -55,6 +77,9 @@ public class Counters {
 		}
 	}
 
+	/**
+	 * Resets all counts to zero.
+	 */
 	public void reset() {
 		for (final Counter counter : counters.values()) {
 			counter.reset();
@@ -69,10 +94,25 @@ public class Counters {
 		return max;
 	}
 
+	/**
+	 * Writes the counts line to the specified {@code output}.
+	 * 
+	 * @param output
+	 *            the output destination
+	 */
 	public void writeCountsLine(LineProcessor output) {
 		writeCountsLineWithFileInfo(output, null);
 	}
 
+	/**
+	 * Writes the counts line to the specified {@code output} appending the
+	 * specified file information.
+	 * 
+	 * @param output
+	 *            the output destination
+	 * @param fileInfo
+	 *            the file information, usually a file name or path
+	 */
 	public void writeCountsLineWithFileInfo(LineProcessor output, String fileInfo) {
 		dontCountSingleEmptyLine();
 
