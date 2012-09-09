@@ -119,7 +119,7 @@ abstract class GlobalProcessor extends UniqProcessor {
 		}
 		@Override
 		protected void writeLine(Line line, long count, int maxCountDigits, LineProcessor output) {
-			UniqCommand.writeCountLine(line, count, Math.max(3, maxCountDigits), output);
+			CountUtil.writeCountLine(line, count, Math.max(3, maxCountDigits), output);
 		}
 	}
 	

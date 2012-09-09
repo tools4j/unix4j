@@ -44,13 +44,13 @@ public class StringUtil {
 	 * @return the value as a fixed size string, padded or truncated if
 	 *         necessary
 	 */
-	public static final String fixSizeString(int size, boolean left, char filler, int value) {
+	public static final String fixSizeString(int size, boolean left, char filler, long value) {
 		return fixSizeString(size, left, filler, String.valueOf(value));
 	}
 
 	/**
 	 * Returns the given string {@code s} into a string of fixed length
-	 * {@code size} padding or truncating the string if necessary.
+	 * {@code size} padding or truncating the string with spaces if necessary.
 	 * <p>
 	 * If {@code left==true}, the given string {@code s} is left-aligned
 	 * appending spaces to make up the fixed length. If {@code s} turns out to

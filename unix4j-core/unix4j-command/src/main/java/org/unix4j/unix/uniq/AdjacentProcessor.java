@@ -124,7 +124,7 @@ abstract class AdjacentProcessor extends UniqProcessor {
 		@Override
 		protected void writeLine(Line line, long count, LineProcessor output) {
 			if (count > 0) {
-				UniqCommand.writeCountLine(line, count, 3, output);
+				CountUtil.writeCountLine(line, count, 3, output);
 			}
 		}
 	}
