@@ -13,9 +13,9 @@ abstract class AbstractGrepProcessor extends AbstractLineProcessor<GrepArguments
 	@Override
 	public boolean processLine(Line line) {
 		final LineProcessor output = getOutput();
-		final boolean isInvert = getArguments().isInvert();
+		final boolean isInvertMatch = getArguments().isInvertMatch();
 		final boolean matches = matches(line);
-		if (isInvert ^ matches) {
+		if (isInvertMatch ^ matches) {
 			return output.processLine(line);
 		}
 		return true;

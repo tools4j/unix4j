@@ -13,7 +13,12 @@ final class RegexpProcessor extends AbstractGrepProcessor {
 	public RegexpProcessor(GrepCommand command, ExecutionContext context, LineProcessor output) {
 		super(command, context, output);
 		final GrepArguments args = getArguments();
-		final String regex = ".*" + args.getPattern() + ".*";
+		final String regex;
+		if (args.isWholeLine()) {
+			regex = args.getPattern();
+		} else {
+			regex = ".*" + args.getPattern() + ".*";
+		}
 		this.pattern = Pattern.compile(regex, args.isIgnoreCase() ? Pattern.CASE_INSENSITIVE : 0);
 	}
 

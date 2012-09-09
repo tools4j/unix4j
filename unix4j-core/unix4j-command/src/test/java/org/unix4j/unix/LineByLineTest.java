@@ -90,7 +90,7 @@ public class LineByLineTest {
 		input.addLine("1").addLine("2").addLine("3").addLine("4").addLine("5");
 		IoTestStub.startRecording();
 
-		Unix4j.from(input).head(5).grep(GrepOption.invert, "blah").toOutput(output);
+		Unix4j.from(input).head(5).grep(GrepOption.invertMatch, "blah").toOutput(output);
 
 		IoTestStub.stopRecordingAndVerify()
 				.expect(input,  IoTestStub.ActionType.READ,  "1")
@@ -115,7 +115,7 @@ public class LineByLineTest {
 		input.addLine("1").addLine("2").addLine("3").addLine("4").addLine("5");
 		IoTestStub.startRecording();
 
-		Unix4j.from(input).grep(GrepOption.invert, "blah").head(5).toOutput(output);
+		Unix4j.from(input).grep(GrepOption.invertMatch, "blah").head(5).toOutput(output);
 
 		IoTestStub.stopRecordingAndVerify()
 				.expect(input,  IoTestStub.ActionType.READ,  "1")

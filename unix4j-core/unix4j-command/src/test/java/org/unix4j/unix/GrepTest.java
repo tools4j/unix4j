@@ -148,7 +148,7 @@ public class GrepTest {
 				.appendLine(TWO)
 				.appendLine(COUNT);
 		final String regex = "This";
-		assertGrep( input, regex, expectedOutput, GrepOption.invert );
+		assertGrep( input, regex, expectedOutput, GrepOption.invertMatch);
 	}
 
 	@Test
@@ -164,7 +164,7 @@ public class GrepTest {
 				// .appendLine(TWO);
 				.appendLine(COUNT);
 		final String regex = "t";
-		assertGrep( input, regex, expectedOutput, GrepOption.invert );
+		assertGrep( input, regex, expectedOutput, GrepOption.invertMatch);
 	}
 
 	@Test
