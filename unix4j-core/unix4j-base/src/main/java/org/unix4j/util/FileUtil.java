@@ -15,10 +15,10 @@ import java.util.regex.Pattern;
 public class FileUtil {
 
 	public static final String ROOT_UNIX = "/";
-	
+
 	// absolute prefix also: \\\\ i.e. actually \\ for network drive
 	public static final String ROOT_WINDOWS = "C:\\";
-	
+
 	public static final String ROOT = isWindows() ? ROOT_WINDOWS : ROOT_UNIX;
 
 	private static boolean isWindows() {
@@ -28,7 +28,7 @@ public class FileUtil {
 	/**
 	 * Returns the user's current working directory taken from the system
 	 * property "user.dir".
-	 * 
+	 *
 	 * @return the user's current working directory
 	 * @see System#getProperties()
 	 */
@@ -39,7 +39,7 @@ public class FileUtil {
 	/**
 	 * Returns the specified files in a new mutable array list. This is similar
 	 * to {@link Arrays#asList(Object...)} but the returned list is expandable.
-	 * 
+	 *
 	 * @param files
 	 *            the files to add to a new list
 	 * @return a new array list containing the specified files
@@ -80,7 +80,7 @@ public class FileUtil {
 	 * "../smith/public/holidays.pdf"</li>
 	 * <li>("/home/john", "/var/tmp/test.out") &rarr; "/var/tmp/test.out"</li>
 	 * </ol>
-	 * 
+	 *
 	 * @param root
 	 *            the root directory for the relative path
 	 * @param file
@@ -127,7 +127,7 @@ public class FileUtil {
 	 * <p>
 	 * For instance, a list with the 3 elements "var", "tmp", "out.txt" is
 	 * returned for an input file "/var/tmp/out.txt".
-	 * 
+	 *
 	 * @param file
 	 *            the file whose path elements should be returned
 	 * @return the path elements of {@code file}
@@ -147,7 +147,7 @@ public class FileUtil {
 	 * Expands files if necessary, meaning that input files with wildcards are
 	 * expanded. If the specified {@code files} list contains no wildcard, the
 	 * files are simply returned; all wildcard files are expanded.
-	 * 
+	 *
 	 * @param paths
 	 *            the file paths, possibly containing wildcard parts
 	 * @return the expanded files resolving wildcards
@@ -205,7 +205,7 @@ public class FileUtil {
 	 * repeated 0 to many times, "?" for exactly one arbitrary character. Both
 	 * characters can be escaped with a preceding
 	 * "\" character (also escaped, that is, "\\").
-	 * 
+	 *
 	 * @param name
 	 *            the name or pattern without path
 	 * @return a file name filter matching either the name or the pattern
@@ -239,7 +239,7 @@ public class FileUtil {
 	 * characters. The characters "*" and "?" are considered wildcard chars if
 	 * they are not escaped with a preceding
 	 * "\" character (also escaped, that is, "\\").
-	 * 
+	 *
 	 * @param name
 	 *            the name or path
 	 * @return true if the name contains unescaped wildcard characters
@@ -257,26 +257,59 @@ public class FileUtil {
 
 	/**
 	 * This method returns the output directory of a given class.
-	 * 
+	 *
 	 * Example: Given a class: com.abc.def.MyClass Which is outputted to a
 	 * directory: /home/ben/myproject/target/com/abc/dev/MyClass.class This
 	 * method will return: /home/ben/myproject/target
-	 * 
+	 *
 	 * @param clazz
 	 * @return A file representing the output directory containing the class and
 	 *         parent packages
 	 */
 
 	public static File getOutputDirectoryGivenClass(final Class<?> clazz) {
-		final String resource = "/" + clazz.getName().replace(".", "/") + ".class";
-		final URL classFileURL = clazz.getResource(resource);
+		File parentDir = getDirectoryOfClassFile(clazz);
 		final int packageDepth = clazz.getName().split("\\.").length;
-		final File classFile = new File(classFileURL.getFile());
-		File parentDir = classFile.getParentFile();
 		for (int i = 0; i < (packageDepth - 1); i++) {
 			parentDir = parentDir.getParentFile();
 		}
 		return parentDir;
+	}
+
+	/**
+	 * This method returns the parent directory of a given class.
+	 *
+	 * Example: Given a class: com.abc.def.MyClass Which is outputted to a
+	 * directory: /home/ben/myproject/target/com/abc/def/MyClass.class This
+	 * method will return: /home/ben/myproject/target/com/abc/def
+	 *
+	 * @param clazz
+	 * @return A file representing the output directory containing the class and
+	 *         parent packages
+	 */
+	public static File getDirectoryOfClassFile(Class<?> clazz) {
+		final String resource = "/" + clazz.getName().replace(".", "/") + ".class";
+		final URL classFileURL = clazz.getResource(resource);
+		final File classFile = new File(classFileURL.getFile());
+		return classFile.getParentFile();
+	}
+
+	/**
+	 * This method returns the parent directory of a given class.
+	 *
+	 * Example: Given a class: com.abc.def.MyClass Which is outputted to a
+	 * directory: /home/ben/myproject/target/com/abc/def/MyClass.class This
+	 * method will return: /home/ben/myproject/target/com/abc/def
+	 *
+	 * @param className fully qualified class name
+	 * @return A file representing the output directory containing the class and
+	 *         parent packages
+	 */
+	public static File getDirectoryOfClassFile(final String className) {
+		final String resource = "/" + className.replace(".", "/") + ".class";
+		final URL classFileURL = FileUtil.class.getResource(resource);
+		final File classFile = new File(classFileURL.getFile());
+		return classFile.getParentFile();
 	}
 
 	// no instances

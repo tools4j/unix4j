@@ -1,237 +1,173 @@
 package org.unix4j.unix;
 
-import java.io.StringWriter;
-
 import org.junit.Test;
 import org.unix4j.Unix4j;
-import org.unix4j.unix.grep.GrepOption;
-import org.unix4j.unix.grep.GrepOptions;
+import org.unix4j.builder.Unix4jCommandBuilder;
+import org.unix4j.util.FileUtil;
 import org.unix4j.util.MultilineString;
+import org.unix4j.util.StackTraceUtil;
+
+import java.io.File;
+
+import static java.lang.String.format;
+import static junit.framework.Assert.assertEquals;
 
 /**
  * Unit test for simple App.
  */
 
 public class GrepTest {
-	private final static String THIS_IS_A_TEST_BLAH_BLAH_BLAH = "This is a test blah blah blah";
-	private final static String THIS_IS_A_TEST_BLAH_BLAH = "This is a test blah blah";
-	private final static String THIS_IS_A_TEST_ONE_TWO_THREE = "This is a test one two three";
-	private final static String ONE = "one";
-	private final static String A = "a";
-	private final static String EMPTY_LINE = "";
-	private final static String TWO = "two";
-	private final static String COUNT = "def\\d123";
-	private final static MultilineString input;
-
-	static {
-		input = new MultilineString();
-		input.appendLine(THIS_IS_A_TEST_BLAH_BLAH_BLAH)
-				.appendLine(THIS_IS_A_TEST_BLAH_BLAH)
-				.appendLine(THIS_IS_A_TEST_ONE_TWO_THREE)
-				.appendLine(ONE)
-				.appendLine(A)
-				.appendLine(EMPTY_LINE)
-				.appendLine(TWO)
-				.appendLine(COUNT);
-	}
-
 	@Test
 	public void testGrep_simple1() {
-		final MultilineString expectedOutput = new MultilineString();
-		expectedOutput.appendLine(THIS_IS_A_TEST_BLAH_BLAH_BLAH)
-				.appendLine(THIS_IS_A_TEST_BLAH_BLAH)
-				.appendLine(THIS_IS_A_TEST_ONE_TWO_THREE);
-				// .appendLine(ONE)
-				// .appendLine(A)
-				// .appendLine(EMPTY_LINE)
-				// .appendLine(TWO);
-		final String regex = "This";
-		assertGrep( input, regex, expectedOutput );
+		final SimpleCommandTester tester = new SimpleCommandTester(this.getClass());
+		tester.run(Unix4j.fromFile(tester.getInputFile()).grep("This"));
+		tester.run(Unix4j.create().grep("This", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_simple2() {
-		final MultilineString expectedOutput = new MultilineString();
-		expectedOutput.appendLine(THIS_IS_A_TEST_BLAH_BLAH_BLAH)
-				.appendLine(THIS_IS_A_TEST_BLAH_BLAH)
-				.appendLine(THIS_IS_A_TEST_ONE_TWO_THREE)
-				.appendLine(A);
-				// .appendLine(EMPTY_LINE)
-				// .appendLine(TWO);
-		final String regex = "a";
-		assertGrep( input, regex, expectedOutput );
+		final SimpleCommandTester tester = new SimpleCommandTester(this.getClass());
+		tester.run(Unix4j.fromFile(tester.getInputFile()).grep("a"));
+		tester.run(Unix4j.create().grep("a", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_simple3() {
-		final MultilineString expectedOutput = new MultilineString();
-		expectedOutput.appendLine(THIS_IS_A_TEST_BLAH_BLAH_BLAH)
-				.appendLine(THIS_IS_A_TEST_BLAH_BLAH)
-				.appendLine(THIS_IS_A_TEST_ONE_TWO_THREE)
-				.appendLine(ONE)
-				.appendLine(A)
-				.appendLine(EMPTY_LINE)
-				.appendLine(TWO)
-				.appendLine(COUNT);
-		final String regex = ".*";
-		assertGrep( input, regex, expectedOutput );
+		final SimpleCommandTester tester = new SimpleCommandTester(this.getClass());
+		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(".*"));
+		tester.run(Unix4j.create().grep(".*", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_simple4() {
-		final MultilineString expectedOutput = new MultilineString();
-		expectedOutput.appendLine(THIS_IS_A_TEST_BLAH_BLAH_BLAH)
-				.appendLine(THIS_IS_A_TEST_BLAH_BLAH)
-				.appendLine(THIS_IS_A_TEST_ONE_TWO_THREE)
-				.appendLine(ONE)
-				.appendLine(A)
-				// .appendLine(EMPTY_LINE)
-				.appendLine(TWO)
-				.appendLine(COUNT);
-		final String regex = ".+";
-		assertGrep( input, regex, expectedOutput );
+		final SimpleCommandTester tester = new SimpleCommandTester(this.getClass());
+		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(".+"));
+		tester.run(Unix4j.create().grep(".+", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_simple5() {
-		final MultilineString expectedOutput = new MultilineString();
-		expectedOutput.appendLine(THIS_IS_A_TEST_BLAH_BLAH_BLAH)
-				.appendLine(THIS_IS_A_TEST_BLAH_BLAH)
-				.appendLine(THIS_IS_A_TEST_ONE_TWO_THREE);
-				// .appendLine(ONE)
-				// .appendLine(A)
-				// .appendLine(EMPTY_LINE)
-				// .appendLine(TWO);
-		final String regex = "\\s";
-		assertGrep( input, regex, expectedOutput );
+		final SimpleCommandTester tester = new SimpleCommandTester(this.getClass());
+		tester.run(Unix4j.fromFile(tester.getInputFile()).grep("\\s"));
+		tester.run(Unix4j.create().grep("\\s", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_caseIsIncorrect() {
-		final MultilineString expectedOutput = new MultilineString();
-				// expectedOutput
-				// .appendLine(THIS_IS_A_TEST_BLAH_BLAH_BLAH)
-				// .appendLine(THIS_IS_A_TEST_BLAH_BLAH)
-				// .appendLine(THIS_IS_A_TEST_ONE_TWO_THREE);
-				// .appendLine(ONE)
-				// .appendLine(A)
-				// .appendLine(EMPTY_LINE)
-				// .appendLine(TWO);
-		final String regex = "THIS";
-		assertGrep( input, regex, expectedOutput );
+		final SimpleCommandTester tester = new SimpleCommandTester(this.getClass());
+		tester.run(Unix4j.fromFile(tester.getInputFile()).grep("THIS"));
+		tester.run(Unix4j.create().grep("THIS", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_ignoringCase() {
-		final MultilineString expectedOutput = new MultilineString();
-		expectedOutput.appendLine(THIS_IS_A_TEST_BLAH_BLAH_BLAH)
-				.appendLine(THIS_IS_A_TEST_BLAH_BLAH)
-				.appendLine(THIS_IS_A_TEST_ONE_TWO_THREE);
-				// .appendLine(ONE)
-				// .appendLine(A)
-				// .appendLine(EMPTY_LINE)
-				// .appendLine(TWO);
-		final String regex = "THIS";
-		assertGrep( input, regex, expectedOutput, GrepOption.ignoreCase );
+		final SimpleCommandTester tester = new SimpleCommandTester(this.getClass());
+		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(Grep.OPTIONS.ignoreCase, "THIS"));
+		tester.run(Unix4j.create().grep(Grep.OPTIONS.ignoreCase, "THIS", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_inverseMatch() {
-		final MultilineString expectedOutput = new MultilineString();
-		expectedOutput
-				// .appendLine(THIS_IS_A_TEST_BLAH_BLAH_BLAH)
-				// .appendLine(THIS_IS_A_TEST_BLAH_BLAH)
-				// .appendLine(THIS_IS_A_TEST_ONE_TWO_THREE);
-				.appendLine(ONE)
-				.appendLine(A)
-				.appendLine(EMPTY_LINE)
-				.appendLine(TWO)
-				.appendLine(COUNT);
-		final String regex = "This";
-		assertGrep( input, regex, expectedOutput, GrepOption.invertMatch);
+		final SimpleCommandTester tester = new SimpleCommandTester(this.getClass());
+		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(Grep.OPTIONS.invertMatch, "This"));
+		tester.run(Unix4j.create().grep(Grep.OPTIONS.invertMatch, "This", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_inverseMatchIgnoreCase() {
-		final MultilineString expectedOutput = new MultilineString();
-		expectedOutput
-				// .appendLine(THIS_IS_A_TEST_BLAH_BLAH_BLAH)
-				// .appendLine(THIS_IS_A_TEST_BLAH_BLAH)
-				// .appendLine(THIS_IS_A_TEST_ONE_TWO_THREE);
-				.appendLine(ONE)
-				.appendLine(A)
-				.appendLine(EMPTY_LINE)
-				// .appendLine(TWO);
-				.appendLine(COUNT);
-		final String regex = "t";
-		assertGrep( input, regex, expectedOutput, GrepOption.invertMatch);
+		final SimpleCommandTester tester = new SimpleCommandTester(this.getClass());
+		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(Grep.OPTIONS.invertMatch.ignoreCase, "t"));
+		tester.run(Unix4j.create().grep(Grep.OPTIONS.invertMatch.ignoreCase, "t", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_usingRegexCharactersToFindLiteralTextWithoutEscaping() {
-		final MultilineString expectedOutput = new MultilineString();
-			// expectedOutput
-			// .appendLine(THIS_IS_A_TEST_BLAH_BLAH_BLAH)
-			// .appendLine(THIS_IS_A_TEST_BLAH_BLAH)
-			// .appendLine(THIS_IS_A_TEST_ONE_TWO_THREE);
-			// .appendLine(ONE)
-			// .appendLine(A)
-			// .appendLine(EMPTY_LINE)
-			// .appendLine(TWO);
-			// .appendLine(COUNT);
-		final String regex = "def\\d123";
-		assertGrep( input, regex, expectedOutput );
+		final SimpleCommandTester tester = new SimpleCommandTester(this.getClass());
+		tester.run(Unix4j.fromFile(tester.getInputFile()).grep("def\\d123"));
+		tester.run(Unix4j.create().grep("def\\d123", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_usingRegexCharactersToFindLiteralTextWithoutEscapingButWithFixedStringOptionSet() {
-		final MultilineString expectedOutput = new MultilineString();
-		expectedOutput
-				// .appendLine(THIS_IS_A_TEST_BLAH_BLAH_BLAH)
-				// .appendLine(THIS_IS_A_TEST_BLAH_BLAH)
-				// .appendLine(THIS_IS_A_TEST_ONE_TWO_THREE);
-				// .appendLine(ONE)
-				// .appendLine(A)
-				// .appendLine(EMPTY_LINE)
-				// .appendLine(TWO);
-				.appendLine(COUNT);
-		final String regex = "def\\d123";
-		assertGrep( input, regex, expectedOutput, GrepOption.fixedStrings );
+		final SimpleCommandTester tester = new SimpleCommandTester(this.getClass());
+		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(Grep.OPTIONS.fixedStrings, "def\\d123"));
+		tester.run(Unix4j.create().grep(Grep.OPTIONS.fixedStrings, "def\\d123", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_fixedStringButWithWrongCase() {
-		final MultilineString expectedOutput = MultilineString.EMPTY;
-		final String regex = "DEF\\d123";
-		assertGrep( input, regex, expectedOutput, GrepOption.fixedStrings );
+		final SimpleCommandTester tester = new SimpleCommandTester(this.getClass());
+		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(Grep.OPTIONS.fixedStrings, "DEF\\d123"));
+		tester.run(Unix4j.create().grep(Grep.OPTIONS.fixedStrings, "DEF\\d123", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_fixedStringWithWrongCaseAndIngoringCase() {
-		final MultilineString expectedOutput = new MultilineString();
-		expectedOutput
-				// .appendLine(THIS_IS_A_TEST_BLAH_BLAH_BLAH)
-				// .appendLine(THIS_IS_A_TEST_BLAH_BLAH)
-				// .appendLine(THIS_IS_A_TEST_ONE_TWO_THREE);
-				// .appendLine(ONE)
-				// .appendLine(A)`
-				// .appendLine(TWO);
-				.appendLine(COUNT);
-		final String regex = "DEF\\d123";
-		assertGrep( input, regex, expectedOutput, Grep.OPTIONS.fixedStrings.ignoreCase);
+		final SimpleCommandTester tester = new SimpleCommandTester(this.getClass());
+		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(Grep.OPTIONS.fixedStrings.ignoreCase, "DEF\\d123"));
+		tester.run(Unix4j.create().grep(Grep.OPTIONS.fixedStrings.ignoreCase, "DEF\\d123", tester.getInputFile()));
 	}
 
-	private void assertGrep(final MultilineString input, final String expression, final MultilineString expectedOutput){
-		final StringWriter actualOutputStringWriter = new StringWriter();
-		Unix4j.from(input.toInput()).grep(expression).toWriter(actualOutputStringWriter);
-		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
-		actualOutput.assertMultilineStringEquals(expectedOutput);
+	private class SimpleCommandTester {
+		private final String expectedOutput;
+		private final File testMethodInputFile;
+
+		public SimpleCommandTester(final Class testClass){
+			final File testClassParentDir = FileUtil.getDirectoryOfClassFile(testClass);
+			final StackTraceElement stackTraceElement = StackTraceUtil.getCurrentMethodStackTraceElement(1);
+			final String testClassOutputDirPath = testClassParentDir.getPath() + "/" + testClass.getSimpleName();
+			final String testMethodName = stackTraceElement.getMethodName();
+
+			testMethodInputFile = new File(format("%s/%s.input", testClassOutputDirPath, testMethodName));
+			final File testMethodExpectedOutputFile = new File(format("%s/%s.output", testClassOutputDirPath, testMethodName));
+			expectedOutput = Unix4j.fromFile(testMethodExpectedOutputFile).toStringResult();
+		}
+
+		public File getInputFile(){
+			return testMethodInputFile;
+		}
+
+		public void run(final Unix4jCommandBuilder command){
+			final String actualOutput = command.toStringResult();
+
+			if(!expectedOutput.equals(actualOutput)){
+				printFailureCommandToStandardErr(command);
+			}
+			assertEquals(expectedOutput, actualOutput);
+		}
+
+		private void printFailureCommandToStandardErr(Unix4jCommandBuilder command) {
+			System.err.println("===============================================================");
+			System.err.println("FAILED testing command: " + command.toString());
+			System.err.println("===============================================================");
+			System.err.println("---------------------------------------------------------------");
+			System.err.println("INPUT:");
+			System.err.println("---------------------------------------------------------------");
+			System.err.println(Unix4j.fromFile(testMethodInputFile).toStringResult());
+			System.err.println("---------------------------------------------------------------");
+			System.err.println("EXPECTED OUTPUT:");
+			System.err.println("---------------------------------------------------------------");
+			System.err.println(expectedOutput);
+			System.err.println("---------------------------------------------------------------");
+			System.err.println("ACTUAL OUTPUT:");
+			System.err.println("---------------------------------------------------------------");
+			System.err.println(expectedOutput);
+			System.err.println("---------------------------------------------------------------");
+			System.err.println();
+		}
 	}
 
-	private void assertGrep(final MultilineString input, final String expression, final MultilineString expectedOutput, GrepOptions options){
-		final StringWriter actualOutputStringWriter = new StringWriter();
-		Unix4j.from(input.toInput()).grep(options, expression).toWriter(actualOutputStringWriter);
-		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
-		actualOutput.assertMultilineStringEquals(expectedOutput);
+	private void testTestToInputAndOutputFiles(MultilineString input, MultilineString expectedOutput) {
+		final File testClassParentDir = FileUtil.getDirectoryOfClassFile(this.getClass());
+		final String testClassOutputDirPath = testClassParentDir.getPath() + "/" + this.getClass().getSimpleName();
+
+		final StackTraceElement stackTraceElement = StackTraceUtil.getCurrentMethodStackTraceElement(1);
+		final String testMethodName = stackTraceElement.getMethodName();
+
+		final File testMethodInputFile = new File(format("%s/%s.input", testClassOutputDirPath, testMethodName));
+		final File testMethodExpectedOutputFile = new File(format("%s/%s.output", testClassOutputDirPath, testMethodName));
+
+		Unix4j.fromString(input.toString()).toFile(testMethodInputFile);
+		Unix4j.fromString(expectedOutput.toString()).toFile(testMethodExpectedOutputFile);
 	}
 }
