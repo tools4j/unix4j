@@ -14,9 +14,9 @@ import org.unix4j.unix.Grep;
 import org.unix4j.util.FileUtil;
 
 /**
- * User: ben
+ * Implementation of the {@code Grep grep} command.
  */
-public class GrepCommand extends AbstractCommand<GrepArguments> {
+class GrepCommand extends AbstractCommand<GrepArguments> {
 	public GrepCommand(GrepArguments arguments) {
 		super(Grep.NAME, arguments);
 	}

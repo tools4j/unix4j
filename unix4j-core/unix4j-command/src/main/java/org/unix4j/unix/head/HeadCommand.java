@@ -18,9 +18,9 @@ import org.unix4j.unix.Head;
 import org.unix4j.util.FileUtil;
 
 /**
- * Head command implementation.
+ * Implementation of the {@code Head head} command.
  */
-public class HeadCommand extends AbstractCommand<HeadArguments> {
+class HeadCommand extends AbstractCommand<HeadArguments> {
 	public HeadCommand(HeadArguments arguments) {
 		super(Head.NAME, arguments);
 		if (arguments.isCountSet() && arguments.getCount() < 0) {

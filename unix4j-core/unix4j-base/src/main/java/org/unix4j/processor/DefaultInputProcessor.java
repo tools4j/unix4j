@@ -5,9 +5,8 @@ import org.unix4j.line.Line;
 
 /**
  * The {@code DefaultInputProcessor} simply writes every line passed to
- * {@link #processLine(Input, Line, LineProcessor)} to the output and calls
- * {@code output.finish()} in {@link #finish(Input, LineProcessor)}. Subclasses
- * often override some of the methods to enhance or modify this default
+ * {@link #processLine(Input, Line, LineProcessor)} to the output. Subclasses
+ * often override some of the methods to enhance or modify this default 
  * behavior.
  */
 public class DefaultInputProcessor implements InputProcessor {
@@ -25,7 +24,7 @@ public class DefaultInputProcessor implements InputProcessor {
 
 	@Override
 	public void finish(Input input, LineProcessor output) {
-		output.finish();
+		//default: no op
 	}
 
 }
