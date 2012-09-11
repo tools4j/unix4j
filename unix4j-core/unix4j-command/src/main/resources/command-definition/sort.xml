@@ -19,8 +19,8 @@
 		properly terminated with a line ending (usually the last line in a file)
 		</note>
 		<!-- TODO implement sort options and remove the following notes -->
-		<note>The following options are currently not supported: check, merge</note>
-		<note>The following sort order options are currently not supported: dictionaryOrder, numericSort, versionSort</note>
+		<note>The following options are currently not supported: {@code check}, {@code merge}</note>
+		<note>The following sort order options are currently not supported: {@code dictionaryOrder}, {@code numericSort}, {@code versionSort}</note>
 	</notes>
 	<methods>
 		<method input="true">
