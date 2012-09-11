@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<command-def xmlns="http://www.unix4j.org/command-def"
+			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			 xsi:schemaLocation="http://www.unix4j.org/command-def command-def.xsd">
+
+	<command name="sed" class="org.unix4j.unix.Sed" package="org.unix4j.unix.sed"/>
+	<name>sed - stream editor for filtering and transforming text</name>
+	<synopsis>sed script</synopsis>
+	<description ref="sed.html"/>
+	<notes>
+	</notes>
+	<methods>
+		<method args="script" input="false">
+			Executes the given sed script.
+		</method>
+	</methods>
+	<options>
+		<option name="dummy" acronym="d">
+			dummy to get codegen working
+		</option>
+	</options>
+	<operands>
+		<operand name="script" type="String">
+			Sed script
+		</operand>
+	</operands>
+</command-def>
