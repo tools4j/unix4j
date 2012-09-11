@@ -80,7 +80,7 @@ public class CommandChainingTest {
 				.appendLine("Dude is a test blah blah blah")
 				.appendLine("Dude is a test one two three")
 				.appendLine("two");
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).head(10).sort().tail(7).sedSubstitute("This", "Dude").toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).head(10).sort().tail(7).sed("s/This/Dude/").toStringResult());
 	}
 
 	@Test
@@ -90,30 +90,30 @@ public class CommandChainingTest {
 				.appendLine("Dude is a test blah blah")
 				.appendLine("Dude is a test blah blah blah")
 				.appendLine("Dude is a test one two three");
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).head(10).sort().tail(7).sedSubstitute("This", "Dude").grep("Dude").toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).head(10).sort().tail(7).sed("s/This/Dude/").grep("Dude").toStringResult());
 	}
 
-//	@Test
-//	public void test_headSortSedTailGrepHeadWc() {
-//		System.out.println(
-//				Unix4j.fromString(input.toString())
-//						.head(10)
-//						.sort()
-//						.tail(7)
-//						.sedSubstitute("This", "Dude")
-//						.grep("Dude")
-//						.head(1)
-//						.wcCountWords()
-//						.toStringResult());
-//		assertEquals("6", /* 6 words */
-//				Unix4j.fromString(input.toString())
-//						.head(10)
-//						.sort()
-//						.tail(7)
-//						.sedSubstitute("This", "Dude")
-//						.grep("Dude")
-//						.head(1)
-//						.wcCountWords()
-//						.toStringResult());
-//	}
+	@Test
+	public void test_headSortSedTailGrepHeadWc() {
+		System.out.println(
+				Unix4j.fromString(input.toString())
+						.head(10)
+						.sort()
+						.tail(7)
+						.sed("s/This/Dude/")
+						.grep("Dude")
+						.head(1)
+						.wc(Wc.OPTIONS.words)
+						.toStringResult());
+		assertEquals("6", /* 6 words */
+				Unix4j.fromString(input.toString())
+						.head(10)
+						.sort()
+						.tail(7)
+						.sed("s/This/Dude/")
+						.grep("Dude")
+						.head(1)
+						.wc(Wc.OPTIONS.words)
+						.toStringResult());
+	}
 }
