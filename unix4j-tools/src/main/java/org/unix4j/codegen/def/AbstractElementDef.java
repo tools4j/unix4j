@@ -16,19 +16,27 @@ import freemarker.template.TemplateModelException;
  */
 abstract public class AbstractElementDef implements TemplateHashModel {
 
-	private final Map<String, Field> fields = new LinkedHashMap<String, Field>();
+	private Map<String, Field> fields;
 
-	public AbstractElementDef() {
+	private final Map<String, Field> getFields() {
+		if (fields == null) {
+			fields = initFields();
+		}
+		return fields;
+	}
+	private final Map<String, Field> initFields() {
+		final Map<String, Field> fields = new LinkedHashMap<String, Field>();
 		for (final Field field : getClass().getFields()) {
 			if (0 == (field.getModifiers() & Modifier.STATIC)) {
 				fields.put(field.getName(), field);
 			}
 		}
+		return fields;
 	}
 
 	@Override
 	public boolean isEmpty() throws TemplateModelException {
-		return fields.isEmpty();
+		return getFields().isEmpty();
 	}
 
 	@Override
@@ -41,7 +49,7 @@ abstract public class AbstractElementDef implements TemplateHashModel {
 	}
 
 	public Object getFieldValue(String name) {
-		final Field field = fields.get(name);
+		final Field field = getFields().get(name);
 		try {
 			return field == null ? null : field.get(this);
 		} catch (Exception e) {
@@ -56,7 +64,7 @@ abstract public class AbstractElementDef implements TemplateHashModel {
 
 	public Map<String, Object> toMap() {
 		final Map<String, Object> map = new LinkedHashMap<String, Object>();
-		for (final String name : fields.keySet()) {
+		for (final String name : getFields().keySet()) {
 			map.put(name, getFieldValue(name));
 		}
 		return map;
