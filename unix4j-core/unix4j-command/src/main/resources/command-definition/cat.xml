@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<command-def	xmlns="http://www.unix4j.org/command-def" 
+				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xsi:schemaLocation="http://www.unix4j.org/command-def command-def.xsd">
+	
+	<command name="cat" class="org.unix4j.unix.Cat" package="org.unix4j.unix.cat"/>
+	<name>
+		cat - concatenate and print files
+	</name>
+	<synopsis>
+		ORIGINAL:	cat [-u][file ...]
+					cat [-benstuv] [file ...]
+		CURRENT:	cat [-bns] [file ...]
+	</synopsis>
+	<description ref="cat.html"/>
+	<notes/>
+	<methods>
+		<method args="" input="true">
+			Reads the lines from the standard input and writes them to the
+			standard output.
+		</method>
+		<method args="files" input="false">
+			Reads the lines from the specified files and writes them to the
+			standard output. The files are processed in command-argument order.
+		</method>
+		<method args="paths" input="false">
+			Reads the lines from the specified files and writes them to the
+			standard output. The path arguments are expanded if wildcards are
+			used and processed in command-argument order.
+		</method>
+		<method args="options" input="true">
+			Reads the lines from the standard input and writes them to the
+			standard output; the given options define the details of the output
+			format.
+		</method>
+		<method args="options,files" input="false">
+			Reads the lines from the specified files and writes them to the
+			standard output; the given options define the details of the output
+			format. The files are processed in command-argument order.
+		</method>
+		<method args="options,paths" input="false">
+			Reads the lines from the specified files and writes them to the
+			standard output; the given options define the details of the output
+			format. The path arguments are expanded if wildcards are used and
+			processed in command-argument order.
+		</method>
+	</methods>
+	<options>
+		<option name="numberNonBlankLines" acronym="b">
+			Number the non-blank output lines, starting at 1.
+		</option>
+		<option name="numberLines" acronym="n">
+			Number the output lines, starting at 1.
+		</option>
+		<option name="squeezeEmptyLines" acronym="s">
+			Squeeze multiple adjacent empty lines, causing the output to be 
+			single spaced.
+		</option>
+	</options>
+	<operands>
+		<operand name="files" type="java.io.File...">
+			The input files to be printed.
+		</operand>
+		<operand name="paths" type="String...">
+			Pathnames of the input files to be printed; wildcards * and ? are
+			supported.  
+		</operand>
+		<operand name="options" type="CatOptions">
+			Options for the cat command.
+		</operand>
+	</operands>
+</command-def>

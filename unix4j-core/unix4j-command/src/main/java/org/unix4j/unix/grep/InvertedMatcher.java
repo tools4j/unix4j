@@ -5,7 +5,7 @@ import org.unix4j.line.Line;
 /**
  * Inverts the result of another matcher that is passed to the constructor.
  */
-public class InvertedMatcher implements LineMatcher {
+class InvertedMatcher implements LineMatcher {
 	
 	private final LineMatcher matcher;
 	

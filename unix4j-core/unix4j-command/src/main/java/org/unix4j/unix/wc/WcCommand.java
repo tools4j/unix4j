@@ -13,9 +13,9 @@ import org.unix4j.unix.Wc;
 import org.unix4j.util.FileUtil;
 
 /**
- * User: ben
+ * Implementation of the {@code Wc wc} command.
  */
-public class WcCommand extends AbstractCommand<WcArguments> {
+class WcCommand extends AbstractCommand<WcArguments> {
 	public WcCommand(WcArguments arguments) {
 		super(Wc.NAME, arguments);
 	}
