@@ -5,6 +5,7 @@ import org.unix4j.io.Input;
 import org.unix4j.line.Line;
 import org.unix4j.redirect.From;
 import org.unix4j.unix.*;
+import org.unix4j.unix.cat.CatOptions;
 import org.unix4j.unix.echo.EchoOptions;
 import org.unix4j.unix.grep.GrepOptions;
 import org.unix4j.unix.head.HeadOptions;
@@ -97,6 +98,42 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 	@Override
 	public Unix4jCommandBuilder from(Input input) {
 		join(From.FACTORY.from(input));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder cat() {
+		join(Cat.FACTORY.cat());
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder cat(File... files) {
+		join(Cat.FACTORY.cat(files));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder cat(String... paths) {
+		join(Cat.FACTORY.cat(paths));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder cat(CatOptions options) {
+		join(Cat.FACTORY.cat(options));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder cat(CatOptions options, File... files) {
+		join(Cat.FACTORY.cat(options, files));
+		return this;
+	}
+	
+	@Override
+	public Unix4jCommandBuilder cat(CatOptions options, String... paths) {
+		join(Cat.FACTORY.cat(options, paths));
 		return this;
 	}
 

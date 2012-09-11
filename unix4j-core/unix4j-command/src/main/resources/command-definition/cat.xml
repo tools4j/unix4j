@@ -46,10 +46,10 @@
 		</method>
 	</methods>
 	<options>
-		<option name="numberNonBlankLines" acronym="b">
+		<option name="numberNonBlankLines" acronym="b" exclusiveGroup="bn">
 			Number the non-blank output lines, starting at 1.
 		</option>
-		<option name="numberLines" acronym="n">
+		<option name="numberLines" acronym="n" exclusiveGroup="bn">
 			Number the output lines, starting at 1.
 		</option>
 		<option name="squeezeEmptyLines" acronym="s">
