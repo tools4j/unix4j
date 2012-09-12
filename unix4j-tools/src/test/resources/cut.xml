@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<command-def	xmlns="http://www.unix4j.org/command-def" 
+				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xsi:schemaLocation="http://www.unix4j.org/command-def command-def.xsd">
+	
+	<command name="cut" class="org.unix4j.unix.Cut" package="org.unix4j.unix.cut"/>
+	<name>
+		cut - cut out selected portions of each line of a file
+	</name>
+	<synopsis>
+     cut -b list [-n] [file ...]
+     cut -c list [file ...]
+     cut -f list [-d delim] [-s] [file ...]
+    </synopsis>
+	<description ref="cut.html"/>
+	<notes/>
+	<methods>
+		<method args="options,file" input="false">
+			Bla 
+		</method>
+	</methods>
+	<options>
+		<option name="bytes" acronym="b" exclusiveGroup="bcf">
+			The list specifies byte positions.
+		</option>
+		<option name="chars" acronym="c" exclusiveGroup="bcf">
+			The list specifies character positions.
+		</option>
+		<option name="fields" acronym="f" exclusiveGroup="bcf">
+			The list specifies fields, separated in the input by the field
+			delimiter character (see the -d option.)  Output fields are 
+			separated by a single occurrence of the field delimiter character.
+		</option>
+		<option name="delim" acronym="d" enabledBy="fields">
+			Use delim as the field delimiter character instead of the tab 
+			character
+		</option>
+		<option name="suppressNoDelimLines" acronym="s" enabledBy="fields">
+			Suppress lines with no field delimiter characters. Unless specified, 
+			lines with no delimiters are passed through unmodified.		
+		</option>
+		<option name="noSplit" acronym="n" enabledBy="bytes">
+			Do not split multi-byte characters.  Characters will only be output
+			if at least one byte is selected, and, after a prefix of zero or 
+			more unselected bytes, the rest of the bytes that form the character
+			are selected.		
+		</option>
+	</options>
+	<operands>
+		<operand name="file" type="java.io.File">
+			The input files		
+		</operand>
+		<operand name="path" type="String">
+			The input paths		
+		</operand>
+		<operand name="options" type="CutOptions">
+			The options defining the options for the cut command.
+		</operand>
+	</operands>
+</command-def>

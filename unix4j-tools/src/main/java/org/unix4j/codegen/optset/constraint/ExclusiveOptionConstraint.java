@@ -8,7 +8,7 @@ import org.unix4j.codegen.optset.def.ActiveSetDef;
  * Constraint for a set of options that are excluded if a certain option is
  * active.
  */
-public class ExcludedOptionsConstraint implements OptionConstraint {
+public class ExclusiveOptionConstraint implements OptionConstraint {
 
 	private final String option;
 	private final Set<String> excluded;
@@ -24,7 +24,7 @@ public class ExcludedOptionsConstraint implements OptionConstraint {
 	 *            the (long) names of options that cannot be active if
 	 *            {@code option} is active
 	 */
-	public ExcludedOptionsConstraint(String option, Set<String> excluded) {
+	public ExclusiveOptionConstraint(String option, Set<String> excluded) {
 		this.option = option;
 		this.excluded = excluded;
 	}
