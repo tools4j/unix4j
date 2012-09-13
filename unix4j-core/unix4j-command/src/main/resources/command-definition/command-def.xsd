@@ -47,8 +47,8 @@
   </xs:element>
   <xs:element name="method">
     <xs:complexType mixed="true">
-      <xs:attribute name="name"/>
-      <xs:attribute name="args"/>
+      <xs:attribute name="name" type="xs:NCName"/>
+      <xs:attribute name="args" type="xs:string"/>
       <xs:attribute name="input" type="xs:boolean" use="required"/>
     </xs:complexType>
   </xs:element>
@@ -63,6 +63,7 @@
     <xs:complexType mixed="true">
       <xs:attribute name="acronym" use="required" type="xs:NCName"/>
       <xs:attribute name="exclusiveGroup" type="xs:NCName"/>
+      <xs:attribute name="enabledBy" type="xs:string"/>
       <xs:attribute name="name" use="required" type="xs:NCName"/>
     </xs:complexType>
   </xs:element>

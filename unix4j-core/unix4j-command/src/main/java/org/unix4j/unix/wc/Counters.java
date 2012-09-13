@@ -14,7 +14,7 @@ import org.unix4j.util.StringUtil;
  * are actually maintained. The {@link #update(Line)} method updates the
  * relevant counters based on a line.
  */
-public class Counters {
+class Counters {
 
 	private final static int MIN_COUNT_PADDING = 2;
 

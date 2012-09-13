@@ -13,9 +13,9 @@ import java.util.regex.Pattern;
 import static org.unix4j.util.Assert.assertArgTrue;
 
 /**
- * User: ben
+ * Implementation of the {@code Sed sed} command.
  */
-public class SedCommand extends AbstractCommand<SedArguments> {
+class SedCommand extends AbstractCommand<SedArguments> {
 
 	public SedCommand(SedArguments arguments) {
 		super(Sed.NAME, arguments);

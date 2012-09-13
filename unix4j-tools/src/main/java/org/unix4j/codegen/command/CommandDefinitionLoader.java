@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -30,13 +31,15 @@ import org.w3c.dom.Element;
 public class CommandDefinitionLoader {
 	private static enum XmlElement {
 		command_def, command, 
-		name, synopsis, description, notes, 
+		name, synopsis, description, 
+		notes, note, 
 		methods, method,
 		options, option,
 		operands, operand
 	}
 	private static enum XmlAttribtue {
-		class_, package_, ref, name, args, input, acronym, type, exclusiveGroup
+		class_, package_, ref, name, args, input, acronym, type, 
+		exclusiveGroup, enabledBy
 	}
 	public CommandDef load(URL commandDefinition) {
 		try {
@@ -58,6 +61,7 @@ public class CommandDefinitionLoader {
 		final String synopsis = XmlUtil.getRequiredElementText(elCommandDef, XmlElement.synopsis);
 		final String description = loadDescription(commandDefinitionURL, elCommandDef);
 		final CommandDef def = new CommandDef(commandName, className, packageName, name, synopsis, description);
+		loadNotes(def, elCommandDef);
 		loadOptions(def, elCommandDef);
 		loadOperands(def, elCommandDef);
 		loadMethods(def, elCommandDef);
@@ -76,6 +80,14 @@ public class CommandDefinitionLoader {
 		}
 		throw new FileNotFoundException("cannot find description file '" + ref + "' for command " + elCommand.getNodeName());
 	}
+	private void loadNotes(CommandDef def, Element elCommand) {
+		final Element elNotes = XmlUtil.getSingleChildElement(elCommand, XmlElement.notes);
+		final List<Element> list = XmlUtil.getChildElements(elNotes, XmlElement.note);
+		for (final Element elNote : list) {
+			final String desc = formatDesc(XmlUtil.getRequiredElementText(elNote));
+			def.notes.add(desc);
+		}
+	}
 	private void loadOptions(CommandDef def, Element elCommand) {
 		final Element elOptions = XmlUtil.getSingleChildElement(elCommand, XmlElement.options);
 		final List<Element> list = XmlUtil.getChildElements(elOptions, XmlElement.option);
@@ -87,6 +99,13 @@ public class CommandDefinitionLoader {
 			final OptionDef optDef = new OptionDef(name, acronym, desc);
 			def.options.put(name, optDef);
 			
+			//the enabled-by constraint
+			final String enabledBy = XmlUtil.getAttribute(elOption, XmlAttribtue.enabledBy);
+			if (enabledBy != null) {
+				final String[] enablers = enabledBy.split(",");
+				optDef.enabledBy.addAll(Arrays.asList(enablers));//verify option names later when we have all options
+			}
+
 			//the exclusive group
 			final String exclusiveGroup = XmlUtil.getAttribute(elOption, XmlAttribtue.exclusiveGroup);
 			if (exclusiveGroup != null) {
@@ -98,6 +117,16 @@ public class CommandDefinitionLoader {
 				members.add(optDef);
 			}
 		}
+
+		//check enabler options now
+		for (final OptionDef opt: def.options.values()) {
+			for (final String enabler : opt.enabledBy) {
+				if (!def.options.containsKey(enabler)) {
+					throw new IllegalArgumentException("enabler option '" + enabler + "' for option '" + opt.name + "' is not defined for the '" + def.commandName + "' command (hint: use name, not acronym)");
+				}
+			}
+		}
+		
 		//add exclusive groups to option defs
 		for (final Map.Entry<String, Set<OptionDef>> e : exclusiveGroupByName.entrySet()) {
 			for (final OptionDef opt : e.getValue()) {

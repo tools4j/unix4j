@@ -5,7 +5,7 @@ import org.unix4j.line.Line;
 /**
  * Constants for different count types.
  */
-public enum CounterType {
+enum CounterType {
 	Lines {
 		@Override
 		public boolean isOptionSet(WcArguments args) {

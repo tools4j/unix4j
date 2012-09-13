@@ -16,7 +16,7 @@ import org.unix4j.util.FileUtil;
 import org.unix4j.util.ReverseOrderComparator;
 
 /**
- * Ls command implementation.
+ * Implementation of the {@code Ls ls} command.
  */
 class LsCommand extends AbstractCommand<LsArguments> {
 	public LsCommand(LsArguments arguments) {

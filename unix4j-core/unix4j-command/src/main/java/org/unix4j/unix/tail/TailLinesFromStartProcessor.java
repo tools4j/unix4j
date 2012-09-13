@@ -5,7 +5,7 @@ import org.unix4j.line.Line;
 import org.unix4j.processor.LineProcessor;
 import org.unix4j.util.Counter;
 
-public class TailLinesFromStartProcessor extends AbstractTailProcessor {
+class TailLinesFromStartProcessor extends AbstractTailProcessor {
 
 	private final Counter counter = new Counter();
 

@@ -18,9 +18,9 @@ import org.unix4j.unix.Tail;
 import org.unix4j.util.FileUtil;
 
 /**
- * Tail command implementation.
+ * Implementation of the {@code Tail tail} command.
  */
-public class TailCommand extends AbstractCommand<TailArguments> {
+class TailCommand extends AbstractCommand<TailArguments> {
 	public TailCommand(TailArguments arguments) {
 		super(Tail.NAME, arguments);
 		if (arguments.isCountSet() && arguments.getCount() < 0) {
