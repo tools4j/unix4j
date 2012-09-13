@@ -6,6 +6,7 @@ import org.unix4j.unix.*;
 public interface Unix4jCommandBuilder
 		extends CommandBuilder,
 		From.Interface<Unix4jCommandBuilder>,
+		Cat.Interface<Unix4jCommandBuilder>,
 		Ls.Interface<Unix4jCommandBuilder>,
 		Grep.Interface<Unix4jCommandBuilder>,
 		Echo.Interface<Unix4jCommandBuilder>,

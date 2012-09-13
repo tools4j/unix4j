@@ -6,7 +6,7 @@ import org.unix4j.command.ExecutionContext;
 import org.unix4j.line.Line;
 import org.unix4j.processor.LineProcessor;
 
-public class TailLinesFromEndProcessor extends AbstractTailProcessor {
+class TailLinesFromEndProcessor extends AbstractTailProcessor {
 	
 	private final LinkedList<Line> tailLines = new LinkedList<Line>();
 

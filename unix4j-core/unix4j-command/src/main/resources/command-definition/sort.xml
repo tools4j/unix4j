@@ -18,6 +18,9 @@
 		A &lt;newline&gt; is added to the end of an input line if it is not
 		properly terminated with a line ending (usually the last line in a file)
 		</note>
+		<!-- TODO implement sort options and remove the following notes -->
+		<note>The following options are currently not supported: {@code check}, {@code merge}</note>
+		<note>The following sort order options are currently not supported: {@code dictionaryOrder}, {@code numericSort}, {@code versionSort}</note>
 	</notes>
 	<methods>
 		<method input="true">
@@ -217,6 +220,10 @@
 			Consider only printable characters
 		</option>
 		-->
+		<option name="versionSort" acronym="V">
+			Natural sort of (version) numbers within text.
+			(This option is ignored if a comparator operand has is present).
+		</option>
 		<option name="reverse" acronym="r">
 			Reverse the sense of comparisons.
 		</option>

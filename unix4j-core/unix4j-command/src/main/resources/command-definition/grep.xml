@@ -7,8 +7,7 @@
 	<name>grep - print lines matching a pattern</name>
 	<synopsis>grep [-ivf] pattern</synopsis>
 	<description ref="grep.html"/>
-	<notes>
-	</notes>
+	<notes/>
 	<methods>
 		<method args="pattern" input="true">
 			Filters the input lines from the standard input and writes the

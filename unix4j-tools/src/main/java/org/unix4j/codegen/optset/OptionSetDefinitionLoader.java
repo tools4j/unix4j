@@ -44,7 +44,6 @@ public class OptionSetDefinitionLoader {
 		//set initial group
 		def.initialGroup = optionsToGroup.get(def.command.options.keySet());
 		
-		
 		//now add groups to def
 		def.groups.addAll(optionsToGroup.values());
 	}
@@ -53,8 +52,12 @@ public class OptionSetDefinitionLoader {
 		final Map<Set<String>, OptionGroupDef> optionsToGroup = new LinkedHashMap<Set<String>, OptionGroupDef>();
 		//first, simply add the options
 		addGroupsForActiveSets(def.command, optionsToGroup, initialActiveSets.values());
+		final Set<String> allOptions = def.command.options.keySet();
+		if (!optionsToGroup.containsKey(allOptions)) {
+			optionsToGroup.put(allOptions, createGroupFor(def.command, allOptions));
+		}
 		//now, fill the optionToNextGroup values
-		final OptionGroupDef allOptionsGroup = getGroupForOptions(optionsToGroup, def.command.options.keySet());
+		final OptionGroupDef allOptionsGroup = getGroupForOptions(optionsToGroup, allOptions);
 		fillOptionToNextGroup(optionsToGroup, allOptionsGroup, initialActiveSets);
 		//done
 		return optionsToGroup;

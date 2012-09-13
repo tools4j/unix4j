@@ -16,6 +16,7 @@ public class OptionDef extends AbstractElementDef {
 	}
 	public final String name;
 	public final String acronym;
-	public final Set<String> excludes = new LinkedHashSet<String>();	//option (long) name
+	public final Set<String> excludes	= new LinkedHashSet<String>();	//option (long) name
+	public final Set<String> enabledBy	= new LinkedHashSet<String>();	//option (long) name
 	public final String desc;
 }

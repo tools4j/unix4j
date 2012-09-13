@@ -11,7 +11,7 @@ import org.unix4j.processor.LineProcessor;
  * Input processor for line, word and char count for multiple input files. The
  * totals line can be printed by {@link #writeTotalsLine(LineProcessor)}.
  */
-public class WcMultiFileProcessor extends DefaultInputProcessor {
+class WcMultiFileProcessor extends DefaultInputProcessor {
 
 	private final Counters current;
 	private final Counters totals;

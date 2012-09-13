@@ -34,7 +34,7 @@ public class StringUtil {
 	 * 
 	 * @param size
 	 *            the fixed size of the returned string
-	 * @param left
+	 * @param alignLeft
 	 *            true if {@code value} should be left-aligned
 	 * @param filler
 	 *            the filler character if {@code value} is shorter than
@@ -44,8 +44,8 @@ public class StringUtil {
 	 * @return the value as a fixed size string, padded or truncated if
 	 *         necessary
 	 */
-	public static final String fixSizeString(int size, boolean left, char filler, long value) {
-		return fixSizeString(size, left, filler, String.valueOf(value));
+	public static final String fixSizeString(int size, boolean alignLeft, char filler, long value) {
+		return fixSizeString(size, alignLeft, filler, String.valueOf(value));
 	}
 
 	/**
@@ -70,15 +70,15 @@ public class StringUtil {
 	 * 
 	 * @param size
 	 *            the fixed size of the returned string
-	 * @param left
+	 * @param alignLeft
 	 *            true if {@code value} should be left-aligned
 	 * @param s
 	 *            the string to format
 	 * @return the string {@code s} as a fixed size string, padded or truncated
 	 *         if necessary
 	 */
-	public static final String fixSizeString(int size, boolean left, String s) {
-		return fixSizeString(size, left, ' ', s);
+	public static final String fixSizeString(int size, boolean alignLeft, String s) {
+		return fixSizeString(size, alignLeft, ' ', s);
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class StringUtil {
 	 * 
 	 * @param size
 	 *            the fixed size of the returned string
-	 * @param left
+	 * @param alignLeft
 	 *            true if {@code value} should be left-aligned
 	 * @param filler
 	 *            the filler character if {@code s} is shorter than {@code size}
@@ -114,19 +114,19 @@ public class StringUtil {
 	 * @return the string {@code s} as a fixed size string, padded or truncated
 	 *         if necessary
 	 */
-	public static final String fixSizeString(int size, boolean left, char filler, String s) {
+	public static final String fixSizeString(int size, boolean alignLeft, char filler, String s) {
 		if (s.length() < size) {
 			final StringBuilder sb = new StringBuilder(size);
-			if (left)
+			if (alignLeft)
 				sb.append(s);
 			for (int i = 0; i < size - s.length(); i++) {
 				sb.append(filler);
 			}
-			if (!left)
+			if (!alignLeft)
 				sb.append(s);
 			return sb.toString();
 		} else {
-			return left ? s.substring(0, size) : s.substring(s.length() - size, s.length());
+			return alignLeft ? s.substring(0, size) : s.substring(s.length() - size, s.length());
 		}
 	}
 

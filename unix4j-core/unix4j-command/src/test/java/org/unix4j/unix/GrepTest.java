@@ -1,16 +1,16 @@
 package org.unix4j.unix;
 
+import static java.lang.String.format;
+import static junit.framework.Assert.assertEquals;
+
+import java.io.File;
+
 import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.builder.Unix4jCommandBuilder;
 import org.unix4j.util.FileUtil;
 import org.unix4j.util.MultilineString;
 import org.unix4j.util.StackTraceUtil;
-
-import java.io.File;
-
-import static java.lang.String.format;
-import static junit.framework.Assert.assertEquals;
 
 /**
  * Unit test for simple App.
@@ -112,7 +112,7 @@ public class GrepTest {
 		private final String expectedOutput;
 		private final File testMethodInputFile;
 
-		public SimpleCommandTester(final Class testClass){
+		public SimpleCommandTester(final Class<?> testClass){
 			final File testClassParentDir = FileUtil.getDirectoryOfClassFile(testClass);
 			final StackTraceElement stackTraceElement = StackTraceUtil.getCurrentMethodStackTraceElement(1);
 			final String testClassOutputDirPath = testClassParentDir.getPath() + "/" + testClass.getSimpleName();
@@ -157,6 +157,7 @@ public class GrepTest {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private void testTestToInputAndOutputFiles(MultilineString input, MultilineString expectedOutput) {
 		final File testClassParentDir = FileUtil.getDirectoryOfClassFile(this.getClass());
 		final String testClassOutputDirPath = testClassParentDir.getPath() + "/" + this.getClass().getSimpleName();
