@@ -72,7 +72,7 @@ class LsCommand extends AbstractCommand<LsArguments> {
 		};
 	}
 
-	private void listFiles(File relativeTo, File parent, List<File> files, LineProcessor output) {
+	private boolean listFiles(File relativeTo, File parent, List<File> files, LineProcessor output) {
 		final LsArguments args = getArguments();
 		final Comparator<File> comparator = getComparator(relativeTo);
 		final boolean allFiles = args.isAllFiles();
@@ -96,18 +96,26 @@ class LsCommand extends AbstractCommand<LsArguments> {
 		//print directory header
 		if (parent != null) {
 			final LsFormatter dirHeaderFmt = LsFormatterDirectoryHeader.FACTORY.create(relativeTo, parent, files, args);
-			dirHeaderFmt.writeFormatted(relativeTo, parent, args, output);
+			if (!dirHeaderFmt.writeFormatted(relativeTo, parent, args, output)) {
+				return false;
+			}
 		}
 		//print directory files and recurse if necessary
 		for (File file : files) {
 			if (allFiles || !file.isHidden()) {
 				if (file.isDirectory() && recurseSubdirs) {
-					listFiles(file, file, FileUtil.toList(file.listFiles()), output);
+					if (!listFiles(file, file, FileUtil.toList(file.listFiles()), output)) {
+						return false;
+					}
 				} else {
-					formatter.writeFormatted(relativeTo, file, getArguments(), output);
+					if (!formatter.writeFormatted(relativeTo, file, getArguments(), output)) {
+						return false;
+					}
 				}
 			}
 		}
+		
+		return true;//we want more output
 	}
 
 	private Comparator<File> getComparator(File relativeTo) {
