@@ -36,23 +36,28 @@ class FileTest {
 	private FileTest(final Class<?> testClass, int inputFileCount, StackTraceElement stackTraceElement) {
 		this.inputFiles = new ArrayList<File>(inputFileCount);
 		final String testMethodName = stackTraceElement.getMethodName();
-		final File outputFile = getFile(testClass, testMethodName, testMethodName + ".output");
+		final File outputFile = getTestFile(testClass, testMethodName, testMethodName + ".output");
 		if (inputFileCount == 1) {
-			final File inputFile = getFile(testClass, testMethodName, testMethodName + ".input", "default.input");
+			final File inputFile = getTestFile(testClass, testMethodName, testMethodName + ".input", "default.input");
 			inputFiles.add(inputFile);
 		} else {
 			for (int i = 0; i < inputFileCount; i++) {
-				final File inputFile = getFile(testClass, testMethodName, testMethodName + ".input." + (i+1));
+				final File inputFile = getTestFile(testClass, testMethodName, testMethodName + ".input." + (i+1));
 				inputFiles.add(inputFile);
 			}
 		}
 		expectedOutput = Unix4j.fromFile(outputFile).toStringResult();
 	}
 	
-	private final File getFile(Class<?> testClass, String testMethod, String fileName) {
-		return getFile(testClass, testMethod, fileName, null);
+	public static final File getTestFile(Class<?> testClass, String fileName) {
+		final StackTraceElement stackTraceElement = StackTraceUtil.getCurrentMethodStackTraceElement(1);
+		return getTestFile(testClass, stackTraceElement.getMethodName(), fileName);
+		
 	}
-	private final File getFile(Class<?> testClass, String testMethod, String fileName, String defaultFileName) {
+	private static final File getTestFile(Class<?> testClass, String testMethod, String fileName) {
+		return getTestFile(testClass, testMethod, fileName, null);
+	}
+	private static final File getTestFile(Class<?> testClass, String testMethod, String fileName, String defaultFileName) {
 		final String packageDir = testClass.getPackage().getName().replace('.', '-');
 		final String testDir = packageDir + "/" + testClass.getSimpleName();
 		final String filePath= "/" + testDir + "/" + fileName;

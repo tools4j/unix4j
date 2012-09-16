@@ -21,7 +21,7 @@ class CheckProcessor extends AbstractSortProcessor {
 	public boolean processLine(Line line) {
 		if (lastLine != null) {
 			if (getComparator().compare(lastLine, line) > 0) {
-				throw new ExitValueException("file is not sorted", 1);
+				throw new ExitValueException("file is not sorted, line: " + line, 1);
 			}
 		}
 		lastLine = line;
@@ -31,6 +31,13 @@ class CheckProcessor extends AbstractSortProcessor {
 	@Override
 	public void finish() {
 		getOutput().finish();
+	}
+	
+	/**
+	 * Resets the last line, for instance when a new file should be checked.
+	 */
+	public void reset() {
+		lastLine = null;
 	}
 
 }
