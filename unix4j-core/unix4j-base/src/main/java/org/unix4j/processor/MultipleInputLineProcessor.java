@@ -2,6 +2,7 @@ package org.unix4j.processor;
 
 import java.util.List;
 
+import org.unix4j.command.ExitValueException;
 import org.unix4j.io.Input;
 import org.unix4j.line.Line;
 
@@ -62,13 +63,18 @@ public class MultipleInputLineProcessor implements LineProcessor {
 		beginMultiple(inputs, output);
 		for (int i = 0; i < inputs.size(); i++) {
 			final Input input = inputs.get(i);
-			processor.begin(input, output);
-			for (final Line line : input) {
-				if (!processor.processLine(input, line, output)) {
-					break;// wants no more lines
+			try {
+				processor.begin(input, output);
+				for (final Line line : input) {
+					if (!processor.processLine(input, line, output)) {
+						break;// wants no more lines
+					}
 				}
+				processor.finish(input, output);
+			} catch (ExitValueException e) {
+				e.setInput(input);
+				throw e;
 			}
-			processor.finish(input, output);
 		}
 		finishMultiple(inputs, output);
 	}
