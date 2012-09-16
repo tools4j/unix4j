@@ -1,11 +1,13 @@
 package org.unix4j.unix.sort;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.ExecutionContext;
 import org.unix4j.io.FileInput;
+import org.unix4j.io.Input;
 import org.unix4j.processor.LineProcessor;
 import org.unix4j.processor.RedirectInputLineProcessor;
 import org.unix4j.unix.Sort;
@@ -26,7 +28,18 @@ class SortCommand extends AbstractCommand<SortArguments> {
 		
 		final LineProcessor standardInputProcessor;
 		if (args.isMerge()) {
-			standardInputProcessor = new MergeProcessor(this, context, output);
+			//input from file?
+			if (args.isFilesSet()) {
+				final List<FileInput> inputs = FileInput.multiple(args.getFiles());
+				return new MergeProcessor(this, context, output, inputs);
+			} else if (args.isPathsSet()) {
+				final List<File> files = FileUtil.expandFiles(args.getPaths());
+				final List<FileInput> inputs = FileInput.multiple(files);
+				return new MergeProcessor(this, context, output, inputs);
+			} else {
+				final List<Input> empty = Collections.emptyList();
+				return new MergeProcessor(this, context, output, empty);
+			}
 		} else if (args.isCheck()) {
 			standardInputProcessor = new CheckProcessor(this, context, output);
 		} else {
