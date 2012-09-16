@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.unix4j.command.Command;
 import org.unix4j.command.DefaultExecutionContext;
+import org.unix4j.command.ExitValueException;
 import org.unix4j.command.NoOp;
 import org.unix4j.io.BufferedOutput;
 import org.unix4j.io.FileOutput;
@@ -90,5 +91,14 @@ public class DefaultCommandBuilder implements CommandBuilder {
 		final StringOutput out = new StringOutput();
 		toOutput(out);
 		return out.toString();
+	}
+	@Override
+	public int toExitValue() {
+		try {
+			toDevNull();
+			return 0;
+		} catch (ExitValueException e) {
+			return e.getExitValue();
+		}
 	}
 }

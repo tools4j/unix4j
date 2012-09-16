@@ -1,13 +1,14 @@
 package org.unix4j.redirect;
 
-import org.unix4j.command.Command;
-import org.unix4j.io.Output;
-import org.unix4j.line.Line;
-
 import java.io.File;
 import java.io.OutputStream;
 import java.io.Writer;
 import java.util.List;
+
+import org.unix4j.command.Command;
+import org.unix4j.command.ExitValueException;
+import org.unix4j.io.Output;
+import org.unix4j.line.Line;
 
 /**
  * Interface defining command execution and output redirection methods.
@@ -52,7 +53,6 @@ public interface To {
 
 	/**
 	 * Executes the composite command and does not write the result anywhere.
-	 * 
 	 */
 	void toDevNull();
 
@@ -85,5 +85,14 @@ public interface To {
 	 * Executes the composite command and writes the result to the given output.
 	 */
 	void toOutput(Output output);
+	
+	/**
+	 * Executes the composite command returns its exit value, 0 if the command
+	 * completes successfully and another command specific error value different
+	 * from zero if the command throws an {@link ExitValueException}.
+	 * 
+	 * @return the exit value returned by the command, 0 for success
+	 */
+	int toExitValue();
 
 }
