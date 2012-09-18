@@ -12,7 +12,7 @@ public class ArrayUtil {
 	 * exception if {@code array} is not an array or null.
 	 * <p>
 	 * The method returns {@code "null"} if the given {@code array} is null.
-	 * 
+	 *
 	 * @param array
 	 *            the array to return as a string
 	 * @return a (deep) string representation of the array
@@ -38,5 +38,15 @@ public class ArrayUtil {
 	// no instances
 	private ArrayUtil() {
 		super();
+	}
+
+	//TODO BJW Write unit tests
+	public static String join(final String[] array, final String delim){
+		final StringBuilder sb = new StringBuilder();
+		for(final String element: array){
+			if(sb.length() > 0) sb.append(delim);
+			sb.append(element);
+		}
+		return sb.toString();
 	}
 }
