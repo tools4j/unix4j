@@ -12,6 +12,7 @@ import java.util.TreeMap;
 import org.unix4j.codegen.command.def.CommandDef;
 import org.unix4j.codegen.command.def.OptionDef;
 import org.unix4j.codegen.def.TypeDef;
+import org.unix4j.codegen.optset.constraint.OptionConstraint;
 import org.unix4j.codegen.optset.def.ActiveSetDef;
 import org.unix4j.codegen.optset.def.OptionGroupDef;
 import org.unix4j.codegen.optset.def.OptionSetDef;
@@ -20,8 +21,8 @@ public class OptionSetDefinitionLoader {
 
 	public OptionSetDef create(CommandDef commandDef) {
 		final OptionSetDef def = createOptionSetDef(commandDef);
-		final SortedMap<String, ActiveSetDef> initialActiveSets = new ActiveSetPermutationBuilder().generateActiveSetsForGroup(commandDef.options);
-		new ConstraintEnforcer().enforceConstraintsAndFilterActiveSets(commandDef, initialActiveSets);
+		final Collection<OptionConstraint> constraints = Constraints.getOptionConstraints(commandDef);
+		final SortedMap<String, ActiveSetDef> initialActiveSets = new ActiveSetPermutationBuilder(constraints).generateActiveSetsForGroup(commandDef.options);
 		addGroupsDerivedFromActiveSets(def, initialActiveSets);
 		return def;
 	}
