@@ -201,7 +201,7 @@
 			be the uppercase equivalent for the purposes of comparison.
 			(This option is ignored if a comparator operand has is present).
 		</option>
-		<option name="numericSort" acronym="n"><!-- exclusiveGroup="nghVM" -->
+		<option name="numericSort" acronym="n" exclusiveGroup="nghVM">
 			Sort numerically; the number begins each line and consists of 
 			optional blanks, an optional minus sign, and zero or more digits
 			possibly separated by thousands separators, optionally followed by a
@@ -217,8 +217,7 @@
 
 			(This option is ignored if a comparator operand has is present).
 		</option>
-		<!-- 
-		<option name="generalNumericSort" acronym="g"><!++ exclusiveGroup="nghVM" ++>
+		<option name="generalNumericSort" acronym="g" exclusiveGroup="nghVM">
 			Restrict the sort key to an initial numeric string, consisting of 
 			optional &lt;blank&gt;s, optional minus sign, and zero or more 
 			digits with an optional radix character and thousands separators 
@@ -228,7 +227,7 @@
 
 			(This option is ignored if a comparator operand has is present).
 		</option>
-		<option name="humanNumericSort" acronym='h'><!++ exclusiveGroup="nghVM" ++>
+		<option name="humanNumericSort" acronym='h' exclusiveGroup="nghVM">
 			Sort numerically, first by numeric sign (negative, zero, or 
 			positive); then by SI suffix (either empty, or 'k' or 'K', or one 
 			of 'MGTPEZY', in that order); and finally by numeric value. For
@@ -238,29 +237,33 @@
 			This option sorts values that are consistently scaled to the nearest
 			suffix, regardless of whether suffixes denote powers of 1000 or
 			1024, and it therefore sorts the output of any single invocation of 
-			the {@code ls} command that are invoked with the -FIXME-human-readable 
+			the {@code ls} command that are invoked with the --human-readable 
 			option. 
 			
 			The syntax for numbers is the same as for the
-			{@code -FIXME-numericSort (-n)} option; the SI suffix must immediately 
+			{@code --numericSort (-n)} option; the SI suffix must immediately 
 			follow the number. 		
 
 			(This option is ignored if a comparator operand has is present).
 		</option>
-		<option name="monthSort" acronym="M"><!++ exclusiveGroup="nghVM" ++>
+		<!--
+		<option name="ignoreNonPrinting" acronym="i">
+			Consider only printable characters
+		</option>
+		-->
+		<option name="monthSort" acronym="M" exclusiveGroup="nghVM">
 			An initial string, consisting of any amount of blanks, followed by a
 			month name abbreviation, is folded to UPPER case and compared in the
 			order: (unknown) &lt; 'JAN' &lt; ... &lt; 'DEC'. The current locale
 			determines the month spellings. 
 		</option>
-		<option name="versionSort" acronym="V"><!++ exclusiveGroup="nghVM" ++>
+		<option name="versionSort" acronym="V" exclusiveGroup="nghVM">
 			Sort by version name and number. It behaves like a standard sort, 
 			except that each sequence of decimal digits is treated numerically 
 			as an index/version number.
 			
 			(This option is ignored if a comparator operand has is present).
 		</option>
-		-->
 		<option name="reverse" acronym="r">
 			Reverse the sense of comparisons.
 		</option>
