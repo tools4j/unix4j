@@ -14,7 +14,7 @@ import static org.junit.Assert.fail;
  */
 public class AbstractPerfTest {
 	private final static ResultsFile resultsFile = new ResultsFile();
-	private final static double MAX_EXECUTION_TIME_TO_BASELINE = 3.0d;
+	private final static double MAX_EXECUTION_TIME_TO_BASELINE = 5.0d;
 	private final static LinuxTestScriptCreator linuxTestScriptCreator = new LinuxTestScriptCreator();
 	private final static ResultsSummaryCsvFile resultsSummaryCsvFile = new ResultsSummaryCsvFile();
 
