@@ -6,6 +6,7 @@ import org.unix4j.line.Line;
 import org.unix4j.redirect.From;
 import org.unix4j.unix.*;
 import org.unix4j.unix.cat.CatOptions;
+import org.unix4j.unix.cut.CutOptions;
 import org.unix4j.unix.echo.EchoOptions;
 import org.unix4j.unix.grep.GrepOptions;
 import org.unix4j.unix.head.HeadOptions;
@@ -14,6 +15,7 @@ import org.unix4j.unix.sort.SortOptions;
 import org.unix4j.unix.tail.TailOptions;
 import org.unix4j.unix.uniq.UniqOptions;
 import org.unix4j.unix.wc.WcOptions;
+import org.unix4j.util.Range;
 
 import java.io.File;
 import java.io.InputStream;
@@ -100,37 +102,37 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 		join(From.FACTORY.from(input));
 		return this;
 	}
-	
+
 	@Override
 	public Unix4jCommandBuilder cat() {
 		join(Cat.FACTORY.cat());
 		return this;
 	}
-	
+
 	@Override
 	public Unix4jCommandBuilder cat(File... files) {
 		join(Cat.FACTORY.cat(files));
 		return this;
 	}
-	
+
 	@Override
 	public Unix4jCommandBuilder cat(String... paths) {
 		join(Cat.FACTORY.cat(paths));
 		return this;
 	}
-	
+
 	@Override
 	public Unix4jCommandBuilder cat(CatOptions options) {
 		join(Cat.FACTORY.cat(options));
 		return this;
 	}
-	
+
 	@Override
 	public Unix4jCommandBuilder cat(CatOptions options, File... files) {
 		join(Cat.FACTORY.cat(options, files));
 		return this;
 	}
-	
+
 	@Override
 	public Unix4jCommandBuilder cat(CatOptions options, String... paths) {
 		join(Cat.FACTORY.cat(options, paths));
@@ -306,36 +308,6 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 	}
 
 	@Override
-	public Unix4jCommandBuilder cut(int fieldIndex) {
-		join(Cut.FACTORY.cut(fieldIndex));
-		return this;
-	}
-
-	@Override
-	public Unix4jCommandBuilder cut(String delimiter, int... fieldIndices) {
-		join(Cut.FACTORY.cut(delimiter, fieldIndices));
-		return this;
-	}
-
-	@Override
-	public Unix4jCommandBuilder cut(String inputDelimiter, String outputDelimiter, int... fieldIndices) {
-		join(Cut.FACTORY.cut(inputDelimiter, outputDelimiter, fieldIndices));
-		return this;
-	}
-
-	@Override
-	public Unix4jCommandBuilder cut(int start, int length) {
-		join(Cut.FACTORY.cut(start, length));
-		return this;
-	}
-
-	@Override
-	public Unix4jCommandBuilder cut(int[] charIndices) {
-		join(Cut.FACTORY.cut(charIndices));
-		return this;
-	}
-
-	@Override
 	public Unix4jCommandBuilder sed(String script) {
 		join(Sed.FACTORY.sed(script));
 		return this;
@@ -388,30 +360,6 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 		join(Wc.FACTORY.wc(options, paths));
 		return this;
 	}
-
-//	@Override
-//	public Unix4jCommandBuilder wcCountLinesWordsAndChars() {
-//		join(Wc.FACTORY.wcCountLinesWordsAndChars());
-//		return this;
-//	}
-//
-//	@Override
-//	public Unix4jCommandBuilder wcCountLines() {
-//		join(Wc.FACTORY.wcCountLines());
-//		return this;
-//	}
-//
-//	@Override
-//	public Unix4jCommandBuilder wcCountChars() {
-//		join(Wc.FACTORY.wcCountChars());
-//		return this;
-//	}
-//
-//	@Override
-//	public Unix4jCommandBuilder wcCountWords() {
-//		join(Wc.FACTORY.wcCountWords());
-//		return this;
-//	}
 
 	@Override
 	public Unix4jCommandBuilder head() {
@@ -550,6 +498,42 @@ public class Unix4jCommandBuilderImpl extends DefaultCommandBuilder implements U
 	@Override
 	public Unix4jCommandBuilder uniq(UniqOptions options, String path) {
 		join(Uniq.FACTORY.uniq(options, path));
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder cut(CutOptions options, Range range) {
+		join(Cut.FACTORY.cut(options, range));
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder cut(CutOptions options, int... indexes) {
+		join(Cut.FACTORY.cut(options, indexes));
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder cut(CutOptions options, String delimiter, Range range) {
+		join(Cut.FACTORY.cut(options, delimiter, range));
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder cut(CutOptions options, String delimiter, int... indexes) {
+		join(Cut.FACTORY.cut(options, delimiter, indexes));
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder cut(CutOptions options, String delimiter, char outputDelimiter, Range range) {
+		join(Cut.FACTORY.cut(options, delimiter, outputDelimiter, range));
+		return this;
+	}
+
+	@Override
+	public Unix4jCommandBuilder cut(CutOptions options, String delimiter, char outputDelimiter, int... indexes) {
+		join(Cut.FACTORY.cut(options, delimiter, outputDelimiter, indexes));
 		return this;
 	}
 }

@@ -16,6 +16,7 @@ data: {
         ../../command-definition/tail.xml
         ../../command-definition/uniq.xml
         ../../command-definition/wc.xml
+        ../../command-definition/cut.xml
     )
     optionSetDefs: org.unix4j.codegen.OptionSetDefinitionDataLoader(
         ../../command-definition/cat.xml
@@ -28,5 +29,6 @@ data: {
         ../../command-definition/tail.xml
         ../../command-definition/uniq.xml
         ../../command-definition/wc.xml
+        ../../command-definition/cut.xml
     )
 }
