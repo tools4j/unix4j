@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<command-def xmlns="http://www.unix4j.org/command-def"
+			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			 xsi:schemaLocation="http://www.unix4j.org/command-def command-def.xsd">
+
+	<command name="cut" class="org.unix4j.unix.Cut" package="org.unix4j.unix.cut"/>
+	<name>cut - remove sections from each line of the input</name>
+	<synopsis>cut [-fc]</synopsis>
+	<description ref="cut.html"/>
+	<notes>
+	</notes>
+	<methods>
+		<method args="options,range" input="true">
+			Cuts the fields or characters using the given range
+			from the input line and writes them to the output.
+		</method>
+		<method args="options,indexes" input="true">
+			Cuts the fields or characters using the given indexes
+			from the input line and writes them to the output.
+		</method>
+		<method args="options,delimiter,range" input="true">
+			Cuts the fields using the given range
+			from the input line and writes them to the output.
+		</method>
+		<method args="options,delimiter,indexes" input="true">
+			Cuts the fields using the given indexes
+			from the input line and writes them to the output.
+		</method>
+		<method args="options,delimiter,outputDelimiter,range" input="true">
+			Cuts the fields using the given range and using the given delimiter
+			from the input line and writes them to the output using the given outputDelimiter.
+		</method>
+		<method args="options,delimiter,outputDelimiter,indexes" input="true">
+			Cuts the fields using the given indexes and using the given delimiter
+			from the input line and writes them to the output using the given outputDelimiter.
+		</method>
+	</methods>
+	<options>
+		<option name="chars" acronym="c" exclusiveGroup="c">
+			The list specifies character positions.
+		</option>
+		<option name="fields" acronym="f" exclusiveGroup="f">
+			The list specifies fields, separated in the input by the field
+			delimiter character (see the -d option.)  Output fields are
+			separated by a single occurrence of the field delimiter character.
+		</option>
+	</options>
+	<operands>
+		<operand name="delimiter" type="String">
+			use as the output delimiter the default is to use the input delimiter
+		</operand>
+		<operand name="outputDelimiter" type="char">
+			use as the output delimiter the default is to use the input delimiter
+		</operand>
+		<operand name="indexes" type="int...">
+			select these chars/field based on the given indexes. Indexes are 1 based.  i.e. the first character/field on a line has an index of 1.
+		</operand>
+		<operand name="range" type="org.unix4j.util.Range">
+			select only these fields
+		</operand>
+		<operand name="options" type="CutOptions">
+			options for the cut command
+		</operand>
+	</operands>
+</command-def>
