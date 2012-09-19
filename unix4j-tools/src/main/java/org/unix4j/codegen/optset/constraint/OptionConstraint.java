@@ -1,7 +1,7 @@
 package org.unix4j.codegen.optset.constraint;
 
-import org.unix4j.codegen.optset.def.ActiveSetDef;
+import java.util.Set;
 
 public interface OptionConstraint {
-	boolean isValidActiveSet(ActiveSetDef activeSet);
+	boolean isValidActiveSet(Set<String> activeSet);
 }
