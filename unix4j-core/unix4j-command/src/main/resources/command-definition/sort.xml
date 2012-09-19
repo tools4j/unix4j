@@ -24,7 +24,7 @@
 		<note>The following sort order options are currently not supported: {@code dictionaryOrder}, {@code numericSort}, {@code versionSort}</note>
 	</notes>
 	<methods>
-		<method input="true">
+		<method usesStandardInput="true">
 			Sort the lines read from the standard input and writes the result to
 			the standard output. 
 			
@@ -35,7 +35,7 @@
 			The sort algorithm used is guaranteed to be stable: lines considered
 			equal will not be reordered as a result of the sort.
 		</method>
-		<method args="files" input="false">
+		<method args="files" usesStandardInput="false">
 			Sort the lines of all the specified files together and writes the
 			result to the standard output. 
 			
@@ -48,7 +48,7 @@
 			originate from different input files, the index of the file in the
 			input arguments list defines the ordering of the lines. 
 		</method>
-		<method args="paths" input="false">
+		<method args="paths" usesStandardInput="false">
 			Sort the lines of all the specified files together and writes the
 			result to the standard output. 
 			
@@ -61,7 +61,7 @@
 			originate from different input files, the index of the file in the
 			input arguments list defines the ordering of the lines. 
 		</method>
-		<method args="comparator" input="true">
+		<method args="comparator" usesStandardInput="true">
 			Sort the lines read from the standard input and writes the result to
 			the standard output. 
 			
@@ -70,7 +70,7 @@
 			The sort algorithm used is guaranteed to be stable: lines considered
 			equal will not be reordered as a result of the sort.
 		</method>
-		<method args="comparator,files" input="false">
+		<method args="comparator,files" usesStandardInput="false">
 			Sort the lines of all the specified files together and writes the
 			result to the standard output. 
 			
@@ -81,7 +81,7 @@
 			originate from different input files, the index of the file in the
 			input arguments list defines the ordering of the lines. 
 		</method>
-		<method args="comparator,paths" input="false">
+		<method args="comparator,paths" usesStandardInput="false">
 			Sort the lines of all the specified files together and writes the
 			result to the standard output. 
 			
@@ -92,7 +92,7 @@
 			originate from different input files, the index of the file in the
 			input arguments list defines the ordering of the lines. 
 		</method>
-		<method args="options" input="true">
+		<method args="options" usesStandardInput="true">
 			Sorts, merges, or sequence checks the lines read from the standard
 			input and writes the result to the standard output. 
 			
@@ -103,7 +103,7 @@
 			The sort algorithm used is guaranteed to be stable: lines considered
 			equal will not be reordered as a result of the sort.
 		</method>
-		<method args="options,files" input="false">
+		<method args="options,files" usesStandardInput="false">
 			Sorts, merges, or sequence checks the lines the lines of all the
 			specified files together and writes the result to the standard
 			output. 
@@ -117,7 +117,7 @@
 			originate from different input files, the index of the file in the
 			input arguments list defines the ordering of the lines. 
 		</method>
-		<method args="options,paths" input="false">
+		<method args="options,paths" usesStandardInput="false">
 			Sorts, merges, or sequence checks the lines the lines of all the
 			specified files together and writes the result to the standard
 			output. 
@@ -131,7 +131,7 @@
 			originate from different input files, the index of the file in the
 			input arguments list defines the ordering of the lines. 
 		</method>
-		<method args="options,comparator" input="true">
+		<method args="options,comparator" usesStandardInput="true">
 			Sorts, merges, or sequence checks the lines read from the standard
 			input and writes the result to the standard output. 
 			
@@ -142,7 +142,7 @@
 			The sort algorithm used is guaranteed to be stable: lines considered
 			equal will not be reordered as a result of the sort.
 		</method>
-		<method args="options,comparator,files" input="false">
+		<method args="options,comparator,files" usesStandardInput="false">
 			Sorts, merges, or sequence checks the lines the lines of all the
 			specified files together and writes the result to the standard
 			output. 
@@ -156,7 +156,7 @@
 			originate from different input files, the index of the file in the
 			input arguments list defines the ordering of the lines. 
 		</method>
-		<method args="options,comparator,paths" input="false">
+		<method args="options,comparator,paths" usesStandardInput="false">
 			Sorts, merges, or sequence checks the lines the lines of all the
 			specified files together and writes the result to the standard
 			output. 

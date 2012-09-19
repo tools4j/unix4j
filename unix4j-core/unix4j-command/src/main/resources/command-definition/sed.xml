@@ -10,15 +10,11 @@
 	<notes>
 	</notes>
 	<methods>
-		<method args="script" input="false">
+		<method args="script" usesStandardInput="false">
 			Executes the given sed script.
 		</method>
 	</methods>
-	<options>
-		<option name="dummy" acronym="d">
-			dummy to get codegen working
-		</option>
-	</options>
+	<options/>
 	<operands>
 		<operand name="script" type="String">
 			Sed script

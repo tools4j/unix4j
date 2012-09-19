@@ -3,6 +3,7 @@
 <@pp.dropOutputFile />
 <#list optionSetDefs as def>
 <#global cmdDef=def.command> 
+<#if cmdDef.options?size != 0> 
 <#global cmd=cmdDef.command>
 <#global commandName=cmdDef.commandName> 
 <#global options=cmdDef.options?values> 
@@ -48,4 +49,5 @@ public final class ${simpleName} {
 	</#foreach>
 	
 }
+</#if>
 </#list>

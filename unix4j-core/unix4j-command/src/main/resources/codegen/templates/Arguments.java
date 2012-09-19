@@ -12,7 +12,9 @@
 package ${def.pkg.name};
 
 import org.unix4j.command.Arguments;
+<#if def.options?size != 0>
 import org.unix4j.option.DefaultOptionSet;
+</#if>
 <#if hasTrueOperand>
 import org.unix4j.util.ArrayUtil;
 </#if>
@@ -39,9 +41,11 @@ import ${cmd.pkg.name}.${cmd.simpleName};
  */
 public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	
+	<#if def.options?size != 0>
 	private final ${optionsName} options;
+	</#if>
 	<#foreach operand in def.operands?values>
-	<#if !isOptions(operand)>
+	<#if !operand.isRedirected && !isOptions(operand)>
 	
 	// operand: <${operand.name}>
 	private boolean ${operand.name}IsSet;
@@ -49,6 +53,7 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	</#if>
 	</#foreach>
 	
+	<#if def.options?size != 0>
 	/**
 	 * Constructor to use if no options are specified.
 	 */
@@ -73,9 +78,17 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	public ${optionsName} getOptions() {
 		return options;
 	}
+	<#else>
+	/**
+	 * Default constructor, no argument values are set initially.
+	 */
+	public ${argumentsName}() {
+		super();
+	}
+	</#if>
 	
 	<#foreach operand in def.operands?values>
-	<#if !isOptions(operand)>
+	<#if !operand.isRedirected && !isOptions(operand)>
 	/**
 	 * Returns {@code <${operand.name}>}: ${operand.desc}
 	 * 
@@ -126,9 +139,13 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	@Override
 	public String toString() {
 		// check first whether there is any option or argument
+		<#if def.options?size != 0>
 		boolean isEmpty = options.size() == 0;
+		<#else>
+		boolean isEmpty = true;
+		</#if>
 		<#foreach operand in def.operands?values>
-		<#if !isOptions(operand)>
+		<#if !operand.isRedirected && !isOptions(operand)>
 		isEmpty &= !${operand.name}IsSet;
 		</#if>
 		</#foreach>
@@ -139,13 +156,14 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 		// ok, we have options or arguments or both
 		final StringBuilder sb = new StringBuilder();
 		
+		<#if def.options?size != 0>
 		// first the options
 		if (options.size() > 0) {
 			sb.append(DefaultOptionSet.toString(options));
 		}
-		
+		</#if>
 		<#foreach operand in def.operands?values>
-		<#if !isOptions(operand)>
+		<#if !operand.isRedirected && !isOptions(operand)>
 		// operand: <${operand.name}>
 		if (${operand.name}IsSet) {
 			if (sb.length() > 0) sb.append(' ');

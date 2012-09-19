@@ -38,8 +38,9 @@ public class CommandDefinitionLoader {
 		operands, operand
 	}
 	private static enum XmlAttribtue {
-		class_, package_, ref, name, args, input, acronym, type, 
-		exclusiveGroup, enabledBy
+		class_, package_, ref, 
+		name, args, usesStandardInput, acronym, type, 
+		exclusiveGroup, enabledBy, isRedirected
 	}
 	public CommandDef load(URL commandDefinition) {
 		try {
@@ -146,7 +147,8 @@ public class CommandDefinitionLoader {
 			final String name = XmlUtil.getRequiredAttribute(elOperand, XmlAttribtue.name);
 			final String type = XmlUtil.getRequiredAttribute(elOperand, XmlAttribtue.type);
 			final String desc = formatDesc(XmlUtil.getRequiredElementText(elOperand));
-			final OperandDef opDef = new OperandDef(name, type, desc);
+			final String indirect = XmlUtil.getAttribute(elOperand, XmlAttribtue.isRedirected, Boolean.FALSE.toString());
+			final OperandDef opDef = new OperandDef(name, type, desc, Boolean.parseBoolean(indirect));
 			def.operands.put(name, opDef);
 		}
 	}
@@ -157,7 +159,7 @@ public class CommandDefinitionLoader {
 		for (final Element elMethod : list) {
 			final String name = XmlUtil.getAttribute(elMethod, XmlAttribtue.name, def.commandName);
 			final String args = XmlUtil.getAttribute(elMethod, XmlAttribtue.args);
-			final String input = XmlUtil.getRequiredAttribute(elMethod, XmlAttribtue.input);
+			final String input = XmlUtil.getRequiredAttribute(elMethod, XmlAttribtue.usesStandardInput);
 			final String desc = formatDesc(XmlUtil.getRequiredElementText(elMethod));
 			final MethodDef methodDef;
 			if (args == null) {

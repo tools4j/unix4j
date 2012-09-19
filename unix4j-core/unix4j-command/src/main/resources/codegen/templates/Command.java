@@ -14,9 +14,11 @@ import org.unix4j.command.CommandInterface;
 import org.unix4j.variable.Literal;
 
 import ${def.pkg.name}.${factoryName};
+<#if def.options?size != 0>
 import ${def.pkg.name}.${optionName};
 import ${def.pkg.name}.${optionsName};
 import ${def.pkg.name}.${optionSetsName};
+</#if>
 import ${def.pkg.name}.${varName};
 
 <#function isOptionsArg def arg>
@@ -55,6 +57,7 @@ import ${def.pkg.name}.${varName};
  * <p>
  * <b>OPTIONS</b>
  * <p>
+<#if def.options?size != 0>
  * The following options are supported:
  * <p>
  * <table>
@@ -62,6 +65,9 @@ import ${def.pkg.name}.${varName};
  * <tr><td width="10px"></td><td nowrap="nowrap">{@code -${opt.acronym}}</td><td>&nbsp;&nbsp;</td><td nowrap="nowrap">{@code --${opt.name}}</td><td>&nbsp;</td><td>${opt.desc}</td></tr>
 </#foreach>
  * </table>
+<#else>
+ * The command supports no options.
+</#if>
  * <p>
  * <b>OPERANDS</b>
  * <p>
@@ -125,7 +131,8 @@ public final class ${cmd.simpleName} {
 	 *            chained method invocations to create joined commands.
 	 */
 	public static interface Interface$<R> extends ${varName}.Interface<R> {}
-	
+
+<#if def.options?size != 0>
 	/**
 	 * Options for the "${commandName}" command: <#foreach opt in def.options?values>{@link ${optionName}#${opt.name} ${opt.acronym}}<#if opt_has_next>, </#if></#foreach>.
 	 * <p> 
@@ -137,6 +144,7 @@ public final class ${cmd.simpleName} {
 	 */
 	public static final ${optionSetsName} OPTIONS = ${optionSetsName}.INSTANCE;
 
+</#if>
 	/**
 	 * Singleton {@link ${factoryName} factory} instance for the "${commandName}" command.
 	 */

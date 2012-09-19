@@ -205,7 +205,7 @@ public final class From {
 		R from(InputStream stream);
 
 		/**
-		 * Reads from the given URL and redirects the contents into thenext
+		 * Reads from the given URL and redirects the contents into the next
 		 * command.
 		 * 
 		 * @param url

@@ -10,34 +10,34 @@
 	<notes>
 	</notes>
 	<methods>
-		<method args="" input="true">
+		<method args="" usesStandardInput="true">
 			Executes a count of lines, words and chars contained in the standard
 			input and writes them to the output.
 		</method>
-		<method args="files" input="false">
+		<method args="files" usesStandardInput="false">
 			Executes a count of lines, words and chars contained in each input
 			file and writes them to the output. If more than one input file is 
 			specified, a line of cumulative counts for all the files is 
 			displayed on a separate line after the output for the last file.
 		</method>
-		<method args="paths" input="false">
+		<method args="paths" usesStandardInput="false">
 			Executes a count of lines, words and chars contained in each input
 			file and writes them to the output. If more than one input file is 
 			specified, a line of cumulative counts for all the files is 
 			displayed on a separate line after the output for the last file.
 		</method>
-		<method args="options" input="true">
+		<method args="options" usesStandardInput="true">
 			Executes a one or more counts, depending on the given options, in
 			the standard input and writes them to the output.
 		</method>
-		<method args="options,files" input="false">
+		<method args="options,files" usesStandardInput="false">
 			Executes a one or more counts, depending on the given options, in
 			each of the given input files and writes them to the output. If more 
 			than one input file is specified, a line of cumulative counts for 
 			all the files is displayed on a separate line after the output for 
 			the last file.
 		</method>
-		<method args="options,paths" input="false">
+		<method args="options,paths" usesStandardInput="false">
 			Executes a one or more counts, depending on the given options, in
 			each of the given input files and writes them to the output. If more 
 			than one input file is specified, a line of cumulative counts for 
@@ -48,17 +48,17 @@
 				(a) we can only support this with a new "option" attribute 
 					selecting the appropriate option
 				(b) do we really still need this?
-		<method name="wcCountLinesWordsAndChars" args="" input="false">
+		<method name="wcCountLinesWordsAndChars" args="" usesStandardInput="false">
 			Executes a count of lines, words and chars in the given input and
 			writes them to the output
 		</method>
-		<method name="wcCountLines" args="" input="false">
+		<method name="wcCountLines" args="" usesStandardInput="false">
 			Executes a count of lines in the given input and writes them to the output
 		</method>
-		<method name="wcCountChars" args="" input="false">
+		<method name="wcCountChars" args="" usesStandardInput="false">
 			Executes a count of chars in the given input and writes them to the output
 		</method>
-		<method name="wcCountWords" args="" input="false">
+		<method name="wcCountWords" args="" usesStandardInput="false">
 			Executes a count of words in the given input and writes them to the output
 		</method>
 		-->

@@ -3,6 +3,7 @@
 <@pp.dropOutputFile /> 
 <#list optionSetDefs as def>
 <#global cmdDef=def.command> 
+<#if cmdDef.options?size != 0> 
 <#global cmd=cmdDef.command> 
 <#global commandName=cmdDef.commandName> 
 <#global optDef=def.optionType> 
@@ -195,4 +196,5 @@ public enum ${grpDef.simpleName} implements ${cmd.simpleName}Options {
 	}
 }
 </#list>
+</#if>
 </#list>

@@ -49,7 +49,7 @@
     <xs:complexType mixed="true">
       <xs:attribute name="name" type="xs:NCName"/>
       <xs:attribute name="args" type="xs:string"/>
-      <xs:attribute name="input" type="xs:boolean" use="required"/>
+      <xs:attribute name="usesStandardInput" type="xs:boolean" use="required"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="options">
@@ -78,6 +78,7 @@
     <xs:complexType mixed="true">
       <xs:attribute name="name" use="required" type="xs:NCName"/>
       <xs:attribute name="type" use="required" type="xs:string"/>
+      <xs:attribute name="isRedirected" type="xs:boolean"/>
     </xs:complexType>
   </xs:element>
 </xs:schema>

@@ -24,7 +24,7 @@
 		<note>The following sort order options are currently not supported: {@code dictionaryOrder}, {@code numericSort}, {@code versionSort}</note>
 	</notes>
 	<methods>
-		<method input="true">
+		<method usesStandardInput="true">
 			Sort the lines read from the standard input and writes the result to
 			the standard output. 
 			
@@ -35,7 +35,7 @@
 			The sort algorithm used is guaranteed to be stable: lines considered
 			equal will not be reordered as a result of the sort.
 		</method>
-		<method args="files" input="false">
+		<method args="files" usesStandardInput="false">
 			Sort the lines of all the specified files together and writes the
 			result to the standard output. 
 			
@@ -48,7 +48,7 @@
 			originate from different input files, the index of the file in the
 			input arguments list defines the ordering of the lines. 
 		</method>
-		<method args="paths" input="false">
+		<method args="paths" usesStandardInput="false">
 			Sort the lines of all the specified files together and writes the
 			result to the standard output. 
 			
@@ -61,7 +61,7 @@
 			originate from different input files, the index of the file in the
 			input arguments list defines the ordering of the lines. 
 		</method>
-		<method args="comparator" input="true">
+		<method args="comparator" usesStandardInput="true">
 			Sort the lines read from the standard input and writes the result to
 			the standard output. 
 			
@@ -70,7 +70,7 @@
 			The sort algorithm used is guaranteed to be stable: lines considered
 			equal will not be reordered as a result of the sort.
 		</method>
-		<method args="comparator,files" input="false">
+		<method args="comparator,files" usesStandardInput="false">
 			Sort the lines of all the specified files together and writes the
 			result to the standard output. 
 			
@@ -81,7 +81,7 @@
 			originate from different input files, the index of the file in the
 			input arguments list defines the ordering of the lines. 
 		</method>
-		<method args="comparator,paths" input="false">
+		<method args="comparator,paths" usesStandardInput="false">
 			Sort the lines of all the specified files together and writes the
 			result to the standard output. 
 			
@@ -92,7 +92,7 @@
 			originate from different input files, the index of the file in the
 			input arguments list defines the ordering of the lines. 
 		</method>
-		<method args="options" input="true">
+		<method args="options" usesStandardInput="true">
 			Sorts, merges, or sequence checks the lines read from the standard
 			input and writes the result to the standard output. 
 			
@@ -103,7 +103,7 @@
 			The sort algorithm used is guaranteed to be stable: lines considered
 			equal will not be reordered as a result of the sort.
 		</method>
-		<method args="options,files" input="false">
+		<method args="options,files" usesStandardInput="false">
 			Sorts, merges, or sequence checks the lines the lines of all the
 			specified files together and writes the result to the standard
 			output. 
@@ -117,7 +117,7 @@
 			originate from different input files, the index of the file in the
 			input arguments list defines the ordering of the lines. 
 		</method>
-		<method args="options,paths" input="false">
+		<method args="options,paths" usesStandardInput="false">
 			Sorts, merges, or sequence checks the lines the lines of all the
 			specified files together and writes the result to the standard
 			output. 
@@ -131,7 +131,7 @@
 			originate from different input files, the index of the file in the
 			input arguments list defines the ordering of the lines. 
 		</method>
-		<method args="options,comparator" input="true">
+		<method args="options,comparator" usesStandardInput="true">
 			Sorts, merges, or sequence checks the lines read from the standard
 			input and writes the result to the standard output. 
 			
@@ -142,7 +142,7 @@
 			The sort algorithm used is guaranteed to be stable: lines considered
 			equal will not be reordered as a result of the sort.
 		</method>
-		<method args="options,comparator,files" input="false">
+		<method args="options,comparator,files" usesStandardInput="false">
 			Sorts, merges, or sequence checks the lines the lines of all the
 			specified files together and writes the result to the standard
 			output. 
@@ -156,7 +156,7 @@
 			originate from different input files, the index of the file in the
 			input arguments list defines the ordering of the lines. 
 		</method>
-		<method args="options,comparator,paths" input="false">
+		<method args="options,comparator,paths" usesStandardInput="false">
 			Sorts, merges, or sequence checks the lines the lines of all the
 			specified files together and writes the result to the standard
 			output. 
@@ -201,7 +201,7 @@
 			be the uppercase equivalent for the purposes of comparison.
 			(This option is ignored if a comparator operand has is present).
 		</option>
-		<option name="numericSort" acronym="n" exclusiveGroup="nghVM">
+		<option name="numericSort" acronym="n"><!-- exclusiveGroup="nghVM" -->
 			Sort numerically; the number begins each line and consists of 
 			optional blanks, an optional minus sign, and zero or more digits
 			possibly separated by thousands separators, optionally followed by a
@@ -217,7 +217,8 @@
 
 			(This option is ignored if a comparator operand has is present).
 		</option>
-		<option name="generalNumericSort" acronym="g" exclusiveGroup="nghVM">
+		<!-- 
+		<option name="generalNumericSort" acronym="g"><!++ exclusiveGroup="nghVM" ++>
 			Restrict the sort key to an initial numeric string, consisting of 
 			optional &lt;blank&gt;s, optional minus sign, and zero or more 
 			digits with an optional radix character and thousands separators 
@@ -227,7 +228,7 @@
 
 			(This option is ignored if a comparator operand has is present).
 		</option>
-		<option name="humanNumericSort" acronym='h' exclusiveGroup="nghVM">
+		<option name="humanNumericSort" acronym='h'><!++ exclusiveGroup="nghVM" ++>
 			Sort numerically, first by numeric sign (negative, zero, or 
 			positive); then by SI suffix (either empty, or 'k' or 'K', or one 
 			of 'MGTPEZY', in that order); and finally by numeric value. For
@@ -237,33 +238,29 @@
 			This option sorts values that are consistently scaled to the nearest
 			suffix, regardless of whether suffixes denote powers of 1000 or
 			1024, and it therefore sorts the output of any single invocation of 
-			the {@code ls} command that are invoked with the --human-readable 
+			the {@code ls} command that are invoked with the -FIXME-human-readable 
 			option. 
 			
 			The syntax for numbers is the same as for the
-			{@code --numericSort (-n)} option; the SI suffix must immediately 
+			{@code -FIXME-numericSort (-n)} option; the SI suffix must immediately 
 			follow the number. 		
 
 			(This option is ignored if a comparator operand has is present).
 		</option>
-		<!--
-		<option name="ignoreNonPrinting" acronym="i">
-			Consider only printable characters
-		</option>
-		-->
-		<option name="monthSort" acronym="M" exclusiveGroup="nghVM">
+		<option name="monthSort" acronym="M"><!++ exclusiveGroup="nghVM" ++>
 			An initial string, consisting of any amount of blanks, followed by a
 			month name abbreviation, is folded to UPPER case and compared in the
 			order: (unknown) &lt; 'JAN' &lt; ... &lt; 'DEC'. The current locale
 			determines the month spellings. 
 		</option>
-		<option name="versionSort" acronym="V" exclusiveGroup="nghVM">
+		<option name="versionSort" acronym="V"><!++ exclusiveGroup="nghVM" ++>
 			Sort by version name and number. It behaves like a standard sort, 
 			except that each sequence of decimal digits is treated numerically 
 			as an index/version number.
 			
 			(This option is ignored if a comparator operand has is present).
 		</option>
+		-->
 		<option name="reverse" acronym="r">
 			Reverse the sense of comparisons.
 		</option>
