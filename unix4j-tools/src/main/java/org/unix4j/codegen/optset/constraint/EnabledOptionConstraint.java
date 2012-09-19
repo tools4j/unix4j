@@ -2,8 +2,6 @@ package org.unix4j.codegen.optset.constraint;
 
 import java.util.Set;
 
-import org.unix4j.codegen.optset.def.ActiveSetDef;
-
 /**
  * Constraint for an option that is only enabled if at least one option from a
  * set of "enabler options" is also active.
@@ -28,10 +26,10 @@ public class EnabledOptionConstraint implements OptionConstraint {
 	}
 
 	@Override
-	public boolean isValidActiveSet(ActiveSetDef activeSet) {
-		if (activeSet.active.contains(option)) {
+	public boolean isValidActiveSet(Set<String> activeSet) {
+		if (activeSet.contains(option)) {
 			for (final String enabler : enabledBy) {
-				if (activeSet.active.contains(enabler)) {
+				if (activeSet.contains(enabler)) {
 					return true;
 				}
 			}

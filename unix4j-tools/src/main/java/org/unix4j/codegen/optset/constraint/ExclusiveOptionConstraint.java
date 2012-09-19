@@ -2,8 +2,6 @@ package org.unix4j.codegen.optset.constraint;
 
 import java.util.Set;
 
-import org.unix4j.codegen.optset.def.ActiveSetDef;
-
 /**
  * Constraint for a set of options that are excluded if a certain option is
  * active.
@@ -30,10 +28,10 @@ public class ExclusiveOptionConstraint implements OptionConstraint {
 	}
 
 	@Override
-	public boolean isValidActiveSet(ActiveSetDef activeSet) {
-		if (activeSet.active.contains(option)) {
+	public boolean isValidActiveSet(Set<String> activeSet) {
+		if (activeSet.contains(option)) {
 			for (final String dont : excluded) {
-				if (activeSet.active.contains(dont)) {
+				if (activeSet.contains(dont)) {
 					return false;
 				}
 			}

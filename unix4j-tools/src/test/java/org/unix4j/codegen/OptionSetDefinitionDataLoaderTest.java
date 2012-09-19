@@ -14,5 +14,7 @@ public class OptionSetDefinitionDataLoaderTest {
 		System.out.println(uniq);
 		final Object cut = new OptionSetDefinitionDataLoader().load(null, Collections.singletonList("/cut.xml"));
 		System.out.println(cut);
+		final Object sort = new OptionSetDefinitionDataLoader().load(null, Collections.singletonList("/sort.xml"));
+		System.out.println(sort);
 	}
 }
