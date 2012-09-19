@@ -24,14 +24,13 @@ import org.unix4j.redirect.From;
 
 public class DefaultCommandBuilder implements CommandBuilder {
 
-	protected Input input = null;
 	protected Command<?> command = NoOp.INSTANCE;
 
 	public DefaultCommandBuilder() {
 		super();
 	}
 	public DefaultCommandBuilder(Input input) {
-		this.input = input;
+		join(From.FACTORY.from(input));
 	}
 	public CommandBuilder join(Command<?> command) {
 		if (command == null) {
@@ -76,10 +75,7 @@ public class DefaultCommandBuilder implements CommandBuilder {
 	}
 	@Override
 	public void toOutput(Output output) {
-		Command<?> command = build();
-		if (input != null) {
-			command = From.FACTORY.from(input).join(command);
-		}
+		final Command<?> command = build();
 		command.execute(new DefaultExecutionContext(), output).finish();
 	}
 	@Override

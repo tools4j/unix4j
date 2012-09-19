@@ -44,11 +44,6 @@ abstract public class AbstractCommand<A extends Arguments<A>> implements Command
 	}
 	
 	@Override
-	public final Command<A> withArgs(A arguments) {
-		throw new IllegalArgumentException("deprecated");
-	}
-
-	@Override
 	public String toString() {
 		final String args = getArguments().toString();
 		return args.isEmpty() ? getName() : getName() + " " + args;

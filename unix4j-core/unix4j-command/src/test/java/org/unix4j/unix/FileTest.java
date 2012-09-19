@@ -46,7 +46,7 @@ class FileTest {
 				inputFiles.add(inputFile);
 			}
 		}
-		expectedOutput = Unix4j.fromFile(outputFile).cat().toStringResult();
+		expectedOutput = Unix4j.fromFile(outputFile).toStringResult();
 	}
 	
 	public static final File getTestFile(Class<?> testClass, String fileName) {
@@ -102,7 +102,7 @@ class FileTest {
 		for (final File input : inputFiles) {
 			System.err.println("INPUT:");
 			System.err.println("---------------------------------------------------------------");
-			System.err.println(Unix4j.fromFile(input).cat().toStringResult());
+			System.err.println(Unix4j.fromFile(input).toStringResult());
 			System.err.println("---------------------------------------------------------------");
 		}
 		System.err.println("EXPECTED OUTPUT:");

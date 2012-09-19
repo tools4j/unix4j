@@ -33,21 +33,6 @@ public interface Command<A extends Arguments<A>> {
 	A getArguments();
 
 	/**
-	 * Returns a new command instance of the same type as this command. The new
-	 * command instance uses the arguments and options specified by the given
-	 * {@code arguments} parameter.
-	 * 
-	 * 
-	 * @param arguments
-	 *            the arguments and options to be used by the newly created
-	 *            command
-	 * @return a new command of the same type as this command using the
-	 *         specified {@code arguments}
-	 */
-	@Deprecated
-	Command<A> withArgs(A arguments);
-
-	/**
 	 * Returns a new command representing the combination of {@code this}
 	 * command with {@code next}. The returned command executes {@code this}
 	 * command first and usually joins the output to the {@code next} command's
