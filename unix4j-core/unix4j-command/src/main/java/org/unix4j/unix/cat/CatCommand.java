@@ -8,11 +8,12 @@ import org.unix4j.command.ExecutionContext;
 import org.unix4j.io.FileInput;
 import org.unix4j.processor.LineProcessor;
 import org.unix4j.processor.RedirectInputLineProcessor;
+import org.unix4j.unix.Cat;
 import org.unix4j.unix.Echo;
 import org.unix4j.util.FileUtil;
 
 /**
- * Implementation of the {@code Cat cat} command.
+ * Implementation of the {@link Cat cat} command.
  */
 class CatCommand extends AbstractCommand<CatArguments> {
 	public CatCommand(CatArguments arguments) {

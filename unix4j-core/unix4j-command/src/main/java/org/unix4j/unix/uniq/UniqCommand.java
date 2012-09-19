@@ -13,7 +13,7 @@ import org.unix4j.unix.Ls;
 import org.unix4j.util.FileUtil;
 
 /**
- * Implementation of the {@code Uniq uniq} command.
+ * Implementation of the {@link Uniq uniq} command.
  */
 class UniqCommand extends AbstractCommand<UniqArguments> {
 	public UniqCommand(UniqArguments arguments) {

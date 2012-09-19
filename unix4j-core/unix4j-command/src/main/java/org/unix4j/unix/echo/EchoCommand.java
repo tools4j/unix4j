@@ -8,7 +8,7 @@ import org.unix4j.processor.LineProcessor;
 import org.unix4j.unix.Echo;
 
 /**
- * Implementation of the {@code Echo echo} command.
+ * Implementation of the {@link Echo echo} command.
  */
 class EchoCommand extends AbstractCommand<EchoArguments> {
 	public EchoCommand(EchoArguments arguments) {

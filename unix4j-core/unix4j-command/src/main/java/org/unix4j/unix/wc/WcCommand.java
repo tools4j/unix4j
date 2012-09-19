@@ -13,7 +13,7 @@ import org.unix4j.unix.Wc;
 import org.unix4j.util.FileUtil;
 
 /**
- * Implementation of the {@code Wc wc} command.
+ * Implementation of the {@link Wc wc} command.
  */
 class WcCommand extends AbstractCommand<WcArguments> {
 	public WcCommand(WcArguments arguments) {

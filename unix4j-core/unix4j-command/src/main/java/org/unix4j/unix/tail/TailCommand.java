@@ -18,7 +18,7 @@ import org.unix4j.unix.Tail;
 import org.unix4j.util.FileUtil;
 
 /**
- * Implementation of the {@code Tail tail} command.
+ * Implementation of the {@link Tail tail} command.
  */
 class TailCommand extends AbstractCommand<TailArguments> {
 	public TailCommand(TailArguments arguments) {

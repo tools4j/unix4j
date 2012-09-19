@@ -18,7 +18,7 @@ import org.unix4j.unix.Head;
 import org.unix4j.util.FileUtil;
 
 /**
- * Implementation of the {@code Head head} command.
+ * Implementation of the {@link Head head} command.
  */
 class HeadCommand extends AbstractCommand<HeadArguments> {
 	public HeadCommand(HeadArguments arguments) {
