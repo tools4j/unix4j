@@ -1,6 +1,6 @@
-package org.unix4j.gen;//FIXME remove gen package when ready to replace Unix4j in org.unix4j
+package org.unix4j;
 
-import org.unix4j.builder.gen.Unix4jCommandBuilder;//FIXME remove gen package when ready
+import org.unix4j.builder.Unix4jCommandBuilder;//FIXME remove gen package when ready
 
 <#function hasNoInputMethod def>
 	<#foreach method in def.methods>
@@ -10,6 +10,15 @@ import org.unix4j.builder.gen.Unix4jCommandBuilder;//FIXME remove gen package wh
 	</#foreach>
 	<#return false>
 </#function>
+
+import java.io.File;
+import java.io.InputStream;
+
+import org.unix4j.io.FileInput;
+import org.unix4j.io.Input;
+import org.unix4j.io.ResourceInput;
+import org.unix4j.io.StreamInput;
+import org.unix4j.io.StringInput;
 
 <#foreach def in commandDefs>
 <#if hasNoInputMethod(def)>
@@ -36,6 +45,18 @@ public final class Unix4j {
 	public static Unix4jCommandBuilder builder() {
 		return new Unix4jCommandBuilder();
 	}
+	
+	/**
+	 * Returns a builder to create a command or command chain providing the
+	 * given input to the first command.
+	 * 
+	 * @return the builder to create the command or command chain
+	 */
+	private static Unix4jCommandBuilder builder(Input input) {
+		return new Unix4jCommandBuilder(input);
+	}
+
+<#include "/include/From.java">
 
 <#foreach def in commandDefs>
 <#foreach method in def.methods>

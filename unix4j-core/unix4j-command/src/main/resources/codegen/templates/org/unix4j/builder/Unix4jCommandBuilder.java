@@ -1,9 +1,8 @@
-package org.unix4j.builder.gen;//FIXME remove gen package when ready to replace the builder in org.unix4j.builder
+package org.unix4j.builder;
 
 import org.unix4j.builder.DefaultCommandBuilder;
 import org.unix4j.command.Command;
 import org.unix4j.io.Input;
-import org.unix4j.unix.Xargs;
 
 <#foreach def in commandDefs> 
 import ${def.command.pkg.name}.${def.command.simpleName};

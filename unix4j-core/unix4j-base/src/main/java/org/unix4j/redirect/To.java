@@ -44,6 +44,14 @@ public interface To {
 	List<Line> toLineList();
 
 	/**
+	 * Executes the composite command and returns the result as a list
+	 * containing the output lines without line ending.
+	 * 
+	 * @return the result as a list of line strings
+	 */
+	List<String> toStringList();
+
+	/**
 	 * Executes the composite command and writes the result to the given file.
 	 * 
 	 * @param file

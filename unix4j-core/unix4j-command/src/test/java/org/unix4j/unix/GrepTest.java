@@ -19,91 +19,91 @@ public class GrepTest {
 	public void testGrep_simple1() {
 		final FileTest tester = new FileTest(this.getClass());
 		tester.run(Unix4j.fromFile(tester.getInputFile()).grep("This"));
-		tester.run(Unix4j.create().grep("This", tester.getInputFile()));
+		tester.run(Unix4j.builder().grep("This", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_simple2() {
 		final FileTest tester = new FileTest(this.getClass());
 		tester.run(Unix4j.fromFile(tester.getInputFile()).grep("a"));
-		tester.run(Unix4j.create().grep("a", tester.getInputFile()));
+		tester.run(Unix4j.builder().grep("a", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_simple3() {
 		final FileTest tester = new FileTest(this.getClass());
 		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(".*"));
-		tester.run(Unix4j.create().grep(".*", tester.getInputFile()));
+		tester.run(Unix4j.builder().grep(".*", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_simple4() {
 		final FileTest tester = new FileTest(this.getClass());
 		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(".+"));
-		tester.run(Unix4j.create().grep(".+", tester.getInputFile()));
+		tester.run(Unix4j.builder().grep(".+", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_simple5() {
 		final FileTest tester = new FileTest(this.getClass());
 		tester.run(Unix4j.fromFile(tester.getInputFile()).grep("\\s"));
-		tester.run(Unix4j.create().grep("\\s", tester.getInputFile()));
+		tester.run(Unix4j.builder().grep("\\s", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_caseIsIncorrect() {
 		final FileTest tester = new FileTest(this.getClass());
 		tester.run(Unix4j.fromFile(tester.getInputFile()).grep("THIS"));
-		tester.run(Unix4j.create().grep("THIS", tester.getInputFile()));
+		tester.run(Unix4j.builder().grep("THIS", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_ignoringCase() {
 		final FileTest tester = new FileTest(this.getClass());
 		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(Grep.OPTIONS.ignoreCase, "THIS"));
-		tester.run(Unix4j.create().grep(Grep.OPTIONS.ignoreCase, "THIS", tester.getInputFile()));
+		tester.run(Unix4j.builder().grep(Grep.OPTIONS.ignoreCase, "THIS", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_inverseMatch() {
 		final FileTest tester = new FileTest(this.getClass());
 		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(Grep.OPTIONS.invertMatch, "This"));
-		tester.run(Unix4j.create().grep(Grep.OPTIONS.invertMatch, "This", tester.getInputFile()));
+		tester.run(Unix4j.builder().grep(Grep.OPTIONS.invertMatch, "This", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_inverseMatchIgnoreCase() {
 		final FileTest tester = new FileTest(this.getClass());
 		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(Grep.OPTIONS.invertMatch.ignoreCase, "t"));
-		tester.run(Unix4j.create().grep(Grep.OPTIONS.invertMatch.ignoreCase, "t", tester.getInputFile()));
+		tester.run(Unix4j.builder().grep(Grep.OPTIONS.invertMatch.ignoreCase, "t", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_usingRegexCharactersToFindLiteralTextWithoutEscaping() {
 		final FileTest tester = new FileTest(this.getClass());
 		tester.run(Unix4j.fromFile(tester.getInputFile()).grep("def\\d123"));
-		tester.run(Unix4j.create().grep("def\\d123", tester.getInputFile()));
+		tester.run(Unix4j.builder().grep("def\\d123", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_usingRegexCharactersToFindLiteralTextWithoutEscapingButWithFixedStringOptionSet() {
 		final FileTest tester = new FileTest(this.getClass());
 		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(Grep.OPTIONS.fixedStrings, "def\\d123"));
-		tester.run(Unix4j.create().grep(Grep.OPTIONS.fixedStrings, "def\\d123", tester.getInputFile()));
+		tester.run(Unix4j.builder().grep(Grep.OPTIONS.fixedStrings, "def\\d123", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_fixedStringButWithWrongCase() {
 		final FileTest tester = new FileTest(this.getClass());
 		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(Grep.OPTIONS.fixedStrings, "DEF\\d123"));
-		tester.run(Unix4j.create().grep(Grep.OPTIONS.fixedStrings, "DEF\\d123", tester.getInputFile()));
+		tester.run(Unix4j.builder().grep(Grep.OPTIONS.fixedStrings, "DEF\\d123", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_fixedStringWithWrongCaseAndIngoringCase() {
 		final FileTest tester = new FileTest(this.getClass());
 		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(Grep.OPTIONS.fixedStrings.ignoreCase, "DEF\\d123"));
-		tester.run(Unix4j.create().grep(Grep.OPTIONS.fixedStrings.ignoreCase, "DEF\\d123", tester.getInputFile()));
+		tester.run(Unix4j.builder().grep(Grep.OPTIONS.fixedStrings.ignoreCase, "DEF\\d123", tester.getInputFile()));
 	}
 
 	@SuppressWarnings("unused")

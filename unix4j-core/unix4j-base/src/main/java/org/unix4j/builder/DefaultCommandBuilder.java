@@ -59,6 +59,22 @@ public class DefaultCommandBuilder implements CommandBuilder {
 		return lines;
 	}
 	@Override
+	public List<String> toStringList() {
+		final List<String> lines = new ArrayList<String>();
+		toOutput(new Output() {
+			@Override
+			public boolean processLine(Line line) {
+				lines.add(line.getContent());
+				return true;//we want more lines
+			}
+			@Override
+			public void finish() {
+				//no op
+			}
+		});
+		return lines;
+	}
+	@Override
 	public void toOutput(Output output) {
 		Command<?> command = build();
 		if (input != null) {
