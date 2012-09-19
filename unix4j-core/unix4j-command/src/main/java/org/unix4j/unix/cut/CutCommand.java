@@ -9,7 +9,7 @@ import org.unix4j.unix.Cut;
 import org.unix4j.util.Range;
 
 /**
- * Implementation of the {@code Cut cut} command.
+ * Implementation of the {@link Cut cut} command.
  */
 class CutCommand extends AbstractCommand<CutArguments> {
 

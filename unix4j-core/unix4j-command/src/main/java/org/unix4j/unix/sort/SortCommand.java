@@ -17,7 +17,7 @@ import org.unix4j.unix.Sort;
 import org.unix4j.util.FileUtil;
 
 /**
- * Implementation of the {@code Sort sort} command.
+ * Implementation of the {@link Sort sort} command.
  */
 class SortCommand extends AbstractCommand<SortArguments> {
 

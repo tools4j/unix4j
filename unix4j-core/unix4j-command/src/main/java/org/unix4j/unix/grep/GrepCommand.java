@@ -14,7 +14,7 @@ import org.unix4j.unix.Grep;
 import org.unix4j.util.FileUtil;
 
 /**
- * Implementation of the {@code Grep grep} command.
+ * Implementation of the {@link Grep grep} command.
  */
 class GrepCommand extends AbstractCommand<GrepArguments> {
 	public GrepCommand(GrepArguments arguments) {

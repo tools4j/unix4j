@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 import static org.unix4j.util.Assert.assertArgTrue;
 
 /**
- * Implementation of the {@code Sed sed} command.
+ * Implementation of the {@link Sed sed} command.
  */
 class SedCommand extends AbstractCommand<SedArguments> {
 
