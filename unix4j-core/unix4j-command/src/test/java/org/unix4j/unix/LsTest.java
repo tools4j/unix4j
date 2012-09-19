@@ -13,7 +13,7 @@ public class LsTest {
 
 	@Before
 	public void beforeEach() {
-		unix4j = Unix4j.create();
+		unix4j = Unix4j.builder();
 	}
 
 	@After

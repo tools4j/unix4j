@@ -8,7 +8,6 @@ import org.unix4j.io.Output;
 import org.unix4j.io.StreamOutput;
 import org.unix4j.unix.Ls;
 import org.unix4j.unix.Sort;
-import org.unix4j.unix.Xargs;
 import org.unix4j.unix.grep.GrepOption;
 
 public class CommandBuilderTest {
@@ -18,7 +17,7 @@ public class CommandBuilderTest {
 
 	@Before
 	public void beforeEach() {
-		unix4j = Unix4j.create();
+		unix4j = Unix4j.builder();
 		output = null;
 	}
 
@@ -94,10 +93,11 @@ public class CommandBuilderTest {
 		unix4j.echo("Hello WORLD").grep(GrepOption.ignoreCase, "world");
 	}
 
-	@Test
-	public void testLsXargsEcho() {
-		unix4j.ls().xargs().echo("XARGS OUTPUT:", Xargs.XARG);
-	}
+//TODO need to port xargs first
+//	@Test
+//	public void testLsXargsEcho() {
+//		unix4j.ls().xargs().echo("XARGS OUTPUT:", Xargs.XARG);
+//	}
 //TODO Need to load a file from the resources directory
 //	@Test
 //	public void testFromFile() {

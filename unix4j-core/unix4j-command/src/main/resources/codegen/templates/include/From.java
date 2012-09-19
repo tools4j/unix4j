@@ -1,18 +1,3 @@
-package org.unix4j;
-
-import java.io.File;
-import java.io.InputStream;
-
-import org.unix4j.builder.Unix4jCommandBuilder;
-import org.unix4j.builder.Unix4jCommandBuilderImpl;
-import org.unix4j.io.Input;
-
-/**
- * Utility class with static methods serving as starting point to create a
- * command or build a command chain joining several commands.
- */
-public class Unix4j {
-
 	/**
 	 * Returns a builder to create a command or command chain reading the input
 	 * from the specified file.
@@ -22,7 +7,7 @@ public class Unix4j {
 	 * @return the fromFile to create the command or command chain
 	 */
 	public static Unix4jCommandBuilder fromFile(File file) {
-		return create().from(file);
+		return builder(new FileInput(file));
 	}
 
 	/**
@@ -51,31 +36,7 @@ public class Unix4j {
 	 * @return the builder to create the command or command chain
 	 */
 	public static Unix4jCommandBuilder fromResource(String resource) {
-		return create().fromResource(resource);
-	}
-
-	/**
-	 * Returns a builder to create a command or command chain reading the input
-	 * from the specified input stream.
-	 * 
-	 * @param input
-	 *            the input stream redirected to the input of the first command
-	 * @return the builder to create the command or command chain
-	 */
-	public static Unix4jCommandBuilder from(InputStream input) {
-		return create().from(input);
-	}
-
-	/**
-	 * Returns a builder to create a command or command chain reading from the
-	 * specified input object.
-	 * 
-	 * @param input
-	 *            the input passed to the first command
-	 * @return the builder to create the command or command chain
-	 */
-	public static Unix4jCommandBuilder from(Input input) {
-		return create().from(input);
+		return builder(new ResourceInput(resource));
 	}
 
 	/**
@@ -87,21 +48,29 @@ public class Unix4j {
 	 * @return the builder to create the command or command chain
 	 */
 	public static Unix4jCommandBuilder fromString(String input) {
-		return create().fromString(input);
+		return builder(new StringInput(input));
 	}
 
 	/**
-	 * Returns a builder to create a command or command chain providing no
-	 * input.
+	 * Returns a builder to create a command or command chain reading the input
+	 * from the specified input stream.
 	 * 
+	 * @param input
+	 *            the input stream redirected to the input of the first command
 	 * @return the builder to create the command or command chain
 	 */
-	public static Unix4jCommandBuilder create() {
-		return new Unix4jCommandBuilderImpl();
+	public static Unix4jCommandBuilder from(InputStream input) {
+		return builder(new StreamInput(input));
 	}
 
-	// no instances
-	private Unix4j() {
-		super();
+	/**
+	 * Returns a builder to create a command or command chain reading from the
+	 * specified input object.
+	 * 
+	 * @param input
+	 *            the input passed to the first command
+	 * @return the builder to create the command or command chain
+	 */
+	public static Unix4jCommandBuilder from(Input input) {
+		return builder(input);
 	}
-}
