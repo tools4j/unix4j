@@ -79,4 +79,11 @@ public class Unix4jCommandBuilder extends DefaultCommandBuilder
 	}
 </#foreach>
 </#foreach>
+
+	@Override
+	public Unix4jCommandBuilder join(Command<?> command) {
+		super.join(command);
+		return this;
+	}
+
 }

@@ -7,7 +7,7 @@
 	 * @return the fromFile to create the command or command chain
 	 */
 	public static Unix4jCommandBuilder fromFile(File file) {
-		return builder(new FileInput(file));
+		return builder().join(From.FACTORY.from(file));
 	}
 
 	/**
@@ -36,7 +36,7 @@
 	 * @return the builder to create the command or command chain
 	 */
 	public static Unix4jCommandBuilder fromResource(String resource) {
-		return builder(new ResourceInput(resource));
+		return builder().join(From.FACTORY.fromResource(resource));
 	}
 
 	/**
@@ -48,7 +48,7 @@
 	 * @return the builder to create the command or command chain
 	 */
 	public static Unix4jCommandBuilder fromString(String input) {
-		return builder(new StringInput(input));
+		return builder().join(From.FACTORY.fromString(input));
 	}
 
 	/**
@@ -60,7 +60,7 @@
 	 * @return the builder to create the command or command chain
 	 */
 	public static Unix4jCommandBuilder from(InputStream input) {
-		return builder(new StreamInput(input));
+		return builder().join(From.FACTORY.from(input));
 	}
 
 	/**
@@ -72,5 +72,5 @@
 	 * @return the builder to create the command or command chain
 	 */
 	public static Unix4jCommandBuilder from(Input input) {
-		return builder(input);
+		return builder().join(From.FACTORY.from(input));
 	}

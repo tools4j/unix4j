@@ -74,11 +74,6 @@ public class JoinedCommand<A extends Arguments<A>> implements Command<A> {
 	}
 
 	@Override
-	public JoinedCommand<A> withArgs(A arguments) {
-		return new JoinedCommand<A>(first.withArgs(arguments), second);
-	}
-
-	@Override
 	public Command<?> join(Command<?> next) {
 		return JoinedCommand.join(getFirst(), getSecond().join(next));
 	}
