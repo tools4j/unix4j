@@ -10,27 +10,27 @@
 	<notes>
 	</notes>
 	<methods>
-		<method args="options,range" input="true">
+		<method args="options,range" usesStandardInput="true">
 			Cuts the fields or characters using the given range
 			from the input line and writes them to the output.
 		</method>
-		<method args="options,indexes" input="true">
+		<method args="options,indexes" usesStandardInput="true">
 			Cuts the fields or characters using the given indexes
 			from the input line and writes them to the output.
 		</method>
-		<method args="options,delimiter,range" input="true">
+		<method args="options,delimiter,range" usesStandardInput="true">
 			Cuts the fields using the given range
 			from the input line and writes them to the output.
 		</method>
-		<method args="options,delimiter,indexes" input="true">
+		<method args="options,delimiter,indexes" usesStandardInput="true">
 			Cuts the fields using the given indexes
 			from the input line and writes them to the output.
 		</method>
-		<method args="options,delimiter,outputDelimiter,range" input="true">
+		<method args="options,delimiter,outputDelimiter,range" usesStandardInput="true">
 			Cuts the fields using the given range and using the given delimiter
 			from the input line and writes them to the output using the given outputDelimiter.
 		</method>
-		<method args="options,delimiter,outputDelimiter,indexes" input="true">
+		<method args="options,delimiter,outputDelimiter,indexes" usesStandardInput="true">
 			Cuts the fields using the given indexes and using the given delimiter
 			from the input line and writes them to the output using the given outputDelimiter.
 		</method>

@@ -1,5 +1,6 @@
 <@pp.dropOutputFile /> 
 <#list commandDefs as def> 
+<#if def.options?size != 0> 
 <#global cmd=def.command>
 <#global simpleName=cmd.simpleName+"Option">
 <@pp.changeOutputFile name=pp.pathTo("/"+def.pkg.path+"/"+simpleName+".java")/> 
@@ -100,4 +101,5 @@ public enum ${simpleName} implements Option, ${cmd.simpleName}Options {
 		return true;
 	}
 }
+</#if>
 </#list>

@@ -11,29 +11,29 @@
 		<note>Infinite loop detection is currently NOT implemented.</note>
 	</notes>
 	<methods>
-		<method input="false">
+		<method usesStandardInput="false">
 			Lists all files and directories in the user's current working 
 			directory and writes them to the output.
 		</method>
-		<method args="files" input="false">
+		<method args="files" usesStandardInput="false">
 			Prints the name of the given files and lists all files contained in 
 			directories for every directory in {@code files}.
 		</method>
-		<method args="paths" input="false">
+		<method args="paths" usesStandardInput="false">
 			Prints the name of the given files and lists all files contained in 
 			directories for every directory in {@code files}.
 		</method>
-		<method args="options" input="false">
+		<method args="options" usesStandardInput="false">
 			Lists all files and directories in the user's current working 
 			directory and writes them to the output using the given options 
 			specifying the details of the output format.
 		</method>
-		<method args="options,files" input="false">
+		<method args="options,files" usesStandardInput="false">
 			Prints the name of the given files and lists all files contained in
 			directories for every directory in {@code files}. The given options
 			define the details of the output format.
 		</method>
-		<method args="options,paths" input="false">
+		<method args="options,paths" usesStandardInput="false">
 			Prints the name of the given files and lists all files contained in
 			directories for every directory in {@code files}. The given options
 			define the details of the output format.

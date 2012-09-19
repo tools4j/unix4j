@@ -14,47 +14,47 @@
 	<description ref="tail.html"/>
 	<notes/>
 	<methods>
-		<method input="true">
+		<method usesStandardInput="true">
 			Reads the last 10 lines from the standard input and writes them to
 			the standard output.
 		</method>
-		<method args="count" input="true">
+		<method args="count" usesStandardInput="true">
 			Reads the last {@code count} lines from the standard input and 
 			writes them to the standard output.
 		</method>
-		<method args="options,count" input="true">
+		<method args="options,count" usesStandardInput="true">
 			Reads the last {@code count} lines or characters from the standard 
 			input and writes them to the standard output.
 		</method>
-		<method args="files" input="false">
+		<method args="files" usesStandardInput="false">
 			Reads the last 10 lines from each of the specified files and writes
 			them to the standard output. If more than a single file is 
 			specified, each file is preceded by a header consisting of the 
 			string {@code "==&gt; XXX &lt;=="} where {@code "XXX"} is the name 
 			of the file.
 		</method>
-		<method args="paths" input="false">
+		<method args="paths" usesStandardInput="false">
 			Reads the last 10 lines from each of the specified files and writes
 			them to the standard output. If more than a single file is 
 			specified, each file is preceded by a header consisting of the 
 			string {@code "==&gt; XXX &lt;=="} where {@code "XXX"} is the name 
 			of the file.
 		</method>
-		<method args="count,files" input="false">
+		<method args="count,files" usesStandardInput="false">
 			Reads the last {@code count} lines from each of the specified files
 			and writes them to the standard output. If more than a single file 
 			is specified, each file is preceded by a header consisting of the 
 			string {@code "==&gt; XXX &lt;=="} where {@code "XXX"} is the name 
 			of the file.
 		</method>
-		<method args="count,paths" input="false">
+		<method args="count,paths" usesStandardInput="false">
 			Reads the last {@code count} lines from each of the specified files
 			and writes them to the standard output. If more than a single file 
 			is specified, each file is preceded by a header consisting of the 
 			string {@code "==&gt; XXX &lt;=="} where {@code "XXX"} is the name 
 			of the file.
 		</method>
-		<method args="options,count,files" input="false">
+		<method args="options,count,files" usesStandardInput="false">
 			Reads the last {@code count} lines or characters from each of the
 			specified files and writes them to the standard output. If more than
 			a single file is specified and the {@code -q} option is not 
@@ -62,7 +62,7 @@
 			string {@code "==&gt; XXX &lt;=="} where {@code "XXX"} is the name 
 			of the file.
 		</method>
-		<method args="options,count,paths" input="false">
+		<method args="options,count,paths" usesStandardInput="false">
 			Reads the last {@code count} lines or characters from each of the
 			specified files and writes them to the standard output. If more than
 			a single file is specified and the {@code -q} option is not 

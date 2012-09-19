@@ -9,32 +9,32 @@
 	<description ref="grep.html"/>
 	<notes/>
 	<methods>
-		<method args="pattern" input="true">
+		<method args="pattern" usesStandardInput="true">
 			Filters the input lines from the standard input and writes the
 			matching lines to the output. A line matches if it contains the
 			given {@code pattern} using case-sensitive string comparison.
 		</method>
-		<method args="pattern,files" input="true">
+		<method args="pattern,files" usesStandardInput="true">
 			Filters the lines from the specified input files and writes the
 			matching lines to the output. A line matches if it contains the
 			given {@code pattern} using case-sensitive string comparison.
 		</method>
-		<method args="pattern,paths" input="true">
+		<method args="pattern,paths" usesStandardInput="true">
 			Filters the lines from the specified input files and writes the
 			matching lines to the output. A line matches if it contains the
 			given {@code pattern} using case-sensitive string comparison.
 		</method>
-		<method args="options,pattern" input="true">
+		<method args="options,pattern" usesStandardInput="true">
 			Filters the input lines from the standard input and writes the
 			matching lines to the output. Whether or not a line matches the
 			given {@code pattern} depends on the specified {@code options}.
 		</method>
-		<method args="options,pattern,files" input="true">
+		<method args="options,pattern,files" usesStandardInput="true">
 			Filters the input lines from the specified input files and writes
 			the matching lines to the output. Whether or not a line matches the
 			given {@code pattern} depends on the specified {@code options}.
 		</method>
-		<method args="options,pattern,paths" input="true">
+		<method args="options,pattern,paths" usesStandardInput="true">
 			Filters the input lines from the specified input files and writes
 			the matching lines to the output. Whether or not a line matches the
 			given {@code pattern} depends on the specified {@code options}.

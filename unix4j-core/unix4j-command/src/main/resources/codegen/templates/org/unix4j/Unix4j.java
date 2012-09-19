@@ -4,7 +4,7 @@ import org.unix4j.builder.Unix4jCommandBuilder;
 
 <#function hasNoInputMethod def>
 	<#foreach method in def.methods>
-		<#if !method.input>
+		<#if !method.usesStandardInput>
 			<#return true>
 		</#if>
 	</#foreach>
@@ -47,7 +47,7 @@ public final class Unix4j {
 
 <#foreach def in commandDefs>
 <#foreach method in def.methods>
-<#if !method.input>
+<#if !method.usesStandardInput>
 	/**
 	 * ${method.desc}
 	 * <p>

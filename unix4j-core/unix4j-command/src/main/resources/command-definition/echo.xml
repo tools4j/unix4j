@@ -14,21 +14,21 @@
 	<description ref="echo.html"/>
 	<notes/>
 	<methods>
-		<method args="string" input="false">
+		<method args="string" usesStandardInput="false">
 			 Writes any specified string followed by a line ending to the 
 			 standard output.
 		</method>
-		<method args="strings" input="false">
+		<method args="strings" usesStandardInput="false">
 			 Writes any specified strings, separated by single blank 
 			 ({@code ' '}) characters and followed by a line ending, to the 
 			 standard output.
 		</method>
-		<method args="options,string" input="false">
+		<method args="options,string" usesStandardInput="false">
 			 Writes any specified string followed by a newline character to 
 			 the standard output suppressing the trailing line ending if the
 			 {@code -n} option is specified.
 		</method>
-		<method args="options,strings" input="false">
+		<method args="options,strings" usesStandardInput="false">
 			 Writes any specified strings, separated by single blank 
 			 ({@code ' '}) characters to the standard output suppressing the
 			 trailing line ending if the {@code -n} option is specified.

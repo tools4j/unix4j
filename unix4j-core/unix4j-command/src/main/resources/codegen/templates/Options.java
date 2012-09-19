@@ -3,6 +3,7 @@
 <@pp.dropOutputFile />
 <#list optionSetDefs as def>
 <#global cmdDef=def.command> 
+<#if cmdDef.options?size != 0> 
 <#global cmd=cmdDef.command>
 <#global commandName=cmdDef.commandName> 
 <#global optionName=cmd.simpleName+"Option">
@@ -79,4 +80,5 @@ public interface ${simpleName} extends OptionSet<${optionName}> {
 		}
 	};
 }
+</#if>
 </#list>
