@@ -1,4 +1,4 @@
-package org.unix4j.redirect;
+package org.unix4j.builder;
 
 import java.io.File;
 import java.io.OutputStream;

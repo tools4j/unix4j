@@ -1,7 +1,6 @@
 package org.unix4j.builder;
 
 import org.unix4j.command.Command;
-import org.unix4j.redirect.To;
 
 public interface CommandBuilder extends To {
 	/**

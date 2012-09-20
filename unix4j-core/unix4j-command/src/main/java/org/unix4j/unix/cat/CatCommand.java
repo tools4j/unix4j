@@ -9,7 +9,6 @@ import org.unix4j.io.FileInput;
 import org.unix4j.processor.LineProcessor;
 import org.unix4j.processor.RedirectInputLineProcessor;
 import org.unix4j.unix.Cat;
-import org.unix4j.unix.Echo;
 import org.unix4j.util.FileUtil;
 
 /**
@@ -17,7 +16,7 @@ import org.unix4j.util.FileUtil;
  */
 class CatCommand extends AbstractCommand<CatArguments> {
 	public CatCommand(CatArguments arguments) {
-		super(Echo.NAME, arguments);
+		super(Cat.NAME, arguments);
 	}
 
 	@Override

@@ -25,6 +25,6 @@ public class FromFileTest {
 
 	@Test(expected = NullPointerException.class)
 	public void testFromFile_fileParamIsNull() {
-		Unix4j.fromFile(null).toStdOut();
+		Unix4j.fromFile((File)null).toStdOut();
 	}
 }

@@ -53,7 +53,12 @@ public final class ${simpleName} implements ${cmd.simpleName}.Interface<${comman
 		final ${argumentsName} args = new ${argumentsName}(${getOptionsArgIfAny(def, method.args)});
 		<#foreach arg in method.args>
 		<#if !isOptionsArg(def, arg)>
-		args.${setter(def.operands[arg])}(${arg});
+		<#global operand = def.operands[arg]>
+		<#if operand.redirection?length == 0>
+		args.${setter(operand)}(${arg});
+		<#else>
+		args.${operand.redirection};
+		</#if>
 		</#if>
 		</#foreach>
 		return new ${commandName}(args);

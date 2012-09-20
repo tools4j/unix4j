@@ -62,10 +62,20 @@ public class XmlUtil {
 	}
 
 	public static Element getSingleChildElement(Element parent, Enum<?> child) {
+		final Element el = getSingleOptionalChildElement(parent, child);
+		if (el != null) {
+			return el;
+		}
+		throw new IllegalArgumentException("mandatory (single) child element " + getXmlName(child) + " missing for XML element " + parent.getNodeName());
+	}
+	public static Element getSingleOptionalChildElement(Element parent, Enum<?> child) {
 		final String elName = getXmlName(child);
 		final NodeList list = parent.getElementsByTagName(elName);
 		if (list.getLength() == 1) {
 			return (Element)list.item(0);
+		}
+		if (list.getLength() == 0) {
+			return null;
 		}
 		throw new IllegalArgumentException("expected a single " + elName + " child element of XML element " + parent.getNodeName() + ", but found " + list.getLength());
 	}

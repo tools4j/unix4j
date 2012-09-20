@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.InputStream;
 
 import org.unix4j.io.Input;
-import org.unix4j.redirect.From;
 
 <#foreach def in commandDefs>
 <#if hasNoInputMethod(def)>
@@ -43,8 +42,6 @@ public final class Unix4j {
 		return new Unix4jCommandBuilder();
 	}
 	
-<#include "/include/From.java">
-
 <#foreach def in commandDefs>
 <#foreach method in def.methods>
 <#if !method.usesStandardInput>
