@@ -78,7 +78,7 @@
     <xs:complexType mixed="true">
       <xs:attribute name="name" use="required" type="xs:NCName"/>
       <xs:attribute name="type" use="required" type="xs:string"/>
-      <xs:attribute name="isRedirected" type="xs:boolean"/>
+      <xs:attribute name="redirection" type="xs:string"/>
     </xs:complexType>
   </xs:element>
 </xs:schema>

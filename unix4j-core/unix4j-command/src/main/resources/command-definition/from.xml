@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <command-def	xmlns="http://www.unix4j.org/command-def" 
 				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-				xsi:schemaLofromion="http://www.unix4j.org/command-def command-def.xsd">
+				xsi:schemaLocation="http://www.unix4j.org/command-def command-def.xsd">
 	
 	<command name="from" class="org.unix4j.unix.From" package="org.unix4j.unix.from"/>
 	<name>
@@ -100,7 +100,6 @@
 			the reader used to read the input
 		</operand>
 		<operand name="url" type="java.net.URL" redirection="setInput(new org.unix4j.io.URLInput(url))">
-			<redirect toOperand="input" conversion="new URLInput(url)"/>
 			the URL to read from
 		</operand>
 		<operand name="input" type="org.unix4j.io.Input">
