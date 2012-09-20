@@ -67,22 +67,22 @@
 	</methods>
 	<options/>
 	<operands>
-		<operand name="string" type="String">
+		<operand name="string" type="String" redirection="setInput(new org.unix4j.io.StringInput(string))">
 			the string to use as input  
 		</operand>
-		<operand name="strings" type="String...">
+		<operand name="strings" type="String..." redirection="setInput(new org.unix4j.io.StringInput(strings))">
 			the input lines  
 		</operand>
-		<operand name="lines" type="java.util.Collection&lt;? extends String>">
+		<operand name="lines" type="java.util.Collection&lt;? extends String>" redirection="setInput(new org.unix4j.io.StringInput(lines))">
 			collection with input lines 
 		</operand>
-		<operand name="path" type="String">
+		<operand name="path" type="String" redirection="setInput(new org.unix4j.io.FileInput(path))">
 			the file to use as input
 		</operand>
-		<operand name="file" type="java.io.File">
+		<operand name="file" type="java.io.File" redirection="setInput(new org.unix4j.io.FileInput(file))">
 			the file to use as input
 		</operand>
-		<operand name="resource" type="String">
+		<operand name="resource" type="String" redirection="setInput(new org.unix4j.io.ResourceInput(resource))">
 			a path to the file to to redirect to the next command The will need
 			to be on the classpath. If the file is in the root directory, the 
 			filename should be prefixed with a forward slash. e.g.:
@@ -93,16 +93,17 @@
 		 	forward slash. e.g.:
 			{@code "/org/company/my/package/test-file.txt"}
 		</operand>
-		<operand name="stream" type="java.io.InputStream">
+		<operand name="stream" type="java.io.InputStream" redirection="setInput(new org.unix4j.io.StreamInput(stream))">
 			the input stream to read from
 		</operand>
-		<operand name="reader" type="java.io.Reader">
+		<operand name="reader" type="java.io.Reader" redirection="setInput(new org.unix4j.io.ReaderInput(reader))">
 			the reader used to read the input
 		</operand>
-		<operand name="url" type="java.net.URL">
+		<operand name="url" type="java.net.URL" redirection="setInput(new org.unix4j.io.URLInput(url))">
+			<redirect toOperand="input" conversion="new URLInput(url)"/>
 			the URL to read from
 		</operand>
-		<operand name="input" type="java.io.Reader">
+		<operand name="input" type="org.unix4j.io.Input">
 			the input object to read from
 		</operand>
 	</operands>

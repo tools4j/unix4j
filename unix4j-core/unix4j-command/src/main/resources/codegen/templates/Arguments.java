@@ -45,7 +45,7 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	private final ${optionsName} options;
 	</#if>
 	<#foreach operand in def.operands?values>
-	<#if !operand.isRedirected && !isOptions(operand)>
+	<#if !isOptions(operand) && operand.redirection?length == 0>
 	
 	// operand: <${operand.name}>
 	private boolean ${operand.name}IsSet;
@@ -88,7 +88,7 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	</#if>
 	
 	<#foreach operand in def.operands?values>
-	<#if !operand.isRedirected && !isOptions(operand)>
+	<#if !isOptions(operand) && operand.redirection?length == 0>
 	/**
 	 * Returns {@code <${operand.name}>}: ${operand.desc}
 	 * 
@@ -145,7 +145,7 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 		boolean isEmpty = true;
 		</#if>
 		<#foreach operand in def.operands?values>
-		<#if !operand.isRedirected && !isOptions(operand)>
+		<#if !isOptions(operand) && operand.redirection?length == 0>
 		isEmpty &= !${operand.name}IsSet;
 		</#if>
 		</#foreach>
@@ -163,7 +163,7 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 		}
 		</#if>
 		<#foreach operand in def.operands?values>
-		<#if !operand.isRedirected && !isOptions(operand)>
+		<#if !isOptions(operand) && operand.redirection?length == 0>
 		// operand: <${operand.name}>
 		if (${operand.name}IsSet) {
 			if (sb.length() > 0) sb.append(' ');

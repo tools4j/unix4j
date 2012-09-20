@@ -29,7 +29,7 @@ public class StringInput extends BufferedInput {
 	 * @param lines
 	 *            the lines for this input
 	 */
-	public StringInput(Iterable<String> lines) {
+	public StringInput(Iterable<? extends String> lines) {
 		super(toList(lines));
 	}
 
@@ -41,7 +41,7 @@ public class StringInput extends BufferedInput {
 		return list;
 	}
 
-	private static LinkedList<Line> toList(Iterable<String> lines) {
+	private static LinkedList<Line> toList(Iterable<? extends String> lines) {
 		final LinkedList<Line> list = new LinkedList<Line>();
 		for (String line : lines) {
 			list.addAll(StringUtil.splitLines(line));

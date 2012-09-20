@@ -35,6 +35,14 @@ import ${cmd.pkg.name}.${cmd.simpleName};
 		<#return def.operands[arg].type>
 	</#if>
 </#function>
+<#function indexOfOperandByType operands operand>
+	<#foreach opd in operands?values>
+		<#if opd.type == operand.type>
+			<#return opd_index>
+		</#if>
+	</#foreach>
+	<#return -1>
+</#function>
 /**
  * Non-instantiable module with inner types defining variables applicable to the
  * <b>${commandName}</b> command methods; {@link Interface} defines the signature 
@@ -42,11 +50,13 @@ import ${cmd.pkg.name}.${cmd.simpleName};
  */
 public class ${varName} {
 <#foreach opd in def.operands?values>
+<#if indexOfOperandByType(def.operands, opd) == opd_index><#-- otherwise it is a repeted occurance of this type -->
 	/**
 	 * Literal for {@code <${opd.name}>} operand, for instance representing a 
 	 * variable or named constant holding a value of the type {@code ${normalizeVarArgType(opd.type, false)}}.
 	 */
 	public interface ${varTypeName(opd)} extends Literal<${normalizeVarArgType(opd.type, true)}>{}
+</#if>
 </#foreach>
 	
 	/**

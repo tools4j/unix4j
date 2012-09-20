@@ -12,7 +12,6 @@ import org.unix4j.command.ExitValueException;
 import org.unix4j.command.NoOp;
 import org.unix4j.io.BufferedOutput;
 import org.unix4j.io.FileOutput;
-import org.unix4j.io.Input;
 import org.unix4j.io.NullOutput;
 import org.unix4j.io.Output;
 import org.unix4j.io.StdOutput;
@@ -20,7 +19,6 @@ import org.unix4j.io.StreamOutput;
 import org.unix4j.io.StringOutput;
 import org.unix4j.io.WriterOutput;
 import org.unix4j.line.Line;
-import org.unix4j.redirect.From;
 
 public class DefaultCommandBuilder implements CommandBuilder {
 
@@ -28,9 +26,6 @@ public class DefaultCommandBuilder implements CommandBuilder {
 
 	public DefaultCommandBuilder() {
 		super();
-	}
-	public DefaultCommandBuilder(Input input) {
-		join(From.FACTORY.from(input));
 	}
 	public CommandBuilder join(Command<?> command) {
 		if (command == null) {

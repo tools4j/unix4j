@@ -40,7 +40,7 @@ public class CommandDefinitionLoader {
 	private static enum XmlAttribtue {
 		class_, package_, ref, 
 		name, args, usesStandardInput, acronym, type, 
-		exclusiveGroup, enabledBy, isRedirected
+		exclusiveGroup, enabledBy, redirection
 	}
 	public CommandDef load(URL commandDefinition) {
 		try {
@@ -147,8 +147,8 @@ public class CommandDefinitionLoader {
 			final String name = XmlUtil.getRequiredAttribute(elOperand, XmlAttribtue.name);
 			final String type = XmlUtil.getRequiredAttribute(elOperand, XmlAttribtue.type);
 			final String desc = formatDesc(XmlUtil.getRequiredElementText(elOperand));
-			final String indirect = XmlUtil.getAttribute(elOperand, XmlAttribtue.isRedirected, Boolean.FALSE.toString());
-			final OperandDef opDef = new OperandDef(name, type, desc, Boolean.parseBoolean(indirect));
+			final String redirection = XmlUtil.getAttribute(elOperand, XmlAttribtue.redirection, "");
+			final OperandDef opDef = new OperandDef(name, type, desc, redirection);
 			def.operands.put(name, opDef);
 		}
 	}
