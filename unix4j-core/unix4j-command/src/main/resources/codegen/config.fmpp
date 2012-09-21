@@ -33,4 +33,10 @@ data: {
         ../../command-definition/wc.xml
         ../../command-definition/cut.xml
     )
+	SSScommandDefs: org.unix4j.codegen.CommandDefinitionDataLoader(
+        ../../command-definition/sort.xml
+    )
+    SSSoptionSetDefs: org.unix4j.codegen.OptionSetDefinitionDataLoader(
+        ../../command-definition/sort.xml
+    )
 }

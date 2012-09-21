@@ -1,6 +1,8 @@
 package org.unix4j.codegen.optset;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
@@ -26,11 +28,11 @@ public class ActiveSetPermutationBuilder {
 		this.constraints = constraints;
 	}
 
-	public SortedMap<String, ActiveSetDef> generateActiveSetsForGroup(Map<String, OptionDef> options) {
-		return generateNextActiveSets(options, new TreeSet<String>());
+	public Map<String, ActiveSetDef> generateActiveSetsForGroup(Map<String, OptionDef> options) {
+		return generateNextActiveSets(options, new HashMap<String, ActiveSetDef>(), new TreeSet<String>());
 	}
-	private SortedMap<String, ActiveSetDef> generateNextActiveSets(Map<String, OptionDef> options, SortedSet<String> active) {
-		final SortedMap<String, ActiveSetDef> activeSets = new TreeMap<String, ActiveSetDef>();
+	private Map<String, ActiveSetDef> generateNextActiveSets(Map<String, OptionDef> options, Map<String, ActiveSetDef> activeSetsByName, SortedSet<String> active) {
+		final Map<String, ActiveSetDef> activeSets = new LinkedHashMap<String, ActiveSetDef>();
 		for (final String opt : options.keySet()) {
 			if (!active.contains(opt)) {
 				final SortedMap<String, OptionDef> newActive = new TreeMap<String, OptionDef>();
@@ -40,8 +42,13 @@ public class ActiveSetPermutationBuilder {
 				newActive.put(opt, options.get(opt));
 				if (isValidActiveSet(newActive.keySet())) {
 					final ActiveSetDef activeSet = new ActiveSetDef(newActive);
-					activeSet.next.putAll(generateNextActiveSets(options, activeSet.active));
-					activeSets.put(opt, activeSet);
+					if (activeSetsByName.containsKey(activeSet.name)) {
+						activeSets.put(opt, activeSetsByName.get(activeSet.name));
+					} else {
+						activeSetsByName.put(activeSet.name, activeSet);
+						activeSet.next.putAll(generateNextActiveSets(options, activeSetsByName, activeSet.active));
+						activeSets.put(opt, activeSet);
+					}
 				}
 			}
 		}

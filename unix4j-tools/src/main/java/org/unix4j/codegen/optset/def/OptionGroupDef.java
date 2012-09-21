@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 import org.unix4j.codegen.command.def.CommandDef;
 import org.unix4j.codegen.command.def.OptionDef;
@@ -22,9 +20,9 @@ public class OptionGroupDef extends AbstractElementDef {
 	}
 
 	public final TypeDef groupType;
-	public final SortedMap<String, OptionDef> options = new TreeMap<String, OptionDef>();	//key: option (long) names
-	public final SortedMap<String, OptionGroupDef> optionToNextGroup = new TreeMap<String, OptionGroupDef>();	//key: option (long) names
-	public final List<SortedMap<String, ActiveSetDef>> levelActiveSets = new ArrayList<SortedMap<String, ActiveSetDef>>();//key in map:activeSet.name / level 0: initial n active options, level 1: n+1 active option, ...
+	public final Map<String, OptionDef> options = new LinkedHashMap<String, OptionDef>();	//key: option (long) names
+	public final Map<String, OptionGroupDef> optionToNextGroup = new LinkedHashMap<String, OptionGroupDef>();	//key: option (long) names
+	public final List<Map<String, ActiveSetDef>> levelActiveSets = new ArrayList<Map<String, ActiveSetDef>>();//key in map:activeSet.name / level 0: initial n active options, level 1: n+1 active option, ...
 
 	@Override
 	public String toString() {
@@ -47,7 +45,7 @@ public class OptionGroupDef extends AbstractElementDef {
 	private String getLevelActiveSetString() {
 		final StringBuilder sb = new StringBuilder();
 		int index = 0;
-		for (final SortedMap<String, ActiveSetDef> levelSets : levelActiveSets) {
+		for (final Map<String, ActiveSetDef> levelSets : levelActiveSets) {
 			sb.append("\t[").append(index).append("]=");
 			boolean first = true;
 			for (final String setName : levelSets.keySet()) {
