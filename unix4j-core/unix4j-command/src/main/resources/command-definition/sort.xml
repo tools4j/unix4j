@@ -201,7 +201,6 @@
 			be the uppercase equivalent for the purposes of comparison.
 			(This option is ignored if a comparator operand has is present).
 		</option>
-		<!-- 
 		<option name="numericSort" acronym="n" exclusiveGroup="nghVM">
 			Sort numerically; the number begins each line and consists of 
 			optional blanks, an optional minus sign, and zero or more digits
@@ -260,7 +259,6 @@
 			
 			(This option is ignored if a comparator operand has is present).
 		</option>
-		 -->
 		<option name="reverse" acronym="r">
 			Reverse the sense of comparisons.
 		</option>
