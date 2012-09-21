@@ -3,8 +3,9 @@ package org.unix4j.util;
 import java.util.Comparator;
 
 /**
- * Comparator for strings trimming leading or trailing blanks or both before
- * forwarding the actual comparison to a delegate comparator.
+ * Comparator for strings or character sequences trimming leading or trailing 
+ * blanks or both before forwarding the actual comparison to a delegate 
+ * comparator.
  */
 public class TrimBlanksStringComparator implements Comparator<String> {
 
@@ -21,18 +22,20 @@ public class TrimBlanksStringComparator implements Comparator<String> {
 	}
 
 	private final Mode mode;
-	private final Comparator<? super String> comparator;
+	private final Comparator<? super CharSequence> comparator;
 
 	/**
 	 * Constructor with mode and delegate comparator performing the actual
-	 * string comparison on the trimmed strings.
+	 * string comparison on the trimmed strings or character sequences.
 	 * 
 	 * @param mode
-	 *            the mode defining which end of the strings should be trimmed
+	 *            the mode defining which end of the character sequence should 
+	 *            be trimmed
 	 * @param comparator
-	 *            delegate comparator performing the actual string comparison
+	 *            delegate comparator performing the actual comparison after 
+	 *            trimming
 	 */
-	public TrimBlanksStringComparator(Mode mode, Comparator<? super String> comparator) {
+	public TrimBlanksStringComparator(Mode mode, Comparator<? super CharSequence> comparator) {
 		this.mode = mode;
 		this.comparator = comparator;
 	}
@@ -43,11 +46,21 @@ public class TrimBlanksStringComparator implements Comparator<String> {
 		final int end1 = findEnd(s1);
 		final int start2 = findStart(s2);
 		final int end2 = findEnd(s2);
-		return comparator.compare(s1.substring(start1, end1), s2.substring(start2, end2));
+		return comparator.compare(s1.subSequence(start1, end1), s2.subSequence(start2, end2));
 	}
 
 	private int findStart(String s) {
 		if (mode == Mode.Trailing) return 0;
+		return findStartTrimBlanks(s);
+	}
+	/**
+	 * Finds and returns the start of the given sequence after trimming spaces
+	 * and tabs.
+	 *  
+	 * @param s the character sequence
+	 * @return the index containing the first non-blank character
+	 */
+	static int findStartTrimBlanks(CharSequence s) {
 		final int len = s.length();
 		for (int i = 0; i < len; i++) {
 			final char ch = s.charAt(i);
@@ -59,8 +72,18 @@ public class TrimBlanksStringComparator implements Comparator<String> {
 	}
 
 	private int findEnd(String s) {
+		if (mode == Mode.Leading) return s.length();
+		return findEndTrimBlanks(s);
+	}
+	/**
+	 * Finds and returns the end of the given sequence after trimming spaces
+	 * and tabs.
+	 *  
+	 * @param s the character sequence
+	 * @return the index after the last non-blank character
+	 */
+	static int findEndTrimBlanks(CharSequence s) {
 		final int len = s.length();
-		if (mode == Mode.Leading) return len;
 		for (int i = len; i > 0; i--) {
 			final char ch = s.charAt(i-1);
 			if (ch != ' ' && ch != '\t') {
