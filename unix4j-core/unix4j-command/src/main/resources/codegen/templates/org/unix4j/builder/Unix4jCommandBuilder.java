@@ -5,7 +5,9 @@ import org.unix4j.command.Command;
 
 <#foreach def in commandDefs> 
 import ${def.command.pkg.name}.${def.command.simpleName};
-import ${def.pkg.name}.*;
+<#if def.options?size != 0>
+import ${def.pkg.name}.${def.command.simpleName}Options;
+</#if>
 </#foreach>
 
 /**

@@ -55,3 +55,12 @@
 	</#if>
 </#function>
 
+<#function countUsesStandardInput def usesStandardInput>
+	<#local count=0>
+	<#foreach method in def.methods>
+		<#if method.usesStandardInput = usesStandardInput>
+			<#local count=count+1>
+		</#if>
+	</#foreach>
+	<#return count>
+</#function>
