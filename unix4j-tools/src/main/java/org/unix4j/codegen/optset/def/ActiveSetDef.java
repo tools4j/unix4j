@@ -3,9 +3,7 @@ package org.unix4j.codegen.optset.def;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedMap;
 import java.util.SortedSet;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.unix4j.codegen.command.def.OptionDef;
@@ -24,7 +22,7 @@ public class ActiveSetDef extends AbstractElementDef {
 
 	public final String name;
 	public final SortedSet<String> active = new TreeSet<String>();								//option (long) names
-	public final SortedMap<String, ActiveSetDef> next = new TreeMap<String, ActiveSetDef>();	//key: option (long) names (does not contain self refs)
+	public final Map<String, ActiveSetDef> next = new LinkedHashMap<String, ActiveSetDef>();	//key: option (long) names (does not contain self refs)
 
 	public Set<String> getAllOptions() {
 		final Set<String> options = new TreeSet<String>();

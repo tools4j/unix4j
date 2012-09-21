@@ -6,7 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.unix4j.codegen.command.def.CommandDef;
@@ -22,16 +21,26 @@ public class OptionSetDefinitionLoader {
 	public OptionSetDef create(CommandDef commandDef) {
 		final OptionSetDef def = createOptionSetDef(commandDef);
 		final Collection<OptionConstraint> constraints = Constraints.getOptionConstraints(commandDef);
-		final SortedMap<String, ActiveSetDef> initialActiveSets = new ActiveSetPermutationBuilder(constraints).generateActiveSetsForGroup(commandDef.options);
+		final Map<String, ActiveSetDef> initialActiveSets = new ActiveSetPermutationBuilder(constraints).generateActiveSetsForGroup(commandDef.options);
+//		print("", initialActiveSets);
+//		if (true) return null;
 		addGroupsDerivedFromActiveSets(def, initialActiveSets);
 		return def;
 	}
 
-	private void addGroupsDerivedFromActiveSets(OptionSetDef def, SortedMap<String, ActiveSetDef> initialActiveSets) {
+	@SuppressWarnings("unused")
+	private void print(String indent, Map<String, ActiveSetDef> activeSets) {
+		for (final Map.Entry<String, ActiveSetDef> e : activeSets.entrySet()) {
+			System.out.println(indent + e.getKey() + ": " + e.getValue().name);
+			print(indent + "\t", e.getValue().next);
+		}
+	}
+
+	private void addGroupsDerivedFromActiveSets(OptionSetDef def, Map<String, ActiveSetDef> initialActiveSets) {
 		//create groups first
 		final Map<Set<String>, OptionGroupDef> optionsToGroup = createGroupsFromActiveSets(def, initialActiveSets);
 
-		//initial level
+//		//initial level
 		for (final ActiveSetDef initialSet : initialActiveSets.values()) {
 			addGroupsDerivedFromActiveSets(optionsToGroup, initialSet);
 		}
@@ -49,7 +58,7 @@ public class OptionSetDefinitionLoader {
 		def.groups.addAll(optionsToGroup.values());
 	}
 
-	private Map<Set<String>, OptionGroupDef> createGroupsFromActiveSets(OptionSetDef def, SortedMap<String, ActiveSetDef> initialActiveSets) {
+	private Map<Set<String>, OptionGroupDef> createGroupsFromActiveSets(OptionSetDef def, Map<String, ActiveSetDef> initialActiveSets) {
 		final Map<Set<String>, OptionGroupDef> optionsToGroup = new LinkedHashMap<Set<String>, OptionGroupDef>();
 		//first, simply add the options
 		addGroupsForActiveSets(def.command, optionsToGroup, initialActiveSets.values());
@@ -84,7 +93,7 @@ public class OptionSetDefinitionLoader {
 		getLevelSetFor(group, activeSet.active.size(), true).put(activeSet.name, activeSet);
 	}
 	
-	private void fillOptionToNextGroup(Map<Set<String>, OptionGroupDef> optionsToGroup, OptionGroupDef group, SortedMap<String, ActiveSetDef> newActiveToActiveSet) {
+	private void fillOptionToNextGroup(Map<Set<String>, OptionGroupDef> optionsToGroup, OptionGroupDef group, Map<String, ActiveSetDef> newActiveToActiveSet) {
 		for (final Map.Entry<String, ActiveSetDef> e : newActiveToActiveSet.entrySet()) {
 			final String newActive = e.getKey(); 
 			final ActiveSetDef activeSet = e.getValue();
@@ -108,7 +117,7 @@ public class OptionSetDefinitionLoader {
 	private boolean populateLevelActiveSetsToGroups(final Map<Set<String>, OptionGroupDef> optionsToGroup, int level) {
 		boolean anyAdded = false;
 		for (final OptionGroupDef group : optionsToGroup.values()) {
-			final SortedMap<String, ActiveSetDef> setsForThisLevel = getLevelSetFor(group, level, false);
+			final Map<String, ActiveSetDef> setsForThisLevel = getLevelSetFor(group, level, false);
 			for (final ActiveSetDef activeSet : setsForThisLevel.values()) {
 				for (ActiveSetDef next : activeSet.next.values()) {
 					addGroupsDerivedFromActiveSets(optionsToGroup, next);
@@ -119,19 +128,19 @@ public class OptionSetDefinitionLoader {
 		return anyAdded;
 	}
 
-	private SortedMap<String, ActiveSetDef> getLevelSetFor(OptionGroupDef group, int level, boolean create) {
-		final SortedMap<String, ActiveSetDef> lastLevelSet = getLastLevelSet(group);
-		if (lastLevelSet != null && lastLevelSet.get(lastLevelSet.firstKey()).active.size() == level) {
+	private Map<String, ActiveSetDef> getLevelSetFor(OptionGroupDef group, int level, boolean create) {
+		final Map<String, ActiveSetDef> lastLevelSet = getLastLevelSet(group);
+		if (lastLevelSet != null && lastLevelSet.get(lastLevelSet.keySet().iterator().next()).active.size() == level) {
 			return lastLevelSet;
 		}
 		if (create) {
-			final SortedMap<String, ActiveSetDef> newLastLevelSet = new TreeMap<String, ActiveSetDef>();
+			final Map<String, ActiveSetDef> newLastLevelSet = new LinkedHashMap<String, ActiveSetDef>();
 			group.levelActiveSets.add(newLastLevelSet);
 			return newLastLevelSet;
 		}
 		return new TreeMap<String, ActiveSetDef>();
 	}
-	private SortedMap<String, ActiveSetDef> getLastLevelSet(OptionGroupDef group) {
+	private Map<String, ActiveSetDef> getLastLevelSet(OptionGroupDef group) {
 		final int size = group.levelActiveSets.size();
 		return size == 0 ? null : group.levelActiveSets.get(size - 1);
 	}
