@@ -10,6 +10,7 @@ import org.unix4j.io.FileInput;
 import org.unix4j.processor.LineProcessor;
 import org.unix4j.processor.RedirectInputLineProcessor;
 import org.unix4j.unix.Ls;
+import org.unix4j.unix.Uniq;
 import org.unix4j.util.FileUtil;
 
 /**

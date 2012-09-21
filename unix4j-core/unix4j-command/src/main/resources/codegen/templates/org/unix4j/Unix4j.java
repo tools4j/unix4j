@@ -1,24 +1,11 @@
+<#include "/include/macros.fmpp">
 package org.unix4j;
 
 import org.unix4j.builder.Unix4jCommandBuilder;
 
-<#function hasNoInputMethod def>
-	<#foreach method in def.methods>
-		<#if !method.usesStandardInput>
-			<#return true>
-		</#if>
-	</#foreach>
-	<#return false>
-</#function>
-
-import java.io.File;
-import java.io.InputStream;
-
-import org.unix4j.io.Input;
-
 <#foreach def in commandDefs>
-<#if hasNoInputMethod(def)>
-import ${def.pkg.name}.*;
+<#if countUsesStandardInput(def, false) != 0 && def.options?size != 0>
+import ${def.pkg.name}.${def.command.simpleName}Options;
 </#if>
 </#foreach>
 

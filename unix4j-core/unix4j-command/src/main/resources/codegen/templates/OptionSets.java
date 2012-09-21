@@ -1,4 +1,4 @@
-<#include "include/macros.fmpp">
+<#include "/include/macros.fmpp">
 
 <@pp.dropOutputFile />
 <#list optionSetDefs as def>
