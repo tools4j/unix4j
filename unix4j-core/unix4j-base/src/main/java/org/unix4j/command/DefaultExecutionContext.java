@@ -1,6 +1,7 @@
 package org.unix4j.command;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
@@ -9,6 +10,7 @@ public class DefaultExecutionContext implements ExecutionContext {
 	private File userHome; 
 	private File tempDirectory; 
 	private File currentDirectory; 
+	private Locale locale;
 	public DefaultExecutionContext() {
 		this.currentDirectory = null;//default
 	}
@@ -45,6 +47,16 @@ public class DefaultExecutionContext implements ExecutionContext {
 			tempDirectory = new File(System.getProperty("java.io.tmpdir"));
 		}
 		return tempDirectory;
+	}
+	public void setLocale(Locale locale) {
+		this.locale = locale;
+	}
+	@Override
+	public Locale getLocale() {
+		if (locale == null) {
+			locale = Locale.getDefault();
+		}
+		return locale;
 	}
 	@Override
 	public Map<String, String> getEnv() {
