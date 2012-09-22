@@ -25,11 +25,11 @@ public class SortFileTest {
 		tester.run(Unix4j.builder().sort(Sort.OPTIONS.reverse, tester.getInputFile()));
 	}
 
-//	@Test
-//	public void sortNumeric() {
-//		final FileTest tester = new FileTest(this.getClass());
-//		tester.run(Unix4j.create().sort(Sort.OPTIONS.numericSort, tester.getInputFiles()));
-//	}
+	@Test
+	public void sortNumericIntegers() {
+		final FileTest tester = new FileTest(this.getClass());
+		tester.run(Unix4j.builder().sort(Sort.OPTIONS.numericSort, tester.getInputFiles()));
+	}
 	
 	@Test
 	public void sortMerge() {
