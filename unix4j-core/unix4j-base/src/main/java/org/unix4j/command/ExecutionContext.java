@@ -1,6 +1,7 @@
 package org.unix4j.command;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
@@ -21,6 +22,8 @@ public interface ExecutionContext {
 	File getUserHome();
 
 	File getTempDirectory();
+	
+	Locale getLocale();
 
 	Map<String, String> getEnv();
 

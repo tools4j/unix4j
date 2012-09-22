@@ -1,0 +1,154 @@
+package org.unix4j.util;
+
+import java.text.DecimalFormatSymbols;
+import java.util.Comparator;
+import java.util.Locale;
+
+/**
+ * A comparator for decimal strings consisting of optional blanks, an optional
+ * '-' sign, and zero or more digits possibly separated by thousands separators,
+ * optionally followed by a decimal-point character and zero or more digits. An
+ * empty number is treated as '0'.
+ */
+public class DecimalNumberStringComparator implements Comparator<CharSequence> {
+
+	/**
+	 * The instance for the default locale returned by {@link #getInstance()}.
+	 */
+	private static final DecimalNumberStringComparator DEFAULT_INSTANCE = new DecimalNumberStringComparator();
+
+	/**
+	 * Returns the instance for the default locale.
+	 * 
+	 * @see Locale#getDefault()
+	 */
+	public static DecimalNumberStringComparator getInstance() {
+		return DEFAULT_INSTANCE;
+	}
+
+	/**
+	 * Returns an instance for the specified locale.
+	 */
+	public static DecimalNumberStringComparator getInstance(Locale locale) {
+		return new DecimalNumberStringComparator(locale);
+	}
+
+	private final DecimalFormatSymbols symbols;
+
+	/**
+	 * Private constructor used to create the {@link #DEFAULT_INSTANCE}.
+	 */
+	private DecimalNumberStringComparator() {
+		this(DecimalFormatSymbols.getInstance());
+	}
+
+	/**
+	 * Private constructor used by {@link #getInstance(Locale)}.
+	 */
+	private DecimalNumberStringComparator(Locale locale) {
+		this(DecimalFormatSymbols.getInstance(locale));
+	}
+
+	/**
+	 * Constructor with decimal symbols.
+	 * 
+	 * @param symbols
+	 *            the decimal symbols
+	 */
+	public DecimalNumberStringComparator(DecimalFormatSymbols symbols) {
+		this.symbols = symbols;
+	}
+
+	@Override
+	public int compare(CharSequence s1, CharSequence s2) {
+		final int start1 = TrimBlanksStringComparator.findStartTrimBlanks(s1);
+		final int start2 = TrimBlanksStringComparator.findStartTrimBlanks(s2);
+		return compare(s1, start1, s1.length(), s2, start2, s2.length());
+	}
+
+	private int compare(CharSequence s1, int start1, int end1, CharSequence s2, int start2, int end2) {
+		final char decimalSeparator = symbols.getDecimalSeparator();
+		final char groupingSeparator = symbols.getGroupingSeparator();
+		final char zeroDigit = symbols.getZeroDigit();
+		final boolean neg1 = start1 < end1 && s1.charAt(start1) == '-';
+		final boolean neg2 = start2 < end2 && s2.charAt(start2) == '-';
+		int index1 = skipLeadingZeroChars(s1, neg1 ? start1 + 1 : start1, end1, zeroDigit);
+		int index2 = skipLeadingZeroChars(s2, neg2 ? start2 + 1 : start2, end2, zeroDigit);
+		int cmp = 0;
+		int digits = 0;
+		boolean isZero1 = true;
+		boolean isZero2 = true;
+		boolean isDecimal = false;
+		while (index1 < end1 || index2 < end2) {
+			digits++;
+			if (digits % 3 == 0) {
+				index1 = skipGroupingSeparatorChars(s1, index1, end1, groupingSeparator);
+				index2 = skipGroupingSeparatorChars(s2, index2, end2, groupingSeparator);
+			}
+			final char ch1 = index1 < end1 ? s1.charAt(index1) : '\n';
+			final char ch2 = index2 < end2 ? s2.charAt(index2) : '\n';
+			final boolean isDigit1 = Character.isDigit(ch1);
+			final boolean isDigit2 = Character.isDigit(ch2);
+			if (isDigit1 && isDigit2) {
+				isZero1 &= (isDigit1 && ch1 == zeroDigit);
+				isZero2 &= (isDigit2 && ch2 == zeroDigit);
+				if (cmp == 0) {
+					cmp = Character.compare(ch1, ch2);
+				}
+				index1++;
+				index2++;
+			} else if (!isDecimal && ch1 == decimalSeparator && ch2 == decimalSeparator) {
+				isDecimal = true;
+				index1++;
+				index2++;
+			} else {
+				if (isDigit1) {
+					if (ch1 == zeroDigit && isDecimal) {
+						index1++;
+					} else {
+						return applySign(1, neg1, neg2);
+					}
+				} else if (isDigit2) {
+					if (ch2 == zeroDigit && isDecimal) {
+						index2++;
+					} else {
+						return applySign(-1, neg1, neg2);
+					}
+				} else {
+					if (cmp == 0) {
+						cmp = Character.compare(ch1, ch2);
+					}
+					index1++;
+					index2++;
+				}
+			}
+		}
+		return applySign(cmp, neg1 & !isZero1, neg2 & !isZero2);
+	}
+
+	private int applySign(int cmp, boolean neg1, boolean neg2) {
+		if (neg1) {
+			return neg2 ? -cmp : -1;
+		} else {
+			return neg2 ? 1 : cmp;
+		}
+	}
+
+	private int skipLeadingZeroChars(CharSequence s, int index, int end, char zeroDigit) {
+		while (index < end) {
+			final char ch = s.charAt(index);
+			if (ch == zeroDigit) {
+				index++;
+			} else {
+				return index;
+			}
+		}
+		return end;
+	}
+	private int skipGroupingSeparatorChars(CharSequence s, int index, int end, char groupingSeparator) {
+		if (index < end && s.charAt(index) == groupingSeparator) {
+			return index + 1;
+		}
+		return index;
+	}
+}
