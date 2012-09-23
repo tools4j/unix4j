@@ -29,8 +29,22 @@ public class ScientificNumberStringComparator implements Comparator<CharSequence
 		final int end1 = TrimBlanksStringComparator.findEndTrimBlanks(s1);
 		final int start2 = TrimBlanksStringComparator.findStartTrimBlanks(s2);
 		final int end2 = TrimBlanksStringComparator.findEndTrimBlanks(s2);
-		final double dbl1 = parseDouble(s1.subSequence(start1, end1));
-		final double dbl2 = parseDouble(s2.subSequence(start2, end2));
+		final CharSequence sub1 = s1.subSequence(start1, end1);
+		final CharSequence sub2 = s2.subSequence(start2, end2);
+		final double dbl1 = parseDouble(sub1);
+		final double dbl2 = parseDouble(sub2);
+		final boolean isNan1 = Double.isNaN(dbl1); 
+		final boolean isNan2 = Double.isNaN(dbl2); 
+		final boolean isNonDouble1 = isNan1 && !"NaN".equalsIgnoreCase(sub1.toString()); 
+		final boolean isNonDouble2 = isNan2 && !"NaN".equalsIgnoreCase(sub2.toString()); 
+		if (isNonDouble1 || isNonDouble2) {
+			if (isNonDouble1 && isNonDouble2) {
+				return sub1.toString().compareTo(sub2.toString());
+			}
+			if (isNonDouble1) return -1;
+			if (isNonDouble2) return 1;
+			throw new RuntimeException("code shoudl never get here: " + s1 + " / " + s2);
+		}
 		return Double.compare(dbl1, dbl2);
 	}
 	private static double parseDouble(CharSequence s) {

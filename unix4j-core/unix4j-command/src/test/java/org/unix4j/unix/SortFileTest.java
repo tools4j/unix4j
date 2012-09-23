@@ -3,6 +3,7 @@ package org.unix4j.unix;
 import java.io.File;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.unix4j.Unix4j;
 
@@ -23,6 +24,19 @@ public class SortFileTest {
 		final FileTest tester = new FileTest(this.getClass());
 		tester.run(Unix4j.fromFile(tester.getInputFile()).sort(Sort.OPTIONS.reverse));
 		tester.run(Unix4j.builder().sort(Sort.OPTIONS.reverse, tester.getInputFile()));
+	}
+
+	@Test
+	public void sortNumeric() {
+		final FileTest tester = new FileTest(this.getClass());
+		tester.run(Unix4j.builder().sort(Sort.OPTIONS.numericSort, tester.getInputFiles()));
+	}
+
+	@Ignore //FIXME make work and unignore
+	@Test
+	public void sortGeneralNumeric() {
+		final FileTest tester = new FileTest(this.getClass());
+		tester.run(Unix4j.builder().sort(Sort.OPTIONS.generalNumericSort, tester.getInputFiles()));
 	}
 
 	@Test
