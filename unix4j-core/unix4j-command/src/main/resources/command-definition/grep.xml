@@ -29,7 +29,7 @@
 			matching lines to the output. Whether or not a line matches the
 			given {@code pattern} depends on the specified {@code options}.
 		</method>
-		<method args="options,pattern,files" usesStandardInput="true">
+		<method args="options,pattern,files" usesStandardInput="true" >
 			Filters the input lines from the specified input files and writes
 			the matching lines to the output. Whether or not a line matches the
 			given {@code pattern} depends on the specified {@code options}.
