@@ -18,7 +18,7 @@ class RegexpMatcher implements LineMatcher {
 		} else if(args.isPatternStrSet()){
 			final String regex;
 			if (args.isWholeLine()) {
-				regex = args.getPatternS tr();
+				regex = args.getPatternStr();
 			} else {
 				regex = ".*" + args.getPatternStr() + ".*";
 			}
