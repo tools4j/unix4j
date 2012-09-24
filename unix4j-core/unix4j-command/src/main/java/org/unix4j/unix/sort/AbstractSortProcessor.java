@@ -6,10 +6,10 @@ import org.unix4j.command.ExecutionContext;
 import org.unix4j.line.Line;
 import org.unix4j.processor.AbstractLineProcessor;
 import org.unix4j.processor.LineProcessor;
-import org.unix4j.util.DecimalNumberStringComparator;
-import org.unix4j.util.LineComparator;
-import org.unix4j.util.ReverseOrderComparator;
-import org.unix4j.util.ScientificNumberStringComparator;
+import org.unix4j.util.sort.DecimalNumberStringComparator;
+import org.unix4j.util.sort.LineComparator;
+import org.unix4j.util.sort.ReverseOrderComparator;
+import org.unix4j.util.sort.ScientificNumberStringComparator;
 
 abstract class AbstractSortProcessor extends AbstractLineProcessor<SortArguments> {
 	

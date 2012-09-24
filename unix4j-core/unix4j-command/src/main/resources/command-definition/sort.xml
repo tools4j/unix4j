@@ -213,18 +213,24 @@
 			
 			Neither a leading ‘+’ nor exponential notation is recognized. To 
 			compare such strings numerically, use the
-			{@code -FIXME-genericNumericSort (-g)} option. 
+			{@code -genericNumericSort (-g)} option. 
 
 			(This option is ignored if a comparator operand has is present).
 		</option>
 		<option name="generalNumericSort" acronym="g" exclusiveGroup="nghVM">
-			Restrict the sort key to an initial numeric string, consisting of 
-			optional &lt;blank&gt;s, optional minus sign, and zero or more 
-			digits with an optional radix character and thousands separators 
-			(as defined in the current locale), which is sorted by arithmetic
-			value. An empty digit string is treated as zero. Leading zeros and
-			signs on zeros do not affect ordering.
+			Sort numerically, using the standard {@link Double#parseDouble(String)}  
+			function to convert a trimmed line to a double-precision floating 
+			point number. This allows floating point numbers to be specified in 
+			scientific notation, like 1.0e-34 and 10e100. 
+			
+			Uses the following collating sequence: Lines that cannot be parsed 
+			because they do not represent valid double values (in alpha-numeric
+			order); "-Infinity"; finite numbers in ascending numeric order 
+			(with -0 &lt; +0); "Infinity"; "NaN".
 
+			This option is usually slower than {@code -numeric-sort (-n)} and it
+			can lose information when converting to floating point.		
+		
 			(This option is ignored if a comparator operand has is present).
 		</option>
 		<option name="humanNumericSort" acronym='h' exclusiveGroup="nghVM">

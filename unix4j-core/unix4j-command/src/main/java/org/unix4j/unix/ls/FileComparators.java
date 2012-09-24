@@ -3,8 +3,8 @@ package org.unix4j.unix.ls;
 import java.io.File;
 import java.util.Comparator;
 
-import org.unix4j.util.CompositeComparator;
 import org.unix4j.util.FileUtil;
+import org.unix4j.util.sort.CompositeComparator;
 
 /**
  * Non-instantiable class with static comparator constants used to sort files.

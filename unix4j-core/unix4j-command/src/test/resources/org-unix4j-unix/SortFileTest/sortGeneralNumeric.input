@@ -17,9 +17,10 @@ bla not a number
 NAN
 1e-5
 nan
+NaN
 zzz
-infinity
--infinity
+Infinity
+-Infinity
 1.30938454E-7
 1.30938454E-8
 1.30938454E+8

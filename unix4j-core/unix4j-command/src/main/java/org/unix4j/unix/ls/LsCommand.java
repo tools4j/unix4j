@@ -13,7 +13,7 @@ import org.unix4j.line.Line;
 import org.unix4j.processor.LineProcessor;
 import org.unix4j.unix.Ls;
 import org.unix4j.util.FileUtil;
-import org.unix4j.util.ReverseOrderComparator;
+import org.unix4j.util.sort.ReverseOrderComparator;
 
 /**
  * Implementation of the {@link Ls ls} command.

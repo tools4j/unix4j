@@ -1,10 +1,10 @@
-package org.unix4j.util;
+package org.unix4j.util.sort;
 
 import java.text.Collator;
 import java.util.Comparator;
 
 import org.unix4j.line.Line;
-import org.unix4j.util.TrimBlanksStringComparator.Mode;
+import org.unix4j.util.sort.TrimBlanksStringComparator.Mode;
 
 /**
  * Comparator for a {@link Line} without line ending; forwards the comparison of
