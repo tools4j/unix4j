@@ -1,14 +1,15 @@
 package org.unix4j.unix;
 
-import static java.lang.String.format;
-
-import java.io.File;
-
 import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.util.FileUtil;
 import org.unix4j.util.MultilineString;
 import org.unix4j.util.StackTraceUtil;
+
+import java.io.File;
+import java.util.regex.Pattern;
+
+import static java.lang.String.format;
 
 /**
  * Unit test for simple App.
@@ -48,6 +49,13 @@ public class GrepTest {
 		final FileTest tester = new FileTest(this.getClass());
 		tester.run(Unix4j.fromFile(tester.getInputFile()).grep("\\s"));
 		tester.run(Unix4j.builder().grep("\\s", tester.getInputFile()));
+	}
+
+	@Test
+	public void testGrep_withPatternObject() {
+		final FileTest tester = new FileTest(this.getClass());
+		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(Pattern.compile("o.e")));
+		tester.run(Unix4j.builder().grep(Pattern.compile("o.e"), tester.getInputFile()));
 	}
 
 	@Test
@@ -100,7 +108,7 @@ public class GrepTest {
 	}
 
 	@Test
-	public void testGrep_fixedStringWithWrongCaseAndIngoringCase() {
+	public void testGrep_fixedStringWithWrongCaseAndIgnoringCase() {
 		final FileTest tester = new FileTest(this.getClass());
 		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(Grep.OPTIONS.fixedStrings.ignoreCase, "DEF\\d123"));
 		tester.run(Unix4j.builder().grep(Grep.OPTIONS.fixedStrings.ignoreCase, "DEF\\d123", tester.getInputFile()));

@@ -1,8 +1,8 @@
 package org.unix4j.unix.grep;
 
-import java.util.regex.Pattern;
-
 import org.unix4j.line.Line;
+
+import java.util.regex.Pattern;
 
 /**
  * A matcher using regular expressions to match the pattern with a line. Uses
@@ -13,13 +13,19 @@ class RegexpMatcher implements LineMatcher {
 	private final Pattern pattern;
 
 	public RegexpMatcher(GrepArguments args) {
-		final String regex;
-		if (args.isWholeLine()) {
-			regex = args.getPattern();
+		if(args.isPatternSet()){
+			this.pattern = args.getPattern();
+		} else if(args.isPatternStrSet()){
+			final String regex;
+			if (args.isWholeLine()) {
+				regex = args.getPatternStr();
+			} else {
+				regex = ".*" + args.getPatternStr() + ".*";
+			}
+			this.pattern = Pattern.compile(regex, args.isIgnoreCase() ? Pattern.CASE_INSENSITIVE : 0);
 		} else {
-			regex = ".*" + args.getPattern() + ".*";
+			throw new IllegalArgumentException("Either pattern, or patternStr must be given");
 		}
-		this.pattern = Pattern.compile(regex, args.isIgnoreCase() ? Pattern.CASE_INSENSITIVE : 0);
 	}
 
 	@Override
