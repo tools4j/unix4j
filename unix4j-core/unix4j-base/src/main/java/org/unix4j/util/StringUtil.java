@@ -179,6 +179,44 @@ public class StringUtil {
 		return lines;
 	}
 
+	/**
+	 * Finds and returns the start of the given sequence after trimming
+	 * whitespace characters.
+	 * 
+	 * @param s
+	 *            the character sequence
+	 * @return the index containing the first non-whitespace character, or the
+	 *         length of the character sequence if all characters are blank
+	 */
+	public static int findStartTrimWhitespace(CharSequence s) {
+		final int len = s.length();
+		for (int i = 0; i < len; i++) {
+			if (!Character.isWhitespace(s.charAt(i))) {
+				return i;
+			}
+		}
+		return len;
+	}
+
+	/**
+	 * Finds and returns the end of the given character sequence after trimming
+	 * white space characters as defined by {@link Character#isWhitespace(char)}
+	 * .
+	 * 
+	 * @param s
+	 *            the character sequence
+	 * @return the index after the last non-whitespace character, or zero if all
+	 *         characters are blank
+	 */
+	public static int findEndTrimWhitespace(CharSequence s) {
+		for (int i = s.length(); i > 0; i--) {
+			if (!Character.isWhitespace(s.charAt(i - 1))) {
+				return i;
+			}
+		}
+		return 0;
+	}
+
 	// no instances
 	private StringUtil() {
 		super();

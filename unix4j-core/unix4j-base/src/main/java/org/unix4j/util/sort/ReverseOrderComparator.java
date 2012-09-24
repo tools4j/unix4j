@@ -1,4 +1,4 @@
-package org.unix4j.util;
+package org.unix4j.util.sort;
 
 import java.util.Comparator;
 

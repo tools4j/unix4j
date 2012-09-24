@@ -1,7 +1,9 @@
-bla not a number
-and another value not a number
 NAN
+and another value not a number
+bla not a number
 nan
+zzz
+-Infinity
 -928340598274352
 -985098.8345987534
 -985098.8345987533
@@ -27,3 +29,5 @@ nan
 1.30938454E+8
 928340598274351
 928340598274352
+Infinity
+NaN

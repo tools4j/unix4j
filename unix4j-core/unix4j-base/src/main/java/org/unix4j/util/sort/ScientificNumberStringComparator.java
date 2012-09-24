@@ -1,6 +1,8 @@
-package org.unix4j.util;
+package org.unix4j.util.sort;
 
 import java.util.Comparator;
+
+import org.unix4j.util.StringUtil;
 
 /** 
  * Comparison based on {@link Double} floating point numbers. This 
@@ -25,31 +27,30 @@ public class ScientificNumberStringComparator implements Comparator<CharSequence
 	
 	@Override
 	public int compare(CharSequence s1, CharSequence s2) {
-		final int start1 = TrimBlanksStringComparator.findStartTrimBlanks(s1);
-		final int end1 = TrimBlanksStringComparator.findEndTrimBlanks(s1);
-		final int start2 = TrimBlanksStringComparator.findStartTrimBlanks(s2);
-		final int end2 = TrimBlanksStringComparator.findEndTrimBlanks(s2);
-		final CharSequence sub1 = s1.subSequence(start1, end1);
-		final CharSequence sub2 = s2.subSequence(start2, end2);
-		final double dbl1 = parseDouble(sub1);
-		final double dbl2 = parseDouble(sub2);
+		final int start1 = StringUtil.findStartTrimWhitespace(s1);
+		final int end1 = StringUtil.findEndTrimWhitespace(s1);
+		final int start2 = StringUtil.findStartTrimWhitespace(s2);
+		final int end2 = StringUtil.findEndTrimWhitespace(s2);
+		final String str1 = s1.subSequence(start1, end1).toString();
+		final String str2 = s2.subSequence(start2, end2).toString();
+		final double dbl1 = parseDouble(str1);
+		final double dbl2 = parseDouble(str2);
 		final boolean isNan1 = Double.isNaN(dbl1); 
 		final boolean isNan2 = Double.isNaN(dbl2); 
-		final boolean isNonDouble1 = isNan1 && !"NaN".equalsIgnoreCase(sub1.toString()); 
-		final boolean isNonDouble2 = isNan2 && !"NaN".equalsIgnoreCase(sub2.toString()); 
-		if (isNonDouble1 || isNonDouble2) {
+		if (isNan1 || isNan2) {
+			final boolean isNonDouble1 = isNan1 && !"NaN".equals(str1); 
+			final boolean isNonDouble2 = isNan2 && !"NaN".equals(str2); 
 			if (isNonDouble1 && isNonDouble2) {
-				return sub1.toString().compareTo(sub2.toString());
+				return str1.compareTo(str2);
 			}
 			if (isNonDouble1) return -1;
 			if (isNonDouble2) return 1;
-			throw new RuntimeException("code shoudl never get here: " + s1 + " / " + s2);
 		}
 		return Double.compare(dbl1, dbl2);
 	}
-	private static double parseDouble(CharSequence s) {
+	private static double parseDouble(String s) {
 		try {
-			return Double.parseDouble(s.toString());
+			return Double.parseDouble(s);
 		} catch (NumberFormatException e) {
 			return Double.NaN;
 		}
