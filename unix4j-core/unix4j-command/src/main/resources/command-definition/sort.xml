@@ -206,12 +206,12 @@
 			optional blanks, an optional minus sign, and zero or more digits
 			possibly separated by thousands separators, optionally followed by a
 			decimal-point character and zero or more digits. An empty number is
-			treated as ‘0’. The current local specifies the decimal-point 
+			treated as '0'. The current local specifies the decimal-point 
 			character and thousands separator.
 			
 			Comparison is exact; there is no rounding error.
 			
-			Neither a leading ‘+’ nor exponential notation is recognized. To 
+			Neither a leading '+' nor exponential notation is recognized. To 
 			compare such strings numerically, use the
 			{@code -genericNumericSort (-g)} option. 
 
