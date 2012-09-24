@@ -39,6 +39,36 @@
 			the matching lines to the output. Whether or not a line matches the
 			given {@code pattern} depends on the specified {@code options}.
 		</method>
+		<method args="patternStr" usesStandardInput="true">
+			Filters the input lines from the standard input and writes the
+			matching lines to the output. A line matches if it contains the
+			given {@code patternStr} using case-sensitive string comparison.
+		</method>
+		<method args="patternStr,files" usesStandardInput="true">
+			Filters the lines from the specified input files and writes the
+			matching lines to the output. A line matches if it contains the
+			given {@code patternStr} using case-sensitive string comparison.
+		</method>
+		<method args="patternStr,paths" usesStandardInput="true">
+			Filters the lines from the specified input files and writes the
+			matching lines to the output. A line matches if it contains the
+			given {@code patternStr} using case-sensitive string comparison.
+		</method>
+		<method args="options,patternStr" usesStandardInput="true">
+			Filters the input lines from the standard input and writes the
+			matching lines to the output. Whether or not a line matches the
+			given {@code patternStr} depends on the specified {@code options}.
+		</method>
+		<method args="options,patternStr,files" usesStandardInput="true">
+			Filters the input lines from the specified input files and writes
+			the matching lines to the output. Whether or not a line matches the
+			given {@code patternStr} depends on the specified {@code options}.
+		</method>
+		<method args="options,patternStr,paths" usesStandardInput="true">
+			Filters the input lines from the specified input files and writes
+			the matching lines to the output. Whether or not a line matches the
+			given {@code patternStr} depends on the specified {@code options}.
+		</method>
 	</methods>
 	<options>
 		<option name="ignoreCase" acronym="i">
@@ -56,7 +86,7 @@
 		</option>
 		<option name="lineNumber" acronym="n">
 			Prefix each line of output with the line number within its input
-			file.
+			file.                            op
 		</option>
 		<option name="count" acronym="c">
 			Suppress normal output; instead print a count of matching lines for
@@ -74,7 +104,10 @@
 		</option>
 	</options>
 	<operands>
-		<operand name="pattern" type="String">
+		<operand name="patternStr" type="String">
+			Lines will be printed which match the given pattern
+		</operand>
+		<operand name="pattern" type="java.util.regex.Pattern">
 			Lines will be printed which match the given pattern
 		</operand>
 		<operand name="paths" type="String...">

@@ -3,7 +3,7 @@ package org.unix4j.unix.grep;
 import org.unix4j.line.Line;
 
 /**
- * Performs fixed string comparisons to decide whether the pattern matches a 
+ * Performs fixed string comparisons to decide whether the pattern matches a
  * line. Member classes exist for different grep options.
  */
 abstract class FixedStringMatcher implements LineMatcher {
@@ -13,10 +13,10 @@ abstract class FixedStringMatcher implements LineMatcher {
 	public FixedStringMatcher(String pattern) {
 		this.pattern = pattern;
 	}
-	
+
 	public static class Standard extends FixedStringMatcher {
 		public Standard(GrepArguments args) {
-			super(args.getPattern());
+			super(args.getPatternStr());
 		}
 		@Override
 		public boolean matches(Line line) {
@@ -25,7 +25,7 @@ abstract class FixedStringMatcher implements LineMatcher {
 	}
 	public static class IgnoreCase extends FixedStringMatcher {
 		public IgnoreCase(GrepArguments args) {
-			super(args.getPattern().toUpperCase());
+			super(args.getPatternStr().toUpperCase());
 		}
 		@Override
 		public boolean matches(Line line) {
@@ -34,7 +34,7 @@ abstract class FixedStringMatcher implements LineMatcher {
 	}
 	public static class WholeLine extends FixedStringMatcher {
 		public WholeLine(GrepArguments args) {
-			super(args.getPattern());
+			super(args.getPatternStr());
 		}
 		@Override
 		public boolean matches(Line line) {
@@ -43,7 +43,7 @@ abstract class FixedStringMatcher implements LineMatcher {
 	}
 	public static class WholeLineIgnoreCase extends FixedStringMatcher {
 		public WholeLineIgnoreCase(GrepArguments args) {
-			super(args.getPattern());
+			super(args.getPatternStr());
 		}
 		@Override
 		public boolean matches(Line line) {

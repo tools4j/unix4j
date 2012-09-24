@@ -1,8 +1,5 @@
 package org.unix4j.unix.grep;
 
-import java.io.File;
-import java.util.List;
-
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.ExecutionContext;
 import org.unix4j.io.FileInput;
@@ -12,6 +9,9 @@ import org.unix4j.processor.MultipleInputLineProcessor;
 import org.unix4j.processor.RedirectInputLineProcessor;
 import org.unix4j.unix.Grep;
 import org.unix4j.util.FileUtil;
+
+import java.io.File;
+import java.util.List;
 
 /**
  * Implementation of the {@link Grep grep} command.
@@ -24,7 +24,7 @@ class GrepCommand extends AbstractCommand<GrepArguments> {
 	@Override
 	public LineProcessor execute(ExecutionContext context, LineProcessor output) {
 		final GrepArguments args = getArguments();
-		
+
 		//from file?
 		if (args.isFilesSet()) {
 			final List<FileInput> inputs = FileInput.multiple(args.getFiles());
@@ -34,11 +34,11 @@ class GrepCommand extends AbstractCommand<GrepArguments> {
 			final List<FileInput> inputs = FileInput.multiple(files);
 			return getFileInputProcessor(inputs, context, output);
 		}
-		
+
 		//from standard input
 		return getStandardInputProcessor(context, output);
 	}
-	
+
 	private LineMatcher getMatcher() {
 		final GrepArguments args = getArguments();
 		final LineMatcher matcher;
@@ -75,9 +75,9 @@ class GrepCommand extends AbstractCommand<GrepArguments> {
 			final InputProcessor processor = new WriteFilesWithMatchingLinesProcessor(this, context, output, matcher);
 			return new MultipleInputLineProcessor(inputs, processor, output);
 		}
-		
+
 		//standard grep output
-		final LineProcessor standardInputProcessor = getStandardInputProcessor(context, output); 
+		final LineProcessor standardInputProcessor = getStandardInputProcessor(context, output);
 		return new RedirectInputLineProcessor(inputs, standardInputProcessor);
 	}
 }
