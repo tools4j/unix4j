@@ -1,15 +1,15 @@
 <#include "/include/macros.fmpp">
 
 <@pp.dropOutputFile />
-<#list optionSetDefs as def>
-<#global cmdDef=def.command> 
-<#if cmdDef.options?size != 0> 
-<#global cmd=cmdDef.command>
-<#global commandName=cmdDef.commandName> 
+<#list optionSetDefs as setDef>
+<#global def=setDef.command> 
+<#if def.options?size != 0> 
+<#global cmd=def.command>
+<#global commandName=def.commandName> 
 <#global optionName=cmd.simpleName+"Option">
 <#global simpleName=cmd.simpleName+"Options">
-<@pp.changeOutputFile name=pp.pathTo("/"+cmdDef.pkg.path+"/"+simpleName+".java")/> 
-package ${cmdDef.pkg.name};
+<@pp.changeOutputFile name=pp.pathTo("/"+def.pkg.path+"/"+simpleName+".java")/> 
+package ${def.pkg.name};
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -18,10 +18,16 @@ import org.unix4j.option.Option;
 import org.unix4j.option.OptionSet;
 
 import ${cmd.pkg.name}.${cmd.simpleName};
-import ${cmdDef.pkg.name}.${optionName};
+import ${def.pkg.name}.${optionName};
 
 /**
  * Interface implemented by all option sets for the {@link ${cmd.simpleName} ${commandName}} command.
+ * It is recommended to use {@link ${cmd.simpleName}#OPTIONS} to specify a valid 
+ * combination of options.
+ * <p>
+ * The options for the ${commandName} command are: 
+ * <p>
+<#include "/include/options-javadoc.java">
  * <p>
  * This interface serves as an alias for the extended interface to simplify the
  * command signature methods by avoiding generic parameters.
