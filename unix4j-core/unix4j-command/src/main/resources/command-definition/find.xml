@@ -1,0 +1,284 @@
+<?xml version="1.0"?>
+<command-def	xmlns="http://www.unix4j.org/command-def" 
+				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xsi:schemaLocation="http://www.unix4j.org/command-def command-def.xsd">
+	
+	<command name="find" class="org.unix4j.unix.Find" package="org.unix4j.unix.find"/>
+	<name>
+		find - search for files in a directory hierarchy
+	</name>
+	<synopsis>
+		find [-H] [-L] [-P] [path...] [expression]
+		find [-H] [-L] [-P] [-D debugopts] [-Olevel] [path...] [expression]
+	</synopsis>
+	<description ref="find.html"/>
+	<notes/>
+	<methods>
+		<method name="find" args="name" usesStandardInput="false">
+			Finds all files matching the specified {@code name} in or below the 
+			user's current working directory and writes the file names to the
+			standard output. 
+			
+			The files names written to the output are relative paths referring
+			to the working directory.
+		</method>
+		<method name="find" args="name,paths" usesStandardInput="false">
+			Finds all files matching the specified {@code name} in or below the 
+			directories specified by {@code paths} and writes the file names to
+			the standard output. 
+			
+			The files names written to the output are paths relative to the
+			starting points specified by the {@code paths} operand.
+		</method>
+		<method name="find" args="size" usesStandardInput="false">
+			Finds all files matching the specified file {@code size} in or below 
+			the user's current working directory and writes the file names to 
+			the standard output. Matching files use at least {@code size} bytes
+			on disk if {@code size} is non-negative, or at most {@code size} 
+			bytes if {@code size} is negative. 
+			
+			The files names written to the output are relative paths referring
+			to the working directory.
+		</method>
+		<method name="find" args="size,paths" usesStandardInput="false">
+			Finds all files matching the specified file {@code size} in or below
+			the directories specified by {@code paths} and writes the file names
+			to the standard output. Matching files use at least {@code size} 
+			bytes on disk if {@code size} is non-negative, or at most 
+			{@code size} bytes if {@code size} is negative. 
+
+			The printed files names are paths relative to the starting points 
+			specified by the {@code paths} operand.
+		</method>
+		<method name="find" args="name,size" usesStandardInput="false">
+			Finds all files matching the specified file {@code name} and 
+			{@code size} in or below the user's current working directory and
+			writes the file names to the standard output. Matching files use 
+			at least {@code size} bytes on disk if {@code size} is non-negative, 
+			or at most {@code size} bytes if {@code size} is negative. 
+
+			The files names written to the output are relative paths referring
+			to the working directory.
+		</method>
+		<method name="find" args="name,size,paths" usesStandardInput="false">
+			Finds all files matching the specified file {@code name} and 
+			{@code size} in or below the directories specified by {@code paths} 
+			and writes the file names to the standard output. Matching files 
+			use at least {@code size} bytes on disk if {@code size} is 
+			non-negative, or at most {@code size} bytes if {@code size} is 
+			negative. 
+
+			The printed files names are paths relative to the starting points 
+			specified by the {@code paths} operand.
+		</method>
+		<method name="find" args="options,name" usesStandardInput="false">
+			Finds all files matching the specified {@code name} in or below the 
+			user's current working directory and writes the file names to the
+			standard output.
+			 
+			The files names written to the output are relative paths referring
+			to the working directory.
+		</method>
+		<method name="find" args="options,name,paths" usesStandardInput="false">
+			Finds all files matching the specified {@code name} in or below the 
+			directories specified by {@code paths} and writes the file names to
+			the standard output. 
+
+			The printed files names are paths relative to the starting points 
+			specified by the {@code paths} operand.
+		</method>
+		<method name="find" args="options,size" usesStandardInput="false">
+			Finds all files matching the specified file {@code size} in or below 
+			the user's current working directory and writes the file names to 
+			the standard output. Matching files use at least {@code size} bytes
+			on disk if {@code size} is non-negative, or at most {@code size} 
+			bytes if {@code size} is negative. 
+
+			The files names written to the output are relative paths referring
+			to the working directory.
+		</method>
+		<method name="find" args="options,size,paths" usesStandardInput="false">
+			Finds all files matching the specified file {@code size} in or below
+			the directories specified by {@code paths} and writes the file names
+			to the standard output. Matching files use at least {@code size} 
+			bytes on disk if {@code size} is non-negative, or at most 
+			{@code size} bytes if {@code size} is negative. 
+
+			The printed files names are paths relative to the starting points 
+			specified by the {@code paths} operand.
+		</method>
+		<method name="find" args="options,time" usesStandardInput="false">
+			Finds all files that have been created, modified or accessed before 
+			or after the specified {@code time} (depending on the given 
+			{@code -time...} options). The names of the matching files found in 
+			or below the user's current working directory are written to the 
+			standard output. 
+
+			The files names written to the output are relative paths referring
+			to the working directory.
+		</method>
+		<method name="find" args="options,time,paths" usesStandardInput="false">
+			Finds all files that have been created, modified or accessed before 
+			or after the specified {@code time} (depending on the given 
+			{@code -time...} options). The names of the matching files found in 
+			or below the directories specified by {@code paths} are written to
+			the standard output. 
+
+			The printed files names are paths relative to the starting points 
+			specified by the {@code paths} operand.
+		</method>
+		<method name="find" args="options,name,size" usesStandardInput="false">
+			Finds all files matching the specified file {@code name} and 
+			{@code size} in or below the user's current working directory and
+			writes the file names to the standard output. Matching files use 
+			at least {@code size} bytes on disk if {@code size} is non-negative, 
+			or at most {@code size} bytes if {@code size} is negative. 
+
+			The files names written to the output are relative paths referring
+			to the working directory.
+		</method>
+		<method name="find" args="options,name,size,paths" usesStandardInput="false">
+			Finds all files matching the specified file {@code name} and 
+			{@code size} in or below the directories specified by {@code paths} 
+			and writes the file names to the standard output. Matching files 
+			use at least {@code size} bytes on disk if {@code size} is 
+			non-negative, or at most {@code size} bytes if {@code size} is 
+			negative. 
+
+			The printed files names are paths relative to the starting points 
+			specified by the {@code paths} operand.
+		</method>
+		<method name="find" args="options,name,time" usesStandardInput="false">
+			Finds all files matching the given {@code name} that have been 
+			created, modified or accessed before or after the specified
+			{@code time} (depending on the given {@code -time...} options). The
+			names of the matching files found in or below the user's current 
+			working directory are written to the standard output.  
+
+			The files names written to the output are relative paths referring
+			to the working directory.
+		</method>
+		<method name="find" args="options,name,time,paths" usesStandardInput="false">
+			Finds all files matching the given {@code name} that have been 
+			created, modified or accessed before or after the specified
+			{@code time} (depending on the given {@code -time...} options). The 
+			names of the matching files found in or below the directories 
+			specified by {@code paths} are written to the standard output. 
+
+			The printed files names are paths relative to the starting points 
+			specified by the {@code paths} operand.
+		</method>
+		<method name="find" args="options,name,size,time" usesStandardInput="false">
+			Finds all files matching the given {@code name} and {@code size} and
+			have been created, modified or accessed before or after the specified
+			{@code time} (depending on the given {@code -time...} options). 
+			
+			Matching files use at least {@code size} bytes on disk if 
+			{@code size} is non-negative, or at most {@code size} bytes if 
+			{@code size} is negative. The names of the matching files found in 
+			or below the user's current working directory are written to the 
+			standard output.  
+
+			The files names written to the output are relative paths referring
+			to the working directory.
+		</method>
+		<method name="find" args="options,name,size,time,paths" usesStandardInput="false">
+			Finds all files matching the given {@code name} and {@code size} and
+			have been created, modified or accessed before or after the specified
+			{@code time} (depending on the given {@code -time...} options). 
+			
+			Matching files use at least {@code size} bytes on disk if 
+			{@code size} is non-negative, or at most {@code size} bytes if 
+			{@code size} is negative. The names of the matching files found in
+			or below the directories specified by {@code paths} are written to 
+			the standard output. 
+
+			The printed files names are paths relative to the starting points 
+			specified by the {@code paths} operand.
+		</method>
+	</methods>
+	<options>
+		<!-- 
+		-type  c
+		The primary shall evaluate as true if the type of the file is c, where c is 'b', 'c', 'd', 'l', 'p', 'f', or 's' for 
+		block special file, character special file, directory, symbolic link, FIFO, regular file, or socket, respectively.		
+		 -->
+		<option name="typeDirectory" acronym="d" exclusiveGroup="type">
+			Consider only directories
+		</option>
+		<option name="typeFile" acronym="f" exclusiveGroup="type">
+			Consider only regular files
+		</option>
+		<option name="typeSymlink" acronym="l" exclusiveGroup="type">
+			Consider only symbolic links
+		</option>
+		<option name="typeOther" acronym="x" exclusiveGroup="type">
+			Consider only files that are neither of directory (d), 
+			regular file (f) or symlink (l). 
+		</option>
+		<option name="regex" acronym="r">
+			Use full regular expression syntax for the patterns specified by the
+			name operand
+
+			(This option is ignored if no name operand is specified).
+		</option>
+		<option name="ignoreCase" acronym="i">
+			Use case insensitive matching when applying the file name pattern
+			specified by the name operand. 
+
+			(This option is ignored if no name operand is specified).
+		</option>
+		<option name="timeNewer" acronym="n">
+			Consider only files that have been created, modified or accessed
+			after or at the time specified by the time operand
+			
+			(This option is ignored if no time operand is specified).
+		</option>
+		<option name="timeOlder" acronym="o">
+			Consider only files that have been created, modified or accessed
+			before or at the time specified by the time operand
+			
+			(This option is ignored if no time operand is specified).
+		</option>
+		<option name="timeCreate" acronym="c" exclusiveGroup="time">
+			The time operand refers to the creation time of the file
+			
+			(This option is ignored if no time operand is specified).
+		</option>
+		<option name="timeAccess" acronym="a" exclusiveGroup="time">
+			The time operand refers to the last access time of the file
+			
+			(This option is ignored if no time operand is specified).
+		</option>
+		<option name="timeModified" acronym="m" exclusiveGroup="time">
+			The time operand refers to the last modification time of the file
+			(the default)
+			
+			(This option is ignored if no time operand is specified).
+		</option>
+	</options>
+	<operands>
+		<operand name="name" type="String">
+			Name pattern to match the file name after removing the path with the
+			leading directories; wildcards * and ? are supported, or full 
+			regular expressions if either of the options {@code -regex (-r)} or
+			{@code -iregex (-i)} is specified.
+		</operand>
+		<operand name="size" type="long">
+			Consider only files using at least {@code size} bytes or at most
+			{@code size} bytes if {@code size} is negative.
+		</operand>
+		<operand name="time" type="java.util.Date">
+			Consider only files that have been created, modified or accessed
+			before or after the specified {@code time} operand; consider the
+			{@code -time...} options for details of the comparison.
+		</operand>
+		<operand name="paths" type="String...">
+			Starting point for the search in the directory hierarchy; 
+			wildcards * and ? are supported.
+		</operand>
+		<operand name="options" type="FindOptions">
+			Options for the file search.
+		</operand>
+	</operands>
+</command-def>

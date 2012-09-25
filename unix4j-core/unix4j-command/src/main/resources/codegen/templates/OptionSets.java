@@ -1,24 +1,25 @@
 <#include "/include/macros.fmpp">
 
 <@pp.dropOutputFile />
-<#list optionSetDefs as def>
-<#global cmdDef=def.command> 
-<#if cmdDef.options?size != 0> 
-<#global cmd=cmdDef.command>
-<#global commandName=cmdDef.commandName> 
-<#global options=cmdDef.options?values> 
+<#list optionSetDefs as setDef>
+<#global def=setDef.command> 
+<#if def.options?size != 0> 
+<#global cmd=def.command>
+<#global commandName=def.commandName> 
+<#global options=def.options?values> 
 <#global optionName=cmd.simpleName+"Option">
 <#global simpleName=cmd.simpleName+"OptionSets">
-<@pp.changeOutputFile name=pp.pathTo("/"+cmdDef.pkg.path+"/"+simpleName+".java")/> 
-package ${cmdDef.pkg.name};
+<@pp.changeOutputFile name=pp.pathTo("/"+def.pkg.path+"/"+simpleName+".java")/> 
+package ${def.pkg.name};
 
 import ${cmd.pkg.name}.${cmd.simpleName};
-import ${cmdDef.pkg.name}.${optionName};
+import ${def.pkg.name}.${optionName};
 
 /**
  * Options for the {@link ${cmd.simpleName} ${commandName}} command with the 
- * the following options: <#foreach opt in options>{@link ${optionName}#${opt.name} ${opt.acronym}}<#if opt_has_next>, </#if></#foreach>.
- * Note that each option has also a long name: <#foreach opt in options>{@code ${opt.acronym}:}{@link ${optionName}#${opt.name} ${opt.name}}<#if opt_has_next>, </#if></#foreach>.
+ * the following options: 
+ * <p>
+<#include "/include/options-javadoc.java">
  * <p>
  * This class serves as entry point to every possible set of {@code ${commandName}} options
  * defined as an enum constant. With this explicit expansion of all possible 
@@ -38,7 +39,7 @@ public final class ${simpleName} {
 	 */
 	public static final ${simpleName} INSTANCE = new ${simpleName}();
 	
-	<#global grp = def.initialGroup>
+	<#global grp = setDef.initialGroup>
 	<#foreach opt in grp.options?values>
 	<#global optType = grp.optionToNextGroup[opt.name].groupType>
 	<#global activeSetName = "Active_" + opt.acronym>

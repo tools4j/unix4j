@@ -60,11 +60,7 @@ import ${def.pkg.name}.${varName};
 <#if def.options?size != 0>
  * The following options are supported:
  * <p>
- * <table>
-<#foreach opt in def.options?values>
- * <tr valign="top"><td width="10px"></td><td nowrap="nowrap">{@code -${opt.acronym}}</td><td>&nbsp;&nbsp;</td><td nowrap="nowrap">{@code --${opt.name}}</td><td>&nbsp;</td><td>${opt.desc}</td></tr>
-</#foreach>
- * </table>
+<#include "/include/options-javadoc.java">
 <#else>
  * The command supports no options.
 </#if>
@@ -75,7 +71,7 @@ import ${def.pkg.name}.${varName};
  * <p>
  * <table>
 <#foreach opd in def.operands?values>
- * <tr><td width="10px"></td><td nowrap="nowrap">{@code <${opd.name}>}</td><td>&nbsp;:&nbsp;</td><td nowrap="nowrap">{@code ${opd.type}}</td><td>&nbsp;</td><td>${opd.desc}</td></tr>
+ * <tr valign="top"><td width="10px"></td><td nowrap="nowrap">{@code <${opd.name}>}</td><td>&nbsp;:&nbsp;</td><td nowrap="nowrap">{@code ${opd.type}}</td><td>&nbsp;</td><td>${opd.desc}</td></tr>
 </#foreach>
  * </table>
  */
@@ -136,11 +132,7 @@ public final class ${cmd.simpleName} {
 	/**
 	 * Options for the "${commandName}" command: <#foreach opt in def.options?values>{@link ${optionName}#${opt.name} ${opt.acronym}}<#if opt_has_next>, </#if></#foreach>.
 	 * <p> 
-	 * <table>
-	<#foreach opt in def.options?values>
-	 * <tr><td width="10px"></td><td nowrap="nowrap">{@code -${opt.acronym}}</td><td>&nbsp;&nbsp;</td><td nowrap="nowrap">{@code --${opt.name}}</td><td>&nbsp;</td><td>${opt.desc}</td></tr>
-	</#foreach>
-	 * </table>
+	<#include "/include/options-javadoc.java">
 	 */
 	public static final ${optionSetsName} OPTIONS = ${optionSetsName}.INSTANCE;
 

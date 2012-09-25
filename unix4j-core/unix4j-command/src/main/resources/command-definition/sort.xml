@@ -190,16 +190,16 @@
 		</option>
 		<option name="ignoreLeadingBlanks" acronym="b">
 			Ignore leading blanks. 
-			(This option is ignored if a comparator operand has is present).
+			(This option is ignored if a comparator operand is present).
 		</option>
 		<option name="dictionaryOrder" acronym="d">
 			Consider only blanks and alphanumeric characters.
-			(This option is ignored if a comparator operand has is present).
+			(This option is ignored if a comparator operand is present).
 		</option>
 		<option name="ignoreCase" acronym="f">
 			Consider all lowercase characters that have uppercase equivalents to
 			be the uppercase equivalent for the purposes of comparison.
-			(This option is ignored if a comparator operand has is present).
+			(This option is ignored if a comparator operand is present).
 		</option>
 		<option name="numericSort" acronym="n" exclusiveGroup="nghVM">
 			Sort numerically; the number begins each line and consists of 
@@ -215,7 +215,7 @@
 			compare such strings numerically, use the
 			{@code -genericNumericSort (-g)} option. 
 
-			(This option is ignored if a comparator operand has is present).
+			(This option is ignored if a comparator operand is present).
 		</option>
 		<option name="generalNumericSort" acronym="g" exclusiveGroup="nghVM">
 			Sort numerically, using the standard {@link Double#parseDouble(String)}  
@@ -231,7 +231,7 @@
 			This option is usually slower than {@code -numeric-sort (-n)} and it
 			can lose information when converting to floating point.		
 		
-			(This option is ignored if a comparator operand has is present).
+			(This option is ignored if a comparator operand is present).
 		</option>
 		<option name="humanNumericSort" acronym='h' exclusiveGroup="nghVM">
 			Sort numerically, first by numeric sign (negative, zero, or 
@@ -250,7 +250,7 @@
 			{@code -FIXME-numericSort (-n)} option; the SI suffix must immediately 
 			follow the number. 		
 
-			(This option is ignored if a comparator operand has is present).
+			(This option is ignored if a comparator operand is present).
 		</option>
 		<option name="monthSort" acronym="M" exclusiveGroup="nghVM">
 			An initial string, consisting of any amount of blanks, followed by a
@@ -263,7 +263,7 @@
 			except that each sequence of decimal digits is treated numerically 
 			as an index/version number.
 			
-			(This option is ignored if a comparator operand has is present).
+			(This option is ignored if a comparator operand is present).
 		</option>
 		<option name="reverse" acronym="r">
 			Reverse the sense of comparisons.
