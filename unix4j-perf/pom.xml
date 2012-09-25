@@ -3,20 +3,26 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<parent>
+		<groupId>org.unix4j</groupId>
+		<artifactId>unix4j</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+
 	<groupId>org.unix4j</groupId>
 	<artifactId>unix4j-perf</artifactId>
-	<version>0.1</version>
+	<version>0.1-SNAPSHOT</version>
 	<dependencies>
 		<dependency>
 			<groupId>org.unix4j</groupId>
 			<artifactId>unix4j-base</artifactId>
-			<version>0.1</version>
+			<version>0.1-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.unix4j</groupId>
 			<artifactId>unix4j-command</artifactId>
-			<version>0.1</version>
+			<version>0.1-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
