@@ -18,6 +18,8 @@ import ${cmd.pkg.name}.${cmd.simpleName};
  * <p>
  * For most applications, it may be more convenient to use {@link ${cmd.simpleName}#OPTIONS} 
  * instead of the option constants defined here.
+ * <p>
+<#include "/include/options-javadoc.java">
  */
 public enum ${simpleName} implements Option, ${cmd.simpleName}Options {
 	<#foreach opt in def.options?values>
