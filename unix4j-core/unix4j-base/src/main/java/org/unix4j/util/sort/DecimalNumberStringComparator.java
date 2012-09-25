@@ -75,20 +75,16 @@ public class DecimalNumberStringComparator implements Comparator<CharSequence> {
 		int index1 = skipLeadingZeroChars(s1, isNeg1 ? start1 + 1 : start1, end1, zeroDigit);
 		int index2 = skipLeadingZeroChars(s2, isNeg2 ? start2 + 1 : start2, end2, zeroDigit);
 		int cmp = 0;
-		int digits = 0;
 		boolean isZero1 = true;
 		boolean isZero2 = true;
 		while (index1 < end1 || index2 < end2) {
-			if (digits % 3 == 0 && digits > 0) {
-				index1 = skipGroupingSeparatorChars(s1, index1, end1, groupingSeparator);
-				index2 = skipGroupingSeparatorChars(s2, index2, end2, groupingSeparator);
-			}
+			index1 = skipGroupingSeparatorChars(s1, index1, end1, groupingSeparator);
+			index2 = skipGroupingSeparatorChars(s2, index2, end2, groupingSeparator);
 			final char ch1 = index1 < end1 ? s1.charAt(index1) : '\n';
 			final char ch2 = index2 < end2 ? s2.charAt(index2) : '\n';
 			final boolean isDigit1 = Character.isDigit(ch1);
 			final boolean isDigit2 = Character.isDigit(ch2);
 			if (isDigit1 && isDigit2) {
-				digits++;
 				isZero1 &= (isDigit1 && ch1 == zeroDigit);
 				isZero2 &= (isDigit2 && ch2 == zeroDigit);
 				if (cmp == 0) {
@@ -138,18 +134,12 @@ public class DecimalNumberStringComparator implements Comparator<CharSequence> {
 		if (isDecimal2) {
 			index2++;
 		}
-		int digits = 0;
 		while (cmp == 0 && (index1 < end1 || index2 < end2)) {
-			if (digits % 3 == 0 && digits > 0) {
-				index1 = skipGroupingSeparatorChars(s1, index1, end1, groupingSeparator);
-				index2 = skipGroupingSeparatorChars(s2, index2, end2, groupingSeparator);
-			}
 			ch1 = index1 < end1 ? s1.charAt(index1) : '\n';
 			ch2 = index2 < end2 ? s2.charAt(index2) : '\n';
 			isDigit1 = Character.isDigit(ch1);
 			isDigit2 = Character.isDigit(ch2);
 			if (isDigit1 && isDigit2) {
-				digits++;
 				isZero1 &= (isDigit1 && ch1 == zeroDigit);
 				isZero2 &= (isDigit2 && ch2 == zeroDigit);
 				cmp = Character.compare(ch1, ch2);

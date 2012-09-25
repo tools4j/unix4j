@@ -105,4 +105,26 @@ public class DecimalNumberStringComparatorTest extends AbstractNumberStringCompa
 		assertSmaller("-0049502948350938450983540698094560934506983405968.873948723948192384791283491283749812374981273948170984320548739845", "-049502948350938450983540698094560934506983405968.873948723948192384791283491283749812374981273948170984320548739844");
 	}
 
+	@Test
+	public void testIntegersWithThousandsSeparators() {
+		assertGreater("1,000,005", "1000004");
+		assertSmaller("1,000,005", "1000006");
+		assertGreater("1,0,0,0,0,0,5", "1,000,004");
+		assertSmaller("1,0,0,0,0,0,5", "1,000,006");
+		assertGreater(",1,0,0,0,0,0,5,", "1,000,004");
+		assertSmaller(",1,0,0,0,0,0,5,", "1,000,006");
+		assertSmaller("1,,0,0,0,0,0,5", "1,000,004");//no longer treated as a number
+		assertSmaller("1,,0,0,0,0,0,5", "1,000,006");//no longer treated as a number
+	}
+	@Test
+	public void testDecimalsWithThousandsSeparators() {
+		assertGreater("1,000,000.001", "1000000.0001");
+		assertSmaller("1,000,000.001", "1000000.0011");
+		assertGreater("1,0,0,0,000.001", "1,000,000.0001");
+		assertSmaller("1,0,0,0,000.001", "1,000,000.0011");
+		assertGreater("1,0,0,0,000.000001", "1,000,000.0000001");
+		assertSmaller("1,0,0,0,000.000001", "1,000,000.0000011");
+		assertSmaller("1,0,0,0,000.000,001", "1,000,000.0000001");//no longer treated as a number
+		assertSmaller("1,0,0,0,000.000,001", "1,000,000.0000011");//no longer treated as a number
+	}
 }
