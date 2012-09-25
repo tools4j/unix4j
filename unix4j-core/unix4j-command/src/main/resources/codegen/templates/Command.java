@@ -71,7 +71,7 @@ import ${def.pkg.name}.${varName};
  * <p>
  * <table>
 <#foreach opd in def.operands?values>
- * <tr><td width="10px"></td><td nowrap="nowrap">{@code <${opd.name}>}</td><td>&nbsp;:&nbsp;</td><td nowrap="nowrap">{@code ${opd.type}}</td><td>&nbsp;</td><td>${opd.desc}</td></tr>
+ * <tr valign="top"><td width="10px"></td><td nowrap="nowrap">{@code <${opd.name}>}</td><td>&nbsp;:&nbsp;</td><td nowrap="nowrap">{@code ${opd.type}}</td><td>&nbsp;</td><td>${opd.desc}</td></tr>
 </#foreach>
  * </table>
  */
