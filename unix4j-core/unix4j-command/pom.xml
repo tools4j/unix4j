@@ -6,11 +6,11 @@
 	<parent>
 		<groupId>org.unix4j</groupId>
 		<artifactId>unix4j-core</artifactId>
-		<version>0.1</version>
+		<version>0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>org.unix4j</groupId>
 	<artifactId>unix4j-command</artifactId>
-	<version>0.1</version>
+	<version>0.1-SNAPSHOT</version>
 
 	<build>
 		<plugins>
@@ -23,7 +23,7 @@
 					<dependency>
 						<groupId>org.unix4j</groupId>
 						<artifactId>unix4j-tools</artifactId>
-						<version>0.1</version>
+						<version>0.1-SNAPSHOT</version>
 						<optional>true</optional>
 					</dependency>
 				</dependencies>
@@ -62,12 +62,12 @@
 	</build>
 
 	<dependencies>
-		<!-- <dependency> <groupId>org.unix4j</groupId> <artifactId>unix4j-tools</artifactId> 
-			<version>0.1</version> <optional>true</optional> </dependency> -->
+		<!-- <dependency> <groupId>org.unix4j</groupId> <artifactId>unix4j-tools</artifactId>
+			<version>0.1-SNAPSHOT</version> <optional>true</optional> </dependency> -->
 		<dependency>
 			<groupId>org.unix4j</groupId>
 			<artifactId>unix4j-base</artifactId>
-			<version>0.1</version>
+			<version>0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

@@ -3,20 +3,49 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+
 	<groupId>org.unix4j</groupId>
 	<artifactId>unix4j</artifactId>
-	<version>0.1</version>
+	<version>0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
+	<url>http://www.unix4j.org</url>
 
 	<modules>
 		<module>unix4j-tools</module>
 		<module>unix4j-core</module>
 		<module>unix4j-perf</module>
-		<!--
-		<module>unix4j-examples</module>
-		<module>unix4j-dist</module>
-		-->
 	</modules>
+
+	<licenses>
+		<license>
+			<name>New BSD License</name>
+			<url>http://www.opensource.org/licenses/BSD-3-Clause</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<url>scm:git:https://code.google.com/p/unix4j/</url>
+		<connection>scm:git:https://code.google.com/p/unix4j/</connection>
+	</scm>
+
+	<developers>
+		<developer>
+			<id>bjwarner</id>
+			<name>Ben Warner</name>
+			<email>bjwarner@gmail.com</email>
+		</developer>
+		<developer>
+			<id>terz</id>
+			<name>Marco Terzer</name>
+			<email>mterzer@gmx.net</email>
+		</developer>
+	</developers>
 
 	<dependencies>
 		<dependency>
@@ -26,7 +55,35 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
 	<profiles>
+		<!--<profile>-->
+			<!--<id>release-sign-artifacts</id>-->
+			<!--<activation>-->
+				<!--<property>-->
+					<!--<name>performRelease</name>-->
+					<!--<value>true</value>-->
+				<!--</property>-->
+			<!--</activation>-->
+			<!--<build>-->
+				<!--<plugins>-->
+					<!--<plugin>-->
+						<!--<groupId>org.apache.maven.plugins</groupId>-->
+						<!--<artifactId>maven-gpg-plugin</artifactId>-->
+						<!--<version>1.1</version>-->
+						<!--<executions>-->
+							<!--<execution>-->
+								<!--<id>sign-artifacts</id>-->
+								<!--<phase>verify</phase>-->
+								<!--<goals>-->
+									<!--<goal>sign</goal>-->
+								<!--</goals>-->
+							<!--</execution>-->
+						<!--</executions>-->
+					<!--</plugin>-->
+				<!--</plugins>-->
+			<!--</build>-->
+		<!--</profile>-->
 		<profile>
 			<id>jdk16</id>
 			<activation>
