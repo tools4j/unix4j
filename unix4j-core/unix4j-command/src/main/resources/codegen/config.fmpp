@@ -7,7 +7,9 @@ modes: [
 data: {
     commandDefs: org.unix4j.codegen.CommandDefinitionDataLoader(
         ../../command-definition/cat.xml
+        ../../command-definition/cut.xml
         ../../command-definition/echo.xml
+        ../../command-definition/find.xml
         ../../command-definition/from.xml
         ../../command-definition/grep.xml
         ../../command-definition/head.xml
@@ -17,11 +19,12 @@ data: {
         ../../command-definition/tail.xml
         ../../command-definition/uniq.xml
         ../../command-definition/wc.xml
-        ../../command-definition/cut.xml
     )
     optionSetDefs: org.unix4j.codegen.OptionSetDefinitionDataLoader(
         ../../command-definition/cat.xml
+        ../../command-definition/cut.xml
         ../../command-definition/echo.xml
+        ../../command-definition/find.xml
         ../../command-definition/from.xml
         ../../command-definition/grep.xml
         ../../command-definition/head.xml
@@ -31,12 +34,5 @@ data: {
         ../../command-definition/tail.xml
         ../../command-definition/uniq.xml
         ../../command-definition/wc.xml
-        ../../command-definition/cut.xml
-    )
-	SSScommandDefs: org.unix4j.codegen.CommandDefinitionDataLoader(
-        ../../command-definition/sort.xml
-    )
-    SSSoptionSetDefs: org.unix4j.codegen.OptionSetDefinitionDataLoader(
-        ../../command-definition/sort.xml
     )
 }
