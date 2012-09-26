@@ -152,10 +152,10 @@ abstract public class AbstractNumberStringComparatorTest {
 		final int max = Byte.MAX_VALUE;
 		for (int i = min; i < max; i++) {
 			for (int j = min; j < max; j++) {
-				final int expected = Integer.compare(i, j);
+				final int expected = i - j;
 				assertCompare(String.valueOf(i), String.valueOf(j), expected);
 //				comparator.compare(String.valueOf(i), String.valueOf(j));
-//				Long.compare(Long.parseLong(String.valueOf(i)), Long.parseLong(String.valueOf(j)));
+//				compare(Long.parseLong(String.valueOf(i)), Long.parseLong(String.valueOf(j)));
 //				new BigDecimal(String.valueOf(i)).compareTo(new BigDecimal(String.valueOf(j)));
 			}
 		}
@@ -166,10 +166,10 @@ abstract public class AbstractNumberStringComparatorTest {
 		for (int i = 0; i < runs; i++) {
 			final long val1 = rnd.nextLong();
 			final long val2 = rnd.nextLong();
-			final int expected = Long.compare(val1, val2);
+			final int expected = compare(val1, val2);
 			assertCompare(String.valueOf(val1), String.valueOf(val2), expected);
 //			comparator.compare(String.valueOf(val1), String.valueOf(val2));
-//			Long.compare(Long.parseLong(String.valueOf(val1)), Long.parseLong(String.valueOf(val2)));
+//			compare(Long.parseLong(String.valueOf(val1)), Long.parseLong(String.valueOf(val2)));
 //			new BigDecimal(String.valueOf(val1)).compareTo(new BigDecimal(String.valueOf(val2)));
 		}
 	}
@@ -241,7 +241,7 @@ abstract public class AbstractNumberStringComparatorTest {
 				assertCompare(dec1.toPlainString(), dec2.toPlainString(), expected);
 			}
 //			comparator.compare(String.valueOf(val1), String.valueOf(val2));
-//			Long.compare(Long.parseLong(String.valueOf(val1)), Long.parseLong(String.valueOf(val2)));
+//			compare(Long.parseLong(String.valueOf(val1)), Long.parseLong(String.valueOf(val2)));
 //			new BigDecimal(String.valueOf(val1)).compareTo(new BigDecimal(String.valueOf(val2)));
 		}
 	}
@@ -339,4 +339,23 @@ abstract public class AbstractNumberStringComparatorTest {
 			sb.append(rnd.nextInt(10));
 		}
 	}
+	
+	//copied from Long.compare JDK 1.7
+    /**
+     * Compares two {@code long} values numerically.
+     * The value returned is identical to what would be returned by:
+     * <pre>
+     *    Long.valueOf(x).compareTo(Long.valueOf(y))
+     * </pre>
+     *
+     * @param  x the first {@code long} to compare
+     * @param  y the second {@code long} to compare
+     * @return the value {@code 0} if {@code x == y};
+     *         a value less than {@code 0} if {@code x < y}; and
+     *         a value greater than {@code 0} if {@code x > y}
+     * @since 1.7
+     */
+    public static int compare(long x, long y) {
+        return (x < y) ? -1 : ((x == y) ? 0 : 1);
+    }
 }
