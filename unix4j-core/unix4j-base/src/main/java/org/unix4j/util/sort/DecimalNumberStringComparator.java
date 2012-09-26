@@ -88,7 +88,7 @@ public class DecimalNumberStringComparator implements Comparator<CharSequence> {
 				isZero1 &= (isDigit1 && ch1 == zeroDigit);
 				isZero2 &= (isDigit2 && ch2 == zeroDigit);
 				if (cmp == 0) {
-					cmp = Character.compare(ch1, ch2);
+					cmp = ch1 - ch2;
 				}
 				index1++;
 				index2++;
@@ -101,7 +101,7 @@ public class DecimalNumberStringComparator implements Comparator<CharSequence> {
 					return applySign(-1, isNeg1, isNeg2);
 				} else {
 					if (cmp == 0) {
-						cmp = Character.compare(ch1, ch2);
+						cmp = ch1 - ch2;
 					}
 					index1++;
 					index2++;
@@ -142,7 +142,7 @@ public class DecimalNumberStringComparator implements Comparator<CharSequence> {
 			if (isDigit1 && isDigit2) {
 				isZero1 &= (isDigit1 && ch1 == zeroDigit);
 				isZero2 &= (isDigit2 && ch2 == zeroDigit);
-				cmp = Character.compare(ch1, ch2);
+				cmp = ch1 - ch2;
 				index1++;
 				index2++;
 			} else {
@@ -159,7 +159,7 @@ public class DecimalNumberStringComparator implements Comparator<CharSequence> {
 						return applySign(-1, isNeg1, isNeg2);
 					}
 				} else {
-					cmp = Character.compare(ch1, ch2);
+					cmp = ch1 - ch2;
 					index1++;
 					index2++;
 				}
