@@ -11,7 +11,7 @@
 
 	<groupId>org.unix4j</groupId>
 	<artifactId>unix4j</artifactId>
-	<version>0.1-SNAPSHOT</version>
+	<version>0.1.SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<url>http://www.unix4j.org</url>
 
