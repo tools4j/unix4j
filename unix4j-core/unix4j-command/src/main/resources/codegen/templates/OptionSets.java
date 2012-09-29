@@ -7,13 +7,11 @@
 <#global cmd=def.command>
 <#global commandName=def.commandName> 
 <#global options=def.options?values> 
-<#global optionName=cmd.simpleName+"Option">
 <#global simpleName=cmd.simpleName+"OptionSets">
 <@pp.changeOutputFile name=pp.pathTo("/"+def.pkg.path+"/"+simpleName+".java")/> 
 package ${def.pkg.name};
 
 import ${cmd.pkg.name}.${cmd.simpleName};
-import ${def.pkg.name}.${optionName};
 
 /**
  * Options for the {@link ${cmd.simpleName} ${commandName}} command with the 

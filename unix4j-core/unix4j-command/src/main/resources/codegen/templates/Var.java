@@ -11,26 +11,21 @@ package ${def.pkg.name};
 
 import org.unix4j.command.CommandInterface;
 import org.unix4j.variable.NamedValue;
+<#foreach opd in def.operands?values>
+	<#if !isCommandSpecificOperand(def, opd)>
+		<#if indexOfOperandByType(def.operands, opd) == opd_index><#-- otherwise it is a repeted occurance of this type -->
+import ${varPkgName}.${varIfaceName(opd)};
+		</#if>
+	</#if>
+</#foreach>
 import ${cmd.pkg.name}.${cmd.simpleName};
 
-<#function varTypeName operand>
-	<#if operand.type?ends_with("...")>
-		<#local name=operand.type?substring(0, operand.type?length-3)+"s">
-	<#elseif operand.type?ends_with("[]")>
-		<#local name=operand.type?substring(0, operand.type?length-2)+"s">
-	<#else>
-		<#local name=operand.type>
-	</#if>
-	<#local name=rawType(name)>
-	<#local lastDot=name?last_index_of(".")>
-	<#return name?substring(lastDot+1)?cap_first + "$">
-</#function>
 <#function isVar index isVarFlags>
 	<#return isVarFlags?substring(index, index+1)=="T">
 </#function>
 <#function fixedOrVarType def arg isVar>
 	<#if isVar>
-		<#return varTypeName(def.operands[arg])>
+		<#return varIfaceName(def.operands[arg])>
 	<#else>
 		<#return def.operands[arg].type>
 	</#if>
@@ -50,12 +45,15 @@ import ${cmd.pkg.name}.${cmd.simpleName};
  */
 public class ${varName} {
 <#foreach opd in def.operands?values>
+<#if isCommandSpecificOperand(def, opd)>
 <#if indexOfOperandByType(def.operands, opd) == opd_index><#-- otherwise it is a repeted occurance of this type -->
 	/**
-	 * Named value for {@code <${opd.name}>} operand, for instance representing 
-	 * a variable or a constant holding a value of the type {@code ${normalizeVarArgType(opd.type, false)}}.
+	 * Interface for a variable or a constant holding a value of the type {@code ${normalizeVarArgType(opd.type, false)}}.
+	 * Such variables can for instance be passed to the {@code <${opd.name}>} 
+	 * operand.
 	 */
-	public interface ${varTypeName(opd)} extends NamedValue<${normalizeVarArgType(opd.type, true)}>{}
+	public interface ${varIfaceName(opd)} extends NamedValue<${normalizeVarArgType(opd.type, true)}>{}
+</#if>
 </#if>
 </#foreach>
 	
