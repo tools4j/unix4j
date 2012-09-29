@@ -11,7 +11,7 @@
 package ${cmd.pkg.name};
 
 import org.unix4j.command.CommandInterface;
-import org.unix4j.variable.Literal;
+import org.unix4j.variable.NamedValue;
 
 import ${def.pkg.name}.${factoryName};
 <#if def.options?size != 0>
@@ -116,7 +116,7 @@ public final class ${cmd.simpleName} {
 	/**
 	 * Very similar to {@link Interface} but defines all method signatures for 
 	 * the "${commandName}" command when variables are used in form of a
-	 * {@link Literal}.
+	 * {@link NamedValue}.
 	 * 
 	 * @param <R>
 	 *            the generic return type for all command signature methods
