@@ -1,3 +1,6 @@
+<#global varPkgName="org.unix4j.vars">
+<#global varPkgPath="org/unix4j/vars">
+
 <#macro optionJavadoc myName aliasName myPre aliasPre javadoc setComment> 
 	/**
 	 * Option {@code "${myPre}${myName}"}: ${javadoc}
@@ -18,24 +21,39 @@
 <#macro optionJavadocAcronym opt setComment> 
 	<@optionJavadoc opt.acronym opt.name "-" "--" opt.desc setComment/>
 </#macro>
+<#function isCommandSpecificOperand def operand>
+	<#return !operand.type?contains(".") && !isPrimitive(operand.type) && !isJavaLang(operand.type)> 
+</#function>
 
+<#function isPrimitive type>
+	<#return type=="long" || type=="int" || type=="short" || type=="byte" || type=="double" || type=="float" || type=="char" || type=="boolean">
+</#function>
+<#function isJavaLang type>
+	<#return type=="String">
+</#function>
+<#function boxPrimitive type>
+	<#if type == "int">
+		<#return "Integer">
+	<#elseif type == "long">
+		<#return "Long">
+	<#elseif type == "double">
+		<#return "Double">
+	<#elseif type == "float">
+		<#return "Float">
+	<#elseif type == "char">
+		<#return "Character">
+	<#elseif type == "boolean">
+		<#return "Boolean">
+	<#else>
+		<#return type>
+	</#if>
+</#function>
+<#function isGenericType type>
+	<#return type?contains("<")>
+</#function>
 <#function normalizeVarArgType type boxPrimitives>
 	<#if boxPrimitives>
-		<#if type == "int">
-			<#local normalized="Integer">
-		<#elseif type == "long">
-			<#local normalized="Long">
-		<#elseif type == "double">
-			<#local normalized="Double">
-		<#elseif type == "float">
-			<#local normalized="Float">
-		<#elseif type == "char">
-			<#local normalized="Character">
-		<#elseif type == "boolean">
-			<#local normalized="Boolean">
-		<#else>
-			<#local normalized=type>
-		</#if>
+		<#local normalized=boxPrimitive(type)>
 	<#else>
 		<#local normalized=type>
 	</#if>
@@ -45,7 +63,6 @@
 		<#return normalized>
 	</#if>
 </#function>
-
 <#function rawType type>
 	<#if type?contains("<")>
 		<#-- cut off the generic stuff -->
@@ -53,6 +70,37 @@
 	<#else>
 		<#return type>
 	</#if>
+</#function>
+<#function typeClass type prefixWithCast>
+	<#local class=normalizeVarArgType(type,false)>
+	<#if isGenericType(class)>
+		<#local raw=rawType(class)>
+		<#if prefixWithCast>
+			<#return "(Class<" + class + ">)(Class<?>)" + raw + ".class">
+		<#else>
+			<#return class + ".class">
+		</#if>
+	<#else>
+		<#return class + ".class">
+	</#if>
+</#function>
+<#function varBaseName operand>
+	<#if operand.type?ends_with("...")>
+		<#local name=operand.type?substring(0, operand.type?length-3)+"s">
+	<#elseif operand.type?ends_with("[]")>
+		<#local name=operand.type?substring(0, operand.type?length-2)+"s">
+	<#else>
+		<#local name=operand.type>
+	</#if>
+	<#local name=rawType(name)>
+	<#local lastDot=name?last_index_of(".")>
+	<#return name?substring(lastDot+1)?cap_first>
+</#function>
+<#function varIfaceName operand>
+	<#return varBaseName(operand) + "$">
+</#function>
+<#function varTypeName operand>
+	<#return varBaseName(operand) + "Variable">
 </#function>
 
 <#function countUsesStandardInput def usesStandardInput>

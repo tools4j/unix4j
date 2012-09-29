@@ -112,7 +112,6 @@ public class DecimalNumberStringComparator implements Comparator<CharSequence> {
 	}
 	private int compareAfterDecimals(CharSequence s1, int index1, int end1, char ch1, boolean isNeg1, boolean isZero1, CharSequence s2, int index2, int end2, char ch2, boolean isNeg2, boolean isZero2, int cmp) {
 		final char decimalSeparator = symbols.getDecimalSeparator();
-		final char groupingSeparator = symbols.getGroupingSeparator();
 		final char zeroDigit = symbols.getZeroDigit();
 		boolean isDigit1 = Character.isDigit(ch1); 
 		boolean isDigit2 = Character.isDigit(ch2); 
