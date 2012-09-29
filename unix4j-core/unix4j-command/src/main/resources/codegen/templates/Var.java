@@ -10,7 +10,7 @@
 package ${def.pkg.name};
 
 import org.unix4j.command.CommandInterface;
-import org.unix4j.variable.Literal;
+import org.unix4j.variable.NamedValue;
 import ${cmd.pkg.name}.${cmd.simpleName};
 
 <#function varTypeName operand>
@@ -52,17 +52,17 @@ public class ${varName} {
 <#foreach opd in def.operands?values>
 <#if indexOfOperandByType(def.operands, opd) == opd_index><#-- otherwise it is a repeted occurance of this type -->
 	/**
-	 * Literal for {@code <${opd.name}>} operand, for instance representing a 
-	 * variable or named constant holding a value of the type {@code ${normalizeVarArgType(opd.type, false)}}.
+	 * Named value for {@code <${opd.name}>} operand, for instance representing 
+	 * a variable or a constant holding a value of the type {@code ${normalizeVarArgType(opd.type, false)}}.
 	 */
-	public interface ${varTypeName(opd)} extends Literal<${normalizeVarArgType(opd.type, true)}>{}
+	public interface ${varTypeName(opd)} extends NamedValue<${normalizeVarArgType(opd.type, true)}>{}
 </#if>
 </#foreach>
 	
 	/**
 	 * Very similar to {@link ${cmd.simpleName}.Interface} but defines all method signatures for 
 	 * the "${commandName}" command when variables are used in form of a
-	 * {@link Literal}.
+	 * {@link NamedValue}.
 	 * 
 	 * @param <R>
 	 *            the generic return type for all command signature methods
