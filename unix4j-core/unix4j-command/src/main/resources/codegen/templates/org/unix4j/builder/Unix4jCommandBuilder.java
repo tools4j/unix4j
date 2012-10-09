@@ -1,6 +1,7 @@
+<#include "/include/builder-method-javadoc.fmpp">
 package org.unix4j.builder;
 
-import org.unix4j.builder.DefaultCommandBuilder;
+import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.Command;
 
 <#foreach def in commandDefs> 
@@ -31,51 +32,37 @@ import ${def.pkg.name}.${def.command.simpleName}Options;
  * {@code xargs} command: here, the next command after {@code xargs} receives 
  * <i>arguments</i> from {@code xargs} instead of (standard) input.
  */
-public class Unix4jCommandBuilder extends DefaultCommandBuilder
-	implements 
+public interface Unix4jCommandBuilder extends CommandBuilder,
 <#foreach def in commandDefs>
 		${def.command.simpleName}.Interface<Unix4jCommandBuilder><#if def_has_next>,<#else> {</#if>
 </#foreach>
-
-	/**
-	 * Constructor for a builder where the standard input is used as input for
-	 * the first command.
-	 */
-	public Unix4jCommandBuilder() {
-		super();
-	}
 
 <#foreach def in commandDefs>
 
 	/* ------------------ ${def.commandName} ------------------ */
 <#foreach method in def.methods>
-	/**
-	 * ${method.desc}
-	 * <p>
-	 * Note that the method returns {@code this} builder to allow for command 
-	 * chaining. The command itself is returned by the {@link #build()} method. 
-	 * See {@link Unix4jCommandBuilder class comments} for more information.
-	 *
-<#foreach arg in method.args>
-	 * @param ${arg} ${def.operands[arg].desc}
-</#foreach>
-	 * @return	{@code this} builder to allow for method chaining. Method
-	 * 			chaining is used here to create command chains. Adding a command 
-	 * 			to the chain usually means that the previous command <i>pipes</i> 
-	 * 			its output to the added command (the pipe symbol in unix)
-	 */
+<@builderMethodJavadoc def method/>
 	@Override
-	public Unix4jCommandBuilder ${method.name}(<#foreach arg in method.args>${def.operands[arg].type} ${arg}<#if arg_has_next>, </#if></#foreach>) {
-		join(${def.command.simpleName}.FACTORY.${method.name}(<#foreach arg in method.args>${arg}<#if arg_has_next>, </#if></#foreach>));
-		return this;
-	}
+	Unix4jCommandBuilder ${method.name}(<#foreach arg in method.args>${def.operands[arg].type} ${arg}<#if arg_has_next>, </#if></#foreach>);
 </#foreach>
 </#foreach>
 
+	/**
+	 * Returns a builder with extended support for use of variables when 
+	 * constructing commands. The returned builder inherits the command chain
+	 * from this builder. 
+	 * 
+	 * @return 	a builder with extended support for variable use when 
+	 * 			constructing commands
+	 */
+	Unix4jCommandBuilder$ withVariables();
+
+	//override with specialized return type
 	@Override
-	public Unix4jCommandBuilder join(Command<?> command) {
-		super.join(command);
-		return this;
-	}
+	Unix4jCommandBuilder join(Command<?> command);
+	
+	//override with specialized return type
+	@Override
+	Unix4jCommandBuilder reset();
 
 }

@@ -2,6 +2,7 @@
 package org.unix4j;
 
 import org.unix4j.builder.Unix4jCommandBuilder;
+import org.unix4j.builder.DefaultUnix4jCommandBuilder;
 
 <#foreach def in commandDefs>
 <#if countUsesStandardInput(def, false) != 0 && def.options?size != 0>
@@ -26,7 +27,7 @@ public final class Unix4j {
 	 * @return the builder to create the command or command chain
 	 */
 	public static Unix4jCommandBuilder builder() {
-		return new Unix4jCommandBuilder();
+		return new DefaultUnix4jCommandBuilder();
 	}
 	
 <#foreach def in commandDefs>
