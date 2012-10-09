@@ -19,7 +19,7 @@ import ${def.pkg.name}.${def.command.simpleName}Var.${varIfaceName(opd)};
 </#foreach>
 
 /**
- * Extension of {@link Unix4jCommandBuilder} adding methods to for commands when
+ * Extension of {@link Unix4jCommandBuilder} adding methods for commands when
  * variables are used as command arguments. Application code does usually not 
  * directly refer to this class but uses it indirectly through the static 
  * methods in {@link org.unix4j.Unix4j Unix4j}.

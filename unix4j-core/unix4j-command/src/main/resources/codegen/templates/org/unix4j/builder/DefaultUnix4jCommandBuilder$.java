@@ -19,7 +19,7 @@ import ${def.pkg.name}.${def.command.simpleName}Var.${varIfaceName(opd)};
 </#foreach>
 
 /**
- * Default implementation for {@link Unix4jCommandBuilder}. Application code 
+ * Default implementation for {@link Unix4jCommandBuilder$}. Application code 
  * does usually not directly refer to this class but uses it indirectly through 
  * the static methods in {@link org.unix4j.Unix4j Unix4j}.
  */
