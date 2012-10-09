@@ -84,13 +84,7 @@ public final class ${cmd.simpleName} {
 	/**
 	 * Interface defining all method signatures for the "${commandName}" command.
 	 * 
-	 * @param <R>
-	 *            the generic return type for all command signature methods
-	 *            to support different implementor types; the command
-	 *            {@link ${cmd.simpleName}#FACTORY FACTORY} for instance returns a
-	 *            new command instance; command builders can also implement this
-	 *            interface and return an instance to itself allowing for
-	 *            chained method invocations to create joined commands.
+<#include "/include/returntype-class-javadoc.java">
 	 */
 	public static interface Interface<R> extends CommandInterface<R> {
 <#foreach method in def.methods>
@@ -100,14 +94,7 @@ public final class ${cmd.simpleName} {
 <#foreach arg in method.args>
 		 * @param ${arg} ${def.operands[arg].desc}
 </#foreach>
-		 * @return the generic type {@code <R>} defined by the implementing
-		 *         class, even if the command itself returns no value and writes
-		 *         its result to the standard output. This is important for some
-		 *         implementors like the command {@link ${cmd.simpleName}#FACTORY FACTORY} 
-		 *         which returns a new command instance. Command builders also
-		 *         implement this interface and return the builder itself which
-		 *         allows for chained method invocations to create joined 
-		 *         commands.
+<#include "/include/returntype-method-javadoc.java">
 		 */
 		R ${method.name}(<#foreach arg in method.args>${def.operands[arg].type} ${arg}<#if arg_has_next>, </#if></#foreach>);
 </#foreach>
@@ -118,13 +105,7 @@ public final class ${cmd.simpleName} {
 	 * the "${commandName}" command when variables are used in form of a
 	 * {@link NamedValue}.
 	 * 
-	 * @param <R>
-	 *            the generic return type for all command signature methods
-	 *            to support different implementor types; the command
-	 *            {@link ${cmd.simpleName}#FACTORY FACTORY} for instance returns a
-	 *            new command instance; command builders can also implement this
-	 *            interface and return an instance to itself allowing for
-	 *            chained method invocations to create joined commands.
+<#include "/include/returntype-class-javadoc.java">
 	 */
 	public static interface Interface$<R> extends ${varName}.Interface<R> {}
 

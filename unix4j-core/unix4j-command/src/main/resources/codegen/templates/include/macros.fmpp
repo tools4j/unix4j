@@ -1,26 +1,6 @@
 <#global varPkgName="org.unix4j.vars">
 <#global varPkgPath="org/unix4j/vars">
 
-<#macro optionJavadoc myName aliasName myPre aliasPre javadoc setComment> 
-	/**
-	 * Option {@code "${myPre}${myName}"}: ${javadoc}
-	 * <p>
-	 * The option {@code "${myPre}${myName}"} is equivalent to the {@code "${aliasPre}}{@link #${aliasName} ${aliasName}}{@code "} option.
-<#if setComment>
-	 * <p>
-	 * Technically speaking, this field points to a set with the options of the 
-	 * current set plus the option {@code "${myPre}${myName}"}. If the option {@code "${myPre}${myName}"}
-	 * is already set, the field {@code ${myName}} points to the enum constant itself
-	 * as it already represents the current set of options.
-</#if> 
-	 */
-</#macro>
-<#macro optionJavadocLong opt setComment> 
-	<@optionJavadoc opt.name opt.acronym "--" "-" opt.desc setComment/>
-</#macro>
-<#macro optionJavadocAcronym opt setComment> 
-	<@optionJavadoc opt.acronym opt.name "-" "--" opt.desc setComment/>
-</#macro>
 <#function isCommandSpecificOperand def operand>
 	<#return !operand.type?contains(".") && !isPrimitive(operand.type) && !isJavaLang(operand.type)> 
 </#function>
@@ -84,6 +64,16 @@
 		<#return class + ".class">
 	</#if>
 </#function>
+
+<#function countUsesStandardInput def usesStandardInput>
+	<#local count=0>
+	<#foreach method in def.methods>
+		<#if method.usesStandardInput = usesStandardInput>
+			<#local count=count+1>
+		</#if>
+	</#foreach>
+	<#return count>
+</#function>
 <#function varBaseName operand>
 	<#if operand.type?ends_with("...")>
 		<#local name=operand.type?substring(0, operand.type?length-3)+"s">
@@ -102,13 +92,21 @@
 <#function varTypeName operand>
 	<#return varBaseName(operand) + "Variable">
 </#function>
-
-<#function countUsesStandardInput def usesStandardInput>
-	<#local count=0>
-	<#foreach method in def.methods>
-		<#if method.usesStandardInput = usesStandardInput>
-			<#local count=count+1>
+<#function isVar index isVarFlags>
+	<#return isVarFlags?substring(index, index+1)=="T">
+</#function>
+<#function fixedOrVarType def arg isVar>
+	<#if isVar>
+		<#return varIfaceName(def.operands[arg])>
+	<#else>
+		<#return def.operands[arg].type>
+	</#if>
+</#function>
+<#function indexOfOperandByType operands operand>
+	<#foreach opd in operands?values>
+		<#if opd.type == operand.type>
+			<#return opd_index>
 		</#if>
 	</#foreach>
-	<#return count>
+	<#return -1>
 </#function>

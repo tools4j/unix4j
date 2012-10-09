@@ -1,4 +1,5 @@
 <#include "/include/macros.fmpp">
+<#include "/include/option-javadoc.fmpp">
 
 <@pp.dropOutputFile />
 <#list optionSetDefs as setDef>

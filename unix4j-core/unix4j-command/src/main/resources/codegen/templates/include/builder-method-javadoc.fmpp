@@ -1,0 +1,17 @@
+<#macro builderMethodJavadoc def method> 
+	/**
+	 * ${method.desc}
+	 * <p>
+	 * Note that the method returns {@code this} builder to allow for command 
+	 * chaining. The command itself is returned by the {@link #build()} method. 
+	 * See {@link Unix4jCommandBuilder class comments} for more information.
+	 *
+<#foreach arg in method.args>
+	 * @param ${arg} ${def.operands[arg].desc}
+</#foreach>
+	 * @return	{@code this} builder to allow for method chaining; method
+	 * 			chaining is used here to create command chains; adding a command 
+	 * 			to the chain usually means that the previous command <i>pipes</i> 
+	 * 			its output to the next command (the pipe symbol in unix)
+	 */
+</#macro>
