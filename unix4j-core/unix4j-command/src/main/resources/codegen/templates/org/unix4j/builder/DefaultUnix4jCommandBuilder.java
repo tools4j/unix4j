@@ -39,10 +39,10 @@ public class DefaultUnix4jCommandBuilder extends DefaultCommandBuilder implement
 </#foreach>
 
 	@Override
-	public Unix4jCommandBuilder$ withVariables() {
-		final Unix4jCommandBuilder$ builder$ = new DefaultUnix4jCommandBuilder$();
-		builder$.join(build());
-		return builder$;
+	public Unix4jCommandBuilderVars withVariables() {
+		final Unix4jCommandBuilderVars builder = new DefaultUnix4jCommandBuilderVars();
+		builder.join(build());
+		return builder;
 	}
 
 	@Override

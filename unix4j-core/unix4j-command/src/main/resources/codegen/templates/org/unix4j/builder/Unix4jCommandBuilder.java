@@ -55,7 +55,7 @@ public interface Unix4jCommandBuilder extends CommandBuilder,
 	 * @return 	a builder with extended support for variable use when 
 	 * 			constructing commands
 	 */
-	Unix4jCommandBuilder$ withVariables();
+	Unix4jCommandBuilderVars withVariables();
 
 	//override with specialized return type
 	@Override

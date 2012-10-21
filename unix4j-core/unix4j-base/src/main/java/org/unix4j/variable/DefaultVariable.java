@@ -2,7 +2,7 @@ package org.unix4j.variable;
 
 /**
  * Default implementation of a {@link Variable}, a named value whose assigned
- * value can change over time.
+ * value can change over time. This variable implementation is not thread safe.
  * 
  * @param <V>
  *            the type of the value

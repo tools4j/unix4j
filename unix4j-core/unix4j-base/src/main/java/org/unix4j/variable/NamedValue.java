@@ -1,7 +1,7 @@
 package org.unix4j.variable;
 
 /**
- * A NamedValue is value that has a name associated with that value; typical
+ * A NamedValue is a value that has a name associated with that value; typical
  * named values are constants and variables.
  * 
  * @param <V>
@@ -27,6 +27,7 @@ public interface NamedValue<V> {
 	 *         variable name
 	 */
 	String getName();
+
 	/**
 	 * Returns the value, usually a constant or the current value of a variable.
 	 * @return the value

@@ -24,7 +24,7 @@ import ${def.pkg.name}.${def.command.simpleName}Var.${varIfaceName(opd)};
  * directly refer to this class but uses it indirectly through the static 
  * methods in {@link org.unix4j.Unix4j Unix4j}.
  */
-public interface Unix4jCommandBuilder$ extends Unix4jCommandBuilder,
+public interface Unix4jCommandBuilderVars extends Unix4jCommandBuilder,
 <#foreach def in commandDefs>
 		${def.command.simpleName}.Interface$<Unix4jCommandBuilder><#if def_has_next>,<#else> {</#if>
 </#foreach>
