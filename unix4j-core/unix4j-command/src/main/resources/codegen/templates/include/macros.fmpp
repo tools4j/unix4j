@@ -87,10 +87,10 @@
 	<#return name?substring(lastDot+1)?cap_first>
 </#function>
 <#function varIfaceName operand>
-	<#return varBaseName(operand) + "$">
+	<#return varBaseName(operand) + "Var">
 </#function>
 <#function varTypeName operand>
-	<#return varBaseName(operand) + "Variable">
+	<#return "Default" + varIfaceName(operand)>
 </#function>
 <#function isVar index isVarFlags>
 	<#return isVarFlags?substring(index, index+1)=="T">

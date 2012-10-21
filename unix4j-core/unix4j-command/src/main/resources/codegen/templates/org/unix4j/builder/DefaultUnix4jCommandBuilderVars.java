@@ -19,17 +19,17 @@ import ${def.pkg.name}.${def.command.simpleName}Var.${varIfaceName(opd)};
 </#foreach>
 
 /**
- * Default implementation for {@link Unix4jCommandBuilder$}. Application code 
+ * Default implementation for {@link Unix4jCommandBuilderVars}. Application code 
  * does usually not directly refer to this class but uses it indirectly through 
  * the static methods in {@link org.unix4j.Unix4j Unix4j}.
  */
-public class DefaultUnix4jCommandBuilder$ extends DefaultUnix4jCommandBuilder implements Unix4jCommandBuilder$ {
+public class DefaultUnix4jCommandBuilderVars extends DefaultUnix4jCommandBuilder implements Unix4jCommandBuilderVars {
 
 	/**
 	 * Default constructor, initialized to build a {@link NoOp} command if no 
 	 * command is {@link #join(Command) joined} to this builder's command chain.
 	 */
-	public DefaultUnix4jCommandBuilder$() {
+	public DefaultUnix4jCommandBuilderVars() {
 		super();
 	}
 
@@ -64,7 +64,7 @@ public class DefaultUnix4jCommandBuilder$ extends DefaultUnix4jCommandBuilder im
 	 * @return this builder
 	 */
 	@Override
-	public Unix4jCommandBuilder$ withVariables() {
+	public Unix4jCommandBuilderVars withVariables() {
 		return this;
 	}
 
