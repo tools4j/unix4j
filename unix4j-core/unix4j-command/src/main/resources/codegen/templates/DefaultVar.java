@@ -7,7 +7,6 @@
 <#global simpleName=varTypeName(opd)>
 <#global ifaceName=varIfaceName(opd)>
 <#global valueType=normalizeVarArgType(opd.type, true)>
-<#global valueClass=normalizeVarArgType(opd.type, true)>
 <@pp.changeOutputFile name=pp.pathTo("/"+varPkgPath+"/"+simpleName+".java")/> 
 package ${varPkgName};
 
@@ -24,11 +23,8 @@ public class ${simpleName} extends DefaultVariable<${valueType}> implements ${if
 	 * @param name
 	 *            the variable name
 	 */
-	<#if isGenericType(opd.type)>
-	@SuppressWarnings("unchecked")
-	</#if>
 	public ${simpleName}(String name) {
-		super(name, ${typeClass(opd.type, true)});
+		super(name);
 	}
 
 	/**
@@ -39,13 +35,23 @@ public class ${simpleName} extends DefaultVariable<${valueType}> implements ${if
 	 * @param value
 	 *            the initial value for the variable
 	 */
-	<#if isGenericType(opd.type)>
-	@SuppressWarnings("unchecked")
-	</#if>
 	public ${simpleName}(String name, ${opd.type} value) {
-		super(name, ${typeClass(opd.type, true)});
-		setValue(value);
+		super(name, value);
 	}
+	<#if isPrimitive(opd.type)>
+
+	/**
+	 * Constructor with name and initial value for the variable.
+	 * 
+	 * @param name
+	 *            the variable name
+	 * @param value
+	 *            the initial value for the variable
+	 */
+	public ${simpleName}(String name, ${valueType} value) {
+		super(name, value);
+	}
+	</#if>
 }
 </#if>
 </#foreach>

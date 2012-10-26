@@ -1,31 +1,13 @@
+<#include "/include/macros.fmpp">
 <@pp.dropOutputFile /> 
 <#list commandDefs as def> 
 <#global cmd=def.command>
 <#global commandName=cmd.simpleName + "Command">
 <#global optionsName=cmd.simpleName+"Options">
 <#global argumentsName=cmd.simpleName+"Arguments">
-<#global varName=cmd.simpleName+"Var">
 <#global simpleName=cmd.simpleName+"Factory">
 <@pp.changeOutputFile name=pp.pathTo("/"+def.pkg.path+"/"+simpleName+".java")/> 
 package ${def.pkg.name};
-
-<#function setter operand>
-	<#return "set" + operand.name?cap_first>
-</#function>
-<#function getOptionsArgIfAny def args>
-	<#foreach arg in args>
-		<#if isOptionsArg(def, arg)>
-			<#return arg>
-		</#if>
-	</#foreach>
-	<#return "">
-</#function>
-<#function hasOptionsArg def args>
-	<#return getOptionsArgIfAny(def, args)?length != 0>
-</#function>
-<#function isOptionsArg def arg>
-	<#return def.operands[arg].type == optionsName>
-</#function>
 
 import ${cmd.pkg.name}.${cmd.simpleName};
 
@@ -57,7 +39,7 @@ public final class ${simpleName} implements ${cmd.simpleName}.Interface<${comman
 		<#if operand.redirection?length == 0>
 		args.${setter(operand)}(${arg});
 		<#else>
-		args.${operand.redirection};
+		args.${operand.redirection?replace(r"${value}",arg)};
 		</#if>
 		</#if>
 		</#foreach>

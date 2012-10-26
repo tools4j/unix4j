@@ -10,30 +10,22 @@ import org.unix4j.util.HashUtil;
  *            the type of the value
  */
 abstract public class AbstractNamedValue<V> implements NamedValue<V> {
+	
 	private final String name;
-	private final Class<V> type;
 
 	/**
-	 * Constructor with name and value type.
+	 * Constructor with name.
 	 * 
 	 * @param name
 	 *            the name of the constant or variable
-	 * @param type
-	 *            the value type
 	 */
-	public AbstractNamedValue(String name, Class<V> type) {
+	public AbstractNamedValue(String name) {
 		this.name = name;
-		this.type = type;
 	}
 
 	@Override
 	public String getName() {
 		return name;
-	}
-
-	@Override
-	public Class<V> getType() {
-		return type;
 	}
 
 	/**
@@ -46,7 +38,6 @@ abstract public class AbstractNamedValue<V> implements NamedValue<V> {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + HashUtil.hashObject(getName());
-		result = prime * result + HashUtil.hashObject(getType());
 		result = prime * result + HashUtil.hashObject(getValue());
 		return result;
 	}
@@ -69,20 +60,18 @@ abstract public class AbstractNamedValue<V> implements NamedValue<V> {
 		final AbstractNamedValue<?> other = (AbstractNamedValue<?>) obj;
 		if (!EqualsUtil.equalObjects(getName(), other.getName()))
 			return false;
-		if (!EqualsUtil.equalObjects(getType(), other.getType()))
-			return false;
 		if (!EqualsUtil.equalObjects(getValue(), other.getValue()))
 			return false;
 		return true;
 	}
 
 	/**
-	 * Returns a string representation for this named value, such as "$myVariable[java.lang.Integer]=786".
-	 * @return a string similar to "$myVariable[java.lang.Integer]=786"
+	 * Returns a string representation for this named value, such as "$myVariable=786".
+	 * @return a string similar to "$myVariable=786"
 	 */
 	@Override
 	public String toString() {
-		return "$" + getName() + "[" + getType() + "]=" + getValue();
+		return "$" + getName() + "=" + getValue();
 	}
 
 }

@@ -110,3 +110,20 @@
 	</#foreach>
 	<#return -1>
 </#function>
+<#function setter operand>
+	<#return "set" + operand.name?cap_first>
+</#function>
+<#function getOptionsArgIfAny def args>
+	<#foreach arg in args>
+		<#if isOptionsArg(def, arg)>
+			<#return arg>
+		</#if>
+	</#foreach>
+	<#return "">
+</#function>
+<#function hasOptionsArg def args>
+	<#return getOptionsArgIfAny(def, args)?length != 0>
+</#function>
+<#function isOptionsArg def arg>
+	<#return def.operands[arg].type == optionsName>
+</#function>
