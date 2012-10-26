@@ -121,7 +121,7 @@ public final class ${cmd.simpleName} {
 	/**
 	 * Singleton {@link ${factoryName} factory} instance for the "${commandName}" command.
 	 */
-	public static final ${factoryName} FACTORY = ${factoryName}.INSTANCE;
+	public static final ${factoryName} Factory = ${factoryName}.INSTANCE;
 
 	// no instances
 	private ${cmd.simpleName}() {

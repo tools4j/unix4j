@@ -20,7 +20,7 @@ import org.unix4j.builder.GenericCommandBuilder;
  * </pre>
  * 
  * Note that all command methods in the interface usually return the generic
- * type {@code R}. Command factories (see {@code FACTORY} constant of a specific
+ * type {@code R}. Command factories (see {@code Factory} constant of a specific
  * command} return a new command instance. Command builders implementing many
  * different command interfaces return an instance to itself (the BUILDER) to
  * allow for method chaining, for instance when creating a joined command.
