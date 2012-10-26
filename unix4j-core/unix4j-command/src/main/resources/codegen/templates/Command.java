@@ -6,7 +6,7 @@
 <#global optionsName=cmd.simpleName+"Options">
 <#global factoryName=cmd.simpleName+"Factory">
 <#global optionSetsName=cmd.simpleName+"OptionSets">
-<#global varName=cmd.simpleName+"Var">
+<#global varName=cmd.simpleName+"4Vars">
 <@pp.changeOutputFile name=pp.pathTo("/"+cmd.pkg.path+"/"+cmd.simpleName+".java")/> 
 package ${cmd.pkg.name};
 
@@ -107,7 +107,7 @@ public final class ${cmd.simpleName} {
 	 * 
 <#include "/include/returntype-class-javadoc.java">
 	 */
-	public static interface Interface$<R> extends ${varName}.Interface<R> {}
+	public static interface Interface4Vars<R> extends ${varName}.Interface<R> {}
 
 <#if def.options?size != 0>
 	/**

@@ -12,7 +12,7 @@ import ${def.pkg.name}.${def.command.simpleName}Options;
 <#foreach opd in def.operands?values>
 	<#if indexOfOperandByType(def.operands, opd) == opd_index><#-- otherwise it is a repeted occurance of this type -->
 		<#if isCommandSpecificOperand(def, opd)>
-import ${def.pkg.name}.${def.command.simpleName}Var.${varIfaceName(opd)};
+import ${def.pkg.name}.${def.command.simpleName}4Vars.${varIfaceName(opd)};
 		</#if>
 	</#if>
 </#foreach>
@@ -24,9 +24,9 @@ import ${def.pkg.name}.${def.command.simpleName}Var.${varIfaceName(opd)};
  * directly refer to this class but uses it indirectly through the static 
  * methods in {@link org.unix4j.Unix4j Unix4j}.
  */
-public interface Unix4jCommandBuilderVars extends Unix4jCommandBuilder,
+public interface Unix4jCommandBuilder4Vars extends Unix4jCommandBuilder,
 <#foreach def in commandDefs>
-		${def.command.simpleName}.Interface$<Unix4jCommandBuilder><#if def_has_next>,<#else> {</#if>
+		${def.command.simpleName}.Interface4Vars<Unix4jCommandBuilder><#if def_has_next>,<#else> {</#if>
 </#foreach>
 
 <#macro methodSignatureForVars def method isVarFlags>
