@@ -21,51 +21,51 @@ public class SortFileTest {
 	@Test
 	public void sortReverse() {
 		final FileTest tester = new FileTest(this.getClass());
-		tester.run(Unix4j.fromFile(tester.getInputFile()).sort(Sort.OPTIONS.reverse));
-		tester.run(Unix4j.builder().sort(Sort.OPTIONS.reverse, tester.getInputFile()));
+		tester.run(Unix4j.fromFile(tester.getInputFile()).sort(Sort.Options.reverse));
+		tester.run(Unix4j.builder().sort(Sort.Options.reverse, tester.getInputFile()));
 	}
 
 	@Test
 	public void sortNumeric() {
 		final FileTest tester = new FileTest(this.getClass());
-		tester.run(Unix4j.builder().sort(Sort.OPTIONS.numericSort, tester.getInputFiles()));
+		tester.run(Unix4j.builder().sort(Sort.Options.numericSort, tester.getInputFiles()));
 	}
 
 	@Test
 	public void sortGeneralNumeric() {
 		final FileTest tester = new FileTest(this.getClass());
-		tester.run(Unix4j.builder().sort(Sort.OPTIONS.generalNumericSort, tester.getInputFiles()));
+		tester.run(Unix4j.builder().sort(Sort.Options.generalNumericSort, tester.getInputFiles()));
 	}
 
 	@Test
 	public void sortNumericIntegers() {
 		final FileTest tester = new FileTest(this.getClass());
-		tester.run(Unix4j.builder().sort(Sort.OPTIONS.numericSort, tester.getInputFiles()));
+		tester.run(Unix4j.builder().sort(Sort.Options.numericSort, tester.getInputFiles()));
 	}
 	
 	@Test
 	public void sortMerge() {
 		final FileTest tester = new FileTest(this.getClass(), 3);
-		tester.run(Unix4j.builder().sort(Sort.OPTIONS.merge, tester.getInputFiles()));
+		tester.run(Unix4j.builder().sort(Sort.Options.merge, tester.getInputFiles()));
 	}
 	
 	@Test
 	public void sortCheck() {
 		final FileTest tester = new FileTest(this.getClass(), 2);
-		tester.run(Unix4j.builder().sort(Sort.OPTIONS.check, tester.getInputFiles()));
+		tester.run(Unix4j.builder().sort(Sort.Options.check, tester.getInputFiles()));
 	}
 
 	@Test
 	public void sortCheckExitValueOK() {
 		final File file = FileTest.getTestFile(getClass(), "sortCheckSucceed.input");
-		final int exitVal = Unix4j.builder().sort(Sort.OPTIONS.check, file).toExitValue();
+		final int exitVal = Unix4j.builder().sort(Sort.Options.check, file).toExitValue();
 		Assert.assertEquals(0, exitVal);
 	}
 
 	@Test
 	public void sortCheckExitValueFAILURE() {
 		final File file = FileTest.getTestFile(getClass(), "sortCheckFail.input");
-		final int exitVal = Unix4j.builder().sort(Sort.OPTIONS.check, file).toExitValue();
+		final int exitVal = Unix4j.builder().sort(Sort.Options.check, file).toExitValue();
 		Assert.assertEquals(1, exitVal);
 	}
 }

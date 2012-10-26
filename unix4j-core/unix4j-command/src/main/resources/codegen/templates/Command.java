@@ -55,7 +55,7 @@ import ${def.pkg.name}.${varName};
  * </#foreach></ul>
  * </#if>
  * <p>
- * <b>OPTIONS</b>
+ * <b>Options</b>
  * <p>
 <#if def.options?size != 0>
  * The following options are supported:
@@ -115,7 +115,7 @@ public final class ${cmd.simpleName} {
 	 * <p> 
 	<#include "/include/options-javadoc.java">
 	 */
-	public static final ${optionSetsName} OPTIONS = ${optionSetsName}.INSTANCE;
+	public static final ${optionSetsName} Options = ${optionSetsName}.INSTANCE;
 
 </#if>
 	/**

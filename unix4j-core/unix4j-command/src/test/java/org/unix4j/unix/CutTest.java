@@ -113,14 +113,14 @@ public class CutTest {
 				.appendLine("row8col1,row8col2,row8col3,row8col4,row8col5");
 
 		final StringOutput actualStringOutput = new StringOutput();
-		Unix4j.from(input.toInput()).cut(Cut.OPTIONS.fields, 1).toOutput(actualStringOutput);
+		Unix4j.from(input.toInput()).cut(Cut.Options.fields, 1).toOutput(actualStringOutput);
 		final MultilineString actualOutput = new MultilineString(actualStringOutput.toString());
 		actualOutput.assertMultilineStringEquals(expectedOutput);
 	}
 
 	private void assertFieldCut(final MultilineString input, final MultilineString expectedOutput, int... fields) {
 		final StringOutput actualStringOutput = new StringOutput();
-		Unix4j.from(input.toInput()).cut(Cut.OPTIONS.fields, ",", ',', fields).toOutput(actualStringOutput);
+		Unix4j.from(input.toInput()).cut(Cut.Options.fields, ",", ',', fields).toOutput(actualStringOutput);
 		final MultilineString actualOutput = new MultilineString(actualStringOutput.toString());
 		actualOutput.assertMultilineStringEquals(expectedOutput);
 	}
@@ -188,7 +188,7 @@ public class CutTest {
 
 	private void assertRangeCut(final MultilineString input, final MultilineString expectedOutput, int start, int length) {
 		final StringOutput actualStringOutput = new StringOutput();
-		Unix4j.from(input.toInput()).cut(Cut.OPTIONS.chars, Range.between(start, length)).toOutput(actualStringOutput);
+		Unix4j.from(input.toInput()).cut(Cut.Options.chars, Range.between(start, length)).toOutput(actualStringOutput);
 		final MultilineString actualOutput = new MultilineString(actualStringOutput.toString());
 		actualOutput.assertMultilineStringEquals(expectedOutput);
 	}
@@ -255,7 +255,7 @@ public class CutTest {
 
 	private void assertCharacterCut(final MultilineString input, final MultilineString expectedOutput, int... characters) {
 		final StringOutput actualStringOutput = new StringOutput();
-		Unix4j.from(input.toInput()).cut(Cut.OPTIONS.chars, Range.of(characters)).toOutput(actualStringOutput);
+		Unix4j.from(input.toInput()).cut(Cut.Options.chars, Range.of(characters)).toOutput(actualStringOutput);
 		final MultilineString actualOutput = new MultilineString(actualStringOutput.toString());
 		actualOutput.assertMultilineStringEquals(expectedOutput);
 	}

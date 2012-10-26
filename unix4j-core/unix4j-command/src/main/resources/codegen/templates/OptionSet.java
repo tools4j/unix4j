@@ -65,7 +65,7 @@ import ${cmd.pkg.name}.${cmd.simpleName};
  * the following options: <#foreach opt in options?values>{@link #${opt.acronym} ${opt.acronym}}<#if opt_has_next>, </#if></#foreach>.
  * <p>
  * Application code does normally not directly refer to this class;
- * {@link ${cmd.simpleName}#OPTIONS} should be used instead to specify command 
+ * {@link ${cmd.simpleName}#Options} should be used instead to specify command 
  * options. See also {@link ${cmdDef.pkg.name}.${optionsName}} for more information.
  */
 public enum ${grpDef.simpleName} implements ${cmd.simpleName}Options {

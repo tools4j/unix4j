@@ -39,7 +39,7 @@ public class SortTest {
 				.appendLine("Whether tis nobler in the mind");
 
 		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort().toStringResult());
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.OPTIONS.unique).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.unique).toStringResult());
 	}
 
 	@Test
@@ -66,10 +66,10 @@ public class SortTest {
 				.appendLine("arms against a sea of troubles.")
 				.appendLine("10 slings and arrows");
 
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.OPTIONS.reverse).toStringResult());
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.OPTIONS.r).toStringResult());
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.OPTIONS.reverse.unique).toStringResult());
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.OPTIONS.u.r).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.reverse).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.r).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.reverse.unique).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.u.r).toStringResult());
 	}
 
 	@Test
@@ -127,7 +127,7 @@ public class SortTest {
 				.appendLine("To suffer the")
 		;
 
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.OPTIONS.ignoreCase).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.ignoreCase).toStringResult());
 	}
 
 	@Test
@@ -155,7 +155,7 @@ public class SortTest {
 				.appendLine("To suffer the")
 		;
 
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.OPTIONS.unique).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.unique).toStringResult());
 	}
 
 	@Test
@@ -181,7 +181,7 @@ public class SortTest {
 				.appendLine("To suffer the")
 		;
 
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.OPTIONS.ignoreCase.unique).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.ignoreCase.unique).toStringResult());
 	}
 
 	@Test
@@ -211,7 +211,7 @@ public class SortTest {
 			.appendLine("   ZZZ")
 			.appendLine("\t\tZZZ")
 		;
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.OPTIONS.ignoreLeadingBlanks).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.ignoreLeadingBlanks).toStringResult());
 	}
 
 	@Test
@@ -237,7 +237,7 @@ public class SortTest {
 			.appendLine("  Abz")
 			.appendLine("   ZZZ")
 		;
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.OPTIONS.unique.ignoreLeadingBlanks).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.unique.ignoreLeadingBlanks).toStringResult());
 	}
 
 	@Test
@@ -264,26 +264,26 @@ public class SortTest {
 				.appendLine("arms against a sea of troubles.")
 				.appendLine("10 slings and arrows");
 
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort().sort(Sort.OPTIONS.reverse).toStringResult());
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.OPTIONS.unique).sort(Sort.OPTIONS.reverse.unique).toStringResult());
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort().sort(Sort.OPTIONS.reverse.unique).toStringResult());
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.OPTIONS.unique).sort(Sort.OPTIONS.reverse).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort().sort(Sort.Options.reverse).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.unique).sort(Sort.Options.reverse.unique).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort().sort(Sort.Options.reverse.unique).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.unique).sort(Sort.Options.reverse).toStringResult());
 	}
 
 	@Test
 	public void testSortOneLine() {
 		assertEquals("blah", Unix4j.fromString("blah").sort().toStringResult());
-		assertEquals("blah", Unix4j.fromString("blah").sort(Sort.OPTIONS.reverse).toStringResult());
-		assertEquals("blah", Unix4j.fromString("blah").sort(Sort.OPTIONS.unique).toStringResult());
-		assertEquals("blah", Unix4j.fromString("blah").sort(Sort.OPTIONS.unique.reverse).toStringResult());
+		assertEquals("blah", Unix4j.fromString("blah").sort(Sort.Options.reverse).toStringResult());
+		assertEquals("blah", Unix4j.fromString("blah").sort(Sort.Options.unique).toStringResult());
+		assertEquals("blah", Unix4j.fromString("blah").sort(Sort.Options.unique.reverse).toStringResult());
 	}
 
 	@Test
 	public void testSortNothing() {
 		assertEquals("", Unix4j.fromString("").sort().toStringResult());
-		assertEquals("", Unix4j.fromString("").sort(Sort.OPTIONS.reverse).toStringResult());
-		assertEquals("", Unix4j.fromString("").sort(Sort.OPTIONS.unique).toStringResult());
-		assertEquals("", Unix4j.fromString("").sort(Sort.OPTIONS.unique.reverse).toStringResult());
+		assertEquals("", Unix4j.fromString("").sort(Sort.Options.reverse).toStringResult());
+		assertEquals("", Unix4j.fromString("").sort(Sort.Options.unique).toStringResult());
+		assertEquals("", Unix4j.fromString("").sort(Sort.Options.unique.reverse).toStringResult());
 	}
 
 	@Test
@@ -312,7 +312,7 @@ public class SortTest {
 
 
 		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort().toStringResult());
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.OPTIONS.unique).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.unique).toStringResult());
 	}
 
 	@Test
@@ -339,8 +339,8 @@ public class SortTest {
 				.appendLine("10 That is the question")
 				.appendLine("1000 To be or not to be");
 
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.OPTIONS.reverse).toStringResult());
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.OPTIONS.r).toStringResult());
-		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.OPTIONS.r.u).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.reverse).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.r).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.r.u).toStringResult());
 	}
 }

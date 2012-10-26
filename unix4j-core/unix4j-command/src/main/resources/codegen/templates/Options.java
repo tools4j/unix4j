@@ -22,7 +22,7 @@ import ${def.pkg.name}.${optionName};
 
 /**
  * Interface implemented by all option sets for the {@link ${cmd.simpleName} ${commandName}} command.
- * It is recommended to use {@link ${cmd.simpleName}#OPTIONS} to specify a valid 
+ * It is recommended to use {@link ${cmd.simpleName}#Options} to specify a valid 
  * combination of options.
  * <p>
  * The options for the ${commandName} command are: 

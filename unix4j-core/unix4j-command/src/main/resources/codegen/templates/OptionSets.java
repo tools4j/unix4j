@@ -25,10 +25,10 @@ import ${cmd.pkg.name}.${cmd.simpleName};
  * option combinations, options can be passed to the command in a very compact 
  * form, such as:
  * <pre>
-<#if options?size != 0> * ${commandName}(${cmd.simpleName}.OPTIONS.${options[0].acronym}, ...);
-<#if options?size != 1> * ${commandName}(${cmd.simpleName}.OPTIONS.${options[0].acronym}.${options[1].acronym}, ...);
+<#if options?size != 0> * ${commandName}(${cmd.simpleName}.Options.${options[0].acronym}, ...);
+<#if options?size != 1> * ${commandName}(${cmd.simpleName}.Options.${options[0].acronym}.${options[1].acronym}, ...);
 <#if options?size != 2> * ...
-<#if options?size != 2> * ${commandName}(${cmd.simpleName}.OPTIONS<#foreach o in options>.${o.acronym}</#foreach>, ...);
+<#if options?size != 2> * ${commandName}(${cmd.simpleName}.Options<#foreach o in options>.${o.acronym}</#foreach>, ...);
 </#if></#if></#if></#if>
  * </pre>
  */

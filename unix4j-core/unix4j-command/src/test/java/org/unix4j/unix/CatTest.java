@@ -85,7 +85,7 @@ public class CatTest {
 		expectedOutput.appendLine(makeCountLine(13, LINE13));
 		expectedOutput.appendLine(makeCountLine(14, LINE14));
 		expectedOutput.appendLine(makeCountLine(15, LINE15));
-		assertCat(input, Cat.OPTIONS.numberLines, expectedOutput);
+		assertCat(input, Cat.Options.numberLines, expectedOutput);
 	}
 
 	@Test
@@ -106,7 +106,7 @@ public class CatTest {
 		expectedOutput.appendLine(makeCountLine(9, LINE13));
 		expectedOutput.appendLine(LINE14);
 		expectedOutput.appendLine(LINE15);
-		assertCat(input, Cat.OPTIONS.numberNonBlankLines, expectedOutput);
+		assertCat(input, Cat.Options.numberNonBlankLines, expectedOutput);
 	}
 
 	@Test
@@ -127,7 +127,7 @@ public class CatTest {
 		expectedOutput.appendLine(LINE13);
 		expectedOutput.appendLine(LINE14);
 //		expectedOutput.appendLine(LINE15);
-		assertCat(input, Cat.OPTIONS.squeezeEmptyLines, expectedOutput);
+		assertCat(input, Cat.Options.squeezeEmptyLines, expectedOutput);
 	}
 
 	@Test
@@ -148,7 +148,7 @@ public class CatTest {
 		expectedOutput.appendLine(makeCountLine(11, LINE13));
 		expectedOutput.appendLine(makeCountLine(12, LINE14));
 //		expectedOutput.appendLine(makeCountLine(LINE15));
-		assertCat(input, Cat.OPTIONS.squeezeEmptyLines.numberLines, expectedOutput);
+		assertCat(input, Cat.Options.squeezeEmptyLines.numberLines, expectedOutput);
 	}
 
 	@Test
@@ -169,7 +169,7 @@ public class CatTest {
 		expectedOutput.appendLine(makeCountLine(9, LINE13));
 		expectedOutput.appendLine(LINE14);
 //		expectedOutput.appendLine(makeCountLine(LINE15));
-		assertCat(input, Cat.OPTIONS.squeezeEmptyLines.numberNonBlankLines, expectedOutput);
+		assertCat(input, Cat.Options.squeezeEmptyLines.numberNonBlankLines, expectedOutput);
 	}
 
 	private String makeCountLine(int count, String line) {

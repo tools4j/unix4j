@@ -10,7 +10,7 @@ import static org.junit.Assert.assertThat;
 public class FromFileOnClasspathTest {
 	@Test
 	public void testFromFileOnClasspath_fileInRootPackage() {
-		assertThat(Unix4j.fromResource("/commuting.txt").grep("from").head(4).tail(1).wc(Wc.OPTIONS.words).toStringResult(), is("13"));
+		assertThat(Unix4j.fromResource("/commuting.txt").grep("from").head(4).tail(1).wc(Wc.Options.words).toStringResult(), is("13"));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -31,6 +31,6 @@ public class FromFileOnClasspathTest {
 		is called for each line for some reason.
 		System.out.println(Unix4j.fromFileOnClasspath("/my/package/redneck.txt").grep("for").grep("ask").wcCountLines().toStringResult());
 		 */
-		assertThat(Unix4j.fromResource("/my/package/redneck.txt").grep("for").grep("ask").wc(Wc.OPTIONS.words).wc(Wc.OPTIONS.lines).toStringResult(), is("1"));
+		assertThat(Unix4j.fromResource("/my/package/redneck.txt").grep("for").grep("ask").wc(Wc.Options.words).wc(Wc.Options.lines).toStringResult(), is("1"));
 	}
 }

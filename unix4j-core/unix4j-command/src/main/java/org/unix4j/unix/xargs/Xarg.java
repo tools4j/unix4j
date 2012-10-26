@@ -53,9 +53,9 @@ public class Xarg implements Commander {
 	}
 	
 	{
-		Unix4j.builder().withVariables().ls(Ls.OPTIONS.l.a, new DefaultFilesVar("$1")).toStdOut();
-		Unix4j.builder().withVariables().ls(Ls.OPTIONS.l.a, Xarg.asFiles(1)).toStdOut();
-		Unix4j.builder().withVariables().ls(Ls.OPTIONS.l.a, Xarg.asStrings(1)).toStdOut();
+		Unix4j.builder().withVariables().ls(Ls.Options.l.a, new DefaultFilesVar("$1")).toStdOut();
+		Unix4j.builder().withVariables().ls(Ls.Options.l.a, Xarg.asFiles(1)).toStdOut();
+		Unix4j.builder().withVariables().ls(Ls.Options.l.a, Xarg.asStrings(1)).toStdOut();
 		
 		xargs().exec(Commands.ls).ls("/usr/home").grep("*").toStdOut();
 		xargs(Commands.ls).ls("/usr/home").grep("*").toStdOut();

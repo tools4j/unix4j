@@ -14,7 +14,7 @@ public class FromFileTest {
 	public void testFromFile() {
 		URL url = this.getClass().getResource("/commuting.txt");
 		File testFile = new File(url.getFile());
-		assertThat(Unix4j.fromFile(testFile).grep("from").head(4).tail(1).wc(Wc.OPTIONS.words).toStringResult(), is("13"));
+		assertThat(Unix4j.fromFile(testFile).grep("from").head(4).tail(1).wc(Wc.Options.words).toStringResult(), is("13"));
 	}
 
 	@Test(expected = RuntimeException.class)

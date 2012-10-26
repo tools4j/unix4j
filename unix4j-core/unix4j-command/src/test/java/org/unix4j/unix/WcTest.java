@@ -27,9 +27,9 @@ public class WcTest {
 
 	@Test
 	public void testWcSingleFields() {
-		assertWc(input.toInput(), "5", Wc.OPTIONS.lines);
-		assertWc(input.toInput(), "" + (41 + 5 * LEL), Wc.OPTIONS.chars);	//41 chars + 5 line endings
-		assertWc(input.toInput(), "8", Wc.OPTIONS.words);
+		assertWc(input.toInput(), "5", Wc.Options.lines);
+		assertWc(input.toInput(), "" + (41 + 5 * LEL), Wc.Options.chars);	//41 chars + 5 line endings
+		assertWc(input.toInput(), "8", Wc.Options.words);
 	}
 
 	@Test
@@ -41,19 +41,19 @@ public class WcTest {
 	@Test
 	public void testWcCountLines() {
 //		assertEquals("5", Unix4j.from(input.toInput()).wcCountLines().toStringResult());
-		assertEquals("5", Unix4j.from(input.toInput()).wc(Wc.OPTIONS.lines).toStringResult());
+		assertEquals("5", Unix4j.from(input.toInput()).wc(Wc.Options.lines).toStringResult());
 	}
 
 	@Test
 	public void testWcCountChars() {
 //		assertEquals("" + (41 + 5 * LEL), Unix4j.from(input.toInput()).wcCountChars().toStringResult());
-		assertEquals("" + (41 + 5 * LEL), Unix4j.from(input.toInput()).wc(Wc.OPTIONS.chars).toStringResult());
+		assertEquals("" + (41 + 5 * LEL), Unix4j.from(input.toInput()).wc(Wc.Options.chars).toStringResult());
 	}
 
 	@Test
 	public void testWcCountWords() {
 //		assertEquals("8", Unix4j.from(input.toInput()).wcCountWords().toStringResult());
-		assertEquals("8", Unix4j.from(input.toInput()).wc(Wc.OPTIONS.words).toStringResult());
+		assertEquals("8", Unix4j.from(input.toInput()).wc(Wc.Options.words).toStringResult());
 	}
 
 
@@ -64,8 +64,8 @@ public class WcTest {
 
 	@Test
 	public void testMultipleOutputs() {
-		assertWc(input.toInput(), "   5   8  " + (41 + 5 * LEL), Wc.OPTIONS.lines.words.chars);
-		assertWc(input.toInput(), "  5  8", Wc.OPTIONS.lines.words);
+		assertWc(input.toInput(), "   5   8  " + (41 + 5 * LEL), Wc.Options.lines.words.chars);
+		assertWc(input.toInput(), "  5  8", Wc.Options.lines.words);
 	}
 
 	@Test
