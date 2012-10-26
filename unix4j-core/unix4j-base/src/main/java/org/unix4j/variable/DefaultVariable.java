@@ -12,30 +12,25 @@ public class DefaultVariable<V> extends AbstractNamedValue<V> implements Variabl
 	private V value;
 
 	/**
-	 * Constructor with name and type, initializing the variable with a null
-	 * value.
+	 * Constructor with name initializing the variable with a null value.
 	 * 
 	 * @param name
 	 *            the variable name
-	 * @param type
-	 *            the variable and value type
 	 */
-	public DefaultVariable(String name, Class<V> type) {
-		super(name, type);
+	public DefaultVariable(String name) {
+		super(name);
 	}
 
 	/**
-	 * Constructor with name, type and initial value for the variable.
+	 * Constructor with name and initial value for the variable.
 	 * 
 	 * @param name
 	 *            the variable name
-	 * @param type
-	 *            the variable and value type
 	 * @param value
 	 *            the initial value for the variable
 	 */
-	public DefaultVariable(String name, Class<V> type, V value) {
-		super(name, type);
+	public DefaultVariable(String name, V value) {
+		super(name);
 		setValue(value);
 	}
 

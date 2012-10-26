@@ -9,17 +9,6 @@ package org.unix4j.variable;
  */
 public interface NamedValue<V> {
 	/**
-	 * Returns the value type. 
-	 * <p>
-	 * Note that for generic types, the returned type represents the raw type of 
-	 * the value, for instance {@code Collection.class} for a value type 
-	 * {@code Collection<String>}.
-	 * 
-	 * @return the value type class
-	 */
-	Class<V> getType();
-
-	/**
 	 * Returns the name associated with this value, usually the name of a
 	 * constant or variable.
 	 * 

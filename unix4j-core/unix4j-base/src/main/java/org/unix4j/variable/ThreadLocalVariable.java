@@ -15,36 +15,31 @@ public class ThreadLocalVariable<V> extends AbstractNamedValue<V> implements Var
 	private final ThreadLocal<V> value;
 
 	/**
-	 * Constructor with name and type, initializing the variable with a null
-	 * value.
+	 * Constructor with name initializing the variable with a null value.
 	 * 
 	 * @param name
 	 *            the variable name
-	 * @param type
-	 *            the variable and value type
 	 */
-	public ThreadLocalVariable(String name, Class<V> type) {
-		this(name, type, new ThreadLocal<V>());
+	public ThreadLocalVariable(String name) {
+		this(name, new ThreadLocal<V>());
 	}
 
 	/**
-	 * Constructor with name, type and initial value for the variable. Every
-	 * thread will get the provided value as default initial variable value,
+	 * Constructor with name and initial value for the variable. Every thread 
+	 * will get the provided value as default initial variable value, 
 	 * independent from the thread that creates this variable. 
 	 * <p>
 	 * If the initial value is not constant, it is recommended to use
-	 * {@link #ThreadLocalVariable(String, Class, ThreadLocal)} to create a new
+	 * {@link #ThreadLocalVariable(String, ThreadLocal)} to create a new
 	 * variable instance.
 	 * 
 	 * @param name
 	 *            the variable name
-	 * @param type
-	 *            the variable and value type
 	 * @param value
 	 *            the initial value for the variable
 	 */
-	public ThreadLocalVariable(String name, Class<V> type, final V value) {
-		this(name, type, new ThreadLocal<V>() {
+	public ThreadLocalVariable(String name, final V value) {
+		this(name, new ThreadLocal<V>() {
 			@Override
 			protected V initialValue() {
 				return value;
@@ -53,20 +48,18 @@ public class ThreadLocalVariable<V> extends AbstractNamedValue<V> implements Var
 	}
 
 	/**
-	 * Constructor with name, type and backing thread-local to hold the value.
-	 * This constructor is for instance useful if the initial value is not a 
-	 * constant value, which usually means that the {@code initialValue()} 
-	 * method of the given {@code ThreadLocal} value has been overridden.
+	 * Constructor with name and backing thread-local to hold the value. This 
+	 * constructor is for instance useful if the initial value is not a constant 
+	 * value, which usually means that the {@code initialValue()} method of the 
+	 * given {@code ThreadLocal} value has been overridden.
 	 * 
 	 * @param name
 	 *            the variable name
-	 * @param type
-	 *            the variable and value type
 	 * @param value
 	 *            the initial value for the variable
 	 */
-	public ThreadLocalVariable(String name, Class<V> type, ThreadLocal<V> value) {
-		super(name, type);
+	public ThreadLocalVariable(String name, ThreadLocal<V> value) {
+		super(name);
 		this.value = value;
 	}
 

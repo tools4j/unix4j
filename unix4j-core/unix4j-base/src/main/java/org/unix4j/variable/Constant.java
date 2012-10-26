@@ -12,40 +12,21 @@ public class Constant<V> extends AbstractNamedValue<V> {
 	private final V value;
 
 	/**
-	 * Constructor with name, type and value.
+	 * Constructor with name and value.
 	 * 
 	 * @param name
 	 *            the name of the constant
-	 * @param type
-	 *            the value type
 	 * @param value
 	 *            the constant value
 	 */
-	public Constant(String name, Class<V> type, V value) {
-		super(name, type);
+	public Constant(String name, V value) {
+		super(name);
 		this.value = value;
 	}
 
 	/**
-	 * Returns a constant for the given name, type and value.
-	 * 
-	 * @param <V>
-	 *            the type of the value
-	 * @param name
-	 *            the name of the constant
-	 * @param type
-	 *            the value type
-	 * @param value
-	 *            the constant value
-	 * @return a new constant for the given name, type and value
-	 */
-	public static <V> Constant<V> of(String name, Class<V> type, V value) {
-		return new Constant<V>(name, type, value);
-	}
-
-	/**
-	 * Returns a constant for the given name and value, deriving the type from
-	 * the given value.
+	 * Returns a constant for the given name and value, an alternative to the
+	 * constructor if the type parameter contains wildcards.
 	 * 
 	 * @param <V>
 	 *            the type of the value
@@ -55,15 +36,8 @@ public class Constant<V> extends AbstractNamedValue<V> {
 	 *            the constant value
 	 * @return a new constant for the given name and value
 	 */
-	public static <V> Constant<? extends V> of(String name, V value) {
-		@SuppressWarnings("unchecked")
-		final Class<? extends V> valueType = (Class<? extends V>) value.getClass();
-		return ofValue(name, valueType, value);
-	}
-
-	//helper for generic type redirection
-	private static <V, T extends V> Constant<T> ofValue(String name, Class<T> type, V value) {
-		return of(name, type, type.cast(value));
+	public static <V> Constant<V> of(String name, V value) {
+		return new Constant<V>(name, value);
 	}
 
 	/**

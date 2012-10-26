@@ -6,6 +6,7 @@ import org.unix4j.command.NoOp;
 import ${varPkgName}.*;
 
 <#foreach def in commandDefs> 
+import ${def.command.pkg.name}.${def.command.simpleName};
 <#if def.options?size != 0>
 import ${def.pkg.name}.${def.command.simpleName}Options;
 </#if>
@@ -41,7 +42,7 @@ public class DefaultUnix4jCommandBuilder4Vars extends DefaultUnix4jCommandBuilde
 <#if isVarFlags?contains("T")><#--at least one variable, otherwise it is the same as the standard method without variables -->
 	@Override
 	public Unix4jCommandBuilder ${method.name}(<#foreach arg in method.args>${fixedOrVarType(def arg isVar(arg_index isVarFlags))} ${arg}<#if arg_has_next>, </#if></#foreach>) {
-		//FIXME join(${def.command.simpleName}.Factory$.${method.name}(<#foreach arg in method.args>${arg}<#if arg_has_next>, </#if></#foreach>));
+		join(${def.command.simpleName}.Factory4Vars.${method.name}(<#foreach arg in method.args>${arg}<#if arg_has_next>, </#if></#foreach>));
 		return this;
 	}
 </#if>

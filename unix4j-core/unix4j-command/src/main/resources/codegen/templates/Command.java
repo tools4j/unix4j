@@ -14,6 +14,7 @@ import org.unix4j.command.CommandInterface;
 import org.unix4j.variable.NamedValue;
 
 import ${def.pkg.name}.${factoryName};
+import ${def.pkg.name}.${factoryName}4Vars;
 <#if def.options?size != 0>
 import ${def.pkg.name}.${optionName};
 import ${def.pkg.name}.${optionsName};
@@ -122,6 +123,13 @@ public final class ${cmd.simpleName} {
 	 * Singleton {@link ${factoryName} factory} instance for the "${commandName}" command.
 	 */
 	public static final ${factoryName} Factory = ${factoryName}.INSTANCE;
+
+	/**
+	 * Singleton {@link ${factoryName}4Vars factory} instance, very similar to 
+	 * {@link #Factory} but to create commands when variables are used in form 
+	 * of a {@link NamedValue}.
+	 */
+	public static final ${factoryName}4Vars Factory4Vars = ${factoryName}4Vars.INSTANCE;
 
 	// no instances
 	private ${cmd.simpleName}() {
