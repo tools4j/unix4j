@@ -32,7 +32,7 @@ public class DefaultUnix4jCommandBuilder extends DefaultCommandBuilder implement
 <#foreach method in def.methods>
 	@Override
 	public Unix4jCommandBuilder ${method.name}(<#foreach arg in method.args>${def.operands[arg].type} ${arg}<#if arg_has_next>, </#if></#foreach>) {
-		join(${def.command.simpleName}.FACTORY.${method.name}(<#foreach arg in method.args>${arg}<#if arg_has_next>, </#if></#foreach>));
+		join(${def.command.simpleName}.Factory.${method.name}(<#foreach arg in method.args>${arg}<#if arg_has_next>, </#if></#foreach>));
 		return this;
 	}
 </#foreach>

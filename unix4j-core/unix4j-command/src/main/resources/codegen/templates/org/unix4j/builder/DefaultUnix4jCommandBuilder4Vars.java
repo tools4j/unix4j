@@ -41,7 +41,7 @@ public class DefaultUnix4jCommandBuilder4Vars extends DefaultUnix4jCommandBuilde
 <#if isVarFlags?contains("T")><#--at least one variable, otherwise it is the same as the standard method without variables -->
 	@Override
 	public Unix4jCommandBuilder ${method.name}(<#foreach arg in method.args>${fixedOrVarType(def arg isVar(arg_index isVarFlags))} ${arg}<#if arg_has_next>, </#if></#foreach>) {
-		//FIXME join(${def.command.simpleName}.FACTORY$.${method.name}(<#foreach arg in method.args>${arg}<#if arg_has_next>, </#if></#foreach>));
+		//FIXME join(${def.command.simpleName}.Factory$.${method.name}(<#foreach arg in method.args>${arg}<#if arg_has_next>, </#if></#foreach>));
 		return this;
 	}
 </#if>

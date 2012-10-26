@@ -312,7 +312,7 @@ public final class From {
 	/**
 	 * Singleton {@link Factory} for the from command.
 	 */
-	public static final Factory FACTORY = new Factory();
+	public static final Factory Factory = new Factory();
 
 	/**
 	 * Factory class returning a new {@link Command} instance from every
