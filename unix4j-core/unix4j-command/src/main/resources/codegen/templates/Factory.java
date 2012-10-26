@@ -30,8 +30,8 @@ package ${def.pkg.name};
 import ${cmd.pkg.name}.${cmd.simpleName};
 
 /**
- * Factory for the {@link ${cmd.simpleName} ${def.commandName}} returning a new 
- * command instance from every signature method.
+ * Factory for the {@link ${cmd.simpleName} ${def.commandName}} command returning 
+ * a new command instance from every signature method.
  */
 public final class ${simpleName} implements ${cmd.simpleName}.Interface<${commandName}> {
 	
