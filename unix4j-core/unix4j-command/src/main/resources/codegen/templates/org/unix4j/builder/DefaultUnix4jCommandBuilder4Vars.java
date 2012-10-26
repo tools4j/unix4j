@@ -12,24 +12,24 @@ import ${def.pkg.name}.${def.command.simpleName}Options;
 <#foreach opd in def.operands?values>
 	<#if indexOfOperandByType(def.operands, opd) == opd_index><#-- otherwise it is a repeted occurance of this type -->
 		<#if isCommandSpecificOperand(def, opd)>
-import ${def.pkg.name}.${def.command.simpleName}Var.${varIfaceName(opd)};
+import ${def.pkg.name}.${def.command.simpleName}4Vars.${varIfaceName(opd)};
 		</#if>
 	</#if>
 </#foreach>
 </#foreach>
 
 /**
- * Default implementation for {@link Unix4jCommandBuilderVars}. Application code 
+ * Default implementation for {@link Unix4jCommandBuilder4Vars}. Application code 
  * does usually not directly refer to this class but uses it indirectly through 
  * the static methods in {@link org.unix4j.Unix4j Unix4j}.
  */
-public class DefaultUnix4jCommandBuilderVars extends DefaultUnix4jCommandBuilder implements Unix4jCommandBuilderVars {
+public class DefaultUnix4jCommandBuilder4Vars extends DefaultUnix4jCommandBuilder implements Unix4jCommandBuilder4Vars {
 
 	/**
 	 * Default constructor, initialized to build a {@link NoOp} command if no 
 	 * command is {@link #join(Command) joined} to this builder's command chain.
 	 */
-	public DefaultUnix4jCommandBuilderVars() {
+	public DefaultUnix4jCommandBuilder4Vars() {
 		super();
 	}
 
@@ -64,7 +64,7 @@ public class DefaultUnix4jCommandBuilderVars extends DefaultUnix4jCommandBuilder
 	 * @return this builder
 	 */
 	@Override
-	public Unix4jCommandBuilderVars withVariables() {
+	public Unix4jCommandBuilder4Vars withVariables() {
 		return this;
 	}
 

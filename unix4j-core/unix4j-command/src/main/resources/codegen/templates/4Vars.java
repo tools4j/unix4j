@@ -5,7 +5,7 @@
 <#global cmd=def.command>
 <#global commandName=def.commandName>
 <#global optionsName=cmd.simpleName+"Options">
-<#global varName=cmd.simpleName+"Var">
+<#global varName=cmd.simpleName+"4Vars">
 <@pp.changeOutputFile name=pp.pathTo("/"+def.pkg.path+"/"+varName+".java")/> 
 package ${def.pkg.name};
 
