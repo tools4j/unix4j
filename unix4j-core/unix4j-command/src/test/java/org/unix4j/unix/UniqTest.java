@@ -76,7 +76,7 @@ public class UniqTest {
 		expectedOutput.appendLine(LINE14);
 		expectedOutput.appendLine(LINE15);
 		expectedOutput.appendLine(LINE16);
-		assertUniq(input, Uniq.OPTIONS.uniqueOnly, expectedOutput);
+		assertUniq(input, Uniq.Options.uniqueOnly, expectedOutput);
 	}
 
 	@Test
@@ -85,7 +85,7 @@ public class UniqTest {
 		expectedOutput.appendLine(LINE4);
 		expectedOutput.appendLine(LINE7);
 		expectedOutput.appendLine(LINE10);
-		assertUniq(input, Uniq.OPTIONS.duplicatedOnly, expectedOutput);
+		assertUniq(input, Uniq.Options.duplicatedOnly, expectedOutput);
 	}
 
 	@Test
@@ -103,7 +103,7 @@ public class UniqTest {
 		expectedOutput.appendLine(makeCountLine(1, LINE14));
 		expectedOutput.appendLine(makeCountLine(1, LINE15));
 		expectedOutput.appendLine(makeCountLine(1, LINE16));
-		assertUniq(input, Uniq.OPTIONS.count, expectedOutput);
+		assertUniq(input, Uniq.Options.count, expectedOutput);
 	}
 
 	@Test
@@ -117,7 +117,7 @@ public class UniqTest {
 		expectedOutput.appendLine(LINE7);
 		expectedOutput.appendLine(LINE10);
 		expectedOutput.appendLine(LINE16);
-		assertUniq(input, Uniq.OPTIONS.global, expectedOutput);
+		assertUniq(input, Uniq.Options.global, expectedOutput);
 	}
 
 	@Test
@@ -127,7 +127,7 @@ public class UniqTest {
 		expectedOutput.appendLine(LINE3);
 		expectedOutput.appendLine(LINE6);
 		expectedOutput.appendLine(LINE16);
-		assertUniq(input, Uniq.OPTIONS.uniqueOnly.global, expectedOutput);
+		assertUniq(input, Uniq.Options.uniqueOnly.global, expectedOutput);
 	}
 
 	@Test
@@ -137,7 +137,7 @@ public class UniqTest {
 		expectedOutput.appendLine(LINE4);
 		expectedOutput.appendLine(LINE7);
 		expectedOutput.appendLine(LINE10);
-		assertUniq(input, Uniq.OPTIONS.duplicatedOnly.g, expectedOutput);
+		assertUniq(input, Uniq.Options.duplicatedOnly.g, expectedOutput);
 	}
 
 	@Test
@@ -151,7 +151,7 @@ public class UniqTest {
 		expectedOutput.appendLine(makeCountLine(4, LINE7));
 		expectedOutput.appendLine(makeCountLine(3, LINE10));
 		expectedOutput.appendLine(makeCountLine(1, LINE16));
-		assertUniq(input, Uniq.OPTIONS.count.global, expectedOutput);
+		assertUniq(input, Uniq.Options.count.global, expectedOutput);
 	}
 
 	private String makeCountLine(int count, String line) {

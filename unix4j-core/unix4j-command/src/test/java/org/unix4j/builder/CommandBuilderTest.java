@@ -49,8 +49,8 @@ public class CommandBuilderTest {
 
 	@Test
 	public void testLsStarStarStarJavaLA() {
-		unix4j.ls(Ls.OPTIONS.l.a, "src/*/*/*/*/*.java", "src/*/*/*/*/*/*.java", "src/*/*/*/*/*/*/*.java");
-//		unix4j.ls(Ls.OPTIONS.l.a, "src/*/*/*/*/*.java");
+		unix4j.ls(Ls.Options.l.a, "src/*/*/*/*/*.java", "src/*/*/*/*/*/*.java", "src/*/*/*/*/*/*/*.java");
+//		unix4j.ls(Ls.Options.l.a, "src/*/*/*/*/*.java");
 	}
 
 	@Test
@@ -65,7 +65,7 @@ public class CommandBuilderTest {
 
 	@Test
 	public void testLsSortReverse() {
-		unix4j.ls().sort(Sort.OPTIONS.reverse);
+		unix4j.ls().sort(Sort.Options.reverse);
 	}
 
 	@Test

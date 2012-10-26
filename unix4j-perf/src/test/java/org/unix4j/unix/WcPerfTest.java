@@ -11,7 +11,7 @@ public class WcPerfTest extends AbstractPerfTest {
 	@Test(timeout = 5000)
 	public void testWc_100Meg_lineCount() {
 //		final Unix4jCommandBuilder command = Unix4j.fromFile(LargeTestFiles.FILE_100_MEG.getFile()).wcCountLines();
-		final Unix4jCommandBuilder command = Unix4j.fromFile(LargeTestFiles.FILE_100_MEG.getFile()).wc(Wc.OPTIONS.lines);
+		final Unix4jCommandBuilder command = Unix4j.fromFile(LargeTestFiles.FILE_100_MEG.getFile()).wc(Wc.Options.lines);
 		final String equivalentUnixTest = "cat 100_Meg_test_file.txt | wc -l";
 		run(command, equivalentUnixTest);
 	}
@@ -19,7 +19,7 @@ public class WcPerfTest extends AbstractPerfTest {
 	@Test(timeout = 5000)
 	public void testWc_10Meg_wordCount() {
 //		final Unix4jCommandBuilder command = Unix4j.fromFile(LargeTestFiles.FILE_10_MEG.getFile()).wcCountWords();
-		final Unix4jCommandBuilder command = Unix4j.fromFile(LargeTestFiles.FILE_10_MEG.getFile()).wc(Wc.OPTIONS.words);
+		final Unix4jCommandBuilder command = Unix4j.fromFile(LargeTestFiles.FILE_10_MEG.getFile()).wc(Wc.Options.words);
 		final String equivalentUnixTest = "cat 10_Meg_test_file.txt | wc -w";
 		run(command, equivalentUnixTest);
 	}
@@ -27,7 +27,7 @@ public class WcPerfTest extends AbstractPerfTest {
 	@Test(timeout = 5000)
 	public void testWc_10Meg_charCount() {
 //		final Unix4jCommandBuilder command = Unix4j.fromFile(LargeTestFiles.FILE_10_MEG.getFile()).wcCountChars();
-		final Unix4jCommandBuilder command = Unix4j.fromFile(LargeTestFiles.FILE_10_MEG.getFile()).wc(Wc.OPTIONS.chars);
+		final Unix4jCommandBuilder command = Unix4j.fromFile(LargeTestFiles.FILE_10_MEG.getFile()).wc(Wc.Options.chars);
 		final String equivalentUnixTest = "cat 10_Meg_test_file.txt | wc -m";
 		run(command, equivalentUnixTest);
 	}

@@ -16,7 +16,7 @@ import ${cmd.pkg.name}.${cmd.simpleName};
 /**
  * Options for the {@link ${cmd.simpleName} ${def.commandName}} command.
  * <p>
- * For most applications, it may be more convenient to use {@link ${cmd.simpleName}#OPTIONS} 
+ * For most applications, it may be more convenient to use {@link ${cmd.simpleName}#Options} 
  * instead of the option constants defined here.
  * <p>
 <#include "/include/options-javadoc.java">

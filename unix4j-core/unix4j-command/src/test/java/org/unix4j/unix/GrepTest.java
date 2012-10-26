@@ -68,22 +68,22 @@ public class GrepTest {
 	@Test
 	public void testGrep_ignoringCase() {
 		final FileTest tester = new FileTest(this.getClass());
-		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(Grep.OPTIONS.ignoreCase, "THIS"));
-		tester.run(Unix4j.builder().grep(Grep.OPTIONS.ignoreCase, "THIS", tester.getInputFile()));
+		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(Grep.Options.ignoreCase, "THIS"));
+		tester.run(Unix4j.builder().grep(Grep.Options.ignoreCase, "THIS", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_inverseMatch() {
 		final FileTest tester = new FileTest(this.getClass());
-		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(Grep.OPTIONS.invertMatch, "This"));
-		tester.run(Unix4j.builder().grep(Grep.OPTIONS.invertMatch, "This", tester.getInputFile()));
+		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(Grep.Options.invertMatch, "This"));
+		tester.run(Unix4j.builder().grep(Grep.Options.invertMatch, "This", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_inverseMatchIgnoreCase() {
 		final FileTest tester = new FileTest(this.getClass());
-		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(Grep.OPTIONS.invertMatch.ignoreCase, "t"));
-		tester.run(Unix4j.builder().grep(Grep.OPTIONS.invertMatch.ignoreCase, "t", tester.getInputFile()));
+		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(Grep.Options.invertMatch.ignoreCase, "t"));
+		tester.run(Unix4j.builder().grep(Grep.Options.invertMatch.ignoreCase, "t", tester.getInputFile()));
 	}
 
 	@Test
@@ -96,22 +96,22 @@ public class GrepTest {
 	@Test
 	public void testGrep_usingRegexCharactersToFindLiteralTextWithoutEscapingButWithFixedStringOptionSet() {
 		final FileTest tester = new FileTest(this.getClass());
-		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(Grep.OPTIONS.fixedStrings, "def\\d123"));
-		tester.run(Unix4j.builder().grep(Grep.OPTIONS.fixedStrings, "def\\d123", tester.getInputFile()));
+		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(Grep.Options.fixedStrings, "def\\d123"));
+		tester.run(Unix4j.builder().grep(Grep.Options.fixedStrings, "def\\d123", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_fixedStringButWithWrongCase() {
 		final FileTest tester = new FileTest(this.getClass());
-		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(Grep.OPTIONS.fixedStrings, "DEF\\d123"));
-		tester.run(Unix4j.builder().grep(Grep.OPTIONS.fixedStrings, "DEF\\d123", tester.getInputFile()));
+		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(Grep.Options.fixedStrings, "DEF\\d123"));
+		tester.run(Unix4j.builder().grep(Grep.Options.fixedStrings, "DEF\\d123", tester.getInputFile()));
 	}
 
 	@Test
 	public void testGrep_fixedStringWithWrongCaseAndIgnoringCase() {
 		final FileTest tester = new FileTest(this.getClass());
-		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(Grep.OPTIONS.fixedStrings.ignoreCase, "DEF\\d123"));
-		tester.run(Unix4j.builder().grep(Grep.OPTIONS.fixedStrings.ignoreCase, "DEF\\d123", tester.getInputFile()));
+		tester.run(Unix4j.fromFile(tester.getInputFile()).grep(Grep.Options.fixedStrings.ignoreCase, "DEF\\d123"));
+		tester.run(Unix4j.builder().grep(Grep.Options.fixedStrings.ignoreCase, "DEF\\d123", tester.getInputFile()));
 	}
 
 	@SuppressWarnings("unused")

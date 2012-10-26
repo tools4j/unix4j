@@ -12,7 +12,7 @@ public class FromInputStream {
 	@Test
 	public void testFromInputStream() {
 		final InputStream inputStream = getClass().getResourceAsStream("/commuting.txt");
-		assertThat(Unix4j.from(inputStream).grep("from").head(4).tail(1).wc(Wc.OPTIONS.words).toStringResult(), is("13"));
+		assertThat(Unix4j.from(inputStream).grep("from").head(4).tail(1).wc(Wc.Options.words).toStringResult(), is("13"));
 	}
 
 	@Test(expected = NullPointerException.class)

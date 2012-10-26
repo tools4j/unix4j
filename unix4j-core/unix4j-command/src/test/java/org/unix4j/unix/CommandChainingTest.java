@@ -103,7 +103,7 @@ public class CommandChainingTest {
 						.sed("s/This/Dude/")
 						.grep("Dude")
 						.head(1)
-						.wc(Wc.OPTIONS.words)
+						.wc(Wc.Options.words)
 						.toStringResult());
 		assertEquals("6", /* 6 words */
 				Unix4j.fromString(input.toString())
@@ -113,7 +113,7 @@ public class CommandChainingTest {
 						.sed("s/This/Dude/")
 						.grep("Dude")
 						.head(1)
-						.wc(Wc.OPTIONS.words)
+						.wc(Wc.Options.words)
 						.toStringResult());
 	}
 }
