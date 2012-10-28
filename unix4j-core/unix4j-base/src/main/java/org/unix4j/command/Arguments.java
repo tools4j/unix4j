@@ -1,5 +1,6 @@
 package org.unix4j.command;
 
+import org.unix4j.variable.VariableContext;
 
 /**
  * Interface implemented by command arguments. Arguments is usually a container
@@ -11,6 +12,23 @@ package org.unix4j.command;
  *            the concrete command specific arguments type
  */
 public interface Arguments<A extends Arguments<A>> {
+	/**
+	 * Returns an arguments object with resolved variables where this is
+	 * possible in the given variable context.
+	 * <p>
+	 * The returned value is the same instance as the current arguments object
+	 * if no variables are used to define argument values or if the specified
+	 * context is the {@link VariableContext#NULL_CONTEXT null context} . If
+	 * variables are used to define argument values, the returned arguments
+	 * object is a derivative of this instance where all variables defined in
+	 * {@code context} have been resolved.
+	 * 
+	 * @param context
+	 *            the variable context with values for the variables
+	 * @return an arguments object with resolved variables where possible
+	 */
+	A getForContext(VariableContext context);
+
 	/**
 	 * Returns a string representation of the command arguments and options.
 	 * 

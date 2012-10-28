@@ -11,7 +11,7 @@
 package ${cmd.pkg.name};
 
 import org.unix4j.command.CommandInterface;
-import org.unix4j.variable.NamedValue;
+import org.unix4j.variable.Variable;
 
 import ${def.pkg.name}.${factoryName};
 import ${def.pkg.name}.${factoryName}4Vars;
@@ -104,7 +104,7 @@ public final class ${cmd.simpleName} {
 	/**
 	 * Very similar to {@link Interface} but defines all method signatures for 
 	 * the "${commandName}" command when variables are used in form of a
-	 * {@link NamedValue}.
+	 * {@link Variable}.
 	 * 
 <#include "/include/returntype-class-javadoc.java">
 	 */
@@ -127,7 +127,7 @@ public final class ${cmd.simpleName} {
 	/**
 	 * Singleton {@link ${factoryName}4Vars factory} instance, very similar to 
 	 * {@link #Factory} but to create commands when variables are used in form 
-	 * of a {@link NamedValue}.
+	 * of a {@link Variable}.
 	 */
 	public static final ${factoryName}4Vars Factory4Vars = ${factoryName}4Vars.INSTANCE;
 

@@ -8,12 +8,12 @@
 <@pp.changeOutputFile name=pp.pathTo("/"+varPkgPath+"/"+simpleName+".java")/> 
 package ${varPkgName};
 
-import org.unix4j.variable.NamedValue;
+import org.unix4j.variable.Variable;
 
 /**
- * Interface for a variable or a constant holding a value of the type {@code ${normalizeVarArgType(opd.type, false)}}.
+ * Variable associated with a value of the type {@code ${normalizeVarArgType(opd.type, false)}}.
  */
-public interface ${simpleName} extends NamedValue<${normalizeVarArgType(opd.type, true)}>{}
+public interface ${simpleName} extends Variable{}
 </#if>
 </#foreach>
 </#list>

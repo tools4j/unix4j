@@ -47,13 +47,14 @@ abstract public class AbstractLineProcessor<A extends Arguments<A>> implements L
 	}
 
 	/**
-	 * Returns the command arguments, a shortcut for
-	 * {@code getCommand().getArguments()}.
+	 * Returns the command arguments for the current variable context. This 
+	 * method is a shortcut for<br>
+	 * {@code getCommand().getArguments(getContext().getVariableContext())}.
 	 * 
-	 * @return the command arguments
+	 * @return the command arguments for the current variable context
 	 */
 	protected A getArguments() {
-		return getCommand().getArguments();
+		return getCommand().getArguments(getContext().getVariableContext());
 	}
 
 	/**

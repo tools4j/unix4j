@@ -1,13 +1,14 @@
 package org.unix4j.command;
 
 import org.unix4j.processor.LineProcessor;
+import org.unix4j.variable.VariableContext;
 
 /**
  * A command is an executable unit defined by the command {@link #getName()
- * name} and the command line {@link #getArguments() arguments}. To execute a
- * command, {@link #execute(ExecutionContext, LineProcessor)} is called which
- * returns a {@link LineProcessor} object to perform the line-by-line command
- * execution.
+ * name} and the command line {@link #getArguments(VariableContext) arguments}.
+ * To execute a command, {@link #execute(ExecutionContext, LineProcessor)} is
+ * called which returns a {@link LineProcessor} object to perform the
+ * line-by-line command execution.
  * <p>
  * Commands can be {@link #join(Command) joined} to other commands which usually
  * means that the first command's output forms the input of the second command.
@@ -28,9 +29,11 @@ public interface Command<A extends Arguments<A>> {
 	/**
 	 * Returns the implementation specific command arguments and options
 	 * 
+	 * @param context
+	 *            the variable context for arguments defined as variables
 	 * @return the arguments and options for this command
 	 */
-	A getArguments();
+	A getArguments(VariableContext context);
 
 	/**
 	 * Returns a new command representing the combination of {@code this}

@@ -1,6 +1,7 @@
 package org.unix4j.command;
 
 import org.unix4j.processor.LineProcessor;
+import org.unix4j.variable.VariableContext;
 
 /**
  * A composite command joining two commands. The output of the
@@ -65,12 +66,12 @@ public class JoinedCommand<A extends Arguments<A>> implements Command<A> {
 	 */
 	@Override
 	public String getName() {
-		return first.getName() + " | " + second.getName();
+		return getFirst().getName() + " | " + getSecond().getName();
 	}
 
 	@Override
-	public A getArguments() {
-		return getArguments();
+	public A getArguments(VariableContext context) {
+		return getFirst().getArguments(context);
 	}
 
 	@Override

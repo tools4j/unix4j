@@ -5,12 +5,15 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
+import org.unix4j.variable.VariableContext;
+
 public class DefaultExecutionContext implements ExecutionContext {
 	private String user; 
 	private File userHome; 
 	private File tempDirectory; 
 	private File currentDirectory; 
 	private Locale locale;
+	private final VariableContext variableContext = VariableContext.NULL_CONTEXT;//FIXME make it a real modifiable scope context
 	public DefaultExecutionContext() {
 		this.currentDirectory = null;//default
 	}
@@ -65,5 +68,9 @@ public class DefaultExecutionContext implements ExecutionContext {
 	@Override
 	public Properties getSys() {
 		return System.getProperties();
+	}
+	@Override
+	public VariableContext getVariableContext() {
+		return variableContext;
 	}
 }

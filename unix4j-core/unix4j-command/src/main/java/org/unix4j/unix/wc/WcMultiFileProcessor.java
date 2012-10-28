@@ -1,6 +1,5 @@
 package org.unix4j.unix.wc;
 
-import org.unix4j.command.ExecutionContext;
 import org.unix4j.io.FileInput;
 import org.unix4j.io.Input;
 import org.unix4j.line.Line;
@@ -16,9 +15,9 @@ class WcMultiFileProcessor extends DefaultInputProcessor {
 	private final Counters current;
 	private final Counters totals;
 	
-	public WcMultiFileProcessor(WcCommand command, ExecutionContext context, LineProcessor output) {
-		current = new Counters(command.getArguments());
-		totals = new Counters(command.getArguments());
+	public WcMultiFileProcessor(WcArguments args) {
+		current = new Counters(args);
+		totals = new Counters(args);
 	}
 
 	@Override
