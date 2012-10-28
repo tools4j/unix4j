@@ -5,6 +5,7 @@ import org.unix4j.command.ExecutionContext;
 import org.unix4j.io.Input;
 import org.unix4j.line.Line;
 import org.unix4j.processor.LineProcessor;
+import org.unix4j.unix.From;
 
 /**
  * Implementation of the pseudo {@link From from} command used for input
@@ -17,7 +18,7 @@ class FromCommand extends AbstractCommand<FromArguments> {
 
 	@Override
 	public LineProcessor execute(ExecutionContext context, final LineProcessor output) {
-		final Input input = getArguments().getInput();
+		final Input input = getArguments(context.getVariableContext()).getInput();
 		return new LineProcessor() {
 			@Override
 			public boolean processLine(Line line) {

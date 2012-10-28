@@ -10,7 +10,8 @@
 package ${def.pkg.name};
 
 import org.unix4j.command.CommandInterface;
-import org.unix4j.variable.NamedValue;
+import org.unix4j.variable.Variable;
+import org.unix4j.variable.DefaultVariable;
 <#foreach opd in def.operands?values>
 	<#if !isCommandSpecificOperand(def, opd)>
 		<#if indexOfOperandByType(def.operands, opd) == opd_index><#-- otherwise it is a repeted occurance of this type -->
@@ -30,11 +31,25 @@ public class ${varName} {
 <#if isCommandSpecificOperand(def, opd)>
 <#if indexOfOperandByType(def.operands, opd) == opd_index><#-- otherwise it is a repeted occurance of this type -->
 	/**
-	 * Interface for a variable or a constant holding a value of the type {@code ${normalizeVarArgType(opd.type, false)}}.
+	 * Interface for a variable holding a value of the type {@code ${normalizeVarArgType(opd.type, false)}}.
 	 * Such variables can for instance be passed to the {@code <${opd.name}>} 
 	 * operand.
 	 */
-	public interface ${varIfaceName(opd)} extends NamedValue<${normalizeVarArgType(opd.type, true)}>{}
+	public static interface ${varIfaceName(opd)} extends Variable{}
+	/**
+	 * Default implementation for a variable or a constant holding a value of the type {@code ${normalizeVarArgType(opd.type, false)}}.
+	 * Such variables can for instance be passed to the {@code <${opd.name}>} 
+	 * operand.
+	 */
+	public static class ${varTypeName(opd)} extends DefaultVariable implements ${varIfaceName(opd)} {
+		/** 
+		 * Constructor with variable name
+		 * @param name the name of the new variable
+		 */
+		public ${varTypeName(opd)}(String name) {
+			super(name);
+		}
+	}
 </#if>
 </#if>
 </#foreach>
@@ -42,7 +57,7 @@ public class ${varName} {
 	/**
 	 * Very similar to {@link ${cmd.simpleName}.Interface} but defines all method signatures for 
 	 * the "${commandName}" command when variables are used in form of a
-	 * {@link NamedValue}.
+	 * {@link Variable}.
 	 * 
 <#include "/include/returntype-class-javadoc.java">
 	 */

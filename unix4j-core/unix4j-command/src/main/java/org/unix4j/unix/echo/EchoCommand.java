@@ -17,6 +17,7 @@ class EchoCommand extends AbstractCommand<EchoArguments> {
 
 	@Override
 	public LineProcessor execute(ExecutionContext context, final LineProcessor output) {
+		final EchoArguments args = getArguments(context.getVariableContext());
 		return new LineProcessor() {
 			@Override
 			public boolean processLine(Line line) {
@@ -26,7 +27,7 @@ class EchoCommand extends AbstractCommand<EchoArguments> {
 			@Override
 			public void finish() {
 				final String message = getMessage();
-				if (getArguments().isNoNewline()) {
+				if (args.isNoNewline()) {
 					output.processLine(new SimpleLine(message, ""));
 				} else {
 					output.processLine(new SimpleLine(message));
@@ -35,7 +36,6 @@ class EchoCommand extends AbstractCommand<EchoArguments> {
 			}
 
 			private String getMessage() {
-				final EchoArguments args = getArguments();
 				if (args.isStringSet()) {
 					return args.getString();
 				} else if (args.isStringsSet()) {

@@ -23,24 +23,23 @@ class GrepCommand extends AbstractCommand<GrepArguments> {
 
 	@Override
 	public LineProcessor execute(ExecutionContext context, LineProcessor output) {
-		final GrepArguments args = getArguments();
+		final GrepArguments args = getArguments(context.getVariableContext());
 
 		//from file?
 		if (args.isFilesSet()) {
 			final List<FileInput> inputs = FileInput.multiple(args.getFiles());
-			return getFileInputProcessor(inputs, context, output);
+			return getFileInputProcessor(inputs, context, output, args);
 		} else if (args.isPathsSet()) {
 			final List<File> files = FileUtil.expandFiles(args.getPaths());
 			final List<FileInput> inputs = FileInput.multiple(files);
-			return getFileInputProcessor(inputs, context, output);
+			return getFileInputProcessor(inputs, context, output, args);
 		}
 
 		//from standard input
-		return getStandardInputProcessor(context, output);
+		return getStandardInputProcessor(context, output, args);
 	}
 
-	private LineMatcher getMatcher() {
-		final GrepArguments args = getArguments();
+	private LineMatcher getMatcher(GrepArguments args) {
 		final LineMatcher matcher;
 		if (args.isFixedStrings()) {
 			if (args.isWholeLine()) {
@@ -54,9 +53,8 @@ class GrepCommand extends AbstractCommand<GrepArguments> {
 		return args.isInvertMatch() ? new InvertedMatcher(matcher) : matcher;
 	}
 
-	private LineProcessor getStandardInputProcessor(ExecutionContext context, LineProcessor output) {
-		final GrepArguments args = getArguments();
-		final LineMatcher matcher = getMatcher();
+	private LineProcessor getStandardInputProcessor(ExecutionContext context, LineProcessor output, GrepArguments args) {
+		final LineMatcher matcher = getMatcher(args);
 		if (args.isCount()) {
 			return new CountMatchingLinesProcessor(this, context, output, matcher);
 		} else if (args.isMatchingFiles()) {
@@ -64,20 +62,19 @@ class GrepCommand extends AbstractCommand<GrepArguments> {
 		}
 		return new WriteMatchingLinesProcessor(this, context, output, matcher);
 	}
-	private LineProcessor getFileInputProcessor(List<FileInput> inputs, ExecutionContext context, LineProcessor output) {
-		final GrepArguments args = getArguments();
+	private LineProcessor getFileInputProcessor(List<FileInput> inputs, ExecutionContext context, LineProcessor output, GrepArguments args) {
 		if (args.isCount()) {
-			final LineMatcher matcher = getMatcher();
+			final LineMatcher matcher = getMatcher(args);
 			final InputProcessor processor = new CountMatchingLinesProcessor(this, context, output, matcher);
 			return new MultipleInputLineProcessor(inputs, processor, output);
 		} else if (args.isMatchingFiles()) {
-			final LineMatcher matcher = getMatcher();
+			final LineMatcher matcher = getMatcher(args);
 			final InputProcessor processor = new WriteFilesWithMatchingLinesProcessor(this, context, output, matcher);
 			return new MultipleInputLineProcessor(inputs, processor, output);
 		}
 
 		//standard grep output
-		final LineProcessor standardInputProcessor = getStandardInputProcessor(context, output);
+		final LineProcessor standardInputProcessor = getStandardInputProcessor(context, output, args);
 		return new RedirectInputLineProcessor(inputs, standardInputProcessor);
 	}
 }

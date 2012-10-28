@@ -1,5 +1,7 @@
 package org.unix4j.command;
 
+import org.unix4j.variable.VariableContext;
+
 
 /**
  * Abstract base class suitable for most command implementations. Name and
@@ -34,8 +36,8 @@ abstract public class AbstractCommand<A extends Arguments<A>> implements Command
 	}
 
 	@Override
-	public A getArguments() {
-		return arguments;
+	public A getArguments(VariableContext context) {
+		return arguments.getForContext(context);
 	}
 
 	@Override
@@ -45,7 +47,7 @@ abstract public class AbstractCommand<A extends Arguments<A>> implements Command
 	
 	@Override
 	public String toString() {
-		final String args = getArguments().toString();
+		final String args = getArguments(VariableContext.NULL_CONTEXT).toString();
 		return args.isEmpty() ? getName() : getName() + " " + args;
 	}
 }

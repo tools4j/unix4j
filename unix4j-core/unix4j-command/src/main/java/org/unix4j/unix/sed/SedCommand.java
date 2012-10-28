@@ -1,16 +1,16 @@
 package org.unix4j.unix.sed;
 
+import static org.unix4j.util.Assert.assertArgTrue;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.ExecutionContext;
 import org.unix4j.line.Line;
 import org.unix4j.line.SimpleLine;
 import org.unix4j.processor.LineProcessor;
 import org.unix4j.unix.Sed;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static org.unix4j.util.Assert.assertArgTrue;
 
 /**
  * Implementation of the {@link Sed sed} command.
@@ -23,9 +23,10 @@ class SedCommand extends AbstractCommand<SedArguments> {
 
 	@Override
 	public LineProcessor execute(ExecutionContext context, final LineProcessor output) {
+		final SedArguments args = getArguments(context.getVariableContext());
 		final String SED_REGEX = "s/(.*?)(?<!\\\\)/(.*?)(?<!\\\\)/(g)?";
 		final Pattern pattern = Pattern.compile(SED_REGEX);
-		final String script = getArguments().getScript();
+		final String script = args.getScript();
 
 		assertArgTrue("Invalid sed script, must be in the form s/<search>/<replace>/[g]", script.matches(SED_REGEX));
 		final Matcher m = pattern.matcher(script);

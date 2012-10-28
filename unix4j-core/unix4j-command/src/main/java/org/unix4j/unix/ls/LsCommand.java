@@ -23,8 +23,7 @@ class LsCommand extends AbstractCommand<LsArguments> {
 		super(Ls.NAME, arguments);
 	}
 	
-	private List<File> getArgumentFiles(ExecutionContext context) {
-		final LsArguments args = getArguments();
+	private List<File> getArgumentFiles(ExecutionContext context, LsArguments args) {
 		if (args.isFilesSet()) {
 			return new ArrayList<File>(Arrays.asList(args.getFiles()));
 		} else if (args.isPathsSet()) {
@@ -58,7 +57,8 @@ class LsCommand extends AbstractCommand<LsArguments> {
 	
 	@Override
 	public LineProcessor execute(final ExecutionContext context, final LineProcessor output) {
-		final List<File> files = getArgumentFiles(context);
+		final LsArguments args = getArguments(context.getVariableContext());
+		final List<File> files = getArgumentFiles(context, args);
 		return new LineProcessor() {
 			@Override
 			public boolean processLine(Line line) {
@@ -66,15 +66,14 @@ class LsCommand extends AbstractCommand<LsArguments> {
 			}
 			@Override
 			public void finish() {
-				listFiles(context.getCurrentDirectory(), null, files, output);
+				listFiles(context.getCurrentDirectory(), null, files, output, args);
 				output.finish();
 			}
 		};
 	}
 
-	private boolean listFiles(File relativeTo, File parent, List<File> files, LineProcessor output) {
-		final LsArguments args = getArguments();
-		final Comparator<File> comparator = getComparator(relativeTo);
+	private boolean listFiles(File relativeTo, File parent, List<File> files, LineProcessor output, LsArguments args) {
+		final Comparator<File> comparator = getComparator(relativeTo, args);
 		final boolean allFiles = args.isAllFiles();
 		final boolean longFormat = args.isLongFormat();
 		final LsFormatter formatter = longFormat ? LsFormatterLong.FACTORY.create(relativeTo, parent, files, args) : LsFormatterShort.INSTANCE;
@@ -104,11 +103,11 @@ class LsCommand extends AbstractCommand<LsArguments> {
 		for (File file : files) {
 			if (allFiles || !file.isHidden()) {
 				if (file.isDirectory() && recurseSubdirs) {
-					if (!listFiles(file, file, FileUtil.toList(file.listFiles()), output)) {
+					if (!listFiles(file, file, FileUtil.toList(file.listFiles()), output, args)) {
 						return false;
 					}
 				} else {
-					if (!formatter.writeFormatted(relativeTo, file, getArguments(), output)) {
+					if (!formatter.writeFormatted(relativeTo, file, args, output)) {
 						return false;
 					}
 				}
@@ -118,8 +117,7 @@ class LsCommand extends AbstractCommand<LsArguments> {
 		return true;//we want more output
 	}
 
-	private Comparator<File> getComparator(File relativeTo) {
-		final LsArguments args = getArguments();
+	private Comparator<File> getComparator(File relativeTo, LsArguments args) {
 		final Comparator<File> comparator = args.isTimeSorted() ? FileComparators.timeAndRelativeFileName(relativeTo) : FileComparators.typeAndRelativeFileName(relativeTo);
 		return args.isReverseOrder() ? ReverseOrderComparator.reverse(comparator) : comparator;
 	}

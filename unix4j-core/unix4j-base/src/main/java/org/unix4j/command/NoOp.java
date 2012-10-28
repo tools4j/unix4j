@@ -3,6 +3,7 @@ package org.unix4j.command;
 import org.unix4j.builder.CommandBuilder;
 import org.unix4j.io.NullOutput;
 import org.unix4j.processor.LineProcessor;
+import org.unix4j.variable.VariableContext;
 
 /**
  * A command that performs no operation. Useful as initial command in a
@@ -14,7 +15,12 @@ public class NoOp extends AbstractCommand<NoOp.Args> {
 	/**
 	 * Arguments for NoOp.
 	 */
-	public static final class Args implements Arguments<Args> {};
+	public static final class Args implements Arguments<Args> {
+		@Override
+		public Args getForContext(VariableContext context) {
+			return this;//no arguments, hence the same for all contexts
+		}
+	}
 
 	/**
 	 * The "nop" command name. 

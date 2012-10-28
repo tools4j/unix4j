@@ -19,27 +19,28 @@ class CutCommand extends AbstractCommand<CutArguments> {
 
 	@Override
 	public LineProcessor execute(ExecutionContext context, final LineProcessor output) {
+		final CutArguments args = getArguments(context.getVariableContext());
 		//If indexes were specified as an int array, convert to a proper range object
-		if(getArguments().isIndexesSet() && getArguments().isRangeSet()){
+		if(args.isIndexesSet() && args.isRangeSet()){
 			throw new IllegalArgumentException("Only one of indexes or range can be set");
-		} else if(getArguments().isIndexesSet()){
-			getArguments().setRange(Range.of(getArguments().getIndexes()));
+		} else if(args.isIndexesSet()){
+			args.setRange(Range.of(args.getIndexes()));
 		}
 
 		//Validate options
-		if(getArguments().isDelimiterSet() && !getArguments().isFields()){
+		if(args.isDelimiterSet() && !args.isFields()){
 			throw new IllegalArgumentException("Delimiter can only be specified if cutting by fields");
 		}
-		if(getArguments().isOutputDelimiterSet() && !getArguments().isFields()){
+		if(args.isOutputDelimiterSet() && !args.isFields()){
 			throw new IllegalArgumentException("Output delimiter can only be specified if cutting by fields");
 		}
 
 		return new LineProcessor() {
 			@Override
 			public boolean processLine(Line line) {
-				if (getArguments().isChars()) {
+				if (args.isChars()) {
 					return cutByChars(line, output);
-				} else if(getArguments().isFields()){
+				} else if(args.isFields()){
 					return cutByFields(line, output);
 				} else {
 					throw new UnsupportedOperationException("Currently cut only supports cutting by chars or fields...");
@@ -52,9 +53,9 @@ class CutCommand extends AbstractCommand<CutArguments> {
 			}
 
 			private boolean cutByFields(Line line, LineProcessor output) {
-				final String inputDelim = getArguments().isDelimiterSet() ? getArguments().getDelimiter(): "\\t";
-				final char outputDelim = getArguments().isOutputDelimiterSet() ? getArguments().getOutputDelimiter(): inputDelim.charAt(0);
-				final Range range = getArguments().getRange();
+				final String inputDelim = args.isDelimiterSet() ? args.getDelimiter(): "\\t";
+				final char outputDelim = args.isOutputDelimiterSet() ? args.getOutputDelimiter(): inputDelim.charAt(0);
+				final Range range = args.getRange();
 				//Passing -1 to the split function will cause it to not strip trailing empty strings
 				final String[] fields = line.getContent().split(inputDelim, -1);
 				final StringBuilder sb = new StringBuilder();
@@ -71,7 +72,7 @@ class CutCommand extends AbstractCommand<CutArguments> {
 			}
 
 			private boolean cutByChars(Line line, LineProcessor output) {
-				final Range range = getArguments().getRange();
+				final Range range = args.getRange();
 				final char[] chars = line.getContent().toCharArray();
 				final StringBuilder sb = new StringBuilder();
 

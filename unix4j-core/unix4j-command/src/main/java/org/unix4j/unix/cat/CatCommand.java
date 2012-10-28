@@ -21,24 +21,23 @@ class CatCommand extends AbstractCommand<CatArguments> {
 
 	@Override
 	public LineProcessor execute(ExecutionContext context, final LineProcessor output) {
-		final CatArguments args = getArguments();
+		final CatArguments args = getArguments(context.getVariableContext());
 
 		// input from files?
 		if (args.isFilesSet()) {
 			final List<FileInput> inputs = FileInput.multiple(args.getFiles());
-			return getFileInputProcessor(inputs, context, output);
+			return getFileInputProcessor(inputs, context, output, args);
 		} else if (args.isPathsSet()) {
 			final List<File> files = FileUtil.expandFiles(args.getPaths());
 			final List<FileInput> inputs = FileInput.multiple(files);
-			return getFileInputProcessor(inputs, context, output);
+			return getFileInputProcessor(inputs, context, output, args);
 		}
 
 		// standard input
-		return getStandardInputProcessor(context, output);
+		return getStandardInputProcessor(context, output, args);
 	}
 
-	private LineProcessor getStandardInputProcessor(ExecutionContext context, LineProcessor output) {
-		final CatArguments args = getArguments();
+	private LineProcessor getStandardInputProcessor(ExecutionContext context, LineProcessor output, CatArguments args) {
 		final LineProcessor printer;
 		if (args.isNumberLines() || args.isNumberNonBlankLines()) {
 			printer = new NumberLinesProcessor(this, context, output);
@@ -51,8 +50,8 @@ class CatCommand extends AbstractCommand<CatArguments> {
 		return new CatProcessor(this, context, printer);
 	}
 
-	private LineProcessor getFileInputProcessor(List<FileInput> inputs, ExecutionContext context, LineProcessor output) {
-		final LineProcessor standardInputProcessor = getStandardInputProcessor(context, output); 
+	private LineProcessor getFileInputProcessor(List<FileInput> inputs, ExecutionContext context, LineProcessor output, CatArguments args) {
+		final LineProcessor standardInputProcessor = getStandardInputProcessor(context, output, args); 
 		return new RedirectInputLineProcessor(inputs, standardInputProcessor);
 	}
 }

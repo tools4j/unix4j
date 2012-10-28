@@ -22,7 +22,7 @@ class WcCommand extends AbstractCommand<WcArguments> {
 
 	@Override
 	public LineProcessor execute(ExecutionContext context, final LineProcessor output) {
-		final WcArguments args = getArguments();
+		final WcArguments args = getArguments(context.getVariableContext());
 		
 		//input from files?
 		final List<FileInput> inputs;
@@ -38,7 +38,7 @@ class WcCommand extends AbstractCommand<WcArguments> {
 		
 		if (inputs.size() > 1) {
 			//totals line at end
-			final WcMultiFileProcessor processor = new WcMultiFileProcessor(this, context, output);
+			final WcMultiFileProcessor processor = new WcMultiFileProcessor(args);
 			return new MultipleInputLineProcessor(inputs, processor, output) {
 				@Override
 				protected void finishMultiple(java.util.List<? extends org.unix4j.io.Input> inputs, LineProcessor output) {

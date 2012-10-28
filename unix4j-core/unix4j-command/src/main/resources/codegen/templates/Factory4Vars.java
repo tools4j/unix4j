@@ -12,7 +12,7 @@ package ${def.pkg.name};
 
 import ${varPkgName}.*;
 
-import org.unix4j.variable.NamedValue;
+import org.unix4j.variable.Variable;
 import ${cmd.pkg.name}.${cmd.simpleName};
 <#if def.options?size != 0>
 import ${def.pkg.name}.${def.command.simpleName}Options;
@@ -29,7 +29,7 @@ import ${def.pkg.name}.${def.command.simpleName}4Vars.${varIfaceName(opd)};
  * Factory for the {@link ${cmd.simpleName} ${def.commandName}} command returning 
  * a new command instance from every signature method --- very similar to
  * {@link ${factoryName}} but for construction of a command when variables are 
- * used in form of a {@link NamedValue}.
+ * used in form of a {@link Variable}.
  */
 public final class ${simpleName} implements ${cmd.simpleName}4Vars.Interface<${commandName}> {
 	
@@ -60,7 +60,8 @@ public final class ${simpleName} implements ${cmd.simpleName}4Vars.Interface<${c
 		<#if operand.redirection?length == 0>
 		args.${setter(operand)}(${arg});
 		<#else>
-		args.${operand.redirection?replace(r"${value}",arg+".getValue()")};
+		if (true) throw new RuntimeException("variables not supported for redirected argument ${arg}");
+		//args.${operand.redirection?replace(r"${value}",arg + ".getName()")};
 		</#if>
 		</#if>
 		</#foreach>

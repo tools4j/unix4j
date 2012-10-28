@@ -30,24 +30,24 @@ class HeadCommand extends AbstractCommand<HeadArguments> {
 
 	@Override
 	public LineProcessor execute(ExecutionContext context, final LineProcessor output) {
-		final HeadArguments args = getArguments();
+		final HeadArguments args = getArguments(context.getVariableContext());
 		
 		//input from file(s)?
 		if (args.isFilesSet()) {
 			final List<FileInput> inputs = FileInput.multiple(args.getFiles());
-			return getFileInputProcessor(inputs, context, output);
+			return getFileInputProcessor(inputs, context, output, args);
 		} else if (args.isPathsSet()) {
 			final List<File> files = FileUtil.expandFiles(args.getPaths());
 			final List<FileInput> inputs = FileInput.multiple(files);
-			return getFileInputProcessor(inputs, context, output);
+			return getFileInputProcessor(inputs, context, output, args);
 		}
 		
 		//read from standard input
-		return getStandardInputProcessor(context, output);
+		return getStandardInputProcessor(context, output, args);
 	}
 	
-	private LineProcessor getStandardInputProcessor(ExecutionContext context, LineProcessor output) {
-		if (getArguments().isChars()) {
+	private LineProcessor getStandardInputProcessor(ExecutionContext context, LineProcessor output, HeadArguments args) {
+		if (args.isChars()) {
 			//count chars
 			return new HeadCharsProcessor(this, context, output);
 		} else {
@@ -56,9 +56,9 @@ class HeadCommand extends AbstractCommand<HeadArguments> {
 		}
 	}
 	
-	private LineProcessor getFileInputProcessor(List<FileInput> inputs, ExecutionContext context, final LineProcessor output) {
-		final LineProcessor standardInputProcessor = getStandardInputProcessor(context, output);
-		if (inputs.size() <= 1 || getArguments().isSuppressHeaders()) {
+	private LineProcessor getFileInputProcessor(List<FileInput> inputs, ExecutionContext context, final LineProcessor output, HeadArguments args) {
+		final LineProcessor standardInputProcessor = getStandardInputProcessor(context, output, args);
+		if (inputs.size() <= 1 || args.isSuppressHeaders()) {
 			return new RedirectInputLineProcessor(inputs, standardInputProcessor);
 		} else {
 			//write header line per file

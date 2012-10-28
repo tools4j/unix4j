@@ -13,12 +13,12 @@ package ${varPkgName};
 import org.unix4j.variable.DefaultVariable;
 
 /**
- * Variable holding a value of the type {@code ${valueType}}.
+ * Implementation for a variable associated with a value of the type {@code ${normalizeVarArgType(opd.type, false)}}.
  */
-public class ${simpleName} extends DefaultVariable<${valueType}> implements ${ifaceName} {
+public class ${simpleName} extends DefaultVariable implements ${ifaceName} {
+	
 	/**
-	 * Constructor with variable name initializing the variable with a null
-	 * value.
+	 * Constructor with variable name.
 	 * 
 	 * @param name
 	 *            the variable name
@@ -26,32 +26,6 @@ public class ${simpleName} extends DefaultVariable<${valueType}> implements ${if
 	public ${simpleName}(String name) {
 		super(name);
 	}
-
-	/**
-	 * Constructor with name and initial value for the variable.
-	 * 
-	 * @param name
-	 *            the variable name
-	 * @param value
-	 *            the initial value for the variable
-	 */
-	public ${simpleName}(String name, ${opd.type} value) {
-		super(name, value);
-	}
-	<#if isPrimitive(opd.type)>
-
-	/**
-	 * Constructor with name and initial value for the variable.
-	 * 
-	 * @param name
-	 *            the variable name
-	 * @param value
-	 *            the initial value for the variable
-	 */
-	public ${simpleName}(String name, ${valueType} value) {
-		super(name, value);
-	}
-	</#if>
 }
 </#if>
 </#foreach>

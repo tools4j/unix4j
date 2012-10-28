@@ -27,20 +27,18 @@ class SortCommand extends AbstractCommand<SortArguments> {
 
 	@Override
 	public LineProcessor execute(ExecutionContext context, LineProcessor output) {
-		final SortArguments args = getArguments();
+		final SortArguments args = getArguments(context.getVariableContext());
 		
 		if (args.isMerge()) {
-			return getMergeProcessor(context, output);
+			return getMergeProcessor(context, output, args);
 		} else if (args.isCheck()) {
-			return getCheckProcessor(context, output);
+			return getCheckProcessor(context, output, args);
 		} else {
-			return getSortProcessor(context, output);
+			return getSortProcessor(context, output, args);
 		}
 	}
 	
-	private LineProcessor getSortProcessor(ExecutionContext context, LineProcessor output) {
-		final SortArguments args = getArguments();
-
+	private LineProcessor getSortProcessor(ExecutionContext context, LineProcessor output, SortArguments args) {
 		final LineProcessor standardInputProcessor;
 		if (args.isUnique()) {
 			standardInputProcessor = new UniqueSortProcessor(this, context, output);
@@ -59,8 +57,7 @@ class SortCommand extends AbstractCommand<SortArguments> {
 		return standardInputProcessor;
 	}
 
-	private LineProcessor getMergeProcessor(ExecutionContext context, LineProcessor output) {
-		final SortArguments args = getArguments();
+	private LineProcessor getMergeProcessor(ExecutionContext context, LineProcessor output, SortArguments args) {
 		//input from file?
 		if (args.isFilesSet()) {
 			final List<FileInput> inputs = FileInput.multiple(args.getFiles());
@@ -75,8 +72,7 @@ class SortCommand extends AbstractCommand<SortArguments> {
 		}
 	}
 	
-	private LineProcessor getCheckProcessor(ExecutionContext context, LineProcessor output) {
-		final SortArguments args = getArguments();
+	private LineProcessor getCheckProcessor(ExecutionContext context, LineProcessor output, SortArguments args) {
 		final CheckProcessor standardInputProcessor = new CheckProcessor(this, context, output);
 		//input from file?
 		List<FileInput> inputs = null; 

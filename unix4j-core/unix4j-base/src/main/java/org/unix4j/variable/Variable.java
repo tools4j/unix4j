@@ -1,14 +1,13 @@
 package org.unix4j.variable;
 
 /**
- * A variable is a named value; the value assigned to a variable can change.
- *
- * @param <V> the type of the value
+ * A variable is a name associated with a value; the value however is stored in
+ * a {@link VariableContext} and therefore not part of this type.
  */
-public interface Variable<V> extends NamedValue<V> {
+public interface Variable {
 	/**
-	 * Sets the value of this variable.
-	 * @param value the new value for this variable.
+	 * Returns the variable name
+	 * @return the name of the variable
 	 */
-	void setValue(V value);
+	String getName();
 }

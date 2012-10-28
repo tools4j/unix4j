@@ -23,23 +23,22 @@ class UniqCommand extends AbstractCommand<UniqArguments> {
 
 	@Override
 	public LineProcessor execute(final ExecutionContext context, final LineProcessor output) {
-		final UniqArguments args = getArguments();
+		final UniqArguments args = getArguments(context.getVariableContext());
 		//input from file?
 		if (args.isFileSet()) {
 			final FileInput input = new FileInput(args.getFile());
-			return getFileInputProcessor(Collections.singletonList(input), context, output);
+			return getFileInputProcessor(Collections.singletonList(input), context, output, args);
 		} else if (args.isPathSet()) {
 			final List<File> files = FileUtil.expandFiles(args.getPath());
 			final List<FileInput> inputs = FileInput.multiple(files);
-			return getFileInputProcessor(inputs, context, output);
+			return getFileInputProcessor(inputs, context, output, args);
 		}
 		
 		//no, from standard input
-		return getStandardInputProcessor(context, output);
+		return getStandardInputProcessor(context, output, args);
 	}
 	
-	private LineProcessor getStandardInputProcessor(ExecutionContext context, LineProcessor output) {
-		final UniqArguments args = getArguments();
+	private LineProcessor getStandardInputProcessor(ExecutionContext context, LineProcessor output, UniqArguments args) {
 		if (args.isGlobal()) {
 			if (args.isUniqueOnly()) {
 				return new GlobalProcessor.UniqueOnly(this, context, output);
@@ -60,8 +59,8 @@ class UniqCommand extends AbstractCommand<UniqArguments> {
 			return new AdjacentProcessor.Normal(this, context, output);
 		}
 	}
-	private LineProcessor getFileInputProcessor(List<FileInput> inputs, ExecutionContext context, LineProcessor output) {
-		final LineProcessor standardInputProcessor = getStandardInputProcessor(context, output); 
+	private LineProcessor getFileInputProcessor(List<FileInput> inputs, ExecutionContext context, LineProcessor output, UniqArguments args) {
+		final LineProcessor standardInputProcessor = getStandardInputProcessor(context, output, args); 
 		return new RedirectInputLineProcessor(inputs, standardInputProcessor);
 	}
 
