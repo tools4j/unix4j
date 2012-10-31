@@ -1,5 +1,7 @@
 package org.unix4j.variable;
 
+import org.unix4j.convert.ValueConverter;
+
 public interface VariableContext {
 	/**
 	 * Null context returning null for every {@code getValue(..)} call and
@@ -11,7 +13,7 @@ public interface VariableContext {
 			throw new IllegalArgumentException("null context: no values can be set");
 		}
 		@Override
-		public <V> V getAndConvertValue(String name, Class<V> type) {
+		public <V> V getValue(String name, ValueConverter<V> converter) throws IllegalArgumentException {
 			return null;
 		}
 		@Override
@@ -22,5 +24,5 @@ public interface VariableContext {
 	
 	Object setValue(String name, Object value);
 	Object getValue(String name);
-	<V> V getAndConvertValue(String name, Class<V> type) throws IllegalArgumentException;
+	<V> V getValue(String name, ValueConverter<V> converter) throws IllegalArgumentException;
 }
