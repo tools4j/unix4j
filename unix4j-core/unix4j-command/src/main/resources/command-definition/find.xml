@@ -153,7 +153,7 @@
 			created, modified or accessed before or after the specified
 			{@code time} (depending on the given {@code -time...} options). The
 			names of the matching files found in or below the user's current 
-			working directory are written to the standard output.  
+			working directory are written to the standard output. 
 
 			The files names written to the output are relative paths referring
 			to the working directory.
@@ -177,7 +177,7 @@
 			{@code size} is non-negative, or at most {@code size} bytes if 
 			{@code size} is negative. The names of the matching files found in 
 			or below the user's current working directory are written to the 
-			standard output.  
+			standard output.
 
 			The files names written to the output are relative paths referring
 			to the working directory.
@@ -255,6 +255,13 @@
 			(the default)
 			
 			(This option is ignored if no time operand is specified).
+		</option>
+		<option name="print0" acronym="z">
+			Print the full file name on the standard output, followed by a null 
+			character (instead of the newline character used by default). This
+			allows file names that contain newlines or other types of white 
+			space to be correctly interpreted by programs that process the find 
+			output. This option corresponds to the --delimiter0 option of xargs.		
 		</option>
 	</options>
 	<operands>
