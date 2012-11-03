@@ -32,6 +32,7 @@
 	<scm>
 		<url>scm:git:https://code.google.com/p/unix4j/</url>
 		<connection>scm:git:https://code.google.com/p/unix4j/</connection>
+		<developerConnection>scm:git:https://code.google.com/p/unix4j/</developerConnection>
 	</scm>
 
 	<developers>
