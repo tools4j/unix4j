@@ -1,0 +1,229 @@
+<?xml version="1.0"?>
+<command-def xmlns="http://www.unix4j.org/command-def"
+			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			 xsi:schemaLocation="http://www.unix4j.org/command-def command-def.xsd">
+
+	<command name="xargs" class="org.unix4j.unix.Xargs" package="org.unix4j.unix.xargs"/>
+	<name>xargs - build and execute command lines from standard input</name>
+	<synopsis>xargs [-lwm]</synopsis>
+	<description ref="xargs.html"/>
+	<notes>
+	</notes>
+	<methods>
+		<method args="" usesStandardInput="true">
+			Reads items from the standard input, delimited by blanks (which can 
+			be protected with double or single quotes or a backslash) or 
+			newlines, and provides variables for the items read from the 
+			standard input. The command following after xargs is executed once 
+			for every input line; the item variables are usually passed to the 
+			invoked command as arguments.
+		</method>
+		<method args="delimiter" usesStandardInput="true">
+			Reads items from the standard input using the specified delimiter to
+			separate items, and provides variables for the items read from the 
+			standard input. The command following after xargs is executed once 
+			for every input line; the item variables are usually passed to the 
+			invoked command as arguments.
+		</method>
+		<method args="maxLines" usesStandardInput="true">
+			Reads items from the standard input, delimited by blanks (which can 
+			be protected with double or single quotes or a backslash) or 
+			newlines, and provides variables for the items read from the 
+			standard input. The command following after xargs is executed once 
+			for every {@code maxLines} nonblank input lines (or possibly fewer 
+			for the last invocation with the remaining lines at the end of the 
+			file). Trailing blanks cause an input line to be logically continued 
+			on the next input line. The item variables are usually passed to the 
+			invoked command as arguments.
+		</method>
+		<method args="maxArgs" usesStandardInput="true">
+			Reads items from the standard input, delimited by blanks (which can 
+			be protected with double or single quotes or a backslash) or 
+			newlines, and provides variables for the items read from the 
+			standard input. The command following after xargs is executed once 
+			for every {@code maxArgs} items read from the standard input (or 
+			possibly fewer for the last invocation with the remaining items at
+			the end of the file). The item variables are usually passed to the 
+			invoked command as arguments.
+		</method>
+		<method args="maxLines,maxArgs" usesStandardInput="true">
+			Reads items from the standard input, delimited by blanks (which can 
+			be protected with double or single quotes or a backslash) or 
+			newlines, and provides variables for the items read from the 
+			standard input. The command following after xargs is executed once 
+			for every {@code maxLines} nonblank input lines or {@code maxArgs}
+			items (whichever occurs first). Fewer lines or items may be used for
+			the last invocation with the remaining lines at the end of the file. 
+			The item variables are usually passed to the invoked command as 
+			arguments.
+		</method>
+		<method args="delimiter,maxLines" usesStandardInput="true">
+			Reads items from the standard input using the specified delimiter to
+			separate items, and provides variables for the items read from the 
+			standard input. The command following after xargs is executed once 
+			for every {@code maxLines} nonblank input lines (or possibly fewer 
+			for the last invocation with the remaining lines at the end of the 
+			file). Trailing blanks cause an input line to be logically continued 
+			on the next input line. The item variables are usually passed to the 
+			invoked command as arguments.
+		</method>
+		<method args="delimiter,maxArgs" usesStandardInput="true">
+			Reads items from the standard input using the specified delimiter to
+			separate items, and provides variables for the items read from the 
+			standard input. The command following after xargs is executed once 
+			for every {@code maxArgs} items read from the standard input (or 
+			possibly fewer for the last invocation with the remaining items at
+			the end of the file). The item variables are usually passed to the 
+			invoked command as arguments.
+		</method>
+		<method args="delimiter,maxLines,maxArgs" usesStandardInput="true">
+			Reads items from the standard input using the specified delimiter to
+			separate items, and provides variables for the items read from the 
+			standard input. The command following after xargs is executed once 
+			for every {@code maxLines} nonblank input lines or {@code maxArgs}
+			items (whichever occurs first). Fewer lines or items may be used for
+			the last invocation with the remaining lines at the end of the file. 
+			The item variables are usually passed to the invoked command as 
+			arguments.
+		</method>
+		<method args="delimiter,eof,maxLines,maxArgs" usesStandardInput="true">
+			Reads items from the standard input using the specified delimiter to
+			separate items, and provides variables for the items read from the 
+			standard input. If the {@code eof} string occurs as a line of input, 
+			the rest of the input is ignored. The command following after xargs
+			is executed once for every {@code maxLines} nonblank input lines or
+			{@code maxArgs} items (whichever occurs first). Fewer lines or items
+			may be used for the last invocation with the remaining lines at the 
+			end of the file. The item variables are usually passed to the 
+			invoked command as arguments.
+		</method>
+		<method args="options" usesStandardInput="true">
+			Reads items from the standard input, delimited by blanks (which can 
+			be protected with double or single quotes or a backslash) or 
+			newlines, and provides variables for the items read from the 
+			standard input. The command following after xargs is executed once 
+			for every input line; the item variables are usually passed to the 
+			invoked command as arguments.
+		</method>
+		<method args="options,delimiter" usesStandardInput="true">
+			Reads items from the standard input using the specified delimiter to
+			separate items, and provides variables for the items read from the 
+			standard input. The command following after xargs is executed once 
+			for every input line; the item variables are usually passed to the 
+			invoked command as arguments.
+		</method>
+		<method args="options,maxLines" usesStandardInput="true">
+			Reads items from the standard input, delimited by blanks (which can 
+			be protected with double or single quotes or a backslash) or 
+			newlines, and provides variables for the items read from the 
+			standard input. The command following after xargs is executed once 
+			for every {@code maxLines} nonblank input lines (or possibly fewer 
+			for the last invocation with the remaining lines at the end of the 
+			file). Trailing blanks cause an input line to be logically continued 
+			on the next input line. The item variables are usually passed to the 
+			invoked command as arguments.
+		</method>
+		<method args="options,maxArgs" usesStandardInput="true">
+			Reads items from the standard input, delimited by blanks (which can 
+			be protected with double or single quotes or a backslash) or 
+			newlines, and provides variables for the items read from the 
+			standard input. The command following after xargs is executed once 
+			for every {@code maxArgs} items read from the standard input (or 
+			possibly fewer for the last invocation with the remaining items at
+			the end of the file). The item variables are usually passed to the 
+			invoked command as arguments.
+		</method>
+		<method args="options,maxLines,maxArgs" usesStandardInput="true">
+			Reads items from the standard input, delimited by blanks (which can 
+			be protected with double or single quotes or a backslash) or 
+			newlines, and provides variables for the items read from the 
+			standard input. The command following after xargs is executed once 
+			for every {@code maxLines} nonblank input lines or {@code maxArgs}
+			items (whichever occurs first). Fewer lines or items may be used for
+			the last invocation with the remaining lines at the end of the file. 
+			The item variables are usually passed to the invoked command as 
+			arguments.
+		</method>
+		<method args="options,delimiter,maxLines" usesStandardInput="true">
+			Reads items from the standard input using the specified delimiter to
+			separate items, and provides variables for the items read from the 
+			standard input. The command following after xargs is executed once 
+			for every {@code maxLines} nonblank input lines (or possibly fewer 
+			for the last invocation with the remaining lines at the end of the 
+			file). Trailing blanks cause an input line to be logically continued 
+			on the next input line. The item variables are usually passed to the 
+			invoked command as arguments.
+		</method>
+		<method args="options,delimiter,maxArgs" usesStandardInput="true">
+			Reads items from the standard input using the specified delimiter to
+			separate items, and provides variables for the items read from the 
+			standard input. The command following after xargs is executed once 
+			for every {@code maxArgs} items read from the standard input (or 
+			possibly fewer for the last invocation with the remaining items at
+			the end of the file). The item variables are usually passed to the 
+			invoked command as arguments.
+		</method>
+		<method args="options,delimiter,maxLines,maxArgs" usesStandardInput="true">
+			Reads items from the standard input using the specified delimiter to
+			separate items, and provides variables for the items read from the 
+			standard input. The command following after xargs is executed once 
+			for every {@code maxLines} nonblank input lines or {@code maxArgs}
+			items (whichever occurs first). Fewer lines or items may be used for
+			the last invocation with the remaining lines at the end of the file. 
+			The item variables are usually passed to the invoked command as 
+			arguments.
+		</method>
+		<method args="options,delimiter,eof,maxLines,maxArgs" usesStandardInput="true">
+			Reads items from the standard input using the specified delimiter to
+			separate items, and provides variables for the items read from the 
+			standard input. If the {@code eof} string occurs as a line of input, 
+			the rest of the input is ignored. The command following after xargs
+			is executed once for every {@code maxLines} nonblank input lines or
+			{@code maxArgs} items (whichever occurs first). Fewer lines or items
+			may be used for the last invocation with the remaining lines at the 
+			end of the file. The item variables are usually passed to the 
+			invoked command as arguments.
+		</method>
+	</methods>
+	<options>
+		<option name="delimiter0" acronym="z">
+			Input items are terminated by a null character instead of by 
+			whitespace, and the quotes and backslash are not special (every
+			character is taken literally). Disables the end of file string,
+			which is treated like any other argument. Useful when input items 
+			might contain white space, quote marks, or backslashes. The find 
+			--print0 option produces input suitable for this mode.
+			
+			(This option is ignored if an explicit delimiter operand is specified).
+		</option>
+ 		<option name="noRunIfEmpty" acronym="r">
+ 			If the standard input does not contain any nonblanks, do not run the
+ 			command. Normally, the command is run once even if there is no 
+ 			input.
+ 		</option>
+		<option name="verbose" acronym="t">
+			Print the command line on the standard error output before executing
+			it.
+ 		</option>
+	</options>
+	<operands>
+		<operand name="delimiter" type="String">
+			Input items are terminated by the specified characters.
+		</operand>
+		<operand name="eof" type="String">
+			If the end of file string occurs as a line of input, the rest of the
+			input is ignored.
+		</operand>
+		<operand name="maxLines" type="long">
+			Use at most maxLines nonblank input lines per command invocation. 
+			Trailing blanks cause an input line to be logically continued on the
+			next input line.
+		</operand>
+		<operand name="maxArgs" type="int">
+			Use at most maxArgs arguments per command invocation.
+		</operand>
+		<operand name="options" type="XargsOptions">
+			The options defining command behavior.
+		</operand>
+	</operands>
+</command-def>
