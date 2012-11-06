@@ -1,11 +1,12 @@
 <#include "/include/macros.fmpp">
 
-<@pp.dropOutputFile /> 
+<@pp.dropOutputFile/>
 <#list commandDefs as def> 
 <#foreach opd in def.operands?values>
 <#if !isCommandSpecificOperand(def, opd)>
 <#global simpleName=varIfaceName(opd)>
 <@pp.changeOutputFile name=pp.pathTo("/"+varPkgPath+"/"+simpleName+".java")/> 
+<@pp.restartOutputFile/> 
 package ${varPkgName};
 
 import org.unix4j.variable.Variable;
