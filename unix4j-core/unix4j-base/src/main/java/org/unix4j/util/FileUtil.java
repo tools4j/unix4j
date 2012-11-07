@@ -196,6 +196,65 @@ public class FileUtil {
 		parts.add(0, part);
 	}
 
+
+	/**
+	 * Expands files if necessary, meaning that input files with wildcards are
+	 * expanded. If the specified {@code files} list contains no wildcard, the
+	 * files are simply returned; all wildcard files are expanded.
+	 *
+	 * @param paths
+	 *            the file paths, possibly containing wildcard parts
+	 * @return the expanded files resolving wildcards
+	 */
+	public static List<String> expandPaths(File currentDirectory, String... paths) {
+		final List<String> expanded = new ArrayList<String>(paths.length);
+		for (final String path : paths) {
+			addPathExpanded(currentDirectory, path, expanded);
+		}
+		return expanded;
+	}
+
+	private static void addPathExpanded(File currentDirectory, String path, List<String> expandedPaths) {
+		if (isWildcardFileName(path)) {
+			final List<String> parts = new LinkedList<String>();
+			File f = new File(path);
+			File p;
+			do {
+				parts.add(0, f.getName());
+				p = f;
+				f = f.getParentFile();
+			} while (f != null);
+			if (p.isDirectory()) {
+				parts.remove(0);
+			} else {
+				p = currentDirectory;
+			}
+			listPaths(p.getPath(), parts, expandedPaths);
+		} else {
+			expandedPaths.add(path);
+		}
+	}
+
+	private static void listPaths(String path, List<String> parts, List<String> dest) {
+		final String part = parts.remove(0);
+		final FilenameFilter filter = getFileNameFilter(part);
+
+		final File file = new File(path);
+		for (final File f : file.listFiles(filter)) {
+			if (parts.isEmpty()) {
+				dest.add(f.getPath());
+			} else {
+				if (f.isDirectory()) {
+					listPaths(f.getPath(), parts, dest);
+				}
+			}
+		}
+		parts.add(0, part);
+	}
+
+
+
+
 	/**
 	 * Returns a file name filter for the specified name. The name should be
 	 * either a simple file name (not a path) or a wildcard expression such as
