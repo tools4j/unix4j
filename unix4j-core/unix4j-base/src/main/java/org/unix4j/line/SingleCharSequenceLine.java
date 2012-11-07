@@ -16,6 +16,7 @@ public class SingleCharSequenceLine implements Line {
 	private final int offset;
 	private final int contentLength;
 	private final int lineEndingLength;
+	private String content = null;
 
 	/**
 	 * Constructor with character sequence with the data and the
@@ -94,7 +95,10 @@ public class SingleCharSequenceLine implements Line {
 
 	@Override
 	public String getContent() {
-		return charSequence.subSequence(offset, offset + contentLength).toString();
+		if (content == null) {
+			content = charSequence.subSequence(offset, offset + contentLength).toString();
+		}
+		return content;
 	}
 
 	@Override

@@ -189,8 +189,23 @@ public class StringUtil {
 	 *         length of the character sequence if all characters are blank
 	 */
 	public static int findStartTrimWhitespace(CharSequence s) {
+		return findStartTrimWhitespace(s, 0);
+	}
+
+	/**
+	 * Finds and returns the start of the given sequence after trimming
+	 * whitespace characters, starting at the given {@code start} index.
+	 * 
+	 * @param s
+	 *            the character sequence
+	 * @param start
+	 *            the first index to consider in the char sequence
+	 * @return the index containing the first non-whitespace character, or the
+	 *         length of the character sequence if all characters are blank
+	 */
+	public static int findStartTrimWhitespace(CharSequence s, int start) {
 		final int len = s.length();
-		for (int i = 0; i < len; i++) {
+		for (int i = start; i < len; i++) {
 			if (!Character.isWhitespace(s.charAt(i))) {
 				return i;
 			}

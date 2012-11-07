@@ -27,10 +27,12 @@ public interface Command<A extends Arguments<A>> {
 	String getName();
 
 	/**
-	 * Returns the implementation specific command arguments and options
+	 * Returns the implementation specific command arguments and options for the
+	 * given variable context. 
 	 * 
 	 * @param context
-	 *            the variable context for arguments defined as variables
+	 *            the variable context for arguments defined as variables, or
+	 *            null if no variables are used or if they need not be resolved
 	 * @return the arguments and options for this command
 	 */
 	A getArguments(VariableContext context);

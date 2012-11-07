@@ -187,7 +187,10 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	
 	@Override
 	public ${argumentsName} getForContext(VariableContext context) {
-		if (operandToVariable.isEmpty() || context == VariableContext.NULL_CONTEXT) {
+		if (context == null) {
+			throw new NullPointerException("variable context cannot be null");
+		}
+		if (operandToVariable.isEmpty()) {
 			return this;
 		}
 		

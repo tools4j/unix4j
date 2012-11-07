@@ -11,9 +11,11 @@ import org.unix4j.command.ExecutionContext;
  * {@link Command#execute(ExecutionContext, LineProcessor)}.
  */
 abstract public class AbstractLineProcessor<A extends Arguments<A>> implements LineProcessor {
+	
 	private final Command<A> command;
 	private final ExecutionContext context;
 	private final LineProcessor output;
+	private A arguments;//lazy init
 
 	/**
 	 * Constructor with command creating this processor, execution context and
@@ -48,13 +50,16 @@ abstract public class AbstractLineProcessor<A extends Arguments<A>> implements L
 
 	/**
 	 * Returns the command arguments for the current variable context. This 
-	 * method is a shortcut for<br>
+	 * method caches the result of <br>
 	 * {@code getCommand().getArguments(getContext().getVariableContext())}.
 	 * 
 	 * @return the command arguments for the current variable context
 	 */
 	protected A getArguments() {
-		return getCommand().getArguments(getContext().getVariableContext());
+		if (arguments == null) {
+			arguments = getCommand().getArguments(getContext().getVariableContext());
+		}
+		return arguments;
 	}
 
 	/**

@@ -11,6 +11,7 @@ abstract class AbstractTailProcessor extends AbstractLineProcessor<TailArguments
 	protected final long count;
 	public AbstractTailProcessor(TailCommand command, ExecutionContext context, LineProcessor output) {
 		super(command, context, output);
-		this.count = getArguments().isCountSet() ? getArguments().getCount() : 10;
+		final TailArguments args = getArguments();
+		this.count = args.isCountSet() ? args.getCount() : 10;
 	}
 }

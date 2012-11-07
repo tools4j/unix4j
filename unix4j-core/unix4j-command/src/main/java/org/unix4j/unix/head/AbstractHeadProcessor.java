@@ -14,7 +14,8 @@ abstract class AbstractHeadProcessor extends AbstractLineProcessor<HeadArguments
 
 	public AbstractHeadProcessor(HeadCommand command, ExecutionContext context, LineProcessor output) {
 		super(command, context, output);
-		this.count = getArguments().isCountSet() ? getArguments().getCount() : 10;
+		final HeadArguments args = getArguments();
+		this.count = args.isCountSet() ? args.getCount() : 10;
 	}
 
 	@Override

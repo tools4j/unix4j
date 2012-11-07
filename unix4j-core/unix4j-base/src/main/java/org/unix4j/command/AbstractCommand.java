@@ -37,7 +37,7 @@ abstract public class AbstractCommand<A extends Arguments<A>> implements Command
 
 	@Override
 	public A getArguments(VariableContext context) {
-		return arguments.getForContext(context);
+		return context == null ? arguments : arguments.getForContext(context);
 	}
 
 	@Override
@@ -47,7 +47,7 @@ abstract public class AbstractCommand<A extends Arguments<A>> implements Command
 	
 	@Override
 	public String toString() {
-		final String args = getArguments(VariableContext.NULL_CONTEXT).toString();
+		final String args = getArguments(null).toString();
 		return args.isEmpty() ? getName() : getName() + " " + args;
 	}
 }
