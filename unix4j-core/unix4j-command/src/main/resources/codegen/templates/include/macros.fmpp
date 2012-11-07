@@ -89,8 +89,11 @@
 <#function varIfaceName operand>
 	<#return varBaseName(operand) + "Var">
 </#function>
-<#function varTypeName operand>
+<#function varImplName operand>
 	<#return "Default" + varIfaceName(operand)>
+</#function>
+<#function varTypedName operand>
+	<#return "Typed" + varIfaceName(operand)>
 </#function>
 <#function isVar index isVarFlags>
 	<#return isVarFlags?substring(index, index+1)=="T">

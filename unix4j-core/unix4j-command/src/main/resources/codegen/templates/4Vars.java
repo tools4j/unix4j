@@ -41,12 +41,12 @@ public class ${varName} {
 	 * Such variables can for instance be passed to the {@code <${opd.name}>} 
 	 * operand.
 	 */
-	public static class ${varTypeName(opd)} extends DefaultVariable implements ${varIfaceName(opd)} {
+	public static class ${varImplName(opd)} extends DefaultVariable implements ${varIfaceName(opd)} {
 		/** 
 		 * Constructor with variable name
 		 * @param name the name of the new variable
 		 */
-		public ${varTypeName(opd)}(String name) {
+		public ${varImplName(opd)}(String name) {
 			super(name);
 		}
 	}

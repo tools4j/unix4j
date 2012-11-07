@@ -13,7 +13,7 @@ public class DefaultExecutionContext implements ExecutionContext {
 	private File tempDirectory; 
 	private File currentDirectory; 
 	private Locale locale;
-	private final VariableContext variableContext = VariableContext.NULL_CONTEXT;//FIXME make it a real modifiable scope context
+	private final VariableContext variableContext = null;//FIXME make it a real modifiable scope context
 	public DefaultExecutionContext() {
 		this.currentDirectory = null;//default
 	}

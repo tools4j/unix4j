@@ -11,7 +11,10 @@ public class DefaultVariableContext implements VariableContext {
 
 	@Override
 	public Object setValue(String name, Object value) {
-		return variables.put(name, value);
+		if (value != null) {
+			return variables.put(name, value);
+		}
+		return variables.remove(name);
 	}
 
 	@Override

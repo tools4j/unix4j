@@ -4,7 +4,7 @@
 <#list commandDefs as def> 
 <#foreach opd in def.operands?values>
 <#if !isCommandSpecificOperand(def, opd)>
-<#global simpleName=varTypeName(opd)>
+<#global simpleName=varImplName(opd)>
 <#global ifaceName=varIfaceName(opd)>
 <#global valueType=normalizeVarArgType(opd.type, true)>
 <@pp.changeOutputFile name=pp.pathTo("/"+varPkgPath+"/"+simpleName+".java")/> 
