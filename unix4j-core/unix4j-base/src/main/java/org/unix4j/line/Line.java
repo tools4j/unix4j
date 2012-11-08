@@ -10,6 +10,12 @@ package org.unix4j.line;
  * {@code "line.separator"} {@link System#getProperties() system property}. The
  * concrete encoding of line endings depends on the source of the line, which
  * could for instance be an existing Windows or Unix file.
+ * <p>
+ * It is illegal for the {@link #getContent() content} part of a line to contain 
+ * any character of the {@link #getLineEnding() line ending} part. A line source 
+ * must ensure that this constraint is fulfilled. Algorithms and programs may 
+ * return undefined results or behave unpredictably for lines not following this 
+ * rule.
  */
 public interface Line extends CharSequence {
 	/**
@@ -36,6 +42,12 @@ public interface Line extends CharSequence {
 	 * endings in WINDOWS together with {@link #LF}.
 	 */
 	char CR = '\r';
+
+	/**
+	 * The zero character {@code '\0'} used to encode line endings for special
+	 * purpose use, such as {@code find --print0 | xargs --delimiter0}.
+	 */
+	char ZERO = '\0';
 
 	/**
 	 * Returns the contents making up this line, but without the line ending
