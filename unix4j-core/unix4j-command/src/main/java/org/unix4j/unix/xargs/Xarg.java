@@ -1,7 +1,7 @@
 package org.unix4j.unix.xargs;
 
+import org.unix4j.convert.StringArrayConverters;
 import org.unix4j.convert.StringConverters;
-import org.unix4j.convert.ValueConverter;
 import org.unix4j.vars.TypedStringVar;
 import org.unix4j.vars.TypedStringsVar;
 
@@ -17,16 +17,7 @@ public class Xarg {
 	public static final TypedStringVar $8 = argVar(8);
 	public static final TypedStringVar $9 = argVar(9);
 	public static final TypedStringVar $string = new TypedStringVar(args(), StringConverters.DEFAULT);
-	public static final TypedStringsVar $strings = new TypedStringsVar(args(), new ValueConverter<String[]>() {
-		@Override
-		public String[] convert(Object value) {
-			if (value != null) {
-				return value.toString().split(" ");
-			}
-			return null;
-		}
-	});
-	
+	public static final TypedStringsVar $strings = new TypedStringsVar(args(), StringArrayConverters.SPACE_DELIMITED);
 	
 	public static final String args() {
 		return "$*";

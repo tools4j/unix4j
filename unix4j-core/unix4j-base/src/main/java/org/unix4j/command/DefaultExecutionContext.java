@@ -5,6 +5,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
+import org.unix4j.variable.StackableVariableContext;
 import org.unix4j.variable.VariableContext;
 
 public class DefaultExecutionContext implements ExecutionContext {
@@ -13,7 +14,7 @@ public class DefaultExecutionContext implements ExecutionContext {
 	private File tempDirectory; 
 	private File currentDirectory; 
 	private Locale locale;
-	private final VariableContext variableContext = null;//FIXME make it a real modifiable scope context
+	private VariableContext variableContext = null;//lazy init
 	public DefaultExecutionContext() {
 		this.currentDirectory = null;//default
 	}
@@ -71,6 +72,9 @@ public class DefaultExecutionContext implements ExecutionContext {
 	}
 	@Override
 	public VariableContext getVariableContext() {
+		if (variableContext == null) {
+			variableContext = new StackableVariableContext();
+		}
 		return variableContext;
 	}
 }

@@ -35,6 +35,22 @@ public class SimpleLine implements Line {
 	 *            the character sequence containing the {@link #getContent()
 	 *            content} data of the line
 	 * @param lineEnding
+	 *            a single line ending character
+	 * @throws IllegalArgumentException
+	 *             if {@code lineEnding} contains more than two characters
+	 * @throws NullPointerException
+	 *             if {@code content} or {@code LineEvent} is null
+	 */
+	public SimpleLine(CharSequence content, char lineEnding) {
+		this(content, String.valueOf(lineEnding));
+	}
+	/**
+	 * Constructor with contents and lineEnding character sequences.
+	 * 
+	 * @param content
+	 *            the character sequence containing the {@link #getContent()
+	 *            content} data of the line
+	 * @param lineEnding
 	 *            the character sequence containing the {@link #getLineEnding()
 	 *            line ending} characters, must have length zero, one or two
 	 * @throws IllegalArgumentException
@@ -71,8 +87,10 @@ public class SimpleLine implements Line {
 		if (start < clen && end <= clen) {
 			return content.subSequence(start, end);
 		}
-		if (start - clen < elen && end - clen <= elen) {
-			return lineEnding.subSequence(start - clen, end - clen);
+		final int estart = start - clen;
+		final int eend = end - clen;
+		if (estart >= 0 && estart <= elen && eend >= 0 && eend <= elen) {
+			return lineEnding.subSequence(estart, eend);
 		}
 		// overlaps the two strings
 		final StringBuilder sb = new StringBuilder(clen + elen);

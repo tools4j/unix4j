@@ -36,6 +36,10 @@ public class DefaultVariableContext implements VariableContext {
 		return converted;
 	}
 	
+	public void clear() {
+		variables.clear();
+	}
+	
 	@Override
 	public String toString() {
 		return getClass().getSimpleName() + variables;

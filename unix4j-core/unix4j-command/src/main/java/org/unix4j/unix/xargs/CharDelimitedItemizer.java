@@ -32,29 +32,40 @@ public class CharDelimitedItemizer implements Itemizer {
 		curLines++;
 		
 		final int len = line.length();
-		int start = 0;
-		int end = 0;
-		while (start < len) {
-			if (delim != line.charAt(end)) {
-				end++;
-			} else {
-				if (multiLine.length() > 0) {
-					multiLine.append(line, start, end);
-					itemStorage.storeItem(multiLine.toString());
-					multiLine.setLength(0);
+		
+		if (line.getLineEndingLength() == 1 && line.getLineEnding().charAt(len-1) == delim) {
+			//the delim is the line ending (e.g. for \0 terminated lines)
+			//it is a constraint for the Line that no other such character 
+			//exists in the content part of the line
+			itemStorage.storeItem(line.getContent());
+			if (curLines < maxLines && itemStorage.size() < maxArgs) {
+				return false;
+			}
+		} else {
+			int start = 0;
+			int end = 0;
+			while (start < len) {
+				if (delim != line.charAt(end)) {
+					end++;
 				} else {
-					final CharSequence item = line.subSequence(start, end);
-					itemStorage.storeItem(item.toString());
+					if (multiLine.length() > 0) {
+						multiLine.append(line, start, end);
+						itemStorage.storeItem(multiLine.toString());
+						multiLine.setLength(0);
+					} else {
+						final CharSequence item = line.subSequence(start, end);
+						itemStorage.storeItem(item.toString());
+					}
+					start = end + 1;
+					end = start;
 				}
-				start = end + 1;
-				end = start;
+			}
+			if (curLines < maxLines && itemStorage.size() < maxArgs) {
+				multiLine.append(line, start, len);
+				return false;
 			}
 		}
 		
-		if (curLines < maxLines && itemStorage.size() < maxArgs) {
-			multiLine.append(line, start, len);
-			return false;
-		}
 		return true;
 	}
 
