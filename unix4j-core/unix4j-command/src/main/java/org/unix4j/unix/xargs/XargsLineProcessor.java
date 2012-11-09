@@ -10,18 +10,26 @@ import org.unix4j.variable.VariableContext;
 class XargsLineProcessor extends AbstractLineProcessor<XargsArguments> {
 
 	private final Itemizer itemizer;
-	private final VariableContextItemStorage storage;
-	private Line lastLine = null;
+	
+	private final DefaultItemStorage storage;
 	
 	public XargsLineProcessor(XargsCommand command, ExecutionContext context, LineProcessor output) {
 		super(command, context, new XargsOutput(output));
 		final XargsArguments args = getArguments();
-		if (args.isDelimiterSet() || args.isDelimiter0()) {
-			itemizer = new CharDelimitedItemizer(args);
+		if (args.isDelimiterSet()) {
+			final String delimiter = args.getDelimiter();
+			if (delimiter.length() == 1) {
+				itemizer = new CharDelimitedItemizer(delimiter.charAt(0));
+			} else {
+				//FIXME support length>1 delimiters
+				throw new IllegalArgumentException("unsupported delimiter: " + delimiter);
+			}
+		} else if (args.isDelimiter0()) {
+			itemizer = new CharDelimitedItemizer(Line.ZERO);
 		} else {
-			itemizer = new WhitespaceItemizer(args);
+			itemizer = new WhitespaceItemizer();
 		}
-		this.storage = new VariableContextItemStorage(context.getVariableContext());
+		this.storage = new DefaultItemStorage(this);
 		pushVariableContext();
 	}
 	
@@ -31,46 +39,50 @@ class XargsLineProcessor extends AbstractLineProcessor<XargsArguments> {
 	}
 	
 	@Override
+	protected XargsArguments getArguments() {
+		return super.getArguments();
+	}
+	
+	@Override
 	protected XargsOutput getOutput() {
 		return (XargsOutput)super.getOutput();
 	}
 	
+	protected VariableContext getVariableContext() {
+		return getContext().getVariableContext();
+	}
+	
+	protected void invoke() {
+		final XargsOutput output = getOutput();
+		final LineProcessor invocation = getCommand().getInvokedCommand().execute(getContext(), output);
+		invocation.finish();
+	}
+
 	@Override
 	public boolean processLine(Line line) {
-		itemizeAndInvoke(line);
+		itemizer.itemizeLine(line, storage);
 		return true;//we always want all the lines
 	}
 	
 	@Override
 	public void finish() {
-		itemizeAndInvoke(null);
+		itemizer.finish(storage);
+		storage.flush();
 		popVariableContext();
 		getOutput().finishAll();
 	}
 	
 	private void pushVariableContext() {
-		final VariableContext vcontext = getContext().getVariableContext();
+		final VariableContext vcontext = getVariableContext();
 		if (vcontext instanceof StackableVariableContext) {
 			((StackableVariableContext)vcontext).push();
 		}
 	}
 	private void popVariableContext() {
-		final VariableContext vcontext = getContext().getVariableContext();
+		final VariableContext vcontext = getVariableContext();
 		if (vcontext instanceof StackableVariableContext) {
 			((StackableVariableContext)vcontext).pop();
 		}
-	}
-
-	private void itemizeAndInvoke(Line line) {
-		if (lastLine != null) {
-			if (itemizer.itemizeLine(lastLine, line == null, storage)) {
-				final XargsOutput output = getOutput();
-				final LineProcessor invocation = getCommand().getInvokedCommand().execute(getContext(), output);
-				invocation.finish();
-				storage.reset();
-			}
-		}
-		lastLine = line;
 	}
 
 }
