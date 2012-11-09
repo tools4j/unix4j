@@ -2,50 +2,30 @@ package org.unix4j.unix.xargs;
 
 import org.unix4j.line.Line;
 
-public class CharDelimitedItemizer implements Itemizer {
+class CharDelimitedItemizer implements Itemizer {
 	
-	private final int maxArgs;
-	private final long maxLines;
-	private final char delim;
+	private final char delimiter;
 	
 	private StringBuilder multiLine = new StringBuilder();
-	private long curLines;
 	
-	public CharDelimitedItemizer(XargsArguments args) {
-		this.maxArgs = args.isMaxArgsSet() ? args.getMaxArgs() : 1;
-		this.maxLines = args.isMaxLinesSet() ? args.getMaxLines() : Integer.MAX_VALUE;
-		if (args.isDelimiterSet()) {
-			final String delimiter = args.getDelimiter();
-			if (delimiter.length() != 1) {
-				throw new IllegalArgumentException("delimiter is set and length is " + delimiter.length() + " but only one char is expected: delimiter=" + delimiter);
-			}
-			this.delim = delimiter.charAt(0);
-		} else if (args.isDelimiter0()) {
-			this.delim = '\0';
-		} else {
-			throw new IllegalArgumentException("neither delimiter operand nor delimiter0 option is set in args=" + args);
-		}
+	public CharDelimitedItemizer(char delimiter) {
+		this.delimiter = delimiter;
 	}
 
 	@Override
-	public boolean itemizeLine(Line line, boolean eof, ItemStorage itemStorage) {
-		curLines++;
-		
+	public void itemizeLine(Line line, ItemStorage itemStorage) {
 		final int len = line.length();
 		
-		if (line.getLineEndingLength() == 1 && line.getLineEnding().charAt(len-1) == delim) {
+		if (line.getLineEndingLength() == 1 && line.getLineEnding().charAt(0) == delimiter) {
 			//the delim is the line ending (e.g. for \0 terminated lines)
 			//it is a constraint for the Line that no other such character 
 			//exists in the content part of the line
 			itemStorage.storeItem(line.getContent());
-			if (curLines < maxLines && itemStorage.size() < maxArgs) {
-				return false;
-			}
 		} else {
 			int start = 0;
 			int end = 0;
-			while (start < len) {
-				if (delim != line.charAt(end)) {
+			while (end < len) {
+				if (delimiter != line.charAt(end)) {
 					end++;
 				} else {
 					if (multiLine.length() > 0) {
@@ -60,13 +40,18 @@ public class CharDelimitedItemizer implements Itemizer {
 					end = start;
 				}
 			}
-			if (curLines < maxLines && itemStorage.size() < maxArgs) {
+			if (start < len) {
 				multiLine.append(line, start, len);
-				return false;
 			}
 		}
-		
-		return true;
+		itemStorage.incrementLineCount();
 	}
-
+	
+	@Override
+	public void finish(ItemStorage itemStorage) {
+		if (multiLine.length() > 0) {
+			itemStorage.storeItem(multiLine.toString());
+			multiLine.setLength(0);
+		}
+	}
 }
