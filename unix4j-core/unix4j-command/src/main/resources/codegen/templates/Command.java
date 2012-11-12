@@ -6,21 +6,17 @@
 <#global optionsName=cmd.simpleName+"Options">
 <#global factoryName=cmd.simpleName+"Factory">
 <#global optionSetsName=cmd.simpleName+"OptionSets">
-<#global varName=cmd.simpleName+"4Vars">
 <@pp.changeOutputFile name=pp.pathTo("/"+cmd.pkg.path+"/"+cmd.simpleName+".java")/> 
 package ${cmd.pkg.name};
 
 import org.unix4j.command.CommandInterface;
-import org.unix4j.variable.Variable;
 
 import ${def.pkg.name}.${factoryName};
-import ${def.pkg.name}.${factoryName}4Vars;
 <#if def.options?size != 0>
 import ${def.pkg.name}.${optionName};
 import ${def.pkg.name}.${optionsName};
 import ${def.pkg.name}.${optionSetsName};
 </#if>
-import ${def.pkg.name}.${varName};
 
 <#function isOptionsArg def arg>
 	<#return def.operands[arg].type == optionsName>
@@ -101,15 +97,6 @@ public final class ${cmd.simpleName} {
 </#foreach>
 	}
 
-	/**
-	 * Very similar to {@link Interface} but defines all method signatures for 
-	 * the "${commandName}" command when variables are used in form of a
-	 * {@link Variable}.
-	 * 
-<#include "/include/returntype-class-javadoc.java">
-	 */
-	public static interface Interface4Vars<R> extends ${varName}.Interface<R> {}
-
 <#if def.options?size != 0>
 	/**
 	 * Options for the "${commandName}" command: <#foreach opt in def.options?values>{@link ${optionName}#${opt.name} ${opt.acronym}}<#if opt_has_next>, </#if></#foreach>.
@@ -123,13 +110,6 @@ public final class ${cmd.simpleName} {
 	 * Singleton {@link ${factoryName} factory} instance for the "${commandName}" command.
 	 */
 	public static final ${factoryName} Factory = ${factoryName}.INSTANCE;
-
-	/**
-	 * Singleton {@link ${factoryName}4Vars factory} instance, very similar to 
-	 * {@link #Factory} but to create commands when variables are used in form 
-	 * of a {@link Variable}.
-	 */
-	public static final ${factoryName}4Vars Factory4Vars = ${factoryName}4Vars.INSTANCE;
 
 	// no instances
 	private ${cmd.simpleName}() {

@@ -11,19 +11,16 @@
 <@pp.changeOutputFile name=pp.pathTo("/"+def.pkg.path+"/"+argumentsName+".java")/> 
 package ${def.pkg.name};
 
+import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.Arrays;
 
 import org.unix4j.command.Arguments;
-import org.unix4j.variable.TypedVariable;
-import org.unix4j.variable.Variable;
-<#if def.options?size != 0 || def.operands?size != 0>
-import org.unix4j.variable.DefaultVariable;
-</#if>
 import org.unix4j.variable.VariableContext;
 <#if def.options?size != 0>
 import org.unix4j.option.DefaultOptionSet;
 </#if>
+import org.unix4j.util.ArgsUtil;
 <#if hasTrueOperand>
 import org.unix4j.util.ArrayUtil;
 </#if>
@@ -50,23 +47,21 @@ import ${cmd.pkg.name}.${cmd.simpleName};
  */
 public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	
-	private enum OperandState {
-		NotSet, SetAsValue, SetAsVariable;
-		boolean isSet() {return this != NotSet;}
-		boolean isVariable() {return this == SetAsVariable;}
-	}
-	
 	<#if def.options?size != 0>
 	private final ${optionsName} options;
-	private final OperandState optionsOperandState;
 	</#if>
-	private final Map<String,Variable> operandToVariable = new HashMap<String, Variable>();
+
+	<#if def.options?size != 0 || def.operands?size != 0>
+	// string arguments encoding options and operands
+	private String[] args;
+	private boolean argsIsSet = false;
+	</#if>
 	<#foreach operand in def.operands?values>
 	<#if !isOptions(operand) && operand.redirection?length == 0>
 	
 	// operand: <${operand.name}>
-	private OperandState ${operand.name}OperandState = OperandState.NotSet;
 	private ${normalizeVarArgType(operand.type, false)} ${operand.name};
+	private boolean ${operand.name}IsSet = false;
 	</#if>
 	</#foreach>
 	
@@ -89,22 +84,6 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 			throw new NullPointerException("options argument cannot be null");
 		}
 		this.options = options;
-		this.optionsOperandState = OperandState.SetAsValue;
-	}
-	
-	/**
-	 * Constructor with variable name for the options.
-	 * 
-	 * @param optionsVariable the variable that defines the selected options
-	 * @throws NullPointerException if the argument is null
-	 */
-	public ${argumentsName}(Variable optionsVariable) {
-		if (optionsVariable == null) {
-			throw new NullPointerException("optionsVariable argument cannot be null");
-		}
-		this.options = null;
-		this.operandToVariable.put("options", optionsVariable);
-		this.optionsOperandState = OperandState.SetAsVariable;
 	}
 	
 	/**
@@ -112,13 +91,8 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	 * an empty options set if no option has been selected.
 	 * 
 	 * @return set with the selected options
-	 * @throws IllegalStateException if options are defined as a variable which 
-	 * 		has not been resolved through {@link #getForContext(VariableContext)}.
 	 */
 	public ${optionsName} getOptions() {
-		if (optionsOperandState.isVariable()) {
-			throw createUnresolvedOperandVariableException("options");
-		}
 		return options;
 	}
 	<#else>
@@ -129,55 +103,43 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 		super();
 	}
 	</#if>
-	
 	<#if def.options?size != 0 || def.operands?size != 0>
+
 	/**
-	 * Returns an exception stating that the specified operand is defined as 
-	 * unresolved variable.
+	 * Constructor string arguments encoding options and arguments, possibly
+	 * also containing variable expressions. 
 	 * 
-	 * @param operandName the name of the operand
-	 * @return An IllegalStateException stating that the specified operand is 
-	 * 		defined as unresolved variable.  
+	 * @param args string arguments for the command
+	 * @throws NullPointerException if args is null
 	 */
-	private IllegalStateException createUnresolvedOperandVariableException(String operandName) {
-		final Variable variable = operandToVariable.get(operandName);
-		return new IllegalStateException("unresolved variable " + variable.getName() + " for the " + operandName + 
-				" operand of the ${commandName} command [hint: it can be resolved through getForContext(..)]");
+	public ${argumentsName}(String... args) {
+		this();
+		if (args == null) {
+			throw new NullPointerException("optionsVariable argument cannot be null");
+		}
+		this.args = args;
+		this.argsIsSet = true;
 	}
-	/**
-	 * Returns an exception stating that the specified operand is defined as 
-	 * typed variable and the conversion into the variable type failed. 
-	 * 
-	 * @param operandName the name of the operand
-	 * @return An IllegalStateException stating that the specified operand is 
-	 * 		defined as typed variable and the type conversion failed.  
-	 */
-	private IllegalStateException createOperandVariableConversionFailedException(String operandName, Class<?> operandType, Object value, Exception cause) {
-		final Variable variable = operandToVariable.get(operandName);
-		final String msg = "unsupported type conversion for variable " + variable.getName() + "=" + value + 
-				" for " + operandName + "operand of the ${commandName} command, operand type=" + operandType.getSimpleName() + 
-				" [hint: use typed variables with customized value converters]";
-		return cause == null ? new IllegalStateException(msg) : new IllegalStateException(msg, cause);
+
+	private String resolveVariable(VariableContext context, String variable) {
+		final Object value = context.getValue(variable);
+		return value == null ? "" : value.toString();
 	}
-	private <V> V resolveVariable(VariableContext context, String operandName, Variable variable, Class<V> operandType) {
-		final Object value;
-		if (variable instanceof TypedVariable) {
-			try {
-				value = context.getValue(variable.getName(), ((TypedVariable<?>)variable).getValueConverter());
-			} catch (IllegalArgumentException e) {
-				final Object unconverted = context.getValue(variable.getName());
-				throw createOperandVariableConversionFailedException(operandName, operandType, unconverted, e);
+	private String[] resolveVariables(VariableContext context, String... unresolved) {
+		final String[] resolved = new String[unresolved.length];
+		for (int i = 0; i < resolved.length; i++) {
+			final String expression = unresolved[i];
+			if (expression.startsWith("$")) {
+				resolved[i] = resolveVariable(context, expression);
+			} else {
+				resolved[i] = expression;
 			}
-		} else {
-			value = context.getValue(variable.getName());
 		}
-		if (value == null) {
-			throw createUnresolvedOperandVariableException(operandName);
-		}
-		if (operandType.isInstance(value)) {
-			return operandType.cast(value);
-		}
-		return null;
+		return resolved;
+	}
+	private <V> V convert(VariableContext context, String operandName, Class<V> operandType, List<String> value) {
+		//FIXME implement conversion
+		throw new RuntimeException("not implemented");
 	}
 	
 	</#if>
@@ -187,41 +149,46 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 		if (context == null) {
 			throw new NullPointerException("variable context cannot be null");
 		}
-		if (operandToVariable.isEmpty()) {
+		if (!argsIsSet) {
 			return this;
 		}
-		
-		<#if def.options?size != 0>
-		final ${argumentsName} argsForContext;
-		if (optionsOperandState.isVariable()) {
-			final Variable variable = operandToVariable.get("options");
-			final ${optionsName} options = resolveVariable(context, "options", variable, ${optionsName}.class);
-			argsForContext = new ${argumentsName}(options);
-		} else {
-			argsForContext = options != null ? new ${argumentsName}(options) : new ${argumentsName}(new DefaultVariable("options")); 
+		//check if there is at least one variable
+		boolean hasVariable = false;
+		for (final String arg : args) {
+			if (arg != null && arg.startsWith("$")) {
+				hasVariable = true;
+				break;
+			}
 		}
+		
+		//resolve variables
+		final String[] resolvedArgs = hasVariable ? resolveVariables(context, this.args) : this.args;
+		
+		//convert now
+		final Map<String, List<String>> map = ArgsUtil.parseArgs(resolvedArgs);
+		<#if def.options?size != 0>
+		final ${optionsName}.Default options = new ${optionsName}.Default();
+		final ${argumentsName} argsForContext = new ${argumentsName}(options);
 		<#else>
 		final ${argumentsName} argsForContext = new ${argumentsName}();
 		</#if>
-		
-		<#foreach operand in def.operands?values>
-		<#if !isOptions(operand) && operand.redirection?length == 0>
-		if (${operand.name}OperandState.isSet()) {
-			if (${operand.name}OperandState.isVariable()) {
-				final Variable variable = operandToVariable.get("${operand.name}");
+		for (final Map.Entry<String, List<String>> e : map.entrySet()) {
+			<#foreach operand in def.operands?values>
+			<#if operand_index != 0>} else </#if>if ("${operand.name}".equals(e.getKey())) {
 				<#if isGenericType(operand.type)>@SuppressWarnings("unchecked")</#if>
-				final ${normalizeVarArgType(operand.type, true)} value = resolveVariable(context, "${operand.name}", variable, ${typeClass(operand.type, true)});
-				if (value != null) {
-					argsForContext.${setter(operand)}(value);//resolved now
-				} else {
-					argsForContext.${setter(operand)}(variable);//still unresolved, exception only when value is accessed
-				}
+				final ${normalizeVarArgType(operand.type, false)} value = convert(context, "${operand.name}", ${typeClass(operand.type, true)}, e.getValue());  
+			<#if isOptions(operand)>
+				options.setAll(value);
+			<#elseif operand.redirection?length == 0>
+				argsForContext.${setter(operand)}(value);
+			<#else>
+				argsForContext.${operand.redirection?replace(r"${value}","value")};
+			</#if>
+			</#foreach>
 			} else {
-				argsForContext.${setter(operand)}(${operand.name});//a fixed value
+				throw new IllegalStateException("invalid operand '" + e.getKey() + "' in ${commandName} command args: " + Arrays.toString(args));
 			}
 		}
-		</#if>
-		</#foreach>
 		return argsForContext; 
 	}
 	
@@ -231,40 +198,26 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	 * Returns {@code <${operand.name}>}: ${operand.desc}
 	 * 
 	 * @return the {@code <${operand.name}>} operand value
-	 * @throws IllegalStateException if this argument has never been set
+	 * @throws IllegalStateException if this operand has never been set
 	 */
 	public ${normalizeVarArgType(operand.type, false)} ${getter(operand)}() {
-		switch (${operand.name}OperandState) {
-		case SetAsValue:
+		if (${operand.name}IsSet) {
 			return ${operand.name};
-		case SetAsVariable:
-			throw createUnresolvedOperandVariableException("${operand.name}");
-		case NotSet:
-			throw new IllegalStateException("argument has not been set: " + ${operand.name});
-		default:
-			//should never happen
-			throw new IllegalStateException("unknown operand state " + ${operand.name}OperandState + " for operand " + ${operand.name});
 		}
+		throw new IllegalStateException("operand has not been set: " + ${operand.name});
 	}
 
 	/**
 	 * Returns true if the {@code <${operand.name}>} operand has been set. 
 	 * <p>
-	 * The method returns true if the {@code <${operand.name}>} operand has been 
-	 * set to a fixed value or if it has been associated with a variable. In the
-	 * latter case, the {@link #${getter(operand)}()} method throws an exception
-	 * if the variable has not been resolved through 
-	 * {@link #getForContext(VariableContext)}.
-	 * <p>
 	 * Note that this method returns true if {@link #${setter(operand)}(${normalizeVarArgType(rawType(operand.type), false)})}
-	 * (also if null was passed to the method) or if the operand has been 
-	 * associated with a variable through {@link #${setter(operand)}(Variable)}. 
+	 * also if null was passed to the method. 
 	 * 
 	 * @return	true if the setter for the {@code <${operand.name}>} operand has 
 	 * 			been called at least once
 	 */
 	public boolean ${isset(operand)}() {
-		return ${operand.name}OperandState.isSet();
+		return ${operand.name}IsSet;
 	}
 	/**
 	 * Sets {@code <${operand.name}>}: ${operand.desc}
@@ -273,17 +226,7 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	 */
 	public void ${setter(operand)}(${operand.type} ${operand.name}) {
 		this.${operand.name} = ${operand.name};
-		this.${operand.name}OperandState = OperandState.SetAsValue;
-	}
-	/**
-	 * Associates {@code <${operand.name}>} with a variable: ${operand.desc}
-	 * 
-	 * @param ${operand.name}Variable the variable to be associated with the 
-	 * 		{@code <${operand.name}>} operand
-	 */
-	public void ${setter(operand)}(Variable ${operand.name}Variable) {
-		this.operandToVariable.put("${operand.name}", ${operand.name}Variable);
-		this.${operand.name}OperandState = OperandState.SetAsVariable;
+		this.${operand.name}IsSet = true;
 	}
 	</#if>
 	</#foreach>
@@ -306,40 +249,32 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	public String toString() {
 		// ok, we have options or arguments or both
 		final StringBuilder sb = new StringBuilder();
-		
-		<#if def.options?size != 0>
-		// first the options
-		if (optionsOperandState.isVariable()) {
-			final Variable variable = operandToVariable.get("options");
-			sb.append('{').append(variable.getName()).append('}');
+
+		<#if def.options?size != 0 || def.operands?size != 0>
+		if (argsIsSet) {
+			for (String arg : args) {
+				sb.append(arg);
+			}
 		} else {
+			<#if def.options?size != 0>
+			// first the options
 			if (options.size() > 0) {
 				sb.append(DefaultOptionSet.toString(options));
 			}
+			</#if>
+			<#foreach operand in def.operands?values>
+			<#if !isOptions(operand) && operand.redirection?length == 0>
+			// operand: <${operand.name}>
+			if (${operand.name}IsSet) {
+				if (sb.length() > 0) sb.append(' ');
+				sb.append("--").append("${operand.name}");
+				sb.append(" ").append(toString(${getter(operand)}()));
+			}
+			</#if>
+			</#foreach>
 		}
 		</#if>
-		<#foreach operand in def.operands?values>
-		<#if !isOptions(operand) && operand.redirection?length == 0>
-		// operand: <${operand.name}>
-		switch (${operand.name}OperandState) {
-		case SetAsValue: {
-			if (sb.length() > 0) sb.append(' ');
-			sb.append("--").append("${operand.name}");
-			sb.append(" ").append(toString(${getter(operand)}()));
-			break;
-		}
-		case SetAsVariable: {
-			final Variable variable = operandToVariable.get("options");
-			if (sb.length() > 0) sb.append(' ');
-			sb.append("--").append("${operand.name}");
-			sb.append(" {").append(variable.getName()).append('}');
-			break;
-		}
-		default:
-			//not set, nothing to do
-		}
-		</#if>
-		</#foreach>
+		
 		return sb.toString();
 	}
 	<#if hasTrueOperand>

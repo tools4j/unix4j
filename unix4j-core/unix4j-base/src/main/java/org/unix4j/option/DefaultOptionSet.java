@@ -4,24 +4,51 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Iterator;
 
+/**
+ * Default implementation of a modifiable option set. The option set is backed
+ * by an efficient {@link EnumSet}.
+ * 
+ * @param <E>
+ *            the option enum type
+ */
 public class DefaultOptionSet<E extends Enum<E> & Option> implements OptionSet<E>, Iterable<E>, Cloneable {
 
 	private final Class<E> optionType;
-	private EnumSet<E> options;
-	private EnumSet<E> useAcronym;
+	private EnumSet<E> options; // cannot be final because of clone
+	private EnumSet<E> useAcronym; // cannot be final because of clone
 
+	/**
+	 * Constructor for option set initialized with a single option.
+	 * 
+	 * @param option
+	 *            the option to be set
+	 */
 	public DefaultOptionSet(E option) {
 		this.optionType = option.getDeclaringClass();
 		this.options = EnumSet.of(option);
 		this.useAcronym = EnumSet.noneOf(optionType);
 	}
 
+	/**
+	 * Constructor for option set initialized with at least one active options.
+	 * 
+	 * @param first
+	 *            the first option to be set
+	 * @param rest
+	 *            the remaining options to be set
+	 */
 	public DefaultOptionSet(E first, E... rest) {
 		this.optionType = first.getDeclaringClass();
 		this.options = EnumSet.of(first, rest);
 		this.useAcronym = EnumSet.noneOf(optionType);
 	}
 
+	/**
+	 * Constructor for an empty option set with no active options.
+	 * 
+	 * @param optionType
+	 *            the option type class
+	 */
 	public DefaultOptionSet(Class<E> optionType) {
 		this.optionType = optionType;
 		this.options = EnumSet.noneOf(optionType);
@@ -33,71 +60,54 @@ public class DefaultOptionSet<E extends Enum<E> & Option> implements OptionSet<E
 	}
 
 	/**
-	 * Sets the specified {@code option} and returns this {@code OptionSet} for
-	 * following chained operations. This {@code OptionSet} is not altered if
-	 * the specified {@code option} was already set.
+	 * Sets the specified {@code option}.
 	 * 
 	 * @param option
 	 *            the option to set
-	 * @return this {@code OptionSet} for following chained operations
 	 */
-	public DefaultOptionSet<E> set(E option) {
+	public void set(E option) {
 		options.add(option);
-		return this;
 	}
 
 	/**
-	 * Sets all specified {@code options} and returns this {@code OptionSet} for
-	 * following chained operations. Only options that were not already set
-	 * before will alter this {@code OptionSet}.
+	 * Sets all specified {@code options}.
 	 * 
 	 * @param options
 	 *            the options to set
-	 * @return this {@code OptionSet} for following chained operations
 	 */
-	public DefaultOptionSet<E> setAll(E... options) {
+	public void setAll(E... options) {
 		for (int i = 0; i < options.length; i++) {
 			set(options[i]);
 		}
-		return this;
 	}
 
 	/**
-	 * Sets all specified {@code options} and returns this {@code OptionSet} for
-	 * following chained operations. Only options that were not already set
-	 * before will alter this {@code OptionSet}.
+	 * Sets all specified {@code options}.
 	 * 
 	 * @param options
 	 *            the options to set
-	 * @return this {@code OptionSet} for following chained operations
 	 */
-	public DefaultOptionSet<E> setAll(Collection<? extends E> options) {
+	public void setAll(Collection<? extends E> options) {
 		for (final E option : options) {
 			set(option);
 			setUseAcronymFor(option, false);
 		}
-		return this;
 	}
 
 	/**
-	 * Sets all the options contained in the specified {@code optionSet} and
-	 * returns this {@code OptionSet} for following chained operations. Only
-	 * options that were not already set before will alter this
-	 * {@code OptionSet}.
+	 * Sets all the options contained in the specified {@code optionSet}.
 	 * <p>
-	 * Note that also the {@link #useAcronymFor(Option)} flags are also 
+	 * Note that also the {@link #useAcronymFor(Option)} flags are also
 	 * inherited from the specified {@code optionSet}.
 	 * 
 	 * @param optionSet
 	 *            the optionSet with options to be set in this {@code OptionSet}
-	 * @return this {@code OptionSet} for following chained operations
 	 */
-	public DefaultOptionSet<E> setAll(OptionSet<E> optionSet) {
+	public void setAll(OptionSet<E> optionSet) {
 		options.addAll(optionSet.asSet());
 		for (E option : optionType.getEnumConstants()) {
 			setUseAcronymFor(option, optionSet.useAcronymFor(option));
 		}
-		return this;
 	}
 
 	@Override
@@ -134,10 +144,10 @@ public class DefaultOptionSet<E extends Enum<E> & Option> implements OptionSet<E
 	public EnumSet<E> asSet() {
 		return options;
 	}
-	
+
 	/**
-	 * Returns an iterator over all set options in this {@code OptionSet}. 
-	 * Removing an option from the 
+	 * Returns an iterator over all set options in this {@code OptionSet}.
+	 * Removing an option from the
 	 * 
 	 * @return an iterator over all set options
 	 */
@@ -174,10 +184,6 @@ public class DefaultOptionSet<E extends Enum<E> & Option> implements OptionSet<E
 		}
 	}
 
-	public OptionSet<E> copy() {
-		return clone();
-	}
-
 	@Override
 	public boolean useAcronymFor(E option) {
 		if (useAcronym.contains(option)) {
@@ -197,7 +203,7 @@ public class DefaultOptionSet<E extends Enum<E> & Option> implements OptionSet<E
 	 * @param useAcronym
 	 *            new flag value to set, true if the option acronym should be
 	 *            used for all options
-	 * @see #setUseAcronymFor(Enum, boolean)           
+	 * @see #setUseAcronymFor(Enum, boolean)
 	 */
 	public void setUseAcronymForAll(boolean useAcronym) {
 		if (useAcronym) {
@@ -231,9 +237,10 @@ public class DefaultOptionSet<E extends Enum<E> & Option> implements OptionSet<E
 	public String toString() {
 		return toString(this);
 	}
+
 	public static <O extends Option> String toString(OptionSet<O> optionSet) {
 		final StringBuilder sb = new StringBuilder();
-		//first, the options with acronym
+		// first, the options with acronym
 		for (final O opt : optionSet) {
 			if (optionSet.useAcronymFor(opt)) {
 				if (sb.length() == 0) {
@@ -242,7 +249,7 @@ public class DefaultOptionSet<E extends Enum<E> & Option> implements OptionSet<E
 				sb.append(opt.acronym());
 			}
 		}
-		//now all options with long names
+		// now all options with long names
 		for (final O opt : optionSet) {
 			if (!optionSet.useAcronymFor(opt)) {
 				if (sb.length() != 0) {
