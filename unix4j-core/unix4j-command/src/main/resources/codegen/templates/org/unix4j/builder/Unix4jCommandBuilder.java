@@ -47,16 +47,6 @@ public interface Unix4jCommandBuilder extends CommandBuilder,
 </#foreach>
 </#foreach>
 
-	/**
-	 * Returns a builder with extended support for use of variables when 
-	 * constructing commands. The returned builder inherits the command chain
-	 * from this builder. 
-	 * 
-	 * @return 	a builder with extended support for variable use when 
-	 * 			constructing commands
-	 */
-	Unix4jCommandBuilder4Vars withVariables();
-
 	//override with specialized return type
 	@Override
 	Unix4jCommandBuilder join(Command<?> command);

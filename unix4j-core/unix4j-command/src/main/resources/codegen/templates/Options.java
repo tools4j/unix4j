@@ -14,6 +14,7 @@ package ${def.pkg.name};
 import java.util.Collections;
 import java.util.Iterator;
 
+import org.unix4j.option.DefaultOptionSet;
 import org.unix4j.option.Option;
 import org.unix4j.option.OptionSet;
 
@@ -85,6 +86,32 @@ public interface ${simpleName} extends OptionSet<${optionName}> {
 			return true;
 		}
 	};
+	/**
+	 * Default implementation for a modifiable option set.
+	 */
+	class Default extends DefaultOptionSet<${optionName}> implements ${simpleName} {
+		/**
+		 * Default constructor for an empty option set with no active options.
+		 */
+		public Default() {
+			super(${optionName}.class);
+		}
+		/**
+		 * Constructor for an option set with a single active option.
+		 * @param option the option to be set
+		 */
+		public Default(${optionName} option) {
+			super(option);
+		}
+		/**
+		 * Constructor for an option set with the given active options.
+		 * @param options the options to be set
+		 */
+		public Default(${optionName}... options) {
+			this();
+			setAll(options);
+		}
+	}
 }
 </#if>
 </#list>

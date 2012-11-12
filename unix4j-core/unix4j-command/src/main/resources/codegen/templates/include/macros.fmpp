@@ -74,37 +74,6 @@
 	</#foreach>
 	<#return count>
 </#function>
-<#function varBaseName operand>
-	<#if operand.type?ends_with("...")>
-		<#local name=operand.type?substring(0, operand.type?length-3)+"s">
-	<#elseif operand.type?ends_with("[]")>
-		<#local name=operand.type?substring(0, operand.type?length-2)+"s">
-	<#else>
-		<#local name=operand.type>
-	</#if>
-	<#local name=rawType(name)>
-	<#local lastDot=name?last_index_of(".")>
-	<#return name?substring(lastDot+1)?cap_first>
-</#function>
-<#function varIfaceName operand>
-	<#return varBaseName(operand) + "Var">
-</#function>
-<#function varImplName operand>
-	<#return "Default" + varIfaceName(operand)>
-</#function>
-<#function varTypedName operand>
-	<#return "Typed" + varIfaceName(operand)>
-</#function>
-<#function isVar index isVarFlags>
-	<#return isVarFlags?substring(index, index+1)=="T">
-</#function>
-<#function fixedOrVarType def arg isVar>
-	<#if isVar>
-		<#return varIfaceName(def.operands[arg])>
-	<#else>
-		<#return def.operands[arg].type>
-	</#if>
-</#function>
 <#function indexOfOperandByType operands operand>
 	<#foreach opd in operands?values>
 		<#if opd.type == operand.type>

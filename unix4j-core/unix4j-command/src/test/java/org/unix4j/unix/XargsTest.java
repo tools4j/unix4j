@@ -34,7 +34,7 @@ public class XargsTest {
 	
 	@Test
 	public void testXargs() {
-		Unix4j.ls().xargs().withVariables().echo(Xarg.$strings).toStdOut();
+		Unix4j.ls().xargs().echo(Xarg.$argsarray).toStdOut();
 
 		expect("hello world");
 		expect("line one");
