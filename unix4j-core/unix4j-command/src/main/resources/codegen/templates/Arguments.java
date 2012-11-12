@@ -141,9 +141,8 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	 */
 	private IllegalStateException createUnresolvedOperandVariableException(String operandName) {
 		final Variable variable = operandToVariable.get(operandName);
-		return new IllegalStateException("unresolved variable " + 
-				variable.getName() + " defines the operand " + operandName + 
-				" [hint: it can be resolved through getForContext(..)]");
+		return new IllegalStateException("unresolved variable " + variable.getName() + " for the " + operandName + 
+				" operand of the ${commandName} command [hint: it can be resolved through getForContext(..)]");
 	}
 	/**
 	 * Returns an exception stating that the specified operand is defined as 
@@ -155,10 +154,8 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	 */
 	private IllegalStateException createOperandVariableConversionFailedException(String operandName, Class<?> operandType, Object value, Exception cause) {
 		final Variable variable = operandToVariable.get(operandName);
-		final String msg = "unsupported type conversion for variable " + 
-				variable.getName() + "=" + value + 
-				" for operand " + operandName + 
-				" of type " + operandType.getSimpleName() +
+		final String msg = "unsupported type conversion for variable " + variable.getName() + "=" + value + 
+				" for " + operandName + "operand of the ${commandName} command, operand type=" + operandType.getSimpleName() + 
 				" [hint: use typed variables with customized value converters]";
 		return cause == null ? new IllegalStateException(msg) : new IllegalStateException(msg, cause);
 	}
@@ -209,17 +206,19 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 		
 		<#foreach operand in def.operands?values>
 		<#if !isOptions(operand) && operand.redirection?length == 0>
-		if (${operand.name}OperandState.isVariable()) {
-			final Variable variable = operandToVariable.get("${operand.name}");
-			<#if isGenericType(operand.type)>@SuppressWarnings("unchecked")</#if>
-			final ${normalizeVarArgType(operand.type, true)} value = resolveVariable(context, "${operand.name}", variable, ${typeClass(operand.type, true)});
-			if (value != null) {
-				argsForContext.${setter(operand)}(value);//resolved now
+		if (${operand.name}OperandState.isSet()) {
+			if (${operand.name}OperandState.isVariable()) {
+				final Variable variable = operandToVariable.get("${operand.name}");
+				<#if isGenericType(operand.type)>@SuppressWarnings("unchecked")</#if>
+				final ${normalizeVarArgType(operand.type, true)} value = resolveVariable(context, "${operand.name}", variable, ${typeClass(operand.type, true)});
+				if (value != null) {
+					argsForContext.${setter(operand)}(value);//resolved now
+				} else {
+					argsForContext.${setter(operand)}(variable);//still unresolved, exception only when value is accessed
+				}
 			} else {
-				argsForContext.${setter(operand)}(variable);//still unresolved, exception only when value is accessed
+				argsForContext.${setter(operand)}(${operand.name});//a fixed value
 			}
-		} else {
-			argsForContext.${setter(operand)}(${operand.name});//a fixed value
 		}
 		</#if>
 		</#foreach>

@@ -2,6 +2,7 @@ package org.unix4j.unix.xargs;
 
 import org.unix4j.convert.StringArrayConverters;
 import org.unix4j.convert.StringConverters;
+import org.unix4j.convert.ValueConverter;
 import org.unix4j.vars.TypedStringVar;
 import org.unix4j.vars.TypedStringsVar;
 
@@ -16,8 +17,23 @@ public class Xarg {
 	public static final TypedStringVar $7 = argVar(7);
 	public static final TypedStringVar $8 = argVar(8);
 	public static final TypedStringVar $9 = argVar(9);
-	public static final TypedStringVar $string = new TypedStringVar(args(), StringConverters.DEFAULT);
-	public static final TypedStringsVar $strings = new TypedStringsVar(args(), StringArrayConverters.SPACE_DELIMITED);
+	public static final TypedStringsVar $strings = new TypedStringsVar(args(), StringArrayConverters.DEFAULT);
+	public static final TypedStringVar $string = new TypedStringVar(args(), new ValueConverter<String>() {
+		@Override
+		public String convert(Object value) {
+			if (value instanceof String[]) {
+				final StringBuilder args = new StringBuilder();
+				boolean space = false;
+				for (final String arg : (String[])value) {
+					if (space) args.append(' ');
+					args.append(arg);
+					space = arg == null || arg.length() > 0;
+				}
+				return args.toString();
+			}
+			return null;
+		}
+	});
 	
 	public static final String args() {
 		return "$*";
@@ -26,6 +42,6 @@ public class Xarg {
 		return "$" + index;
 	}
 	public static final TypedStringVar argVar(int index) {
-		return new TypedStringVar(arg(9), StringConverters.DEFAULT);
+		return new TypedStringVar(arg(index), StringConverters.DEFAULT);
 	}
 }
