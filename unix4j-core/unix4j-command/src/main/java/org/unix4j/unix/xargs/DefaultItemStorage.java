@@ -1,5 +1,6 @@
 package org.unix4j.unix.xargs;
 
+import org.unix4j.convert.StringConverters;
 import org.unix4j.variable.VariableContext;
 
 class DefaultItemStorage implements ItemStorage {
@@ -52,11 +53,21 @@ class DefaultItemStorage implements ItemStorage {
 	}
 	
 	private void invokeCommandAndClearAllItems() {
+		variables.setValue(Xarg.args(), getAllItems());
 		processor.invoke();
+		variables.setValue(Xarg.args(), null);//set null clears the variable
 		while (items > 0) {
 			items--;
 			variables.setValue(Xarg.arg(items), null);//set null clears the variable
 		}
+	}
+	
+	private String[] getAllItems() {
+		final String[] allItems = new String[items];
+		for (int i = 0; i < items; i++) {
+			allItems[i] = variables.getValue(Xarg.arg(i), StringConverters.DEFAULT);
+		}
+		return allItems;
 	}
 
 }
