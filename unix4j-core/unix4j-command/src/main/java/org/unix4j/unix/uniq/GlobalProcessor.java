@@ -3,7 +3,7 @@ package org.unix4j.unix.uniq;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.unix4j.command.ExecutionContext;
+import org.unix4j.context.ExecutionContext;
 import org.unix4j.line.Line;
 import org.unix4j.processor.LineProcessor;
 

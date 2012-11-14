@@ -1,12 +1,14 @@
-package org.unix4j.command;
+package org.unix4j.context;
 
 import java.io.File;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
-import org.unix4j.variable.StackableVariableContext;
-import org.unix4j.variable.VariableContext;
+import org.unix4j.convert.ConverterRegistry;
+import org.unix4j.convert.DefaultConverterRegistry;
+import org.unix4j.convert.ValueConverter;
+
 
 public class DefaultExecutionContext implements ExecutionContext {
 	private String user; 
@@ -15,6 +17,8 @@ public class DefaultExecutionContext implements ExecutionContext {
 	private File currentDirectory; 
 	private Locale locale;
 	private VariableContext variableContext = null;//lazy init
+	private ConverterRegistry converterRegistry = null;//lazy init
+	
 	public DefaultExecutionContext() {
 		this.currentDirectory = null;//default
 	}
@@ -77,4 +81,12 @@ public class DefaultExecutionContext implements ExecutionContext {
 		}
 		return variableContext;
 	}
+	@Override
+	public <V> ValueConverter<V> getValueConverterFor(Class<V> type) {
+		if (converterRegistry == null) {
+			converterRegistry = new DefaultConverterRegistry();
+		}
+		return converterRegistry.getValueConverterFor(type);
+	}
+	
 }

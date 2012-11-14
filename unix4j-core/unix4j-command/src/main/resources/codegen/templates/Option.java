@@ -34,6 +34,10 @@ public enum ${simpleName} implements Option, ${cmd.simpleName}Options {
 	private ${simpleName}(char acronym) {
 		this.acronym = acronym;
 	}
+	@Override
+	public Class<${simpleName}> optionType() {
+		return ${simpleName}.class;
+	}
 	/**
 	 * Returns the option with the given {@code acronym}, or {@code null} if no
 	 * such option is found.

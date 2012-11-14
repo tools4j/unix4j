@@ -1,6 +1,6 @@
 package org.unix4j.unix.xargs;
 
-import org.unix4j.variable.VariableContext;
+import org.unix4j.context.VariableContext;
 
 /**
  * Stores items found by an {@link Itemizer}. The items are usually stored in

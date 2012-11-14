@@ -103,6 +103,12 @@ public enum ${grpDef.simpleName} implements ${cmd.simpleName}Options {
 	public final ${optGroup.groupType.simpleName} ${opt.name};
 	</#foreach>
 	private final EnumSet<${optDef.simpleName}> options;
+	
+	//inherit javadoc
+	@Override
+	public Class<${optDef.simpleName}> optionType() {
+		return ${optDef.simpleName}.class;
+	}
 	//inherit javadoc
 	@Override
 	public boolean isSet(${optDef.simpleName} option) {

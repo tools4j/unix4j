@@ -1,4 +1,4 @@
-package org.unix4j.variable;
+package org.unix4j.context;
 
 import org.unix4j.convert.ValueConverter;
 

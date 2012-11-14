@@ -1,7 +1,7 @@
 package org.unix4j.unix.find;
 
 import org.unix4j.command.AbstractCommand;
-import org.unix4j.command.ExecutionContext;
+import org.unix4j.context.ExecutionContext;
 import org.unix4j.line.Line;
 import org.unix4j.line.SimpleLine;
 import org.unix4j.processor.LineProcessor;
@@ -35,7 +35,7 @@ class FindCommand extends AbstractCommand<FindArguments> {
 
 	@Override
 	public LineProcessor execute(final ExecutionContext context, final LineProcessor output) {
-		final FindArguments args = getArguments(context.getVariableContext());
+		final FindArguments args = getArguments(context);
 		final List<String> paths = getArgumentPaths(context, args);
 		return new LineProcessor() {
 			@Override

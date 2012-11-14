@@ -1,6 +1,6 @@
 package org.unix4j.command;
 
-import org.unix4j.variable.VariableContext;
+import org.unix4j.context.ExecutionContext;
 
 
 /**
@@ -36,7 +36,7 @@ abstract public class AbstractCommand<A extends Arguments<A>> implements Command
 	}
 
 	@Override
-	public A getArguments(VariableContext context) {
+	public A getArguments(ExecutionContext context) {
 		return context == null ? arguments : arguments.getForContext(context);
 	}
 

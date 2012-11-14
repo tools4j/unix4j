@@ -2,7 +2,7 @@ package org.unix4j.processor;
 
 import org.unix4j.command.Arguments;
 import org.unix4j.command.Command;
-import org.unix4j.command.ExecutionContext;
+import org.unix4j.context.ExecutionContext;
 
 /**
  * Abstract base implementation for {@link LineProcessor} returned by the
@@ -50,14 +50,14 @@ abstract public class AbstractLineProcessor<A extends Arguments<A>> implements L
 
 	/**
 	 * Returns the command arguments for the current variable context. This 
-	 * method caches the result of <br>
-	 * {@code getCommand().getArguments(getContext().getVariableContext())}.
+	 * method returns and caches the result of <br>
+	 * {@code getCommand().getArguments(getContext())}.
 	 * 
 	 * @return the command arguments for the current variable context
 	 */
 	protected A getArguments() {
 		if (arguments == null) {
-			arguments = getCommand().getArguments(getContext().getVariableContext());
+			arguments = getCommand().getArguments(getContext());
 		}
 		return arguments;
 	}

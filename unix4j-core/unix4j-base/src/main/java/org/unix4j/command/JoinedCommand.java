@@ -1,7 +1,7 @@
 package org.unix4j.command;
 
+import org.unix4j.context.ExecutionContext;
 import org.unix4j.processor.LineProcessor;
-import org.unix4j.variable.VariableContext;
 
 /**
  * A composite command joining two commands. The output of the
@@ -70,7 +70,7 @@ public class JoinedCommand<A extends Arguments<A>> implements Command<A> {
 	}
 
 	@Override
-	public A getArguments(VariableContext context) {
+	public A getArguments(ExecutionContext context) {
 		return getFirst().getArguments(context);
 	}
 

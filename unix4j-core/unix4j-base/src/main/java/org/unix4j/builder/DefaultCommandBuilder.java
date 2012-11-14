@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.unix4j.command.Command;
-import org.unix4j.command.DefaultExecutionContext;
 import org.unix4j.command.ExitValueException;
 import org.unix4j.command.NoOp;
+import org.unix4j.context.DefaultExecutionContext;
 import org.unix4j.io.BufferedOutput;
 import org.unix4j.io.FileOutput;
 import org.unix4j.io.NullOutput;

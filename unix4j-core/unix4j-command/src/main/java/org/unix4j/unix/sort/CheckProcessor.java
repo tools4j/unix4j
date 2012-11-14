@@ -1,7 +1,7 @@
 package org.unix4j.unix.sort;
 
-import org.unix4j.command.ExecutionContext;
 import org.unix4j.command.ExitValueException;
+import org.unix4j.context.ExecutionContext;
 import org.unix4j.line.Line;
 import org.unix4j.processor.LineProcessor;
 

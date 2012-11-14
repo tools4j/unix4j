@@ -39,6 +39,10 @@ public interface ${simpleName} extends OptionSet<${optionName}> {
 	 */
 	${simpleName} EMPTY = new ${simpleName}() {
 		@Override
+		public Class<${optionName}> optionType() {
+			return ${optionName}.class;
+		}
+		@Override
 		public boolean isSet(${optionName} option) {
 			return false;
 		}

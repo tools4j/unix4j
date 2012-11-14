@@ -12,6 +12,11 @@ import java.util.Set;
  */
 public interface OptionSet<O extends Option> extends Iterable<O> {
 	/**
+	 * Returns the option type class, usually an enum.
+	 * @return the option type
+	 */
+	Class<O> optionType();
+	/**
 	 * Returns true if the specified {@code option} is set and false otherwise
 	 * 
 	 * @param option

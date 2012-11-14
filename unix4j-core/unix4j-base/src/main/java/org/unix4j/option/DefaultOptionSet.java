@@ -55,6 +55,7 @@ public class DefaultOptionSet<E extends Enum<E> & Option> implements OptionSet<E
 		this.useAcronym = EnumSet.noneOf(optionType);
 	}
 
+	@Override
 	public Class<E> optionType() {
 		return optionType;
 	}

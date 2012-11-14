@@ -1,6 +1,8 @@
 package org.unix4j.command;
 
-import org.unix4j.variable.VariableContext;
+import org.unix4j.context.ExecutionContext;
+import org.unix4j.context.VariableContext;
+import org.unix4j.convert.ValueConverter;
 
 /**
  * Interface implemented by command arguments. Arguments is usually a container
@@ -13,20 +15,32 @@ import org.unix4j.variable.VariableContext;
  */
 public interface Arguments<A extends Arguments<A>> {
 	/**
-	 * Returns an arguments object with resolved variables where this is
-	 * possible in the given variable context.
+	 * Returns an arguments object for the given execution context with resolved
+	 * variables if necessary and possible. If variables are defined in this
+	 * arguments instance, a new arguments instance is created with values
+	 * instead of variables for those variables that are defined in the
+	 * specified context object. If this arguments instance uses no variables,
+	 * {@code this} arguments instance is simply returned.
 	 * <p>
-	 * The returned value is the same instance as the current arguments object
-	 * if no variables are used to define argument values. If variables are used 
-	 * to define argument values, the returned arguments object is a derivative 
-	 * of this instance where all variables defined in {@code context} have 
-	 * been resolved.
+	 * If variables are present, they are resolved if such a variable is defined
+	 * in the {@link VariableContext} returned by 
+	 * {@code context.}{@link ExecutionContext#getVariableContext() getVariableContext()}.
+	 * Values are converted if necessary with the {@link ValueConverter}s
+	 * returned by 
+	 * {@code context.}{@link ExecutionContext#getValueConverterFor(Class)
+	 * getValueConverterFor(Class)}.
 	 * 
 	 * @param context
-	 *            the variable context with values for the variables
+	 *            the execution context providing access to variables and
+	 *            converters
 	 * @return an arguments object with resolved variables where possible
+	 * @throws NullPointerException
+	 *             if context is null
+	 * @throws IllegalArgumentException
+	 *             if variables are defined but cannot be converted into the
+	 *             target type
 	 */
-	A getForContext(VariableContext context);
+	A getForContext(ExecutionContext context);
 
 	/**
 	 * Returns a string representation of the command arguments and options.

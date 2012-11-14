@@ -2,7 +2,7 @@ package org.unix4j.unix.tail;
 
 import java.util.LinkedList;
 
-import org.unix4j.command.ExecutionContext;
+import org.unix4j.context.ExecutionContext;
 import org.unix4j.line.Line;
 import org.unix4j.line.SimpleLine;
 import org.unix4j.processor.LineProcessor;

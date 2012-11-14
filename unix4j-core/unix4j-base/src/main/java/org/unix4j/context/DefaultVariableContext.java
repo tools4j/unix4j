@@ -1,10 +1,14 @@
-package org.unix4j.variable;
+package org.unix4j.context;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.unix4j.convert.ValueConverter;
 
+/**
+ * Default implementation of a {@link VariableContext} backed by a 
+ * {@link LinkedHashMap} to store the variable values.
+ */
 public class DefaultVariableContext implements VariableContext {
 	
 	private final Map<String, Object> variables = new LinkedHashMap<String, Object>();

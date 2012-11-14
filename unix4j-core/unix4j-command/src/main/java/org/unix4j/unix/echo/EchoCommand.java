@@ -1,7 +1,7 @@
 package org.unix4j.unix.echo;
 
 import org.unix4j.command.AbstractCommand;
-import org.unix4j.command.ExecutionContext;
+import org.unix4j.context.ExecutionContext;
 import org.unix4j.line.Line;
 import org.unix4j.line.SimpleLine;
 import org.unix4j.processor.LineProcessor;
@@ -17,7 +17,7 @@ class EchoCommand extends AbstractCommand<EchoArguments> {
 
 	@Override
 	public LineProcessor execute(ExecutionContext context, final LineProcessor output) {
-		final EchoArguments args = getArguments(context.getVariableContext());
+		final EchoArguments args = getArguments(context);
 		return new LineProcessor() {
 			@Override
 			public boolean processLine(Line line) {

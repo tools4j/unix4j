@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.unix4j.command.AbstractCommand;
-import org.unix4j.command.ExecutionContext;
+import org.unix4j.context.ExecutionContext;
 import org.unix4j.io.FileInput;
 import org.unix4j.io.Input;
 import org.unix4j.processor.DefaultInputProcessor;
@@ -27,7 +27,7 @@ class SortCommand extends AbstractCommand<SortArguments> {
 
 	@Override
 	public LineProcessor execute(ExecutionContext context, LineProcessor output) {
-		final SortArguments args = getArguments(context.getVariableContext());
+		final SortArguments args = getArguments(context);
 		
 		if (args.isMerge()) {
 			return getMergeProcessor(context, output, args);

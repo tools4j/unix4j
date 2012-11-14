@@ -1,6 +1,6 @@
 package org.unix4j.unix.grep;
 
-import org.unix4j.command.ExecutionContext;
+import org.unix4j.context.ExecutionContext;
 import org.unix4j.line.Line;
 import org.unix4j.processor.AbstractLineProcessor;
 import org.unix4j.processor.LineProcessor;

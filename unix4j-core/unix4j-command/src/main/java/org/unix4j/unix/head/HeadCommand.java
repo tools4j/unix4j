@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.List;
 
 import org.unix4j.command.AbstractCommand;
-import org.unix4j.command.ExecutionContext;
+import org.unix4j.context.ExecutionContext;
 import org.unix4j.io.FileInput;
 import org.unix4j.io.Input;
 import org.unix4j.line.Line;
@@ -30,7 +30,7 @@ class HeadCommand extends AbstractCommand<HeadArguments> {
 
 	@Override
 	public LineProcessor execute(ExecutionContext context, final LineProcessor output) {
-		final HeadArguments args = getArguments(context.getVariableContext());
+		final HeadArguments args = getArguments(context);
 		
 		//input from file(s)?
 		if (args.isFilesSet()) {
