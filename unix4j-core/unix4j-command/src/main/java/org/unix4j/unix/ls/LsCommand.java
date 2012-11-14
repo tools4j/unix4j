@@ -8,7 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.unix4j.command.AbstractCommand;
-import org.unix4j.command.ExecutionContext;
+import org.unix4j.context.ExecutionContext;
 import org.unix4j.line.Line;
 import org.unix4j.processor.LineProcessor;
 import org.unix4j.unix.Ls;
@@ -57,7 +57,7 @@ class LsCommand extends AbstractCommand<LsArguments> {
 	
 	@Override
 	public LineProcessor execute(final ExecutionContext context, final LineProcessor output) {
-		final LsArguments args = getArguments(context.getVariableContext());
+		final LsArguments args = getArguments(context);
 		final List<File> files = getArgumentFiles(context, args);
 		return new LineProcessor() {
 			@Override

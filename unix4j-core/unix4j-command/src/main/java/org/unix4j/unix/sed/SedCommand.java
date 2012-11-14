@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.unix4j.command.AbstractCommand;
-import org.unix4j.command.ExecutionContext;
+import org.unix4j.context.ExecutionContext;
 import org.unix4j.line.Line;
 import org.unix4j.line.SimpleLine;
 import org.unix4j.processor.LineProcessor;
@@ -23,7 +23,7 @@ class SedCommand extends AbstractCommand<SedArguments> {
 
 	@Override
 	public LineProcessor execute(ExecutionContext context, final LineProcessor output) {
-		final SedArguments args = getArguments(context.getVariableContext());
+		final SedArguments args = getArguments(context);
 		final String SED_REGEX = "s/(.*?)(?<!\\\\)/(.*?)(?<!\\\\)/(g)?";
 		final Pattern pattern = Pattern.compile(SED_REGEX);
 		final String script = args.getScript();

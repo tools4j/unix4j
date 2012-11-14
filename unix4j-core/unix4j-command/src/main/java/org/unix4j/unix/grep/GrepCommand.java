@@ -1,7 +1,7 @@
 package org.unix4j.unix.grep;
 
 import org.unix4j.command.AbstractCommand;
-import org.unix4j.command.ExecutionContext;
+import org.unix4j.context.ExecutionContext;
 import org.unix4j.io.FileInput;
 import org.unix4j.processor.InputProcessor;
 import org.unix4j.processor.LineProcessor;
@@ -23,7 +23,7 @@ class GrepCommand extends AbstractCommand<GrepArguments> {
 
 	@Override
 	public LineProcessor execute(ExecutionContext context, LineProcessor output) {
-		final GrepArguments args = getArguments(context.getVariableContext());
+		final GrepArguments args = getArguments(context);
 
 		//from file?
 		if (args.isFilesSet()) {

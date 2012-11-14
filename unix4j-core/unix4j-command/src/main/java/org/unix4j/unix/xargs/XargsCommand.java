@@ -2,7 +2,7 @@ package org.unix4j.unix.xargs;
 
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.Command;
-import org.unix4j.command.ExecutionContext;
+import org.unix4j.context.ExecutionContext;
 import org.unix4j.processor.LineProcessor;
 import org.unix4j.unix.Echo;
 import org.unix4j.unix.Find;

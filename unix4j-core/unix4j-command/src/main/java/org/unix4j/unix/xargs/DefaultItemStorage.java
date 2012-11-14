@@ -1,7 +1,7 @@
 package org.unix4j.unix.xargs;
 
+import org.unix4j.context.VariableContext;
 import org.unix4j.convert.StringConverters;
-import org.unix4j.variable.VariableContext;
 
 class DefaultItemStorage implements ItemStorage {
 	

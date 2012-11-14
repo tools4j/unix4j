@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.List;
 
 import org.unix4j.command.AbstractCommand;
-import org.unix4j.command.ExecutionContext;
+import org.unix4j.context.ExecutionContext;
 import org.unix4j.io.FileInput;
 import org.unix4j.processor.LineProcessor;
 import org.unix4j.processor.RedirectInputLineProcessor;
@@ -21,7 +21,7 @@ class CatCommand extends AbstractCommand<CatArguments> {
 
 	@Override
 	public LineProcessor execute(ExecutionContext context, final LineProcessor output) {
-		final CatArguments args = getArguments(context.getVariableContext());
+		final CatArguments args = getArguments(context);
 
 		// input from files?
 		if (args.isFilesSet()) {

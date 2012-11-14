@@ -1,12 +1,13 @@
-package org.unix4j.command;
+package org.unix4j.context;
 
 import java.io.File;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
+import org.unix4j.command.Command;
+import org.unix4j.convert.ValueConverter;
 import org.unix4j.processor.LineProcessor;
-import org.unix4j.variable.VariableContext;
 
 /**
  * The execution context encapsulates all information relevant during the
@@ -31,4 +32,6 @@ public interface ExecutionContext {
 	Properties getSys();
 
 	VariableContext getVariableContext();
+	
+	<V> ValueConverter<V> getValueConverterFor(Class<V> type);
 }

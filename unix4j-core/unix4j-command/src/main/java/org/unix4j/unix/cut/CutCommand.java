@@ -1,7 +1,7 @@
 package org.unix4j.unix.cut;
 
 import org.unix4j.command.AbstractCommand;
-import org.unix4j.command.ExecutionContext;
+import org.unix4j.context.ExecutionContext;
 import org.unix4j.line.Line;
 import org.unix4j.line.SimpleLine;
 import org.unix4j.processor.LineProcessor;
@@ -19,7 +19,7 @@ class CutCommand extends AbstractCommand<CutArguments> {
 
 	@Override
 	public LineProcessor execute(ExecutionContext context, final LineProcessor output) {
-		final CutArguments args = getArguments(context.getVariableContext());
+		final CutArguments args = getArguments(context);
 		//If indexes were specified as an int array, convert to a proper range object
 		if(args.isIndexesSet() && args.isRangeSet()){
 			throw new IllegalArgumentException("Only one of indexes or range can be set");

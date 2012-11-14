@@ -16,7 +16,9 @@ import java.util.Map;
 import java.util.Arrays;
 
 import org.unix4j.command.Arguments;
-import org.unix4j.variable.VariableContext;
+import org.unix4j.context.ExecutionContext;
+import org.unix4j.context.VariableContext;
+import org.unix4j.convert.ValueConverter;
 <#if def.options?size != 0>
 import org.unix4j.option.DefaultOptionSet;
 </#if>
@@ -137,17 +139,33 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 		}
 		return resolved;
 	}
-	private <V> V convert(VariableContext context, String operandName, Class<V> operandType, List<String> value) {
-		//FIXME implement conversion
-		throw new RuntimeException("not implemented");
+	private <V> V convert(ExecutionContext context, String operandName, Class<V> operandType, Object value) {
+		if (operandType.isInstance(value)) {
+			return operandType.cast(value);
+		}
+		final ValueConverter<V> converter = context.getValueConverterFor(operandType);
+		if (converter != null) {
+			return converter.convert(value);
+		}
+		throw new IllegalArgumentException("cannot convert --" + operandName + 
+				" value '" + value + "' into the type " + operandType.getName() + 
+				" for ${commandName} command");
+	}
+		
+	private <V> V convertList(ExecutionContext context, String operandName, Class<V> operandType, List<String> values) {
+		if (values.size() == 1) {
+			final String value = values.get(0);
+			return convert(context, operandName, operandType, value);
+		}
+		return convert(context, operandName, operandType, values);
 	}
 	
 	</#if>
 	
 	@Override
-	public ${argumentsName} getForContext(VariableContext context) {
+	public ${argumentsName} getForContext(ExecutionContext context) {
 		if (context == null) {
-			throw new NullPointerException("variable context cannot be null");
+			throw new NullPointerException("context cannot be null");
 		}
 		if (!argsIsSet) {
 			return this;
@@ -162,7 +180,7 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 		}
 		
 		//resolve variables
-		final String[] resolvedArgs = hasVariable ? resolveVariables(context, this.args) : this.args;
+		final String[] resolvedArgs = hasVariable ? resolveVariables(context.getVariableContext(), this.args) : this.args;
 		
 		//convert now
 		final Map<String, List<String>> map = ArgsUtil.parseArgs(resolvedArgs);
@@ -176,7 +194,7 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 			<#foreach operand in def.operands?values>
 			<#if operand_index != 0>} else </#if>if ("${operand.name}".equals(e.getKey())) {
 				<#if isGenericType(operand.type)>@SuppressWarnings("unchecked")</#if>
-				final ${normalizeVarArgType(operand.type, false)} value = convert(context, "${operand.name}", ${typeClass(operand.type, true)}, e.getValue());  
+				final ${normalizeVarArgType(operand.type, false)} value = convertList(context, "${operand.name}", ${typeClass(operand.type, true)}, e.getValue());  
 			<#if isOptions(operand)>
 				options.setAll(value);
 			<#elseif operand.redirection?length == 0>

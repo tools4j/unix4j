@@ -1,7 +1,7 @@
 package org.unix4j.unix.from;
 
 import org.unix4j.command.AbstractCommand;
-import org.unix4j.command.ExecutionContext;
+import org.unix4j.context.ExecutionContext;
 import org.unix4j.io.Input;
 import org.unix4j.line.Line;
 import org.unix4j.processor.LineProcessor;
@@ -18,7 +18,7 @@ class FromCommand extends AbstractCommand<FromArguments> {
 
 	@Override
 	public LineProcessor execute(ExecutionContext context, final LineProcessor output) {
-		final Input input = getArguments(context.getVariableContext()).getInput();
+		final Input input = getArguments(context).getInput();
 		return new LineProcessor() {
 			@Override
 			public boolean processLine(Line line) {
