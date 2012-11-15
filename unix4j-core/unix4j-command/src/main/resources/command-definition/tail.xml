@@ -87,7 +87,7 @@
 			{@code tail -s 1} prints the whole file. 
 		</option>
 	</options>
-	<operands>
+	<operands default="paths">
 		<operand name="count" type="long">
 			The last {@code count} lines of each input file are
 			copied to standard output, starting from 1 (characters instead of 

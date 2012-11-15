@@ -76,8 +76,8 @@
 			Executes a count of chars and writes this count to the output.
 		</option>
 	</options>
-	<operands>
-		<operand name="paths" type="String...">
+	<operands default="paths">
+		<operand name="paths" type="String[]">
 			Pathnames of the input files; wildcards * and ? are supported.
 		</operand>
 		<operand name="files" type="java.io.File...">

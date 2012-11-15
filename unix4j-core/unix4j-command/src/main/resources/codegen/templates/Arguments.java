@@ -183,7 +183,7 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 		final String[] resolvedArgs = hasVariable ? resolveVariables(context.getVariableContext(), this.args) : this.args;
 		
 		//convert now
-		final Map<String, List<String>> map = ArgsUtil.parseArgs(resolvedArgs);
+		final Map<String, List<String>> map = ArgsUtil.parseArgs("options", "${def.defaultOperand}", resolvedArgs);
 		<#if def.options?size != 0>
 		final ${optionsName}.Default options = new ${optionsName}.Default();
 		final ${argumentsName} argsForContext = new ${argumentsName}(options);

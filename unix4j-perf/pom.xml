@@ -5,23 +5,24 @@
 	<parent>
 		<groupId>org.unix4j</groupId>
 		<artifactId>unix4j</artifactId>
-		<version>0.1.SNAPSHOT</version>
+		<version>0.2.SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.unix4j</groupId>
 	<artifactId>unix4j-perf</artifactId>
-	<version>0.1</version>
+	<version>${project.parent.version}</version>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.unix4j</groupId>
 			<artifactId>unix4j-base</artifactId>
-			<version>0.1</version>
+			<version>${project.parent.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.unix4j</groupId>
 			<artifactId>unix4j-command</artifactId>
-			<version>0.1</version>
+			<version>${project.parent.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

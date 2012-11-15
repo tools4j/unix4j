@@ -57,7 +57,7 @@
 			single spaced.
 		</option>
 	</options>
-	<operands>
+	<operands default="paths">
 		<operand name="files" type="java.io.File...">
 			The input files to be printed.
 		</operand>

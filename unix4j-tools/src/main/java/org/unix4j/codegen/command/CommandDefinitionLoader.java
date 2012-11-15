@@ -39,7 +39,7 @@ public class CommandDefinitionLoader {
 	}
 	private static enum XmlAttribtue {
 		class_, package_, ref, 
-		name, args, usesStandardInput, acronym, type, 
+		name, args, usesStandardInput, acronym, type, _default,
 		exclusiveGroup, enabledBy, redirection
 	}
 	public CommandDef load(URL commandDefinition) {
@@ -143,6 +143,8 @@ public class CommandDefinitionLoader {
 	private void loadOperands(CommandDef def, Element elCommand) {
 		final Element elOperands = XmlUtil.getSingleChildElement(elCommand, XmlElement.operands);
 		final List<Element> list = XmlUtil.getChildElements(elOperands, XmlElement.operand);
+		def.defaultOperand = XmlUtil.getRequiredAttribute(elOperands, XmlAttribtue._default);
+		boolean defaultOperandExists = false;
 		for (final Element elOperand : list) {
 			final String name = XmlUtil.getRequiredAttribute(elOperand, XmlAttribtue.name);
 			final String type = XmlUtil.getRequiredAttribute(elOperand, XmlAttribtue.type);
@@ -150,6 +152,10 @@ public class CommandDefinitionLoader {
 			final String redirection = XmlUtil.getAttribute(elOperand, XmlAttribtue.redirection, "");
 			final OperandDef opDef = new OperandDef(name, type, desc, redirection);
 			def.operands.put(name, opDef);
+			defaultOperandExists |= def.defaultOperand.equals(name);
+		}
+		if (!defaultOperandExists) {
+			throw new IllegalArgumentException("default operand '" + def.defaultOperand + "' is not defined for command " + elCommand.getNodeName());
 		}
 	}
 

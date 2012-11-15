@@ -66,7 +66,7 @@
 		</method>
 	</methods>
 	<options/>
-	<operands>
+	<operands default="path">
 		<operand name="string" type="String" redirection="setInput(new org.unix4j.io.StringInput(${value}))">
 			the string to use as input  
 		</operand>

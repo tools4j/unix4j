@@ -15,7 +15,7 @@
 		</method>
 	</methods>
 	<options/>
-	<operands>
+	<operands default="script">
 		<operand name="script" type="String">
 			Sed script
 		</operand>

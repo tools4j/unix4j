@@ -96,7 +96,7 @@
 			input lines are not sorted.
 		</option>
 	</options>
-	<operands>
+	<operands default="path">
 		<operand name="file" type="java.io.File">
 			The files or directories used as starting point for the listing.		
 		</operand>

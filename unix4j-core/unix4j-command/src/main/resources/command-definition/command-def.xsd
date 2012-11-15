@@ -1,84 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="http://www.unix4j.org/command-def" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.unix4j.org/command-def">
-  <xs:element name="command-def">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="command"/>
-        <xs:element ref="name"/>
-        <xs:element ref="synopsis"/>
-        <xs:element ref="description"/>
-        <xs:element ref="notes"/>
-        <xs:element ref="methods"/>
-        <xs:element ref="options"/>
-        <xs:element ref="operands"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="command">
-    <xs:complexType>
-      <xs:attribute name="name" use="required" type="xs:NCName"/>
-      <xs:attribute name="class" use="required" type="xs:NCName"/>
-      <xs:attribute name="package" use="required" type="xs:NCName"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="name" type="xs:string"/>
-  <xs:element name="synopsis" type="xs:string"/>
-  <xs:element name="description">
-    <xs:complexType>
-      <xs:attribute name="ref" use="required" type="xs:NCName"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="notes">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" maxOccurs="unbounded" ref="note"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="note">
-    <xs:complexType mixed="true"/>
-  </xs:element>
-  <xs:element name="methods">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="1" maxOccurs="unbounded" ref="method"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="method">
-    <xs:complexType mixed="true">
-      <xs:attribute name="name" type="xs:NCName"/>
-      <xs:attribute name="args" type="xs:string"/>
-      <xs:attribute name="usesStandardInput" type="xs:boolean" use="required"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="options">
-    <xs:complexType mixed="true">
-      <xs:sequence>
-        <xs:element minOccurs="0" maxOccurs="unbounded" ref="option"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="option">
-    <xs:complexType mixed="true">
-      <xs:attribute name="acronym" use="required" type="xs:NCName"/>
-      <xs:attribute name="exclusiveGroup" type="xs:NCName"/>
-      <xs:attribute name="enabledBy" type="xs:string"/>
-      <xs:attribute name="name" use="required" type="xs:NCName"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="operands">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" maxOccurs="unbounded" ref="operand"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="operand">
-    <xs:complexType mixed="true">
-      <xs:attribute name="name" use="required" type="xs:NCName"/>
-      <xs:attribute name="type" use="required" type="xs:string"/>
-      <xs:attribute name="redirection" type="xs:string"/>
-    </xs:complexType>
-  </xs:element>
+<xs:schema xmlns="http://www.unix4j.org/command-def" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified" targetNamespace="http://www.unix4j.org/command-def">
+	<xs:element name="command-def">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="command" />
+				<xs:element ref="name" />
+				<xs:element ref="synopsis" />
+				<xs:element ref="description" />
+				<xs:element ref="notes" />
+				<xs:element ref="methods" />
+				<xs:element ref="options" />
+				<xs:element ref="operands" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="command">
+		<xs:complexType>
+			<xs:attribute name="name" use="required" type="xs:NCName" />
+			<xs:attribute name="class" use="required" type="xs:NCName" />
+			<xs:attribute name="package" use="required" type="xs:NCName" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="name" type="xs:string" />
+	<xs:element name="synopsis" type="xs:string" />
+	<xs:element name="description">
+		<xs:complexType>
+			<xs:attribute name="ref" use="required" type="xs:NCName" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="notes">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="note" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="note">
+		<xs:complexType mixed="true" />
+	</xs:element>
+	<xs:element name="methods">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="1" maxOccurs="unbounded" ref="method" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="method">
+		<xs:complexType mixed="true">
+			<xs:attribute name="name" type="xs:NCName" />
+			<xs:attribute name="args" type="xs:string" />
+			<xs:attribute name="usesStandardInput" type="xs:boolean" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="options">
+		<xs:complexType mixed="true">
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="option" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="option">
+		<xs:complexType mixed="true">
+			<xs:attribute name="acronym" use="required" type="xs:NCName" />
+			<xs:attribute name="exclusiveGroup" type="xs:NCName" />
+			<xs:attribute name="enabledBy" type="xs:string" />
+			<xs:attribute name="name" use="required" type="xs:NCName" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="operands">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="unbounded" ref="operand" />
+			</xs:sequence>
+			<xs:attribute name="default" use="required" type="xs:NCName" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="operand">
+		<xs:complexType mixed="true">
+			<xs:attribute name="name" use="required" type="xs:NCName" />
+			<xs:attribute name="type" use="required" type="xs:string" />
+			<xs:attribute name="redirection" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
 </xs:schema>
