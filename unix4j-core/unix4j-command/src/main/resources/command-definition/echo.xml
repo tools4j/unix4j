@@ -39,11 +39,11 @@
 			Do not print the trailing newline character(s).
 		</option>
 	</options>
-	<operands>
+	<operands default="strings">
 		<operand name="string" type="String">
 			A string to be written to standard output.		
 		</operand>
-		<operand name="strings" type="String...">
+		<operand name="strings" type="String[]">
 			Strings to be written to standard output, separated by single blank 
 			characters.	
 		</operand>

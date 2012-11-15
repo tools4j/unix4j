@@ -206,7 +206,7 @@
 			it.
  		</option>
 	</options>
-	<operands>
+	<operands default="maxArgs">
 		<operand name="delimiter" type="String">
 			Input items are terminated by the specified characters.
 		</operand>

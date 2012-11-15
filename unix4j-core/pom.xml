@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>org.unix4j</groupId>
 		<artifactId>unix4j</artifactId>
-		<version>0.1.SNAPSHOT</version>
+		<version>0.2.SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.unix4j</groupId>
 	<artifactId>unix4j-core</artifactId>
-	<version>0.1</version>
+	<version>${project.parent.version}</version>
 	<packaging>pom</packaging>
 
 	<modules>

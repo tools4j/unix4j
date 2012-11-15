@@ -81,7 +81,7 @@
 			examined.
 		</option>
 	</options>
-	<operands>
+	<operands default="paths">
 		<operand name="count" type="long">
 			The first {@code count} lines of each input file are
 			copied to standard output, starting from 1 (characters instead of 

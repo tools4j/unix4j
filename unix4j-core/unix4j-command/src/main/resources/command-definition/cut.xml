@@ -45,7 +45,7 @@
 			separated by a single occurrence of the field delimiter character.
 		</option>
 	</options>
-	<operands>
+	<operands default="range">
 		<operand name="delimiter" type="String">
 			use as the output delimiter the default is to use the input delimiter
 		</operand>

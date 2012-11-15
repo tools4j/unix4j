@@ -103,7 +103,7 @@
 			excluding the terminating line ending.
 		</option>
 	</options>
-	<operands>
+	<operands default="paths">
 		<operand name="patternStr" type="String">
 			Lines will be printed which match the given pattern
 		</operand>

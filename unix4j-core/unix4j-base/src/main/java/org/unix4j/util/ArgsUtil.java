@@ -11,28 +11,25 @@ import java.util.Map;
  */
 public class ArgsUtil {
 
-	public static final String KEY_OPTIONS = "options";
-	public static final String KEY_DEFAULT_OPERAND = "default";
-
 	/**
 	 * Returns a map with the options and operands. Operands are found in the
 	 * returned map by operand name without the leading "--" prefix; the operand
 	 * values are the values in the list. If operand values are provided without
-	 * an operand name, they are returned in the map under the
-	 * {@link #KEY_DEFAULT_OPERAND} key.
+	 * an operand name, they are returned in the map using the specified
+	 * {@code defaultKey}.
 	 * <p>
-	 * Options are stored in the return map under the {@link #KEY_OPTIONS} key
-	 * with the option long or short names as values in the list. Option long
-	 * names are added to the list without the leading "--" and short names
-	 * without the leading single dash "-".
+	 * Options are stored in the return map under the {@code optionsKey} with
+	 * the option long or short names as values in the list. Option long names
+	 * are added to the list without the leading "--" and short names without
+	 * the leading single dash "-".
 	 * <p>
 	 * The argument "--" is accepted as a delimiter indicating the end of
 	 * options and named operands. Any following arguments are treated as
-	 * default operands returned in the map under the
-	 * {@link #KEY_DEFAULT_OPERAND} key, even if they begin with the '-'
-	 * character.
+	 * default operands returned in the map under the {@code defaultKey}, even
+	 * if they begin with the '-' character.
 	 * <p>
-	 * Sample strings that could be passed as arguments to the echo command:
+	 * Sample strings that could be passed as arguments to the echo command,
+	 * assuming {@code optionsKey="options"} and {@code defaultKey="default"}:
 	 * 
 	 * <pre>
 	 * "--message" "hello" "world"        --> {"message":["hello", "world"]}
@@ -45,7 +42,8 @@ public class ArgsUtil {
 	 * "--" "8" "--" "7" "=" "15"         --> {"default":["8", "--", "7", "=", "15"}
 	 * </pre>
 	 * <p>
-	 * Sample strings that could be passed as arguments to the ls command:
+	 * Sample strings that could be passed as arguments to the ls command, again
+	 * with {@code optionsKey="options"} and {@code defaultKey="default"}:
 	 * 
 	 * <pre>
 	 * "-lart"                           --> {"options":["l", "a", "r", "t"]}
@@ -55,13 +53,18 @@ public class ArgsUtil {
 	 * "-la" "--" "-*" "--*"             --> {"options":["l", "a"], "default":["-*", "--*"]}
 	 * </pre>
 	 * 
+	 * @param optionsKey
+	 *            the map key to use for options aka no-value operands
+	 * @param defaultKey
+	 *            the map key to use for operands when no operand name is
+	 *            specified
 	 * @param args
 	 *            the arguments to be parsed
 	 * @return the operands and options in a map with operand names as keys and
 	 *         operand values as values plus the special key "options" with all
 	 *         found option short/long names as values
 	 */
-	public static final Map<String, List<String>> parseArgs(String... args) {
+	public static final Map<String, List<String>> parseArgs(String optionsKey, String defaultKey, String... args) {
 		final Map<String, List<String>> map = new LinkedHashMap<String, List<String>>();
 		boolean allOperands = false;
 		String name = null;
@@ -69,10 +72,10 @@ public class ArgsUtil {
 		for (int i = 0; i < args.length; i++) {
 			final String arg = args[i];
 			if (allOperands) {
-				add(map, KEY_DEFAULT_OPERAND, arg);
+				add(map, defaultKey, arg);
 			} else {
 				if (arg.startsWith("--")) {
-					add(map, name, values);
+					add(optionsKey, map, name, values);
 					if (arg.length() == 2) {
 						// delimiter, all coming args are default operands
 						allOperands = true;
@@ -85,17 +88,17 @@ public class ArgsUtil {
 					}
 				} else if (arg.startsWith("-")) {
 					// a short option name string
-					add(map, name, values);
+					add(optionsKey, map, name, values);
 					final int len = arg.length();
 					for (int j = 1; j < len; j++) {
-						add(map, KEY_OPTIONS, "" + arg.charAt(j));
+						add(map, optionsKey, "" + arg.charAt(j));
 					}
 					name = null;
 					values = null;
 				} else {
 					// an operand value
 					if (name == null) {
-						name = KEY_DEFAULT_OPERAND;
+						name = defaultKey;
 					}
 					if (values == null) {
 						values = new ArrayList<String>(2);
@@ -104,7 +107,7 @@ public class ArgsUtil {
 				}
 			}
 		}
-		add(map, name, values);
+		add(optionsKey, map, name, values);
 		return map;
 	}
 
@@ -127,11 +130,11 @@ public class ArgsUtil {
 	 * as operand values --- merged with existing operand values if there are
 	 * any.
 	 */
-	private static void add(Map<String, List<String>> map, String key, List<String> values) {
+	private static void add(String optionsKey, Map<String, List<String>> map, String key, List<String> values) {
 		if (key != null) {
 			if (values == null) {
 				// an option long name
-				add(map, KEY_OPTIONS, key);
+				add(map, optionsKey, key);
 			} else {
 				// an operand
 				List<String> old = map.get(key);
