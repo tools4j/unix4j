@@ -9,64 +9,75 @@
 	<description ref="grep.html"/>
 	<notes/>
 	<methods>
+		<method args="args" usesStandardInput="true">
+			Filters the input lines from the standard input or the provided 
+			input files and writes the matching lines to the standard output. A 
+			line matches if it contains the given {@code "--pattern"} operand
+			value (the default operand).
+			
+			Options can be specified by acronym (with a leading dash "-") or by 
+			long name (with two leading dashes "--"). Operands other than the 
+			default "--pattern" operand have to be prefixed with the operand 
+			name. 
+		</method>
 		<method args="pattern" usesStandardInput="true">
 			Filters the input lines from the standard input and writes the
-			matching lines to the output. A line matches if it contains the
+			matching lines to the standard output. A line matches if it contains the
 			given {@code pattern} using case-sensitive string comparison.
 		</method>
-		<method args="pattern,files" usesStandardInput="true">
+		<method args="pattern,files" usesStandardInput="false">
 			Filters the lines from the specified input files and writes the
-			matching lines to the output. A line matches if it contains the
+			matching lines to the standard output. A line matches if it contains the
 			given {@code pattern} using case-sensitive string comparison.
 		</method>
-		<method args="pattern,paths" usesStandardInput="true">
+		<method args="pattern,paths" usesStandardInput="false">
 			Filters the lines from the specified input files and writes the
-			matching lines to the output. A line matches if it contains the
+			matching lines to the standard output. A line matches if it contains the
 			given {@code pattern} using case-sensitive string comparison.
 		</method>
 		<method args="options,pattern" usesStandardInput="true">
 			Filters the input lines from the standard input and writes the
-			matching lines to the output. Whether or not a line matches the
+			matching lines to the standard output. Whether or not a line matches the
 			given {@code pattern} depends on the specified {@code options}.
 		</method>
-		<method args="options,pattern,files" usesStandardInput="true" >
+		<method args="options,pattern,files" usesStandardInput="false" >
 			Filters the input lines from the specified input files and writes
-			the matching lines to the output. Whether or not a line matches the
+			the matching lines to the standard output. Whether or not a line matches the
 			given {@code pattern} depends on the specified {@code options}.
 		</method>
-		<method args="options,pattern,paths" usesStandardInput="true">
+		<method args="options,pattern,paths" usesStandardInput="false">
 			Filters the input lines from the specified input files and writes
-			the matching lines to the output. Whether or not a line matches the
+			the matching lines to the standard output. Whether or not a line matches the
 			given {@code pattern} depends on the specified {@code options}.
 		</method>
 		<method args="patternStr" usesStandardInput="true">
 			Filters the input lines from the standard input and writes the
-			matching lines to the output. A line matches if it contains the
+			matching lines to the standard output. A line matches if it contains the
 			given {@code patternStr} using case-sensitive string comparison.
 		</method>
-		<method args="patternStr,files" usesStandardInput="true">
+		<method args="patternStr,files" usesStandardInput="false">
 			Filters the lines from the specified input files and writes the
-			matching lines to the output. A line matches if it contains the
+			matching lines to the standard output. A line matches if it contains the
 			given {@code patternStr} using case-sensitive string comparison.
 		</method>
-		<method args="patternStr,paths" usesStandardInput="true">
+		<method args="patternStr,paths" usesStandardInput="false">
 			Filters the lines from the specified input files and writes the
-			matching lines to the output. A line matches if it contains the
+			matching lines to the standard output. A line matches if it contains the
 			given {@code patternStr} using case-sensitive string comparison.
 		</method>
 		<method args="options,patternStr" usesStandardInput="true">
 			Filters the input lines from the standard input and writes the
-			matching lines to the output. Whether or not a line matches the
+			matching lines to the standard output. Whether or not a line matches the
 			given {@code patternStr} depends on the specified {@code options}.
 		</method>
-		<method args="options,patternStr,files" usesStandardInput="true">
+		<method args="options,patternStr,files" usesStandardInput="false">
 			Filters the input lines from the specified input files and writes
-			the matching lines to the output. Whether or not a line matches the
+			the matching lines to the standard output. Whether or not a line matches the
 			given {@code patternStr} depends on the specified {@code options}.
 		</method>
-		<method args="options,patternStr,paths" usesStandardInput="true">
+		<method args="options,patternStr,paths" usesStandardInput="false">
 			Filters the input lines from the specified input files and writes
-			the matching lines to the output. Whether or not a line matches the
+			the matching lines to the standard output. Whether or not a line matches the
 			given {@code patternStr} depends on the specified {@code options}.
 		</method>
 	</methods>
@@ -77,8 +88,8 @@
 		</option>
 		<option name="invertMatch" acronym="v">
 			Invert the match result, that is, a non-matching line is written to
-			the output and a matching line is not. This option is also known from
-			Unix with its acronym 'v'.
+			the output and a matching line is not. This option is also known 
+			from Unix with its acronym 'v'.
 		</option>
 		<option name="fixedStrings" acronym="F">
 			Use fixed-strings matching instead of regular expressions. This is
@@ -86,7 +97,7 @@
 		</option>
 		<option name="lineNumber" acronym="n">
 			Prefix each line of output with the line number within its input
-			file.                            op
+			file.
 		</option>
 		<option name="count" acronym="c">
 			Suppress normal output; instead print a count of matching lines for
@@ -103,7 +114,7 @@
 			excluding the terminating line ending.
 		</option>
 	</options>
-	<operands default="paths">
+	<operands default="pattern">
 		<operand name="patternStr" type="String">
 			Lines will be printed which match the given pattern
 		</operand>
@@ -116,6 +127,13 @@
 		</operand>
 		<operand name="files" type="java.io.File...">
 			The input files to be searched for the pattern.
+		</operand>
+		<operand name="args" type="String...">
+			String arguments defining the options and operands for the command. 
+			Options can be specified by acronym (with a leading dash "-") or by 
+			long name (with two leading dashes "--"). Operands other than the
+			default "--pattern" operand have to be prefixed with the operand 
+			name (e.g. "--paths" for subsequent path operand values). 
 		</operand>
 		<operand name="options" type="GrepOptions">
 			The options defining the types of patterns and command behavior.

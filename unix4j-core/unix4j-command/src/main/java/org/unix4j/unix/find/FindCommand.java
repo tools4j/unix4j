@@ -23,8 +23,8 @@ class FindCommand extends AbstractCommand<FindArguments> {
 	}
 
 	private List<String> getArgumentPaths(ExecutionContext context, FindArguments args) {
-		if (args.isPathsSet()) {
-			return FileUtil.expandPaths(context.getCurrentDirectory(), args.getPaths());
+		if (args.isPathSet()) {
+			return FileUtil.expandPaths(context.getCurrentDirectory(), args.getPath());
 		} else {
 			//no input files or paths ==> use just the current directory
 			final ArrayList<String> list = new ArrayList<String>(1);

@@ -10,6 +10,9 @@
 	<notes>
 	</notes>
 	<methods>
+		<method args="args" usesStandardInput="false">
+			Executes the given sed script.
+		</method>
 		<method args="script" usesStandardInput="false">
 			Executes the given sed script.
 		</method>
@@ -17,6 +20,9 @@
 	<options/>
 	<operands default="script">
 		<operand name="script" type="String">
+			Sed script
+		</operand>
+		<operand name="args" type="String...">
 			Sed script
 		</operand>
 	</operands>

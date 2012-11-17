@@ -18,6 +18,19 @@
 			for every input line; the item variables are usually passed to the 
 			invoked command as arguments.
 		</method>
+		<method args="args" usesStandardInput="true">
+			Reads items from the standard input, delimited by blanks and 
+			newlines or a specified delimiter, and provides variables for the
+			items read from the standard input. The command following after 
+			xargs is executed once for every input line (or for multiple lines
+			depending on the input options); the item variables are usually 
+			passed to the invoked command as arguments.
+			
+			Options can be specified by acronym (with a leading dash "-") or by 
+			long name (with two leading dashes "--"). Operands other than the 
+			default "--maxArgs" operand have to be prefixed with the operand 
+			name. 
+		</method>
 		<method args="delimiter" usesStandardInput="true">
 			Reads items from the standard input using the specified delimiter to
 			separate items, and provides variables for the items read from the 
@@ -221,6 +234,13 @@
 		</operand>
 		<operand name="maxArgs" type="int">
 			Use at most maxArgs arguments per command invocation.
+		</operand>
+		<operand name="args" type="String...">
+			String arguments defining the options and operands for the command. 
+			Options can be specified by acronym (with a leading dash "-") or by 
+			long name (with two leading dashes "--"). Operands other than the
+			default "--maxArgs" operand have to be prefixed with the operand 
+			name (e.g. "--maxLines" for a subsequent line count operand value). 
 		</operand>
 		<operand name="options" type="XargsOptions">
 			The options defining command behavior.

@@ -14,9 +14,9 @@
 	<description ref="uniq.html"/>
 	<notes/>
 	<methods>
-		<method usesStandardInput="true">
+		<method args="" usesStandardInput="true">
 			Reads from the standard input and compares adjacent lines, writing
-			one copy  of each input line on the output. The second and 
+			one copy  of each input line to the standard output. The second and 
 			succeeding copies of repeated adjacent input lines are not written
 			to the output.
 			
@@ -24,11 +24,25 @@
 			not adjacent (see --global or -g option); sorted input lines always
 			result in unique output lines. 
 		</method>
+		<method args="args" usesStandardInput="true">
+			Reads the file specified by the {@code "--path"} operand (the 
+			default operand) and writes only unique lines to the standard 
+			output. The second and succeeding copies of repeated input lines are 
+			not written to the output.
+			
+			Options can be specified by acronym (with a leading dash "-") or by 
+			long name (with two leading dashes "--"). Operands other than the 
+			default "--path" operand have to be prefixed with the operand name. 
+
+			Note that repeated lines in the input are not detected if they are 
+			not adjacent unless the --global is specified (sorted input lines 
+			always result in unique output lines). 
+		</method>
 		<method args="file" usesStandardInput="false">
 			Reads from the specified input {@code file} and compares adjacent
-			lines, writing one copy of each input line on the output. The 
-			second and succeeding copies of repeated adjacent input lines are 
-			not written to the output.
+			lines, writing one copy of each input line to the standard output. 
+			The second and succeeding copies of repeated adjacent input lines 
+			are not written to the output.
 			
 			Note that repeated lines in the input are not detected if they are 
 			not adjacent (see --global or -g option); sorted input lines always
@@ -36,9 +50,9 @@
 		</method>
 		<method args="path" usesStandardInput="false">
 			Reads the file specified by its {@code path} and compares adjacent
-			lines, writing one copy of each input line on the output. The 
-			second and succeeding copies of repeated adjacent input lines are 
-			not written to the output.
+			lines, writing one copy of each input line to the standard output. 
+			The second and succeeding copies of repeated adjacent input lines 
+			are not written to the output.
 			
 			Note that repeated lines in the input are not detected if they are 
 			not adjacent (see --global or -g option); sorted input lines always
@@ -46,7 +60,7 @@
 		</method>
 		<method args="options" usesStandardInput="true">
 			Reads from the standard input and compares adjacent lines, writing
-			one copy  of each input line on the output. The second and 
+			one copy  of each input line to the standard output. The second and 
 			succeeding copies of repeated adjacent input lines are not written
 			to the output.
 			
@@ -57,9 +71,9 @@
 		</method>
 		<method args="options,file" usesStandardInput="false">
 			Reads from the specified input {@code file} and compares adjacent
-			lines, writing one copy of each input line on the output. The 
-			second and succeeding copies of repeated adjacent input lines are 
-			not written to the output.
+			lines, writing one copy of each input line to the standard output. 
+			The second and succeeding copies of repeated adjacent input lines 
+			are not written to the output.
 			
 			Note that repeated non-adjacent lines in the input are only detected
 			with the --global or -g option. In other words, unique output lines
@@ -68,9 +82,9 @@
 		</method>
 		<method args="options,path" usesStandardInput="false">
 			Reads the file specified by its {@code path} and compares adjacent
-			lines, writing one copy of each input line on the output. The 
-			second and succeeding copies of repeated adjacent input lines are 
-			not written to the output.
+			lines, writing one copy of each input line to the standard output. 
+			The second and succeeding copies of repeated adjacent input lines 
+			are not written to the output.
 			
 			Note that repeated non-adjacent lines in the input are only detected
 			with the --global or -g option. In other words, unique output lines
@@ -103,6 +117,13 @@
 		<operand name="path" type="String">
 			The files or directories used as starting point for the listing; 
 			wildcards * and ? are supported.		
+		</operand>
+		<operand name="args" type="String...">
+			String arguments defining the options and operands for the command. 
+			Options can be specified by acronym (with a leading dash "-") or by 
+			long name (with two leading dashes "--"). Operands other than the
+			default "--path" operand have to be prefixed with the operand 
+			name. 
 		</operand>
 		<operand name="options" type="UniqOptions">
 			The options defining the uniqueness details for the output lines.

@@ -14,22 +14,22 @@
 	<description ref="echo.html"/>
 	<notes/>
 	<methods>
-		<method args="string" usesStandardInput="false">
-			 Writes any specified string followed by a line ending to the 
-			 standard output.
+		<method args="args" usesStandardInput="false">
+			 Writes any of the specified strings, separated by single blank 
+			 ({@code ' '}) characters to the standard output suppressing the
+			 trailing line ending if the {@code "-n"} option is specified.			 
 		</method>
-		<method args="strings" usesStandardInput="false">
-			 Writes any specified strings, separated by single blank 
-			 ({@code ' '}) characters and followed by a line ending, to the 
+		<method args="string" usesStandardInput="false">
+			 Writes the specified string followed by a line ending to the 
 			 standard output.
 		</method>
 		<method args="options,string" usesStandardInput="false">
-			 Writes any specified string followed by a newline character to 
+			 Writes the specified string followed by a newline character to 
 			 the standard output suppressing the trailing line ending if the
 			 {@code -n} option is specified.
 		</method>
 		<method args="options,strings" usesStandardInput="false">
-			 Writes any specified strings, separated by single blank 
+			 Writes any of the specified strings, separated by single blank 
 			 ({@code ' '}) characters to the standard output suppressing the
 			 trailing line ending if the {@code -n} option is specified.
 		</method>
@@ -43,9 +43,15 @@
 		<operand name="string" type="String">
 			A string to be written to standard output.		
 		</operand>
-		<operand name="strings" type="String[]">
+		<operand name="strings" type="String...">
 			Strings to be written to standard output, separated by single blank 
 			characters.	
+		</operand>
+		<operand name="args" type="String...">
+			String arguments defining the options for the command and the 
+			strings to be written to the output. Options can be specified by 
+			acronym (with a leading dash "-") or by long name (with two leading 
+			dashes "--"). 
 		</operand>
 		<operand name="options" type="EchoOptions">
 			Options for the echo command.

@@ -145,6 +145,6 @@ public class SedTest {
 	@Test(expected = NullPointerException.class)
 	public void testSed_nullScript() {
 		final StringWriter actualOutputStringWriter = new StringWriter();
-		Unix4j.from(input.toInput()).sed(null).toWriter(actualOutputStringWriter);
+		Unix4j.from(input.toInput()).sed((String)null).toWriter(actualOutputStringWriter);
 	}
 }
