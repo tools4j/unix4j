@@ -12,37 +12,43 @@
 	<methods>
 		<method args="" usesStandardInput="true">
 			Executes a count of lines, words and chars contained in the standard
-			input and writes them to the output.
+			input and writes them to the standard output.
+		</method>
+		<method args="args" usesStandardInput="true">
+			One or several counts are executed and written to the standard 
+			output. Counts include lines, words and chars (depending on the 
+			provided options) and cumulative counts for all the files are 
+			displayed on a separate line after the output for the last file if
+			more than one input file is specified. 
+
+			Options can be specified by acronym (with a leading dash "-") or by 
+			long name (with two leading dashes "--"). Operands other than the 
+			default "--paths" operand have to be prefixed with the operand 
+			name. 
 		</method>
 		<method args="files" usesStandardInput="false">
 			Executes a count of lines, words and chars contained in each input
-			file and writes them to the output. If more than one input file is 
-			specified, a line of cumulative counts for all the files is 
-			displayed on a separate line after the output for the last file.
-		</method>
-		<method args="paths" usesStandardInput="false">
-			Executes a count of lines, words and chars contained in each input
-			file and writes them to the output. If more than one input file is 
-			specified, a line of cumulative counts for all the files is 
+			file and writes them to the standard output. If more than one input 
+			file is specified, a line of cumulative counts for all the files is 
 			displayed on a separate line after the output for the last file.
 		</method>
 		<method args="options" usesStandardInput="true">
 			Executes a one or more counts, depending on the given options, in
-			the standard input and writes them to the output.
+			the standard input and writes them to the standard output.
 		</method>
 		<method args="options,files" usesStandardInput="false">
 			Executes a one or more counts, depending on the given options, in
-			each of the given input files and writes them to the output. If more 
-			than one input file is specified, a line of cumulative counts for 
-			all the files is displayed on a separate line after the output for 
-			the last file.
+			each of the given input files and writes them to the standard 
+			output. If more than one input file is specified, a line of 
+			cumulative counts for all the files is displayed on a separate line 
+			after the output for the last file.
 		</method>
 		<method args="options,paths" usesStandardInput="false">
 			Executes a one or more counts, depending on the given options, in
-			each of the given input files and writes them to the output. If more 
-			than one input file is specified, a line of cumulative counts for 
-			all the files is displayed on a separate line after the output for 
-			the last file.
+			each of the given input files and writes them to the standard 
+			output. If more than one input file is specified, a line of 
+			cumulative counts for all the files is displayed on a separate line
+			after the output for the last file.
 		</method>
 		<!-- NOTES: 
 				(a) we can only support this with a new "option" attribute 
@@ -50,16 +56,16 @@
 				(b) do we really still need this?
 		<method name="wcCountLinesWordsAndChars" args="" usesStandardInput="false">
 			Executes a count of lines, words and chars in the given input and
-			writes them to the output
+			writes them to the standard output
 		</method>
 		<method name="wcCountLines" args="" usesStandardInput="false">
-			Executes a count of lines in the given input and writes them to the output
+			Executes a count of lines in the given input and writes them to the standard output
 		</method>
 		<method name="wcCountChars" args="" usesStandardInput="false">
-			Executes a count of chars in the given input and writes them to the output
+			Executes a count of chars in the given input and writes them to the standard output
 		</method>
 		<method name="wcCountWords" args="" usesStandardInput="false">
-			Executes a count of words in the given input and writes them to the output
+			Executes a count of words in the given input and writes them to the standard output
 		</method>
 		-->
 	</methods>
@@ -82,6 +88,13 @@
 		</operand>
 		<operand name="files" type="java.io.File...">
 			The input files.
+		</operand>
+		<operand name="args" type="String...">
+			String arguments defining the options and operands for the command. 
+			Options can be specified by acronym (with a leading dash "-") or by 
+			long name (with two leading dashes "--"). Operands other than the
+			default "--paths" operand have to be prefixed with the operand 
+			name. 
 		</operand>
 		<operand name="options" type="WcOptions">
 			The options defining command behavior.

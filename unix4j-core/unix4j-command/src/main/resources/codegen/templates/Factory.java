@@ -32,18 +32,22 @@ public final class ${simpleName} implements ${cmd.simpleName}.Interface<${comman
 
 	@Override
 	public ${commandName} ${method.name}(<#foreach arg in method.args>${def.operands[arg].type} ${arg}<#if arg_has_next>, </#if></#foreach>) {
-		final ${argumentsName} args = new ${argumentsName}(${getOptionsArgIfAny(def, method.args)});
+		<#if method.args?size==1 && isArgsOperandName(method.args[0])>
+		final ${argumentsName} ${def.commandName}Args = new ${argumentsName}(${method.args[0]});
+		<#else>
+		final ${argumentsName} ${def.commandName}Args = new ${argumentsName}(${getOptionsArgIfAny(def, method.args)});
 		<#foreach arg in method.args>
 		<#if !isOptionsArg(def, arg)>
 		<#global operand = def.operands[arg]>
 		<#if operand.redirection?length == 0>
-		args.${setter(operand)}(${arg});
+		${def.commandName}Args.${setter(operand)}(${arg});
 		<#else>
-		args.${operand.redirection?replace(r"${value}",arg)};
+		${def.commandName}Args.${operand.redirection?replace(r"${value}",arg)};
 		</#if>
 		</#if>
 		</#foreach>
-		return new ${commandName}(args);
+		</#if>
+		return new ${commandName}(${def.commandName}Args);
 	}
 </#foreach>
 }

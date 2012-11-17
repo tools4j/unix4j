@@ -14,6 +14,18 @@
 	<description ref="find.html"/>
 	<notes/>
 	<methods>
+		<method args="args" usesStandardInput="false">
+			Finds all files matching the search criteria specified by the given
+			arguments and writes the file names to the standard output. 
+			
+			Options can be specified by acronym (with a leading dash "-") or by 
+			long name (with two leading dashes "--"). Operands other than the 
+			default "--name" operand have to be prefixed with the operand name. 
+			
+			The files names written to the output are relative paths referring
+			to the working directory (or -- if provided -- relative to the path 
+			given after the {@code "--path"} operand name).
+		</method>
 		<method args="name" usesStandardInput="false">
 			Finds all files matching the specified {@code name} in or below the 
 			user's current working directory and writes the file names to the
@@ -22,13 +34,13 @@
 			The files names written to the output are relative paths referring
 			to the working directory.
 		</method>
-		<method args="name,paths" usesStandardInput="false">
+		<method args="path,name" usesStandardInput="false">
 			Finds all files matching the specified {@code name} in or below the 
-			directories specified by {@code paths} and writes the file names to
+			directory specified by {@code path} and writes the file names to
 			the standard output. 
 			
 			The files names written to the output are paths relative to the
-			starting points specified by the {@code paths} operand.
+			specified {@code path} operand.
 		</method>
 		<method args="size" usesStandardInput="false">
 			Finds all files matching the specified file {@code size} in or below 
@@ -40,17 +52,17 @@
 			The files names written to the output are relative paths referring
 			to the working directory.
 		</method>
-		<method args="size,paths" usesStandardInput="false">
+		<method args="path,size" usesStandardInput="false">
 			Finds all files matching the specified file {@code size} in or below
-			the directories specified by {@code paths} and writes the file names
+			the directory specified by {@code path} and writes the file names
 			to the standard output. Matching files use at least {@code size} 
 			bytes on disk if {@code size} is non-negative, or at most 
 			{@code size} bytes if {@code size} is negative. 
 
-			The printed files names are paths relative to the starting points 
-			specified by the {@code paths} operand.
+			The files names written to the output are paths relative to the
+			specified {@code path} operand.
 		</method>
-		<method args="name,size" usesStandardInput="false">
+		<method args="size,name" usesStandardInput="false">
 			Finds all files matching the specified file {@code name} and 
 			{@code size} in or below the user's current working directory and
 			writes the file names to the standard output. Matching files use 
@@ -60,16 +72,16 @@
 			The files names written to the output are relative paths referring
 			to the working directory.
 		</method>
-		<method args="name,size,paths" usesStandardInput="false">
+		<method args="path,size,name" usesStandardInput="false">
 			Finds all files matching the specified file {@code name} and 
-			{@code size} in or below the directories specified by {@code paths} 
+			{@code size} in or below the directory specified by {@code path} 
 			and writes the file names to the standard output. Matching files 
 			use at least {@code size} bytes on disk if {@code size} is 
 			non-negative, or at most {@code size} bytes if {@code size} is 
 			negative. 
 
-			The printed files names are paths relative to the starting points 
-			specified by the {@code paths} operand.
+			The files names written to the output are paths relative to the
+			specified {@code path} operand.
 		</method>
 		<method args="options,name" usesStandardInput="false">
 			Finds all files matching the specified {@code name} in or below the 
@@ -79,13 +91,13 @@
 			The files names written to the output are relative paths referring
 			to the working directory.
 		</method>
-		<method args="options,name,paths" usesStandardInput="false">
+		<method args="options,path,name" usesStandardInput="false">
 			Finds all files matching the specified {@code name} in or below the 
-			directories specified by {@code paths} and writes the file names to
+			directory specified by {@code path} and writes the file names to
 			the standard output. 
 
-			The printed files names are paths relative to the starting points 
-			specified by the {@code paths} operand.
+			The files names written to the output are paths relative to the
+			specified {@code path} operand.
 		</method>
 		<method args="options,size" usesStandardInput="false">
 			Finds all files matching the specified file {@code size} in or below 
@@ -97,15 +109,15 @@
 			The files names written to the output are relative paths referring
 			to the working directory.
 		</method>
-		<method args="options,size,paths" usesStandardInput="false">
+		<method args="options,path,size" usesStandardInput="false">
 			Finds all files matching the specified file {@code size} in or below
-			the directories specified by {@code paths} and writes the file names
+			the directory specified by {@code path} and writes the file names
 			to the standard output. Matching files use at least {@code size} 
 			bytes on disk if {@code size} is non-negative, or at most 
 			{@code size} bytes if {@code size} is negative. 
 
-			The printed files names are paths relative to the starting points 
-			specified by the {@code paths} operand.
+			The files names written to the output are paths relative to the
+			specified {@code path} operand.
 		</method>
 		<method args="options,time" usesStandardInput="false">
 			Finds all files that have been created, modified or accessed before 
@@ -117,17 +129,17 @@
 			The files names written to the output are relative paths referring
 			to the working directory.
 		</method>
-		<method args="options,time,paths" usesStandardInput="false">
+		<method args="options,path,time" usesStandardInput="false">
 			Finds all files that have been created, modified or accessed before 
 			or after the specified {@code time} (depending on the given 
 			{@code -time...} options). The names of the matching files found in 
-			or below the directories specified by {@code paths} are written to
+			or below the directory specified by {@code path} are written to
 			the standard output. 
 
-			The printed files names are paths relative to the starting points 
-			specified by the {@code paths} operand.
+			The files names written to the output are paths relative to the
+			specified {@code path} operand.
 		</method>
-		<method args="options,name,size" usesStandardInput="false">
+		<method args="options,size,name" usesStandardInput="false">
 			Finds all files matching the specified file {@code name} and 
 			{@code size} in or below the user's current working directory and
 			writes the file names to the standard output. Matching files use 
@@ -137,18 +149,18 @@
 			The files names written to the output are relative paths referring
 			to the working directory.
 		</method>
-		<method args="options,name,size,paths" usesStandardInput="false">
+		<method args="options,path,size,name" usesStandardInput="false">
 			Finds all files matching the specified file {@code name} and 
-			{@code size} in or below the directories specified by {@code paths} 
+			{@code size} in or below the directory specified by {@code path} 
 			and writes the file names to the standard output. Matching files 
 			use at least {@code size} bytes on disk if {@code size} is 
 			non-negative, or at most {@code size} bytes if {@code size} is 
 			negative. 
 
-			The printed files names are paths relative to the starting points 
-			specified by the {@code paths} operand.
+			The files names written to the output are paths relative to the
+			specified {@code path} operand.
 		</method>
-		<method args="options,name,time" usesStandardInput="false">
+		<method args="options,time,name" usesStandardInput="false">
 			Finds all files matching the given {@code name} that have been 
 			created, modified or accessed before or after the specified
 			{@code time} (depending on the given {@code -time...} options). The
@@ -158,17 +170,17 @@
 			The files names written to the output are relative paths referring
 			to the working directory.
 		</method>
-		<method args="options,name,time,paths" usesStandardInput="false">
+		<method args="options,path,time,name" usesStandardInput="false">
 			Finds all files matching the given {@code name} that have been 
 			created, modified or accessed before or after the specified
 			{@code time} (depending on the given {@code -time...} options). The 
-			names of the matching files found in or below the directories 
-			specified by {@code paths} are written to the standard output. 
+			names of the matching files found in or below the directory 
+			specified by {@code path} are written to the standard output. 
 
-			The printed files names are paths relative to the starting points 
-			specified by the {@code paths} operand.
+			The files names written to the output are paths relative to the
+			specified {@code path} operand.
 		</method>
-		<method args="options,name,size,time" usesStandardInput="false">
+		<method args="options,size,time,name" usesStandardInput="false">
 			Finds all files matching the given {@code name} and {@code size} and
 			have been created, modified or accessed before or after the specified
 			{@code time} (depending on the given {@code -time...} options). 
@@ -182,7 +194,7 @@
 			The files names written to the output are relative paths referring
 			to the working directory.
 		</method>
-		<method args="options,name,size,time,paths" usesStandardInput="false">
+		<method args="options,path,size,time,name" usesStandardInput="false">
 			Finds all files matching the given {@code name} and {@code size} and
 			have been created, modified or accessed before or after the specified
 			{@code time} (depending on the given {@code -time...} options). 
@@ -190,11 +202,11 @@
 			Matching files use at least {@code size} bytes on disk if 
 			{@code size} is non-negative, or at most {@code size} bytes if 
 			{@code size} is negative. The names of the matching files found in
-			or below the directories specified by {@code paths} are written to 
+			or below the directory specified by {@code path} are written to 
 			the standard output. 
 
-			The printed files names are paths relative to the starting points 
-			specified by the {@code paths} operand.
+			The files names written to the output are paths relative to the
+			specified {@code path} operand.
 		</method>
 	</methods>
 	<options>
@@ -280,9 +292,16 @@
 			before or after the specified {@code time} operand; consider the
 			{@code -time...} options for details of the comparison.
 		</operand>
-		<operand name="paths" type="String...">
+		<operand name="path" type="String">
 			Starting point for the search in the directory hierarchy; 
 			wildcards * and ? are supported.
+		</operand>
+		<operand name="args" type="String...">
+			String arguments defining the options and operands for the command. 
+			Options can be specified by acronym (with a leading dash "-") or by 
+			long name (with two leading dashes "--"). Operands other than the
+			default "--name" operand have to be prefixed with the operand name
+			(e.g. "--paths" for subsequent path operand values). 
 		</operand>
 		<operand name="options" type="FindOptions">
 			Options for the file search.

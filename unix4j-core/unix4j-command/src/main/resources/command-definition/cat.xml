@@ -19,14 +19,16 @@
 			Reads the lines from the standard input and writes them to the
 			standard output.
 		</method>
+		<method args="args" usesStandardInput="false">
+			Reads the lines from files specified as arguments and writes them to
+			the standard output. Options can be specified by acronym (with a
+			leading dash "-") or by long name (with two leading dashes "--"). 
+			File arguments are expanded if wildcards are used. All file 
+			arguments are processed in command-argument order.
+		</method>
 		<method args="files" usesStandardInput="false">
 			Reads the lines from the specified files and writes them to the
 			standard output. The files are processed in command-argument order.
-		</method>
-		<method args="paths" usesStandardInput="false">
-			Reads the lines from the specified files and writes them to the
-			standard output. The path arguments are expanded if wildcards are
-			used and processed in command-argument order.
 		</method>
 		<method args="options" usesStandardInput="true">
 			Reads the lines from the standard input and writes them to the
@@ -64,6 +66,12 @@
 		<operand name="paths" type="String...">
 			Pathnames of the input files to be printed; wildcards * and ? are
 			supported.  
+		</operand>
+		<operand name="args" type="String...">
+			String arguments defining the options and file operands for the 
+			command. Options can be specified by acronym (with a leading dash 
+			"-") or by long name (with two leading dashes "--"). File arguments 
+			are expanded if wildcards are used. 
 		</operand>
 		<operand name="options" type="CatOptions">
 			Options for the cat command.

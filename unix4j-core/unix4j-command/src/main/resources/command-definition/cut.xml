@@ -10,6 +10,11 @@
 	<notes>
 	</notes>
 	<methods>
+		<method args="args" usesStandardInput="true">
+			Cuts the fields or characters from the input line and writes them to 
+			the standard output. Depending on the provided options and operands, 
+			range, delimiter or indexes define the cut.
+		</method>
 		<method args="options,range" usesStandardInput="true">
 			Cuts the fields or characters using the given range
 			from the input line and writes them to the output.
@@ -57,6 +62,13 @@
 		</operand>
 		<operand name="range" type="org.unix4j.util.Range">
 			select only these fields
+		</operand>
+		<operand name="args" type="String...">
+			String arguments defining the options and operands for the command. 
+			Options can be specified by acronym (with a leading dash "-") or by 
+			long name (with two leading dashes "--"). Operands other than the
+			default "--range" operand have to be prefixed with the operand name
+			(e.g. "--indexes" for subsequent index operand values). 
 		</operand>
 		<operand name="options" type="CutOptions">
 			options for the cut command

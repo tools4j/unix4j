@@ -24,7 +24,7 @@
 		<note>The following sort order options are currently not supported: {@code dictionaryOrder}, {@code numericSort}, {@code versionSort}</note>
 	</notes>
 	<methods>
-		<method usesStandardInput="true">
+		<method args="" usesStandardInput="true">
 			Sort the lines read from the standard input and writes the result to
 			the standard output. 
 			
@@ -35,20 +35,21 @@
 			The sort algorithm used is guaranteed to be stable: lines considered
 			equal will not be reordered as a result of the sort.
 		</method>
-		<method args="files" usesStandardInput="false">
+		<method args="paths" usesStandardInput="false">
 			Sort the lines of all the specified files together and writes the
-			result to the standard output. 
+			result to the standard output.
 			
-			Comparisons are based on the entire line without line ending. The 
-			collating sequence of the current locale is used to perform the
-			comparisons. 
+			Options can be specified by acronym (with a leading dash "-") or by 
+			long name (with two leading dashes "--"). Operands other than the 
+			default "--paths" operand have to be prefixed with the operand 
+			name. 
 			
 			The sort algorithm used is guaranteed to be stable: lines considered
 			equal will not be reordered as a result of the sort. If two lines 
 			originate from different input files, the index of the file in the
 			input arguments list defines the ordering of the lines. 
 		</method>
-		<method args="paths" usesStandardInput="false">
+		<method args="files" usesStandardInput="false">
 			Sort the lines of all the specified files together and writes the
 			result to the standard output. 
 			
@@ -333,6 +334,13 @@
 			compare equal are written is unspecified.		
 		</operand>
 		-->
+		<operand name="args" type="String...">
+			String arguments defining the options and operands for the command. 
+			Options can be specified by acronym (with a leading dash "-") or by 
+			long name (with two leading dashes "--"). Operands other than the
+			default "--paths" operand have to be prefixed with the operand 
+			name (e.g. "--comparator" for a subsequent comparator operand value). 
+		</operand>
 		<operand name="options" type="SortOptions">
 			The options for the sort command.
 		</operand>

@@ -11,18 +11,24 @@
 <@pp.changeOutputFile name=pp.pathTo("/"+def.pkg.path+"/"+argumentsName+".java")/> 
 package ${def.pkg.name};
 
+<#if hasArgsOperand(def)>
 import java.util.List;
 import java.util.Map;
 import java.util.Arrays;
+</#if>
 
 import org.unix4j.command.Arguments;
 import org.unix4j.context.ExecutionContext;
+<#if hasArgsOperand(def)>
 import org.unix4j.context.VariableContext;
 import org.unix4j.convert.ValueConverter;
+</#if>
 <#if def.options?size != 0>
 import org.unix4j.option.DefaultOptionSet;
 </#if>
+<#if hasArgsOperand(def)>
 import org.unix4j.util.ArgsUtil;
+</#if>
 <#if hasTrueOperand>
 import org.unix4j.util.ArrayUtil;
 </#if>
@@ -54,9 +60,6 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	</#if>
 
 	<#if def.options?size != 0 || def.operands?size != 0>
-	// string arguments encoding options and operands
-	private String[] args;
-	private boolean argsIsSet = false;
 	</#if>
 	<#foreach operand in def.operands?values>
 	<#if !isOptions(operand) && operand.redirection?length == 0>
@@ -105,7 +108,7 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 		super();
 	}
 	</#if>
-	<#if def.options?size != 0 || def.operands?size != 0>
+	<#if hasArgsOperand(def)>
 
 	/**
 	 * Constructor string arguments encoding options and arguments, possibly
@@ -151,7 +154,6 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 				" value '" + value + "' into the type " + operandType.getName() + 
 				" for ${commandName} command");
 	}
-		
 	private <V> V convertList(ExecutionContext context, String operandName, Class<V> operandType, List<String> values) {
 		if (values.size() == 1) {
 			final String value = values.get(0);
@@ -159,7 +161,6 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 		}
 		return convert(context, operandName, operandType, values);
 	}
-	
 	</#if>
 	
 	@Override
@@ -167,6 +168,7 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 		if (context == null) {
 			throw new NullPointerException("context cannot be null");
 		}
+		<#if hasArgsOperand(def)>
 		if (!argsIsSet) {
 			return this;
 		}
@@ -193,21 +195,29 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 		for (final Map.Entry<String, List<String>> e : map.entrySet()) {
 			<#foreach operand in def.operands?values>
 			<#if operand_index != 0>} else </#if>if ("${operand.name}".equals(e.getKey())) {
-				<#if isGenericType(operand.type)>@SuppressWarnings("unchecked")</#if>
+				<#if isArgsOperand(operand)>
+				throw new IllegalStateException("invalid operand '" + e.getKey() + "' in ${commandName} command args: " + Arrays.toString(args));
+				<#else>
+					<#if isGenericType(operand.type)>@SuppressWarnings("unchecked")</#if>
 				final ${normalizeVarArgType(operand.type, false)} value = convertList(context, "${operand.name}", ${typeClass(operand.type, true)}, e.getValue());  
-			<#if isOptions(operand)>
+					<#if isOptions(operand)>
 				options.setAll(value);
-			<#elseif operand.redirection?length == 0>
+					<#elseif operand.redirection?length == 0>
 				argsForContext.${setter(operand)}(value);
-			<#else>
+					<#else>
 				argsForContext.${operand.redirection?replace(r"${value}","value")};
-			</#if>
+					</#if>
+				</#if>
 			</#foreach>
 			} else {
 				throw new IllegalStateException("invalid operand '" + e.getKey() + "' in ${commandName} command args: " + Arrays.toString(args));
 			}
 		}
-		return argsForContext; 
+		return argsForContext;
+		<#else>
+		//no String... args for this command, hence nothing to resolve
+		return this;
+		</#if>
 	}
 	
 	<#foreach operand in def.operands?values>
@@ -227,9 +237,11 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 
 	/**
 	 * Returns true if the {@code <${operand.name}>} operand has been set. 
+<#if !isArgsOperand(operand)>
 	 * <p>
 	 * Note that this method returns true if {@link #${setter(operand)}(${normalizeVarArgType(rawType(operand.type), false)})}
-	 * also if null was passed to the method. 
+	 * also if null was passed to the method.
+</#if> 
 	 * 
 	 * @return	true if the setter for the {@code <${operand.name}>} operand has 
 	 * 			been called at least once
@@ -237,6 +249,7 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	public boolean ${isset(operand)}() {
 		return ${operand.name}IsSet;
 	}
+	<#if !isArgsOperand(operand)>
 	/**
 	 * Sets {@code <${operand.name}>}: ${operand.desc}
 	 * 
@@ -246,6 +259,7 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 		this.${operand.name} = ${operand.name};
 		this.${operand.name}IsSet = true;
 	}
+	</#if>
 	</#if>
 	</#foreach>
 	
@@ -269,11 +283,13 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 		final StringBuilder sb = new StringBuilder();
 
 		<#if def.options?size != 0 || def.operands?size != 0>
+		<#if hasArgsOperand(def)>
 		if (argsIsSet) {
 			for (String arg : args) {
 				sb.append(arg);
 			}
 		} else {
+		<#else>{</#if>
 			<#if def.options?size != 0>
 			// first the options
 			if (options.size() > 0) {

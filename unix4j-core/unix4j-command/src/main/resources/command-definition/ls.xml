@@ -11,15 +11,20 @@
 		<note>Infinite loop detection is currently NOT implemented.</note>
 	</notes>
 	<methods>
-		<method usesStandardInput="false">
+		<method args="" usesStandardInput="false">
 			Lists all files and directories in the user's current working 
 			directory and writes them to the output.
 		</method>
-		<method args="files" usesStandardInput="false">
-			Prints the name of the given files and lists all files contained in 
-			directories for every directory in {@code files}.
+		<method args="args" usesStandardInput="false">
+			Prints the name of the specified files and lists all files contained 
+			in directories for every directory in those files. 
+			
+			Options can be specified by acronym (with a leading dash "-") or by 
+			long name (with two leading dashes "--"). Operands other than the 
+			default "--paths" operand have to be prefixed with the operand 
+			name. 
 		</method>
-		<method args="paths" usesStandardInput="false">
+		<method args="files" usesStandardInput="false">
 			Prints the name of the given files and lists all files contained in 
 			directories for every directory in {@code files}.
 		</method>
@@ -72,6 +77,13 @@
 		<operand name="paths" type="String...">
 			The files or directories used as starting point for the listing; 
 			wildcards * and ? are supported.		
+		</operand>
+		<operand name="args" type="String...">
+			String arguments defining the options and operands for the command. 
+			Options can be specified by acronym (with a leading dash "-") or by 
+			long name (with two leading dashes "--"). Operands other than the
+			default "--paths" operand have to be prefixed with the operand 
+			name (e.g. "--count" for a subsequent count operand value). 
 		</operand>
 		<operand name="options" type="LsOptions">
 			The options defining the output format.

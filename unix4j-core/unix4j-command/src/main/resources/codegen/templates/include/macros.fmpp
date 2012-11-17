@@ -99,3 +99,17 @@
 <#function isOptionsArg def arg>
 	<#return def.operands[arg].type == optionsName>
 </#function>
+<#function hasArgsOperand def>
+	<#foreach operand in def.operands?values>
+		<#if isArgsOperand(operand)>
+			<#return true>
+		</#if>
+	</#foreach>
+	<#return false>
+</#function>
+<#function isArgsOperandName operandName>
+	<#return operandName == "args">
+</#function>
+<#function isArgsOperand operand>
+	<#return isArgsOperandName(operand.name)>
+</#function>

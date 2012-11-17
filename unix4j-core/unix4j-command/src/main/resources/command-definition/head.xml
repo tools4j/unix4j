@@ -14,9 +14,21 @@
 	<description ref="head.html"/>
 	<notes/>
 	<methods>
-		<method usesStandardInput="true">
+		<method args="" usesStandardInput="true">
 			Reads the first 10 lines from the standard input and writes them to
 			the standard output.
+		</method>
+		<method args="args" usesStandardInput="true">
+			Reads the first n lines from each of the files specified and writes
+			them to the standard output. If more than a single file is 
+			specified, each file is preceded by a header consisting of the 
+			string {@code "==&gt; XXX &lt;=="} where {@code "XXX"} is the name 
+			of the file.
+
+			Options can be specified by acronym (with a leading dash "-") or by 
+			long name (with two leading dashes "--"). Operands other than the 
+			default "--paths" operand have to be prefixed with the operand 
+			name. 
 		</method>
 		<method args="count" usesStandardInput="true">
 			Reads the first {@code count} lines from the standard input and 
@@ -27,13 +39,6 @@
 			input and writes them to the standard output.
 		</method>
 		<method args="files" usesStandardInput="false">
-			Reads the first 10 lines from each of the specified files and writes
-			them to the standard output. If more than a single file is 
-			specified, each file is preceded by a header consisting of the 
-			string {@code "==&gt; XXX &lt;=="} where {@code "XXX"} is the name 
-			of the file.
-		</method>
-		<method args="paths" usesStandardInput="false">
 			Reads the first 10 lines from each of the specified files and writes
 			them to the standard output. If more than a single file is 
 			specified, each file is preceded by a header consisting of the 
@@ -96,6 +101,13 @@
 		</operand>
 		<operand name="files" type="java.io.File...">
 			The input files to be filtered.
+		</operand>
+		<operand name="args" type="String...">
+			String arguments defining the options and operands for the command. 
+			Options can be specified by acronym (with a leading dash "-") or by 
+			long name (with two leading dashes "--"). Operands other than the
+			default "--paths" operand have to be prefixed with the operand 
+			name (e.g. "--count" for a subsequent count operand value). 
 		</operand>
 		<operand name="options" type="HeadOptions">
 			Options for the head command.
