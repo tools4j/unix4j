@@ -28,7 +28,7 @@ public class OptionSetConverters {
 		public O convert(Object value) throws IllegalArgumentException {
 			if (value != null) {
 				final String optionString = value.toString();
-				if (optionString.length() == 1) {
+				if (optionString.length() > 0) {
 					for (final O option : options) {
 						if (option.name().equals(optionString) || (optionString.length() == 1 && optionString.charAt(0) == option.acronym())) {
 							return option;

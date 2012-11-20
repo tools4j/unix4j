@@ -61,7 +61,8 @@ public class UniqTest {
 		expectedOutput.appendLine(LINE14);
 		expectedOutput.appendLine(LINE15);
 		expectedOutput.appendLine(LINE16);
-		assertUniq(input, UniqOptions.EMPTY, expectedOutput);
+		assertUniq(expectedOutput, input, UniqOptions.EMPTY);
+		assertUniq(expectedOutput, input);
 	}
 
 	@Test
@@ -76,7 +77,9 @@ public class UniqTest {
 		expectedOutput.appendLine(LINE14);
 		expectedOutput.appendLine(LINE15);
 		expectedOutput.appendLine(LINE16);
-		assertUniq(input, Uniq.Options.uniqueOnly, expectedOutput);
+		assertUniq(expectedOutput, input, Uniq.Options.uniqueOnly);
+		assertUniq(expectedOutput, input, "--uniqueOnly");
+		assertUniq(expectedOutput, input, "-u");
 	}
 
 	@Test
@@ -85,7 +88,9 @@ public class UniqTest {
 		expectedOutput.appendLine(LINE4);
 		expectedOutput.appendLine(LINE7);
 		expectedOutput.appendLine(LINE10);
-		assertUniq(input, Uniq.Options.duplicatedOnly, expectedOutput);
+		assertUniq(expectedOutput, input, Uniq.Options.duplicatedOnly);
+		assertUniq(expectedOutput, input, "--duplicatedOnly");
+		assertUniq(expectedOutput, input, "-d");
 	}
 
 	@Test
@@ -103,7 +108,10 @@ public class UniqTest {
 		expectedOutput.appendLine(makeCountLine(1, LINE14));
 		expectedOutput.appendLine(makeCountLine(1, LINE15));
 		expectedOutput.appendLine(makeCountLine(1, LINE16));
-		assertUniq(input, Uniq.Options.count, expectedOutput);
+		assertUniq(expectedOutput, input, Uniq.Options.count);
+		assertUniq(expectedOutput, input, "--count");
+		assertUniq(expectedOutput, input, "-c");
+		assertUniq(expectedOutput, input, "-c", "--count");
 	}
 
 	@Test
@@ -117,7 +125,9 @@ public class UniqTest {
 		expectedOutput.appendLine(LINE7);
 		expectedOutput.appendLine(LINE10);
 		expectedOutput.appendLine(LINE16);
-		assertUniq(input, Uniq.Options.global, expectedOutput);
+		assertUniq(expectedOutput, input, Uniq.Options.global);
+		assertUniq(expectedOutput, input, "--global");
+		assertUniq(expectedOutput, input, "-g");
 	}
 
 	@Test
@@ -127,7 +137,10 @@ public class UniqTest {
 		expectedOutput.appendLine(LINE3);
 		expectedOutput.appendLine(LINE6);
 		expectedOutput.appendLine(LINE16);
-		assertUniq(input, Uniq.Options.uniqueOnly.global, expectedOutput);
+		assertUniq(expectedOutput, input, Uniq.Options.uniqueOnly.global);
+		assertUniq(expectedOutput, input, "--uniqueOnly", "--global");
+		assertUniq(expectedOutput, input, "-ug");
+		assertUniq(expectedOutput, input, "-u", "-g");
 	}
 
 	@Test
@@ -137,7 +150,10 @@ public class UniqTest {
 		expectedOutput.appendLine(LINE4);
 		expectedOutput.appendLine(LINE7);
 		expectedOutput.appendLine(LINE10);
-		assertUniq(input, Uniq.Options.duplicatedOnly.g, expectedOutput);
+		assertUniq(expectedOutput, input, Uniq.Options.duplicatedOnly.g);
+		assertUniq(expectedOutput, input, "-g", "--duplicatedOnly");
+		assertUniq(expectedOutput, input, "-dg");
+		assertUniq(expectedOutput, input, "--duplicatedOnly", "-g");
 	}
 
 	@Test
@@ -151,16 +167,25 @@ public class UniqTest {
 		expectedOutput.appendLine(makeCountLine(4, LINE7));
 		expectedOutput.appendLine(makeCountLine(3, LINE10));
 		expectedOutput.appendLine(makeCountLine(1, LINE16));
-		assertUniq(input, Uniq.Options.count.global, expectedOutput);
+		assertUniq(expectedOutput, input, Uniq.Options.count.global);
+		assertUniq(expectedOutput, input, "--count", "--global");
+		assertUniq(expectedOutput, input, "-g", "--count");
+		assertUniq(expectedOutput, input, "-cg");
 	}
 
 	private String makeCountLine(int count, String line) {
 		return "   " + count + " " + line;
 	}
 
-	private void assertUniq(final MultilineString input, UniqOptions options, final MultilineString expectedOutput){
+	private void assertUniq(final MultilineString expectedOutput, final MultilineString input, UniqOptions options){
 		final StringWriter actualOutputStringWriter = new StringWriter();
 		Unix4j.from(input.toInput()).uniq(options).toWriter(actualOutputStringWriter);
+		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
+		actualOutput.assertMultilineStringEquals(expectedOutput);
+	}
+	private void assertUniq(final MultilineString expectedOutput, final MultilineString input, String... args){
+		final StringWriter actualOutputStringWriter = new StringWriter();
+		Unix4j.from(input.toInput()).uniq(args).toWriter(actualOutputStringWriter);
 		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
 		actualOutput.assertMultilineStringEquals(expectedOutput);
 	}

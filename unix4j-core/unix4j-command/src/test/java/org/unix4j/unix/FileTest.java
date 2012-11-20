@@ -75,14 +75,24 @@ class FileTest {
 		return new File(fileURL.getFile());
 	}
 
-	public File getInputFile(){
+	public File getInputFile() {
 		if (inputFiles.size() == 1) {
 			return inputFiles.get(0);
 		}
 		throw new IllegalStateException("there are " + inputFiles.size() + " inpput files, use getInputFiles() instead");
 	}
+	public String getInputFileName() {
+		return getInputFile().toString();
+	}
 	public File[] getInputFiles(){
 		return inputFiles.toArray(new File[inputFiles.size()]);
+	}
+	public String[] getInputFileNames(){
+		final String[] names = new String[inputFiles.size()];
+		for (int i = 0; i < names.length; i++) {
+			names[i] = inputFiles.get(i).toString();
+		}
+		return names;
 	}
 
 	public void run(final Unix4jCommandBuilder command){

@@ -72,6 +72,8 @@ public class SortTest {
 		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.u.r).toStringResult());
 		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort("-r").toStringResult());
 		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort("-ur").toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort("--reverse").toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort("--unique", "--reverse").toStringResult());
 	}
 
 	@Test
@@ -130,6 +132,8 @@ public class SortTest {
 		;
 
 		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.ignoreCase).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort("-f").toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort("--ignoreCase").toStringResult());
 	}
 
 	@Test
@@ -158,6 +162,8 @@ public class SortTest {
 		;
 
 		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.unique).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort("-u").toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort("--unique").toStringResult());
 	}
 
 	@Test
@@ -184,6 +190,10 @@ public class SortTest {
 		;
 
 		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.ignoreCase.unique).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort("-fu").toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort("-uf").toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort("--ignoreCase", "--unique").toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort("--unique", "--ignoreCase").toStringResult());
 	}
 
 	@Test
@@ -214,6 +224,8 @@ public class SortTest {
 			.appendLine("\t\tZZZ")
 		;
 		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.ignoreLeadingBlanks).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort("--ignoreLeadingBlanks").toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort("-b").toStringResult());
 	}
 
 	@Test
@@ -240,6 +252,7 @@ public class SortTest {
 			.appendLine("   ZZZ")
 		;
 		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.unique.ignoreLeadingBlanks).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort("-ub").toStringResult());
 	}
 
 	@Test
@@ -270,6 +283,9 @@ public class SortTest {
 		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.unique).sort(Sort.Options.reverse.unique).toStringResult());
 		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort().sort(Sort.Options.reverse.unique).toStringResult());
 		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.unique).sort(Sort.Options.reverse).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort().sort("-r").toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort("-u").sort("-r").toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort("-u").sort("-ru").toStringResult());
 	}
 
 	@Test
@@ -278,6 +294,10 @@ public class SortTest {
 		assertEquals("blah", Unix4j.fromString("blah").sort(Sort.Options.reverse).toStringResult());
 		assertEquals("blah", Unix4j.fromString("blah").sort(Sort.Options.unique).toStringResult());
 		assertEquals("blah", Unix4j.fromString("blah").sort(Sort.Options.unique.reverse).toStringResult());
+		assertEquals("blah", Unix4j.fromString("blah").sort("-ur").toStringResult());
+		assertEquals("blah", Unix4j.fromString("blah").sort("--unique").toStringResult());
+		assertEquals("blah", Unix4j.fromString("blah").sort("--reverse").toStringResult());
+		assertEquals("blah", Unix4j.fromString("blah").sort("--reverse", "--unique").toStringResult());
 	}
 
 	@Test
@@ -286,6 +306,11 @@ public class SortTest {
 		assertEquals("", Unix4j.fromString("").sort(Sort.Options.reverse).toStringResult());
 		assertEquals("", Unix4j.fromString("").sort(Sort.Options.unique).toStringResult());
 		assertEquals("", Unix4j.fromString("").sort(Sort.Options.unique.reverse).toStringResult());
+		assertEquals("", Unix4j.fromString("").sort("-r").toStringResult());
+		assertEquals("", Unix4j.fromString("").sort("-ru").toStringResult());
+		assertEquals("", Unix4j.fromString("").sort("--reverse").toStringResult());
+		assertEquals("", Unix4j.fromString("").sort("--unique").toStringResult());
+		assertEquals("", Unix4j.fromString("").sort("--unique", "--reverse").toStringResult());
 	}
 
 	@Test
@@ -315,6 +340,7 @@ public class SortTest {
 
 		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort().toStringResult());
 		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.unique).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort("--unique").toStringResult());
 	}
 
 	@Test
@@ -344,5 +370,6 @@ public class SortTest {
 		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.reverse).toStringResult());
 		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.r).toStringResult());
 		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.r.u).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort("-ru").toStringResult());
 	}
 }
