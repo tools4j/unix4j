@@ -143,12 +143,23 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 		return resolved;
 	}
 	private <V> V convert(ExecutionContext context, String operandName, Class<V> operandType, Object value) {
-		if (operandType.isInstance(value)) {
-			return operandType.cast(value);
-		}
 		final ValueConverter<V> converter = context.getValueConverterFor(operandType);
+		final V convertedValue;
 		if (converter != null) {
-			return converter.convert(value);
+			convertedValue = converter.convert(value);
+		} else {
+			<#if def.options?size != 0>
+			if (${optionsName}.class.equals(operandType)) {
+				convertedValue = operandType.cast(${optionsName}.CONVERTER.convert(value));
+			} else {
+				convertedValue = null;
+			}
+			<#else>
+			convertedValue = null;
+			</#if>
+		}
+		if (convertedValue != null) {
+			return convertedValue;
 		}
 		throw new IllegalArgumentException("cannot convert --" + operandName + 
 				" value '" + value + "' into the type " + operandType.getName() + 

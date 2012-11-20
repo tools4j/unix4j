@@ -20,7 +20,8 @@ public class GrepTest {
 	public void testGrep_simple1() {
 		final FileTest tester = new FileTest(this.getClass());
 		tester.run(Unix4j.fromFile(tester.getInputFile()).grep("This"));
-		tester.run(Unix4j.builder().grep("This", tester.getInputFile()));
+//		tester.run(Unix4j.builder().grep("This", tester.getInputFile()));
+//		tester.run(Unix4j.builder().grep("--pattern", "This", "--file", tester.getInputFile().toString()));
 	}
 
 	@Test

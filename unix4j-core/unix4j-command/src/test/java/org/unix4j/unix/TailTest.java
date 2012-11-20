@@ -146,8 +146,17 @@ public class TailTest {
 
 	private void assertTail(final MultilineString input, final int lines, final MultilineString expectedOutput){
 		final StringWriter actualOutputStringWriter = new StringWriter();
+		MultilineString actualOutput;
+		
+		//direct
 		Unix4j.from(input.toInput()).tail(lines).toWriter(actualOutputStringWriter);
-		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
+		actualOutput = new MultilineString(actualOutputStringWriter.toString());
+		actualOutput.assertMultilineStringEquals(expectedOutput);
+		
+		//String... args
+		actualOutputStringWriter.getBuffer().setLength(0);
+		Unix4j.from(input.toInput()).tail("--count", "" + lines).toWriter(actualOutputStringWriter);
+		actualOutput = new MultilineString(actualOutputStringWriter.toString());
 		actualOutput.assertMultilineStringEquals(expectedOutput);
 	}
 }

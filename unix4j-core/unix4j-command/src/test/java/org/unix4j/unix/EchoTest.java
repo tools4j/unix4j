@@ -35,9 +35,8 @@ public class EchoTest {
 		assertEquals("one\ntwo", Unix4j.builder().echo("one\ntwo").toStringResult());
 	}
 
-	//FIXME this test must be possible
-//	@Test
-//	public void testTwoMessages() {
-//		assertEquals("one\ntwo three\nfour", Unix4j.builder().echo("one\ntwo", "three\nfour").toStringResult());
-//	}
+	@Test
+	public void testTwoMessages() {
+		assertEquals("one\ntwo three\nfour", Unix4j.builder().echo("one\ntwo", "three\nfour").toStringResult());
+	}
 }

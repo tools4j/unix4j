@@ -70,6 +70,8 @@ public class SortTest {
 		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.r).toStringResult());
 		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.reverse.unique).toStringResult());
 		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.u.r).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort("-r").toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort("-ur").toStringResult());
 	}
 
 	@Test
