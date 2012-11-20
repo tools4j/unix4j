@@ -145,8 +145,17 @@ public class HeadTest {
 
 	private void assertHead(final MultilineString input, final int lines, final MultilineString expectedOutput){
 		final StringWriter actualOutputStringWriter = new StringWriter();
+		MultilineString actualOutput;
+		
+		//direct
 		Unix4j.from(input.toInput()).head(lines).toWriter(actualOutputStringWriter);
-		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
+		actualOutput = new MultilineString(actualOutputStringWriter.toString());
+		actualOutput.assertMultilineStringEquals(expectedOutput);
+
+		//String... args
+		actualOutputStringWriter.getBuffer().setLength(0);
+		Unix4j.from(input.toInput()).head("--count", "" + lines).toWriter(actualOutputStringWriter);
+		actualOutput = new MultilineString(actualOutputStringWriter.toString());
 		actualOutput.assertMultilineStringEquals(expectedOutput);
 	}
 }

@@ -35,7 +35,7 @@
 			The sort algorithm used is guaranteed to be stable: lines considered
 			equal will not be reordered as a result of the sort.
 		</method>
-		<method args="paths" usesStandardInput="false">
+		<method args="args" usesStandardInput="false">
 			Sort the lines of all the specified files together and writes the
 			result to the standard output.
 			

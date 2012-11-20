@@ -14,6 +14,8 @@ package ${def.pkg.name};
 import java.util.Collections;
 import java.util.Iterator;
 
+import org.unix4j.convert.OptionSetConverters.OptionSetConverter;
+import org.unix4j.convert.ValueConverter;
 import org.unix4j.option.DefaultOptionSet;
 import org.unix4j.option.Option;
 import org.unix4j.option.OptionSet;
@@ -115,7 +117,29 @@ public interface ${simpleName} extends OptionSet<${optionName}> {
 			this();
 			setAll(options);
 		}
+		/**
+		 * Constructor for an option set initialized with the options given by
+		 * another option set.
+		 * 
+		 * @param optionSet set with the options to be active
+		 */
+		public Default(OptionSet<${optionName}> optionSet) {
+			this();
+			setAll(optionSet);
+		}
 	}
+	
+	/**
+	 * Value converter for {@link ${simpleName}} based on an {@link IterableOfOptionNameOrAcronymToOptionSetConverter}. 
+	 */
+	ValueConverter<${simpleName}> CONVERTER = new ValueConverter<${simpleName}>() {
+		private final OptionSetConverter<${optionName}> converter = new OptionSetConverter<${optionName}>(${optionName}.class);
+		@Override
+		public ${simpleName} convert(Object value) {
+			final OptionSet<${optionName}> set = converter.convert(value);
+			return set == null ? null : new Default(set);
+		}
+	};
 }
 </#if>
 </#list>
