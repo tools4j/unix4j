@@ -130,7 +130,7 @@ public interface ${simpleName} extends OptionSet<${optionName}> {
 	}
 	
 	/**
-	 * Value converter for {@link ${simpleName}} based on an {@link IterableOfOptionNameOrAcronymToOptionSetConverter}. 
+	 * Value converter for {@link ${simpleName}} based on an {@link OptionSetConverter}. 
 	 */
 	ValueConverter<${simpleName}> CONVERTER = new ValueConverter<${simpleName}>() {
 		private final OptionSetConverter<${optionName}> converter = new OptionSetConverter<${optionName}>(${optionName}.class);
