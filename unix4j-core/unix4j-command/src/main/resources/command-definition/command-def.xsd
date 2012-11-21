@@ -73,7 +73,7 @@
 			<xs:sequence>
 				<xs:element minOccurs="0" maxOccurs="unbounded" ref="operand" />
 			</xs:sequence>
-			<xs:attribute name="default" use="required" type="xs:NCName" />
+			<xs:attribute name="default" use="required" type="xs:string" />
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="operand">

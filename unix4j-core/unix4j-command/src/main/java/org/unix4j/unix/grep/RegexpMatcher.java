@@ -15,12 +15,12 @@ class RegexpMatcher implements LineMatcher {
 	public RegexpMatcher(GrepArguments args) {
 		if(args.isPatternSet()){
 			this.pattern = args.getPattern();
-		} else if(args.isPatternStrSet()){
+		} else if(args.isRegexpSet()){
 			final String regex;
 			if (args.isWholeLine()) {
-				regex = args.getPatternStr();
+				regex = args.getRegexp();
 			} else {
-				regex = ".*" + args.getPatternStr() + ".*";
+				regex = ".*" + args.getRegexp() + ".*";
 			}
 			this.pattern = Pattern.compile(regex, args.isIgnoreCase() ? Pattern.CASE_INSENSITIVE : 0);
 		} else {

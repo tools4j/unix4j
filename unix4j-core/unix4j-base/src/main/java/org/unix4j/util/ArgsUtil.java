@@ -28,8 +28,8 @@ public class ArgsUtil {
 	 * default operands returned in the map under the {@code defaultKey}, even
 	 * if they begin with the '-' character.
 	 * <p>
-	 * Sample strings that could be passed as arguments to the echo command,
-	 * assuming {@code optionsKey="options"} and {@code defaultKey="default"}:
+	 * String args that could be passed as arguments to the {@code echo} command, 
+	 * assuming {@code optionsKey="options"} and {@code defaultKeys=["default"]}:
 	 * 
 	 * <pre>
 	 * "--message" "hello" "world"        --> {"message":["hello", "world"]}
@@ -42,8 +42,8 @@ public class ArgsUtil {
 	 * "--" "8" "--" "7" "=" "15"         --> {"default":["8", "--", "7", "=", "15"}
 	 * </pre>
 	 * <p>
-	 * Sample strings that could be passed as arguments to the ls command, again
-	 * with {@code optionsKey="options"} and {@code defaultKey="default"}:
+	 * String args that could be passed as arguments to the {@code ls} command, 
+	 * again with {@code optionsKey="options"} and {@code defaultKeys=["default"]}:
 	 * 
 	 * <pre>
 	 * "-lart"                           --> {"options":["l", "a", "r", "t"]}
@@ -52,33 +52,48 @@ public class ArgsUtil {
 	 * "-laR" "*.txt" "*.log"            --> {"options":["l", "a", "R"], "default":["*.txt", "*.log"]}
 	 * "-la" "--" "-*" "--*"             --> {"options":["l", "a"], "default":["-*", "--*"]}
 	 * </pre>
+	 * <p>
+	 * String args that could be passed as arguments to the {@code grep} command
+	 * which has two default operands, hence {@code optionsKey="options"} and 
+	 * {@code defaultKeys=["pattern","paths"]}:
+	 * 
+	 * <pre>
+	 * "myword" "myfile.txt"                       --> {"pattern":["myword"], paths:["myfile.txt"]}
+	 * "-i" "myword" "myfile.txt"                  --> {"options":["i"], "pattern":["myword"], paths:["myfile.txt"]}
+	 * "-i" "error" "*.txt" "*.log"                --> {"options":["i"], "pattern":["error"], paths:["*.txt", "*.log"]}
+	 * "--ignoreCase" "--" "error" "*"             --> {"options":["ignoreCase"], "pattern":["error"], paths:["*"]}
+	 * "--ignoreCase" "--pattern" "error" "--" "*" --> {"options":["ignoreCase"], "pattern":["error"], paths:["*"]}
+	 * "-i" "error" "--paths" "*"                  --> {"options":["i"], "pattern":["error"], paths:["*"]}
+	 * "--ignoreCase" "--paths" "*" "--" "error"   --> {"options":["ignoreCase"], "pattern":["error"], paths:["*"]}
+	 * </pre>
 	 * 
 	 * @param optionsKey
 	 *            the map key to use for options aka no-value operands
-	 * @param defaultKey
-	 *            the map key to use for operands when no operand name is
-	 *            specified
+	 * @param defaultKeys
+	 *            a list of map keys to use for operands when no operand name is
+	 *            specified; only the last key can have multiple operand values
 	 * @param args
 	 *            the arguments to be parsed
 	 * @return the operands and options in a map with operand names as keys and
 	 *         operand values as values plus the special key "options" with all
 	 *         found option short/long names as values
 	 */
-	public static final Map<String, List<String>> parseArgs(String optionsKey, String defaultKey, String... args) {
+	public static final Map<String, List<String>> parseArgs(String optionsKey, List<String> defaultKeys, String... args) {
 		final Map<String, List<String>> map = new LinkedHashMap<String, List<String>>();
-		boolean allOperands = false;
+		boolean allDefaultOperands = false;
 		String name = null;
 		List<String> values = null;
 		for (int i = 0; i < args.length; i++) {
 			final String arg = args[i];
-			if (allOperands) {
+			if (allDefaultOperands) {
+				final String defaultKey = getDefaultKey(map, defaultKeys);
 				add(map, defaultKey, arg);
 			} else {
 				if (arg.startsWith("--")) {
 					add(optionsKey, map, name, values);
 					if (arg.length() == 2) {
 						// delimiter, all coming args are default operands
-						allOperands = true;
+						allDefaultOperands = true;
 						name = null;
 						values = null;
 					} else {
@@ -98,7 +113,8 @@ public class ArgsUtil {
 				} else {
 					// an operand value
 					if (name == null) {
-						name = defaultKey;
+						final String defaultKey = getDefaultKey(map, defaultKeys);
+						add(map, defaultKey, arg);
 					}
 					if (values == null) {
 						values = new ArrayList<String>(2);
@@ -109,6 +125,15 @@ public class ArgsUtil {
 		}
 		add(optionsKey, map, name, values);
 		return map;
+	}
+	
+	private static String getDefaultKey(Map<String, List<String>> map, List<String> defaultKeys) {
+		for (final String defaultKey : defaultKeys) {
+			if (!map.containsKey(defaultKey)) {
+				return defaultKey;
+			}
+		}
+		return defaultKeys.get(defaultKeys.size() - 1);
 	}
 
 	/**

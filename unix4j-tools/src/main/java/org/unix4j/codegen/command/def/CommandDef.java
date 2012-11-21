@@ -18,7 +18,6 @@ public class CommandDef extends AbstractElementDef {
 		this.name = name;
 		this.synopsis = synopsis;
 		this.description = description;
-		this.defaultOperand = "MISSING:defaultOperand";//should always be filled with a different value
 	}
 
 	public final String commandName;		//the command name, such as "ls"
@@ -31,7 +30,7 @@ public class CommandDef extends AbstractElementDef {
 	public final List<MethodDef> methods = new ArrayList<MethodDef>();
 	public final Map<String, OptionDef> options = new LinkedHashMap<String, OptionDef>();		//by (long) name
 	public final Map<String, OperandDef> operands = new LinkedHashMap<String, OperandDef>();	//by name
-	public String defaultOperand;			//operand name for default operand
+	public final List<String> defaultOperands = new ArrayList<String>(1);			//operand names for default operands
 	
 	@Override
 	public String toString() {

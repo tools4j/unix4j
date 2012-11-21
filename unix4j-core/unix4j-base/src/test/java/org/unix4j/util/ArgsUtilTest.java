@@ -12,12 +12,14 @@ import org.junit.Test;
 
 /**
  * Unit test for {@link ArgsUtil}. Tests all samples given in the javadoc
- * comments of {@link ArgsUtil#parseArgs(String, String, String...)}.
+ * comments of {@link ArgsUtil#parseArgs(String, List, String...)}.
  */
 public class ArgsUtilTest {
 	
 	private static final String OPTIONS = "options";
 	private static final String DEFAULT = "default";
+	private static final String PATTERN = "pattern";
+	private static final String PATHS	= "paths";
 
 	private Map<String, List<String>> actual;
 	private Map<String, List<String>> expected;
@@ -152,6 +154,61 @@ public class ArgsUtilTest {
 	}
 
 	@Test
+	public void testGrepWithTwoDefaultOperands() {
+		expect(PATTERN, "myword");
+		expect(PATHS, "myfile.txt");
+		actualGrep("myword", "myfile.txt");
+	}
+
+	@Test
+	public void testGrepWithShortOptionAndTwoDefaultOperands() {
+		expect(OPTIONS, "i");
+		expect(PATTERN, "myword");
+		expect(PATHS, "myfile.txt");
+		actualGrep("-i", "myword", "myfile.txt");
+	}
+
+	@Test
+	public void testGrepWithShortOptionAndThreeDefaultOperands() {
+		expect(OPTIONS, "i");
+		expect(PATTERN, "error");
+		expect(PATHS, "*.txt", "*.log");
+		actualGrep("-i", "error", "*.txt", "*.log");
+	}
+
+	@Test
+	public void testGrepWithLongOptionAndTwoDelimitedDefaultOperands() {
+		expect(OPTIONS, "ignoreCase");
+		expect(PATTERN, "error");
+		expect(PATHS, "*");
+		actualGrep("--ignoreCase", "--", "error", "*");
+	}
+
+	@Test
+	public void testGrepWithLongOptionOneNamedOperandAndOneDelimitedDefaultOperand() {
+		expect(OPTIONS, "ignoreCase");
+		expect(PATTERN, "error");
+		expect(PATHS, "*");
+		actualGrep("--ignoreCase", "--" + PATTERN, "error", "--", "*");
+	}
+
+	@Test
+	public void testGrepWithShortOptionDefaultOperandAndNamedOperand() {
+		expect(OPTIONS, "i");
+		expect(PATTERN, "error");
+		expect(PATHS, "*");
+		actualGrep("-i", "error", "--" + PATHS, "*");
+	}
+
+	@Test
+	public void testGrepWithLongOptionNamedOperandAndDefaultDelimitedOperand() {
+		expect(OPTIONS, "ignoreCase");
+		expect(PATTERN, "error");
+		expect(PATHS, "*");
+		actualGrep("--ignoreCase", "--" + PATHS, "*", "--", "error");
+	}
+
+	@Test
 	public void testEmpty() {
 		expected = Collections.emptyMap();
 		actual();
@@ -163,7 +220,13 @@ public class ArgsUtilTest {
 	}
 
 	private void actual(String... args) {
-		actual = ArgsUtil.parseArgs(OPTIONS, DEFAULT, args);
+		assertArgs(OPTIONS, Arrays.asList(DEFAULT), args);
+	}
+	private void actualGrep(String... args) {
+		assertArgs(OPTIONS, Arrays.asList(PATTERN, PATHS), args);
+	}
+	private void assertArgs(String options, List<String> defaults, String... args) {
+		actual = ArgsUtil.parseArgs(options, defaults, args);
 		Assert.assertEquals(expected, actual);
 	}
 

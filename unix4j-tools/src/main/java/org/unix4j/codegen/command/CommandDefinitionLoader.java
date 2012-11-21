@@ -143,8 +143,8 @@ public class CommandDefinitionLoader {
 	private void loadOperands(CommandDef def, Element elCommand) {
 		final Element elOperands = XmlUtil.getSingleChildElement(elCommand, XmlElement.operands);
 		final List<Element> list = XmlUtil.getChildElements(elOperands, XmlElement.operand);
-		def.defaultOperand = XmlUtil.getRequiredAttribute(elOperands, XmlAttribtue._default);
-		boolean defaultOperandExists = false;
+		final String[] defaultOperands = XmlUtil.getRequiredAttribute(elOperands, XmlAttribtue._default).split(",");
+		final boolean[] defaultOperandExists = new boolean[defaultOperands.length];
 		for (final Element elOperand : list) {
 			final String name = XmlUtil.getRequiredAttribute(elOperand, XmlAttribtue.name);
 			final String type = XmlUtil.getRequiredAttribute(elOperand, XmlAttribtue.type);
@@ -152,10 +152,18 @@ public class CommandDefinitionLoader {
 			final String redirection = XmlUtil.getAttribute(elOperand, XmlAttribtue.redirection, "");
 			final OperandDef opDef = new OperandDef(name, type, desc, redirection);
 			def.operands.put(name, opDef);
-			defaultOperandExists |= def.defaultOperand.equals(name);
+			for (int i = 0; i < defaultOperands.length; i++) {
+				defaultOperandExists[i] |= name.equals(defaultOperands[i]); 
+			}
 		}
-		if (!defaultOperandExists) {
-			throw new IllegalArgumentException("default operand '" + def.defaultOperand + "' is not defined for command " + elCommand.getNodeName());
+		if (defaultOperands.length == 0) {
+			throw new IllegalArgumentException("default operand cannot be empty for command " + elCommand.getNodeName());
+		}
+		for (int i = 0; i < defaultOperands.length; i++) {
+			if (!defaultOperandExists[i]) {
+				throw new IllegalArgumentException("default operand '" + defaultOperands[i] + "' is not defined for command " + elCommand.getNodeName());
+			}
+			def.defaultOperands.add(defaultOperands[i]);
 		}
 	}
 

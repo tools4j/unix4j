@@ -196,7 +196,8 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 		final String[] resolvedArgs = hasVariable ? resolveVariables(context.getVariableContext(), this.args) : this.args;
 		
 		//convert now
-		final Map<String, List<String>> map = ArgsUtil.parseArgs("options", "${def.defaultOperand}", resolvedArgs);
+		final List<String> defaultOperands = Arrays.asList(<#foreach defOp in def.defaultOperands>"${defOp}"<#if defOp_has_next>, </#if></#foreach>);
+		final Map<String, List<String>> map = ArgsUtil.parseArgs("options", defaultOperands, resolvedArgs);
 		<#if def.options?size != 0>
 		final ${optionsName}.Default options = new ${optionsName}.Default();
 		final ${argumentsName} argsForContext = new ${argumentsName}(options);
