@@ -16,7 +16,7 @@ abstract class FixedStringMatcher implements LineMatcher {
 
 	public static class Standard extends FixedStringMatcher {
 		public Standard(GrepArguments args) {
-			super(args.getPatternStr());
+			super(args.getRegexp());
 		}
 		@Override
 		public boolean matches(Line line) {
@@ -25,7 +25,7 @@ abstract class FixedStringMatcher implements LineMatcher {
 	}
 	public static class IgnoreCase extends FixedStringMatcher {
 		public IgnoreCase(GrepArguments args) {
-			super(args.getPatternStr().toUpperCase());
+			super(args.getRegexp().toUpperCase());
 		}
 		@Override
 		public boolean matches(Line line) {
@@ -34,7 +34,7 @@ abstract class FixedStringMatcher implements LineMatcher {
 	}
 	public static class WholeLine extends FixedStringMatcher {
 		public WholeLine(GrepArguments args) {
-			super(args.getPatternStr());
+			super(args.getRegexp());
 		}
 		@Override
 		public boolean matches(Line line) {
@@ -43,7 +43,7 @@ abstract class FixedStringMatcher implements LineMatcher {
 	}
 	public static class WholeLineIgnoreCase extends FixedStringMatcher {
 		public WholeLineIgnoreCase(GrepArguments args) {
-			super(args.getPatternStr());
+			super(args.getRegexp());
 		}
 		@Override
 		public boolean matches(Line line) {
