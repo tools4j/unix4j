@@ -10,7 +10,7 @@
 
 	<groupId>org.unix4j</groupId>
 	<artifactId>unix4j</artifactId>
-	<version>0.2-SNAPSHOT</version>
+	<version>0.2.SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<url>http://www.unix4j.org</url>
 
@@ -115,7 +115,7 @@
 							<groups>
 								<group>
 									<title>unix4j-core</title>
-									<packages>org.unix4j:org.unix4j.builder:org.unix4j.command:org.unix4j.convert:org.unix4j.io:org.unix4j.line:org.unix4j.option:org.unix4j.processor:org.unix4j.util*:org.unix4j.variable</packages>
+									<packages>org.unix4j:org.unix4j.builder:org.unix4j.command:org.unix4j.context:org.unix4j.convert:org.unix4j.io:org.unix4j.line:org.unix4j.option:org.unix4j.processor:org.unix4j.util*</packages>
 								</group>
 								<group>
 									<title>unix4j-commands</title>
@@ -159,7 +159,7 @@
 							<groups>
 								<group>
 									<title>unix4j-core</title>
-									<packages>org.unix4j:org.unix4j.builder:org.unix4j.command:org.unix4j.convert:org.unix4j.io:org.unix4j.line:org.unix4j.option:org.unix4j.processor:org.unix4j.util*:org.unix4j.variable</packages>
+									<packages>org.unix4j:org.unix4j.builder:org.unix4j.command:org.unix4j.context:org.unix4j.convert:org.unix4j.io:org.unix4j.line:org.unix4j.option:org.unix4j.processor:org.unix4j.util*</packages>
 								</group>
 								<group>
 									<title>unix4j-commands</title>
