@@ -132,7 +132,7 @@
 			Lines will be printed which match the given regular expression. The 
 			{@code regexp} string is surrounded with ".*" on both sides unless
 			the {@code --wholeLine} option is specified. If the 
-			{@link --fixedStrings} option is used, plain string comparison is
+			{@code --fixedStrings} option is used, plain string comparison is
 			used instead of regular expression matching.
 		</operand>
 		<operand name="pattern" type="java.util.regex.Pattern">

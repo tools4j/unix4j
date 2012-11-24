@@ -40,6 +40,8 @@ import ${def.pkg.name}.${optionSetsName};
 </#foreach>
  * </table>
  * <p>
+ * See {@link Interface} for the corresponding command signature methods.
+ * <p>
  * <b>DESCRIPTION</b>
  * <p>
  * ${def.description}

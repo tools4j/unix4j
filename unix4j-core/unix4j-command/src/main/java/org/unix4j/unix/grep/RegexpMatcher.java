@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 /**
  * A matcher using regular expressions to match the pattern with a line. Uses
- * Java's {@Link Pattern} to do the regexp stuff.
+ * Java's {@link Pattern} to do the regexp stuff.
  */
 class RegexpMatcher implements LineMatcher {
 

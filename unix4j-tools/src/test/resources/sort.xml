@@ -213,7 +213,7 @@
 			
 			Neither a leading ‘+’ nor exponential notation is recognized. To 
 			compare such strings numerically, use the
-			{@code -FIXME-genericNumericSort (-g)} option. 
+			{@code --genericNumericSort (-g)} option. 
 
 			(This option is ignored if a comparator operand has is present).
 		</option>
@@ -237,11 +237,11 @@
 			This option sorts values that are consistently scaled to the nearest
 			suffix, regardless of whether suffixes denote powers of 1000 or
 			1024, and it therefore sorts the output of any single invocation of 
-			the {@code ls} command that are invoked with the -FIXME-human-readable 
+			the {@code ls} command that are invoked with the --human-readable 
 			option. 
 			
 			The syntax for numbers is the same as for the
-			{@code -FIXME-numericSort (-n)} option; the SI suffix must immediately 
+			{@code --numericSort (-n)} option; the SI suffix must immediately 
 			follow the number. 		
 
 			(This option is ignored if a comparator operand has is present).
