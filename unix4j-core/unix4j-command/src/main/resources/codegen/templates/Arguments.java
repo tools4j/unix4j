@@ -20,7 +20,6 @@ import java.util.Arrays;
 import org.unix4j.command.Arguments;
 import org.unix4j.context.ExecutionContext;
 <#if hasArgsOperand(def)>
-import org.unix4j.context.VariableContext;
 import org.unix4j.convert.ValueConverter;
 </#if>
 <#if def.options?size != 0>
@@ -32,6 +31,7 @@ import org.unix4j.util.ArgsUtil;
 <#if hasTrueOperand>
 import org.unix4j.util.ArrayUtil;
 </#if>
+import org.unix4j.variable.VariableContext;
 
 import ${cmd.pkg.name}.${cmd.simpleName};
 
@@ -70,13 +70,17 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	</#if>
 	</#foreach>
 	
-	<#if def.options?size != 0>
 	/**
 	 * Constructor to use if no options are specified.
 	 */
 	public ${argumentsName}() {
-		this(${optionsName}.EMPTY);
+		<#if def.options?size != 0>
+		this.options = ${optionsName}.EMPTY;
+		<#else>
+		super();
+		</#if>
 	}
+	<#if def.options?size != 0>
 
 	/**
 	 * Constructor with option set containing the selected command options.
@@ -100,13 +104,6 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	public ${optionsName} getOptions() {
 		return options;
 	}
-	<#else>
-	/**
-	 * Default constructor, no argument values are set initially.
-	 */
-	public ${argumentsName}() {
-		super();
-	}
 	</#if>
 	<#if hasArgsOperand(def)>
 
@@ -119,19 +116,20 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	 */
 	public ${argumentsName}(String... args) {
 		this();
-		if (args == null) {
-			throw new NullPointerException("optionsVariable argument cannot be null");
-		}
 		this.args = args;
 		this.argsIsSet = true;
 	}
 
-	private String resolveVariable(VariableContext context, String variable) {
+	private Object resolveVariable(VariableContext context, String variable) {
 		final Object value = context.getValue(variable);
-		return value == null ? "" : value.toString();
+		if (value != null) {
+			return value;
+		}
+		throw new IllegalArgumentException("cannot resolve variable " + variable + 
+				" in command: ${commandName} " + this);
 	}
-	private String[] resolveVariables(VariableContext context, String... unresolved) {
-		final String[] resolved = new String[unresolved.length];
+	private Object[] resolveVariables(VariableContext context, String... unresolved) {
+		final Object[] resolved = new Object[unresolved.length];
 		for (int i = 0; i < resolved.length; i++) {
 			final String expression = unresolved[i];
 			if (expression.startsWith("$")) {
@@ -165,9 +163,9 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 				" value '" + value + "' into the type " + operandType.getName() + 
 				" for ${commandName} command");
 	}
-	private <V> V convertList(ExecutionContext context, String operandName, Class<V> operandType, List<String> values) {
+	private <V> V convertList(ExecutionContext context, String operandName, Class<V> operandType, List<Object> values) {
 		if (values.size() == 1) {
-			final String value = values.get(0);
+			final Object value = values.get(0);
 			return convert(context, operandName, operandType, value);
 		}
 		return convert(context, operandName, operandType, values);
@@ -180,9 +178,11 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 			throw new NullPointerException("context cannot be null");
 		}
 		<#if hasArgsOperand(def)>
-		if (!argsIsSet) {
+		if (!argsIsSet || args.length == 0) {
+			//nothing to resolve
 			return this;
 		}
+
 		//check if there is at least one variable
 		boolean hasVariable = false;
 		for (final String arg : args) {
@@ -191,20 +191,19 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 				break;
 			}
 		}
-		
 		//resolve variables
-		final String[] resolvedArgs = hasVariable ? resolveVariables(context.getVariableContext(), this.args) : this.args;
+		final Object[] resolvedArgs = hasVariable ? resolveVariables(context.getVariableContext(), this.args) : this.args;
 		
 		//convert now
 		final List<String> defaultOperands = Arrays.asList(<#foreach defOp in def.defaultOperands>"${defOp}"<#if defOp_has_next>, </#if></#foreach>);
-		final Map<String, List<String>> map = ArgsUtil.parseArgs("options", defaultOperands, resolvedArgs);
+		final Map<String, List<Object>> map = ArgsUtil.parseArgs("options", defaultOperands, resolvedArgs);
 		<#if def.options?size != 0>
 		final ${optionsName}.Default options = new ${optionsName}.Default();
 		final ${argumentsName} argsForContext = new ${argumentsName}(options);
 		<#else>
 		final ${argumentsName} argsForContext = new ${argumentsName}();
 		</#if>
-		for (final Map.Entry<String, List<String>> e : map.entrySet()) {
+		for (final Map.Entry<String, List<Object>> e : map.entrySet()) {
 			<#foreach operand in def.operands?values>
 			<#if operand_index != 0>} else </#if>if ("${operand.name}".equals(e.getKey())) {
 				<#if isArgsOperand(operand)>

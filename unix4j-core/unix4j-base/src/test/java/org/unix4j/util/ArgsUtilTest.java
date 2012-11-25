@@ -21,13 +21,13 @@ public class ArgsUtilTest {
 	private static final String PATTERN = "pattern";
 	private static final String PATHS	= "paths";
 
-	private Map<String, List<String>> actual;
-	private Map<String, List<String>> expected;
+	private Map<String, List<Object>> actual;
+	private Map<String, List<Object>> expected;
 
 	@Before
 	public void beforeEach() {
 		actual = null;
-		expected = new LinkedHashMap<String, List<String>>();
+		expected = new LinkedHashMap<String, List<Object>>();
 	}
 
 	@Test
@@ -214,18 +214,18 @@ public class ArgsUtilTest {
 		actual();
 	}
 
-	private void expect(String key, String... values) {
+	private void expect(String key, Object... values) {
 		expected.put(key, Arrays.asList(values));
 
 	}
 
-	private void actual(String... args) {
+	private void actual(Object... args) {
 		assertArgs(OPTIONS, Arrays.asList(DEFAULT), args);
 	}
-	private void actualGrep(String... args) {
+	private void actualGrep(Object... args) {
 		assertArgs(OPTIONS, Arrays.asList(PATTERN, PATHS), args);
 	}
-	private void assertArgs(String options, List<String> defaults, String... args) {
+	private void assertArgs(String options, List<String> defaults, Object... args) {
 		actual = ArgsUtil.parseArgs(options, defaults, args);
 		Assert.assertEquals(expected, actual);
 	}

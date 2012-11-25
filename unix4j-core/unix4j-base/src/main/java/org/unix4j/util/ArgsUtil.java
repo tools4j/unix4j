@@ -78,46 +78,53 @@ public class ArgsUtil {
 	 *         operand values as values plus the special key "options" with all
 	 *         found option short/long names as values
 	 */
-	public static final Map<String, List<String>> parseArgs(String optionsKey, List<String> defaultKeys, String... args) {
-		final Map<String, List<String>> map = new LinkedHashMap<String, List<String>>();
+	public static final Map<String, List<Object>> parseArgs(String optionsKey, List<String> defaultKeys, Object... args) {
+		final Map<String, List<Object>> map = new LinkedHashMap<String, List<Object>>();
 		boolean allDefaultOperands = false;
 		String name = null;
-		List<String> values = null;
+		List<Object> values = null;
 		for (int i = 0; i < args.length; i++) {
-			final String arg = args[i];
+			final Object arg = args[i];
 			if (allDefaultOperands) {
 				final String defaultKey = getDefaultKey(map, defaultKeys);
 				add(map, defaultKey, arg);
 			} else {
-				if (arg.startsWith("--")) {
-					add(optionsKey, map, name, values);
-					if (arg.length() == 2) {
-						// delimiter, all coming args are default operands
-						allDefaultOperands = true;
+				boolean isOperandValue = true;
+				if (arg instanceof String) {
+					final String sarg = (String)arg;
+					if (sarg.startsWith("--")) {
+						isOperandValue = false;
+						add(optionsKey, map, name, values);
+						if (sarg.length() == 2) {
+							// delimiter, all coming args are default operands
+							allDefaultOperands = true;
+							name = null;
+							values = null;
+						} else {
+							// operand name or option long name
+							name = sarg.substring(2);// cut off the dashes --
+							values = null;
+						}
+					} else if (sarg.startsWith("-")) {
+						isOperandValue = false;
+						// a short option name string
+						add(optionsKey, map, name, values);
+						final int len = sarg.length();
+						for (int j = 1; j < len; j++) {
+							add(map, optionsKey, "" + sarg.charAt(j));
+						}
 						name = null;
 						values = null;
-					} else {
-						// operand name or option long name
-						name = arg.substring(2);// cut off the dashes --
-						values = null;
 					}
-				} else if (arg.startsWith("-")) {
-					// a short option name string
-					add(optionsKey, map, name, values);
-					final int len = arg.length();
-					for (int j = 1; j < len; j++) {
-						add(map, optionsKey, "" + arg.charAt(j));
-					}
-					name = null;
-					values = null;
-				} else {
+				}
+				if (isOperandValue) {	
 					// an operand value
 					if (name == null) {
 						final String defaultKey = getDefaultKey(map, defaultKeys);
 						add(map, defaultKey, arg);
 					}
 					if (values == null) {
-						values = new ArrayList<String>(2);
+						values = new ArrayList<Object>(2);
 					}
 					values.add(arg);
 				}
@@ -127,7 +134,7 @@ public class ArgsUtil {
 		return map;
 	}
 	
-	private static String getDefaultKey(Map<String, List<String>> map, List<String> defaultKeys) {
+	private static String getDefaultKey(Map<String, List<Object>> map, List<String> defaultKeys) {
 		for (final String defaultKey : defaultKeys) {
 			if (!map.containsKey(defaultKey)) {
 				return defaultKey;
@@ -140,10 +147,10 @@ public class ArgsUtil {
 	 * Adds the given value to the list in the map if it exist for the specified
 	 * key, and to a new list added to the map if it does not exist yet
 	 */
-	private static void add(Map<String, List<String>> map, String key, String value) {
-		List<String> values = map.get(key);
+	private static void add(Map<String, List<Object>> map, String key, Object value) {
+		List<Object> values = map.get(key);
 		if (values == null) {
-			map.put(key, values = new ArrayList<String>());
+			map.put(key, values = new ArrayList<Object>(2));
 		}
 		values.add(value);
 	}
@@ -155,14 +162,14 @@ public class ArgsUtil {
 	 * as operand values --- merged with existing operand values if there are
 	 * any.
 	 */
-	private static void add(String optionsKey, Map<String, List<String>> map, String key, List<String> values) {
+	private static void add(String optionsKey, Map<String, List<Object>> map, String key, List<Object> values) {
 		if (key != null) {
 			if (values == null) {
 				// an option long name
 				add(map, optionsKey, key);
 			} else {
 				// an operand
-				List<String> old = map.get(key);
+				List<Object> old = map.get(key);
 				if (old == null) {
 					map.put(key, values);
 				} else {

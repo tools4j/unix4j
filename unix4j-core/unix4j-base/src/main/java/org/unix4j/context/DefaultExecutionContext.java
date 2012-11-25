@@ -8,6 +8,8 @@ import java.util.Properties;
 import org.unix4j.convert.ConverterRegistry;
 import org.unix4j.convert.DefaultConverterRegistry;
 import org.unix4j.convert.ValueConverter;
+import org.unix4j.variable.StackableVariableContext;
+import org.unix4j.variable.VariableContext;
 
 
 public class DefaultExecutionContext implements ExecutionContext {

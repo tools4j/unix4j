@@ -1,4 +1,4 @@
-package org.unix4j.context;
+package org.unix4j.variable;
 
 import java.util.LinkedList;
 
@@ -18,6 +18,22 @@ import org.unix4j.convert.ValueConverter;
  */
 public class StackableVariableContext implements VariableContext {
 	
+	private static final VariableContext EMPTY_VARIABLE_CONTEXT = new VariableContext() {
+		@Override
+		public Object setValue(String name, Object value) {
+			//should never be called
+			throw new IllegalStateException("empty variable constant is not modifiable");
+		}
+		@Override
+		public <V> V getValue(String name, ValueConverter<V> converter) throws IllegalArgumentException {
+			return null;
+		}
+		@Override
+		public Object getValue(String name) {
+			return null;
+		}
+	};
+	
 	private final LinkedList<VariableContext> stack = new LinkedList<VariableContext>();
 	
 	public StackableVariableContext push() {
@@ -33,11 +49,14 @@ public class StackableVariableContext implements VariableContext {
 		throw new IllegalStateException("stack is empty");
 	}
 	
-	public VariableContext peek() {
+	public VariableContext peek(boolean fail) {
 		if (!stack.isEmpty()) {
 			return stack.getLast();
 		}
-		throw new IllegalStateException("stack is empty");
+		if (fail) {
+			throw new IllegalStateException("stack is empty [hint: push a new variable context before storing variables]");
+		}
+		return EMPTY_VARIABLE_CONTEXT;
 	}
 	
 	public VariableContext removeAllStackFrames() {
@@ -47,17 +66,17 @@ public class StackableVariableContext implements VariableContext {
 	
 	@Override
 	public Object setValue(String name, Object value) {
-		return peek().setValue(name, value);
+		return peek(true).setValue(name, value);
 	}
 
 	@Override
 	public Object getValue(String name) {
-		return peek().getValue(name);
+		return peek(false).getValue(name);
 	}
 
 	@Override
 	public <V> V getValue(String name, ValueConverter<V> converter) throws IllegalArgumentException {
-		return peek().getValue(name, converter);
+		return peek(false).getValue(name, converter);
 	}
 
 }

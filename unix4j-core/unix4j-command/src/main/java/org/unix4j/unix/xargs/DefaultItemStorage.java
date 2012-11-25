@@ -1,7 +1,10 @@
 package org.unix4j.unix.xargs;
 
-import org.unix4j.context.VariableContext;
-import org.unix4j.convert.StringConverters;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.unix4j.variable.Arg;
+import org.unix4j.variable.VariableContext;
 
 class DefaultItemStorage implements ItemStorage {
 	
@@ -12,8 +15,8 @@ class DefaultItemStorage implements ItemStorage {
 	private final int maxArgs;
 	private final boolean runWithoutItems;
 
-	private int lines;
-	private int items;
+	private int lineCount;
+	private final List<String> items = new ArrayList<String>();
 	
 	public DefaultItemStorage(XargsLineProcessor processor) {
 		this.processor = processor;
@@ -26,48 +29,42 @@ class DefaultItemStorage implements ItemStorage {
 
 	@Override
 	public void storeItem(String item) {
-		variables.setValue(Xarg.arg(items), item);
-		items++;
-		if (items >= maxArgs) {
+		final int index = items.size();
+		variables.setValue(Arg.arg(index), item);
+		items.add(item);
+		if (items.size() >= maxArgs) {
 			invokeCommandAndClearAllItems();
-			lines = 0;
+			lineCount = 0;
 		}
 	}
 
 	@Override
 	public void incrementLineCount() {
-		lines++;
-		if (lines >= maxLines) {
-			if (runWithoutItems || items > 0) {
+		lineCount++;
+		if (lineCount >= maxLines) {
+			if (runWithoutItems || !items.isEmpty()) {
 				invokeCommandAndClearAllItems();
 			}
-			lines = 0;
+			lineCount = 0;
 		}
 	}
 	
 	protected void flush() {
-		if (runWithoutItems || items > 0) {
+		if (lineCount > 0 && (runWithoutItems || !items.isEmpty())) {
 			invokeCommandAndClearAllItems();
 		}
-		lines = 0;
+		lineCount = 0;
 	}
 	
 	private void invokeCommandAndClearAllItems() {
-		variables.setValue(Xarg.args(), getAllItems());
+		variables.setValue(Arg.args(), items);
 		processor.invoke();
-		variables.setValue(Xarg.args(), null);//set null clears the variable
-		while (items > 0) {
-			items--;
-			variables.setValue(Xarg.arg(items), null);//set null clears the variable
+		variables.setValue(Arg.args(), null);//set null clears the variable
+		final int itemCount = items.size();
+		for (int i = 0; i < itemCount; i++) {
+			variables.setValue(Arg.arg(i), null);//set null clears the variable
 		}
+		items.clear();
 	}
 	
-	private String[] getAllItems() {
-		final String[] allItems = new String[items];
-		for (int i = 0; i < items; i++) {
-			allItems[i] = variables.getValue(Xarg.arg(i), StringConverters.DEFAULT);
-		}
-		return allItems;
-	}
-
 }

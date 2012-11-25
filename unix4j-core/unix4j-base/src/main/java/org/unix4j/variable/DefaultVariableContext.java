@@ -1,4 +1,4 @@
-package org.unix4j.context;
+package org.unix4j.variable;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

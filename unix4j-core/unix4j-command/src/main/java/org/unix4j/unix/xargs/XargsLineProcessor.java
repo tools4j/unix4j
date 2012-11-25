@@ -1,11 +1,11 @@
 package org.unix4j.unix.xargs;
 
 import org.unix4j.context.ExecutionContext;
-import org.unix4j.context.StackableVariableContext;
-import org.unix4j.context.VariableContext;
 import org.unix4j.line.Line;
 import org.unix4j.processor.AbstractLineProcessor;
 import org.unix4j.processor.LineProcessor;
+import org.unix4j.variable.StackableVariableContext;
+import org.unix4j.variable.VariableContext;
 
 class XargsLineProcessor extends AbstractLineProcessor<XargsArguments> {
 

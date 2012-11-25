@@ -7,6 +7,7 @@ import org.unix4j.processor.LineProcessor;
 import org.unix4j.unix.Echo;
 import org.unix4j.unix.Find;
 import org.unix4j.unix.Xargs;
+import org.unix4j.variable.Arg;
 
 /**
  * Implementation of the {@link Xargs xargs} command.
@@ -16,7 +17,7 @@ class XargsCommand extends AbstractCommand<XargsArguments> {
 	private final Command<?> invokedCommand;
 	
 	public XargsCommand(XargsArguments arguments) {
-		this(arguments, Echo.Factory.echo(Xarg.$args));
+		this(arguments, Echo.Factory.echo(Arg.$args));
 	}
 	protected XargsCommand(XargsArguments arguments, Command<?> invokedCommand) {
 		super(Find.NAME, arguments);
