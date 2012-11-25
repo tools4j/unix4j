@@ -19,10 +19,6 @@
 			 ({@code ' '}) characters to the standard output suppressing the
 			 trailing line ending if the {@code "-n"} option is specified.			 
 		</method>
-		<method args="string" usesStandardInput="false">
-			 Writes the specified string followed by a line ending to the 
-			 standard output.
-		</method>
 		<method args="options,string" usesStandardInput="false">
 			 Writes the specified string followed by a newline character to 
 			 the standard output suppressing the trailing line ending if the

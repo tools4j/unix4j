@@ -8,6 +8,7 @@ import java.util.Properties;
 import org.unix4j.command.Command;
 import org.unix4j.convert.ValueConverter;
 import org.unix4j.processor.LineProcessor;
+import org.unix4j.variable.VariableContext;
 
 /**
  * The execution context encapsulates all information relevant during the

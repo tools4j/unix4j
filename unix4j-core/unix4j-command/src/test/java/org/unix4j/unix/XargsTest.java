@@ -6,14 +6,14 @@ import java.util.List;
 import junit.framework.Assert;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.io.Input;
 import org.unix4j.io.StringInput;
-import org.unix4j.unix.xargs.Xarg;
+import org.unix4j.util.StackTraceUtil;
+import org.unix4j.variable.Arg;
 
-@Ignore
+//@Ignore
 public class XargsTest {
 	
 	private static final String LINE_0 = "hello world";
@@ -21,7 +21,7 @@ public class XargsTest {
 	private static final String LINE_2 = "  \ttabs\t\t and\tspaces    \t";
 	private static final String LINE_3 = "";
 	private static final String LINE_4 = "Bla";
-	private static final String LINE_5 = "A\0B\0C\0\0E";
+	private static final String LINE_5 = "A\0B\0C\0\0D";
 	
 	private Input input;
 	private final List<String> expectedLines = new ArrayList<String>();
@@ -33,16 +33,43 @@ public class XargsTest {
 	}
 	
 	@Test
-	public void testXargs() {
-		Unix4j.ls().xargs().echo(Xarg.$argsarray).toStdOut();
-
+	public void testXargsWithDefaultCommand() {
 		expect("hello world");
 		expect("line one");
-		expect("tabs and spaces");
-		expect("");
-		expect("Bla");
-		expect("A\0B\0C\0\0E");
+		expect("tabs and spaces Bla");
+		expect("A\0B\0C\0\0D");
 		actual(Unix4j.from(input).cat().xargs().toStringList());
+	}
+
+	@Test
+	public void testXargsWithEchoAndNoVariable() {
+		expect("");
+		expect("");
+		expect("");
+		expect("");
+		actual(Unix4j.from(input).cat().xargs().echo().toStringList());
+	}
+
+	@Test
+	public void testXargsWithEchoAndArgsVariable() {
+		expect("hello world");
+		expect("line one");
+		expect("tabs and spaces Bla");
+		expect("A\0B\0C\0\0D");
+		actual(Unix4j.from(input).cat().xargs().echo(Arg.$args).toStringList());
+	}
+
+	@Test
+	public void testXargsWithEchoAndArg0Variable() {
+		expect("hello");
+		expect("line");
+		expect("tabs");
+		expect("A\0B\0C\0\0D");
+		actual(Unix4j.from(input).cat().xargs().echo(Arg.$0).toStringList());
+	}
+	@Test(expected=IllegalArgumentException.class)
+	public void testXargsWithEchoAndArg1Variable() {
+		actual(Unix4j.from(input).cat().xargs().echo(Arg.$1).toStringList());
 	}
 
 	private void expect(String... expectedLines) {
@@ -57,10 +84,12 @@ public class XargsTest {
 				Assert.assertEquals("line[" + i + "]", expectedLines.get(i), actualLines.get(i));
 			}
 		} catch (AssertionError e) {
+			final StackTraceElement testMethod = StackTraceUtil.getCurrentMethodStackTraceElement(1);
+			System.err.println(">>> TEST: class=" + testMethod.getClassName() + ", method=" + testMethod.getMethodName() + "()");
 			final int max = Math.max(expectedLines.size(), actualLines.size());
 			for (int i = 0; i < max; i++) {
-				final String exp = i < expectedLines.size() ? expectedLines.get(i) : null; 
-				final String act = i < actualLines.size() ? actualLines.get(i) : null;
+				final String exp = i < expectedLines.size() ? expectedLines.get(i) : "<none>"; 
+				final String act = i < actualLines.size() ? actualLines.get(i) : "<none>";
 				final String prefix = (exp != null && act != null && exp.equals(act)) ? "..(ok)..." : "..(ERR).."; 
 				System.err.println(prefix + "EXP[" + i + "]=" + exp);
 				System.err.println(prefix + "ACT[" + i + "]=" + act);

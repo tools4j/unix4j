@@ -1,8 +1,8 @@
 package org.unix4j.command;
 
 import org.unix4j.context.ExecutionContext;
-import org.unix4j.context.VariableContext;
 import org.unix4j.processor.LineProcessor;
+import org.unix4j.variable.VariableContext;
 
 /**
  * A command is an executable unit defined by the command {@link #getName()

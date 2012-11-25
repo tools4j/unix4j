@@ -1,8 +1,8 @@
 package org.unix4j.command;
 
 import org.unix4j.context.ExecutionContext;
-import org.unix4j.context.VariableContext;
 import org.unix4j.convert.ValueConverter;
+import org.unix4j.variable.VariableContext;
 
 /**
  * Interface implemented by command arguments. Arguments is usually a container
