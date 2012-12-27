@@ -2,6 +2,12 @@ package org.unix4j.variable;
 
 import org.unix4j.convert.ValueConverter;
 
+/**
+ * The variable context is an extension of the somewhat simplistic 
+ * {@link VariableResolver}. It extends the resolver by allowing registration of 
+ * delegate resolvers and adding a convenience method to return converted 
+ * variable values.
+ */
 public interface VariableContext extends VariableResolver {
 	/**
 	 * Adds a variable resolver to this variable context. The last recently 

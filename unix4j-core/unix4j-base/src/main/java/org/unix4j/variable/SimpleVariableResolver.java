@@ -4,8 +4,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Simple variable resolver instance resolving variable by an exact match of
- * the variable name.
+ * Simple variable resolver implementation backed by a map of variable names to
+ * values.
  */
 public class SimpleVariableResolver implements VariableResolver {
 	
