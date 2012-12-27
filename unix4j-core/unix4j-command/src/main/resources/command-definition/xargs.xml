@@ -45,9 +45,8 @@
 			standard input. The command following after xargs is executed once 
 			for every {@code maxLines} nonblank input lines (or possibly fewer 
 			for the last invocation with the remaining lines at the end of the 
-			file). Trailing blanks cause an input line to be logically continued 
-			on the next input line. The item variables are usually passed to the 
-			invoked command as arguments.
+			file). The item variables are usually passed to the invoked command 
+			as arguments.
 		</method>
 		<method args="maxArgs" usesStandardInput="true">
 			Reads items from the standard input, delimited by blanks (which can 
@@ -76,9 +75,8 @@
 			standard input. The command following after xargs is executed once 
 			for every {@code maxLines} nonblank input lines (or possibly fewer 
 			for the last invocation with the remaining lines at the end of the 
-			file). Trailing blanks cause an input line to be logically continued 
-			on the next input line. The item variables are usually passed to the 
-			invoked command as arguments.
+			file). The item variables are usually passed to the invoked command 
+			as arguments.
 		</method>
 		<method args="delimiter,maxArgs" usesStandardInput="true">
 			Reads items from the standard input using the specified delimiter to
@@ -132,9 +130,8 @@
 			standard input. The command following after xargs is executed once 
 			for every {@code maxLines} nonblank input lines (or possibly fewer 
 			for the last invocation with the remaining lines at the end of the 
-			file). Trailing blanks cause an input line to be logically continued 
-			on the next input line. The item variables are usually passed to the 
-			invoked command as arguments.
+			file). The item variables are usually passed to the invoked command 
+			as arguments.
 		</method>
 		<method args="options,maxArgs" usesStandardInput="true">
 			Reads items from the standard input, delimited by blanks (which can 
@@ -163,9 +160,8 @@
 			standard input. The command following after xargs is executed once 
 			for every {@code maxLines} nonblank input lines (or possibly fewer 
 			for the last invocation with the remaining lines at the end of the 
-			file). Trailing blanks cause an input line to be logically continued 
-			on the next input line. The item variables are usually passed to the 
-			invoked command as arguments.
+			file). The item variables are usually passed to the invoked command 
+			as arguments.
 		</method>
 		<method args="options,delimiter,maxArgs" usesStandardInput="true">
 			Reads items from the standard input using the specified delimiter to
@@ -209,6 +205,12 @@
 			
 			(This option is ignored if an explicit delimiter operand is specified).
 		</option>
+		<option name="exactArgs" acronym="x">
+			Terminate immediately if {@code maxArgs} is specified but the found
+			number of variable items is less than {@code maxArgs}.		
+
+			(This option is ignored if no {@code maxArgs} operand is specified).
+		</option>
  		<option name="noRunIfEmpty" acronym="r">
  			If the standard input does not contain any nonblanks, do not run the
  			command. Normally, the command is run once even if there is no 
@@ -229,8 +231,6 @@
 		</operand>
 		<operand name="maxLines" type="long">
 			Use at most maxLines nonblank input lines per command invocation. 
-			Trailing blanks cause an input line to be logically continued on the
-			next input line.
 		</operand>
 		<operand name="maxArgs" type="int">
 			Use at most maxArgs arguments per command invocation.

@@ -1,24 +1,8 @@
 package org.unix4j.convert;
 
 import java.lang.reflect.Array;
-import java.util.Collection;
 
 public class StringArrayConverters {
-	public static final ValueConverter<String[]> COLLECTION_TO_ARRAY = new ValueConverter<String[]>() {
-		@Override
-		public String[] convert(Object value) throws IllegalArgumentException {
-			if (value instanceof Collection) {
-				final Collection<?> coll = (Collection<?>)value;
-				final String[] result = new String[coll.size()];
-				int index = 0;
-				for (final Object el : coll) {
-					result[index++] = el == null ? null : el.toString();
-				}
-				return result;
-			}
-			return null;
-		}
-	};
 	public static final ValueConverter<String[]> STRING_ARRAY_TO_STRING_ARRAY = new ValueConverter<String[]>() {
 		@Override
 		public String[] convert(Object value) throws IllegalArgumentException {
@@ -44,7 +28,7 @@ public class StringArrayConverters {
 			return null;
 		}
 	};
-	public static final ValueConverter<String[]> ARRAY_TO_STRING_ARRAY = new ValueConverter<String[]>() {
+	public static final ValueConverter<String[]> ANY_ARRAY_TO_STRING_ARRAY = new ValueConverter<String[]>() {
 		@Override
 		public String[] convert(Object value) throws IllegalArgumentException {
 			if (value != null && value.getClass().isArray()) {
@@ -95,7 +79,7 @@ public class StringArrayConverters {
 			return null;
 		}
 	};
-	public static final ValueConverter<String[]> OBJECT_TO_SINGLETON_ARRAY = new ValueConverter<String[]>() {
+	public static final ValueConverter<String[]> OBJECT_TO_SINGLETON_STRING_ARRAY = new ValueConverter<String[]>() {
 		@Override
 		public String[] convert(Object value) throws IllegalArgumentException {
 			if (value != null) {
@@ -104,10 +88,16 @@ public class StringArrayConverters {
 			return null;
 		}
 	};
+	public static final ValueConverter<String[]> ARRAY_TO_STRING_ARRAY = new CompositeValueConverter<String[]>().add(STRING_ARRAY_TO_STRING_ARRAY).add(OBJECT_ARRAY_TO_STRING_ARRAY).add(ANY_ARRAY_TO_STRING_ARRAY);
+	public static final ValueConverter<String[]> COLLECTION_TO_STRING_ARRAY = new ConcatenatedConverter<String[]>(ArrayConverters.COLLECTION_TO_ARRAY, OBJECT_ARRAY_TO_STRING_ARRAY);
 	
-	public static final ValueConverter<String[]> DEFAULT = new CompositeValueConverter<String[]>().add(COLLECTION_TO_ARRAY).add(STRING_ARRAY_TO_STRING_ARRAY).add(OBJECT_ARRAY_TO_STRING_ARRAY).add(ARRAY_TO_STRING_ARRAY).add(OBJECT_TO_SINGLETON_ARRAY);
-	public static final ValueConverter<String[]> DEFAULT_WHITESPACE_DELIMITED = new CompositeValueConverter<String[]>().add(COLLECTION_TO_ARRAY).add(STRING_ARRAY_TO_STRING_ARRAY).add(OBJECT_ARRAY_TO_STRING_ARRAY).add(ARRAY_TO_STRING_ARRAY).add(WHITESPACE_DELIMITED);
-	public static final ValueConverter<String[]> DEFAULT_SPACE_DELIMITED = new CompositeValueConverter<String[]>().add(COLLECTION_TO_ARRAY).add(STRING_ARRAY_TO_STRING_ARRAY).add(OBJECT_ARRAY_TO_STRING_ARRAY).add(ARRAY_TO_STRING_ARRAY).add(SPACE_DELIMITED);
-	public static final ValueConverter<String[]> DEFAULT_COMMA_DELIMITED = new CompositeValueConverter<String[]>().add(COLLECTION_TO_ARRAY).add(STRING_ARRAY_TO_STRING_ARRAY).add(OBJECT_ARRAY_TO_STRING_ARRAY).add(ARRAY_TO_STRING_ARRAY).add(COMMA_DELIMITED);
-	public static final ValueConverter<String[]> DEFAULT_TAB_DELIMITED = new CompositeValueConverter<String[]>().add(COLLECTION_TO_ARRAY).add(STRING_ARRAY_TO_STRING_ARRAY).add(OBJECT_ARRAY_TO_STRING_ARRAY).add(ARRAY_TO_STRING_ARRAY).add(TAB_DELIMITED);
+	public static final ValueConverter<String[]> COLLECTION_OR_ARRAY_TO_STRING_ARRAY = new CompositeValueConverter<String[]>().add(COLLECTION_TO_STRING_ARRAY).add(ARRAY_TO_STRING_ARRAY);
+	public static final ValueConverter<String[]> COLLECTION_OR_ARRAY_TO_FLAT_STRING_ARRAY = new ConcatenatedConverter<String[]>(ListConverters.COLLECTION_OR_ARRAY_TO_FLAT_LIST, COLLECTION_TO_STRING_ARRAY);
+	
+	public static final ValueConverter<String[]> DEFAULT = new CompositeValueConverter<String[]>().add(COLLECTION_OR_ARRAY_TO_STRING_ARRAY).add(OBJECT_TO_SINGLETON_STRING_ARRAY);
+	public static final ValueConverter<String[]> FLATTEN = new CompositeValueConverter<String[]>().add(COLLECTION_OR_ARRAY_TO_FLAT_STRING_ARRAY).add(OBJECT_TO_SINGLETON_STRING_ARRAY);
+	public static final ValueConverter<String[]> DEFAULT_WHITESPACE_DELIMITED = new CompositeValueConverter<String[]>().add(COLLECTION_OR_ARRAY_TO_STRING_ARRAY).add(WHITESPACE_DELIMITED).add(OBJECT_TO_SINGLETON_STRING_ARRAY);
+	public static final ValueConverter<String[]> DEFAULT_SPACE_DELIMITED = new CompositeValueConverter<String[]>().add(COLLECTION_OR_ARRAY_TO_STRING_ARRAY).add(SPACE_DELIMITED).add(OBJECT_TO_SINGLETON_STRING_ARRAY);
+	public static final ValueConverter<String[]> DEFAULT_COMMA_DELIMITED = new CompositeValueConverter<String[]>().add(COLLECTION_OR_ARRAY_TO_STRING_ARRAY).add(COMMA_DELIMITED).add(OBJECT_TO_SINGLETON_STRING_ARRAY);
+	public static final ValueConverter<String[]> DEFAULT_TAB_DELIMITED = new CompositeValueConverter<String[]>().add(COLLECTION_OR_ARRAY_TO_STRING_ARRAY).add(TAB_DELIMITED).add(OBJECT_TO_SINGLETON_STRING_ARRAY);
 }

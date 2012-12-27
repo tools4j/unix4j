@@ -56,7 +56,15 @@ public class XargsTest {
 		expect("line one");
 		expect("tabs and spaces Bla");
 		expect("A\0B\0C\0\0D");
-		actual(Unix4j.from(input).cat().xargs().echo(Arg.$args).toStringList());
+		actual(Unix4j.from(input).cat().xargs().echo(Arg.$all).toStringList());
+	}
+	@Test
+	public void testXargsWithEchoAndArgsFrom0Variable() {
+		expect("hello world");
+		expect("line one");
+		expect("tabs and spaces Bla");
+		expect("A\0B\0C\0\0D");
+		actual(Unix4j.from(input).cat().xargs().echo(Arg.argsFrom(0)).toStringList());
 	}
 
 	@Test
@@ -67,9 +75,51 @@ public class XargsTest {
 		expect("A\0B\0C\0\0D");
 		actual(Unix4j.from(input).cat().xargs().echo(Arg.$0).toStringList());
 	}
+	
+	@Test
+	public void testXargsWithEchoAndArg0Variable2() {
+		expect("hello");
+		expect("line");
+		expect("tabs");
+		expect("A\0B\0C\0\0D");
+		actual(Unix4j.from(input).cat().xargs().echo(Arg.arg(0)).toStringList());
+	}
+
 	@Test(expected=IllegalArgumentException.class)
 	public void testXargsWithEchoAndArg1Variable() {
 		actual(Unix4j.from(input).cat().xargs().echo(Arg.$1).toStringList());
+	}
+
+	@Test
+	public void testXargsWithEchoAndArgsFrom1Variable() {
+		expect("world");
+		expect("one");
+		expect("and spaces Bla");
+		expect("");
+		actual(Unix4j.from(input).cat().xargs().echo(Arg.argsFrom(1)).toStringList());
+	}
+
+	@Test
+	public void testXargsWithEchoAndArg0ThenArgsFrom2Variable() {
+		expect("hello");
+		expect("line");
+		expect("tabs spaces Bla");
+		expect("A\0B\0C\0\0D");
+		actual(Unix4j.from(input).cat().xargs().echo(Arg.$0, Arg.argsFrom(2)).toStringList());
+	}
+
+	@Test
+	public void testXargsWithDefaultCommandAndMaxArgs1() {
+		expect("hello");
+		expect("world");
+		expect("line");
+		expect("one");
+		expect("tabs");
+		expect("and");
+		expect("spaces");
+		expect("Bla");
+		expect("A\0B\0C\0\0D");
+		actual(Unix4j.from(input).cat().xargs(1).toStringList());
 	}
 
 	private void expect(String... expectedLines) {

@@ -2,30 +2,25 @@ package org.unix4j.variable;
 
 import org.unix4j.convert.ValueConverter;
 
-public interface VariableContext {
+public interface VariableContext extends VariableResolver {
 	/**
-	 * Sets the specified value for the variable with the given name. If the
-	 * value is null, the variable is cleared. Returns the old value held by the
-	 * value before setting it, or null if no such variable existed.
-	 * 
-	 * @param name
-	 *            the variabel name
-	 * @param value
-	 *            the new value for the variable, null to clear the variable
-	 * @return the old value held by the variable before setting it, or null if
-	 *         the variable did not exist before
+	 * Adds a variable resolver to this variable context. The last recently 
+	 * added resolver has preference over previously added resolvers. This 
+	 * allows hiding of variables for instance to support different variable
+	 * scopes with the same variable names.
+	 *  
+	 * @param resolver the resolver to add
 	 */
-	Object setValue(String name, Object value);
+	void addVariableResolver(VariableResolver resolver);
 
 	/**
-	 * Returns the value currently set for the variable given by its name.
-	 * Returns null if no such variable exists.
-	 * 
-	 * @param name
-	 *            the variable name
-	 * @return the value of the variable, or null if the variable does not exist
+	 * Removes the specified variable resolver if it exists and does nothing
+	 * otherwise. If this resolver exists multiple times, the most recently
+	 * added object is removed.
+	 *  
+	 * @param resolver the resolver to remove
 	 */
-	Object getValue(String name);
+	void removeVariableResolver(VariableResolver resolver);
 
 	/**
 	 * Returns the value of the variable given by name and converts it into the
