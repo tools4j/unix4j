@@ -17,7 +17,7 @@ class XargsCommand extends AbstractCommand<XargsArguments> {
 	private final Command<?> invokedCommand;
 	
 	public XargsCommand(XargsArguments arguments) {
-		this(arguments, Echo.Factory.echo(Arg.$args));
+		this(arguments, Echo.Factory.echo(Arg.$all));
 	}
 	protected XargsCommand(XargsArguments arguments, Command<?> invokedCommand) {
 		super(Find.NAME, arguments);

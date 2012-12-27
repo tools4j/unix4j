@@ -31,7 +31,10 @@ import org.unix4j.util.ArgsUtil;
 <#if hasTrueOperand>
 import org.unix4j.util.ArrayUtil;
 </#if>
+<#if hasArgsOperand(def)>
+import org.unix4j.variable.Arg;
 import org.unix4j.variable.VariableContext;
+</#if>
 
 import ${cmd.pkg.name}.${cmd.simpleName};
 
@@ -132,7 +135,7 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 		final Object[] resolved = new Object[unresolved.length];
 		for (int i = 0; i < resolved.length; i++) {
 			final String expression = unresolved[i];
-			if (expression.startsWith("$")) {
+			if (Arg.isVariable(expression)) {
 				resolved[i] = resolveVariable(context, expression);
 			} else {
 				resolved[i] = expression;

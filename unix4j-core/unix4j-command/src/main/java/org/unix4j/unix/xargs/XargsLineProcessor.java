@@ -4,7 +4,6 @@ import org.unix4j.context.ExecutionContext;
 import org.unix4j.line.Line;
 import org.unix4j.processor.AbstractLineProcessor;
 import org.unix4j.processor.LineProcessor;
-import org.unix4j.variable.StackableVariableContext;
 import org.unix4j.variable.VariableContext;
 
 class XargsLineProcessor extends AbstractLineProcessor<XargsArguments> {
@@ -30,7 +29,7 @@ class XargsLineProcessor extends AbstractLineProcessor<XargsArguments> {
 			itemizer = new WhitespaceItemizer();
 		}
 		this.storage = new DefaultItemStorage(this);
-		pushVariableContext();
+		getVariableContext().addVariableResolver(storage);
 	}
 	
 	@Override
@@ -68,21 +67,7 @@ class XargsLineProcessor extends AbstractLineProcessor<XargsArguments> {
 	public void finish() {
 		itemizer.finish(storage);
 		storage.flush();
-		popVariableContext();
+		getVariableContext().removeVariableResolver(storage);
 		getOutput().finishAll();
 	}
-	
-	private void pushVariableContext() {
-		final VariableContext vcontext = getVariableContext();
-		if (vcontext instanceof StackableVariableContext) {
-			((StackableVariableContext)vcontext).push();
-		}
-	}
-	private void popVariableContext() {
-		final VariableContext vcontext = getVariableContext();
-		if (vcontext instanceof StackableVariableContext) {
-			((StackableVariableContext)vcontext).pop();
-		}
-	}
-
 }

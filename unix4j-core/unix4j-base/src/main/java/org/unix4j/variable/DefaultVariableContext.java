@@ -1,7 +1,8 @@
 package org.unix4j.variable;
 
+import java.util.Deque;
 import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.LinkedList;
 
 import org.unix4j.convert.ValueConverter;
 
@@ -11,19 +12,25 @@ import org.unix4j.convert.ValueConverter;
  */
 public class DefaultVariableContext implements VariableContext {
 	
-	private final Map<String, Object> variables = new LinkedHashMap<String, Object>();
+	private final Deque<VariableResolver> resolvers = new LinkedList<VariableResolver>();
 
 	@Override
-	public Object setValue(String name, Object value) {
-		if (value != null) {
-			return variables.put(name, value);
-		}
-		return variables.remove(name);
+	public void addVariableResolver(VariableResolver resolver) {
+		resolvers.addFirst(resolver);
 	}
-
+	@Override
+	public void removeVariableResolver(VariableResolver resolver) {
+		resolvers.removeFirstOccurrence(resolver);
+	}
 	@Override
 	public Object getValue(String name) {
-		return variables.get(name);
+		for (final VariableResolver resolver : resolvers) {
+			final Object value = resolver.getValue(name);
+			if (value != null) {
+				return value;
+			}
+		}
+		return null;
 	}
 
 	@Override
@@ -40,13 +47,9 @@ public class DefaultVariableContext implements VariableContext {
 		return converted;
 	}
 	
-	public void clear() {
-		variables.clear();
-	}
-	
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + variables;
+		return getClass().getSimpleName() + resolvers;
 	}
 
 }
