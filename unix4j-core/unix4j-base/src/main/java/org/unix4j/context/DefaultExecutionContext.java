@@ -13,6 +13,18 @@ import org.unix4j.variable.VariableContext;
 
 
 public class DefaultExecutionContext implements ExecutionContext {
+	
+	/**
+	 * Factory returning a new instance of {@link DefaultExecutionContext} using
+	 * the default constructor.
+	 */
+	public static final ExecutionContextFactory FACTORY = new ExecutionContextFactory() {
+		@Override
+		public DefaultExecutionContext createExecutionContext() {
+			return new DefaultExecutionContext();
+		}
+	};
+	
 	private String user; 
 	private File userHome; 
 	private File tempDirectory; 

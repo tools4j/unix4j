@@ -32,6 +32,7 @@ public class DefaultConverterRegistry implements ConverterRegistry {
 		registerValueConverter(long.class, LongConverters.DEFAULT);
 		registerValueConverter(String.class, StringConverters.DEFAULT);
 		registerValueConverter(String[].class, StringArrayConverters.FLATTEN);
+		registerValueConverter(File[].class, FileArrayConverters.FLATTEN);
 		registerValueConverter(Object[].class, ArrayConverters.FLATTEN);
 		registerValueConverter(Date.class, DateConverters.DEFAULT);
 		registerValueConverter(File.class, FileConverters.DEFAULT);

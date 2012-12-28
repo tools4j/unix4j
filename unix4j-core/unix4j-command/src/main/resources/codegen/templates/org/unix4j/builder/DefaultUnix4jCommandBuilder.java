@@ -3,6 +3,8 @@ package org.unix4j.builder;
 import org.unix4j.builder.DefaultCommandBuilder;
 import org.unix4j.command.Command;
 import org.unix4j.command.NoOp;
+import org.unix4j.context.DefaultExecutionContext;
+import org.unix4j.context.ExecutionContextFactory;
 
 <#foreach def in commandDefs> 
 import ${def.command.pkg.name}.${def.command.simpleName};
@@ -19,11 +21,26 @@ import ${def.pkg.name}.${def.command.simpleName}Options;
 public class DefaultUnix4jCommandBuilder extends DefaultCommandBuilder implements Unix4jCommandBuilder {
 
 	/**
-	 * Default constructor, initialized to build a {@link NoOp} command if no 
-	 * command is {@link #join(Command) joined} to this builder's command chain.
+	 * Default constructor initialized with a {@link NoOp} command which will be 
+	 * replaced by the first command joined to this builder's command chain. 
+	 * Uses a {@link DefaultExecutionContext} to execute commands.
 	 */
 	public DefaultUnix4jCommandBuilder() {
 		super();
+	}
+
+	/**
+	 * Constructor using the specified factory to create contexts for command
+	 * execution. The builder is initialized with a {@link NoOp} command which
+	 * will be replaced by the first command joined to this builder's command 
+	 * chain.
+	 * 
+	 * @param contextFactory
+	 *            the factory used to create execution contexts that are passed
+	 *            to the execute method when a command is executed
+	 */
+	public DefaultUnix4jCommandBuilder(ExecutionContextFactory contextFactory) {
+		super(contextFactory);
 	}
 
 <#foreach def in commandDefs>

@@ -10,6 +10,7 @@ import org.unix4j.command.Command;
 import org.unix4j.command.ExitValueException;
 import org.unix4j.command.NoOp;
 import org.unix4j.context.DefaultExecutionContext;
+import org.unix4j.context.ExecutionContextFactory;
 import org.unix4j.io.BufferedOutput;
 import org.unix4j.io.FileOutput;
 import org.unix4j.io.NullOutput;
@@ -27,14 +28,42 @@ import org.unix4j.line.Line;
  */
 public class DefaultCommandBuilder implements CommandBuilder {
 
+	private final ExecutionContextFactory contextFactory;
 	private Command<?> command = NoOp.INSTANCE;
 
 	/**
-	 * Default constructor, initialized to build a {@link NoOp} command if no
+	 * Default constructor initialized to build a {@link NoOp} command if no
 	 * command is {@link #join(Command) joined} to this builder's command chain.
+	 * Uses a {@link DefaultExecutionContext} to execute commands.
 	 */
 	public DefaultCommandBuilder() {
-		super();
+		this(DefaultExecutionContext.FACTORY);
+	}
+
+	/**
+	 * Constructor using the specified factory to create contexts for command
+	 * execution. The builder is initialized with a {@link NoOp} command which
+	 * will be replaced by the first command {@link #join(Command) joined} to 
+	 * this builder's command chain. 
+	 * 
+	 * @param contextFactory
+	 *            the factory used to create execution contexts that are passed
+	 *            to the execute method when a command is executed
+	 */
+	public DefaultCommandBuilder(ExecutionContextFactory contextFactory) {
+		this.contextFactory = contextFactory;
+	}
+
+	/**
+	 * Returns the context factory used to create contexts for command
+	 * execution. The returned factory has usually been passed to the
+	 * constructor of this builder.
+	 * 
+	 * @return the factory used to create execution contexts that are passed to
+	 *         the execute method when a command is executed
+	 */
+	public ExecutionContextFactory getContextFactory() {
+		return contextFactory;
 	}
 
 	@Override
@@ -95,7 +124,7 @@ public class DefaultCommandBuilder implements CommandBuilder {
 	@Override
 	public void toOutput(Output output) {
 		final Command<?> command = build();
-		command.execute(new DefaultExecutionContext(), output).finish();
+		command.execute(getContextFactory().createExecutionContext(), output).finish();
 	}
 
 	@Override

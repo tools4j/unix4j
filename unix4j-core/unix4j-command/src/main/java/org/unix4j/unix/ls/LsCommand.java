@@ -73,11 +73,10 @@ class LsCommand extends AbstractCommand<LsArguments> {
 	}
 
 	private boolean listFiles(File relativeTo, File parent, List<File> files, LineProcessor output, LsArguments args) {
-		final Comparator<File> comparator = getComparator(relativeTo, args);
+		final Comparator<File> comparator = getComparator(parent == null ? relativeTo : parent, args);
 		final boolean allFiles = args.isAllFiles();
 		final boolean longFormat = args.isLongFormat();
 		final LsFormatter formatter = longFormat ? LsFormatterLong.FACTORY.create(relativeTo, parent, files, args) : LsFormatterShort.INSTANCE;
-		final boolean recurseSubdirs = parent == null || args.isRecurseSubdirs();
 
 		//add special directories . and ..
 		if (parent != null && allFiles) {
@@ -102,13 +101,28 @@ class LsCommand extends AbstractCommand<LsArguments> {
 		//print directory files and recurse if necessary
 		for (File file : files) {
 			if (allFiles || !file.isHidden()) {
-				if (file.isDirectory() && recurseSubdirs) {
-					if (!listFiles(file, file, FileUtil.toList(file.listFiles()), output, args)) {
+				if (file.isDirectory() && parent == null && !args.isRecurseSubdirs()) {
+					if (!listFiles(relativeTo, file, FileUtil.toList(file.listFiles()), output, args)) {
 						return false;
 					}
 				} else {
-					if (!formatter.writeFormatted(relativeTo, file, args, output)) {
-						return false;
+					if (!file.isDirectory() || parent != null) {
+						if (!formatter.writeFormatted(parent == null ? relativeTo : parent, file, args, output)) {
+							return false;
+						}
+					}
+				}
+			}
+		}
+		
+		//recurse subdirs now
+		if (args.isRecurseSubdirs()) {
+			for (File file : files) {
+				if (allFiles || !file.isHidden()) {
+					if (file.isDirectory() && (parent == null || !file.equals(parent) && !file.equals(parent.getParentFile()))) {
+						if (!listFiles(relativeTo, file, FileUtil.toList(file.listFiles()), output, args)) {
+							return false;
+						}
 					}
 				}
 			}

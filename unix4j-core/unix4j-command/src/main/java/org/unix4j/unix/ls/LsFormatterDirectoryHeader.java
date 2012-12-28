@@ -3,6 +3,7 @@ package org.unix4j.unix.ls;
 import java.io.File;
 import java.util.List;
 
+import org.unix4j.line.Line;
 import org.unix4j.line.SimpleLine;
 import org.unix4j.processor.LineProcessor;
 import org.unix4j.util.FileUtil;
@@ -30,13 +31,22 @@ class LsFormatterDirectoryHeader implements LsFormatter {
 
 	@Override
 	public boolean writeFormatted(File relativeTo, File file, LsArguments args, LineProcessor output) {
-		final String relativePath = FileUtil.getRelativePath(relativeTo, file);
+		String relativePath = FileUtil.getRelativePath(relativeTo, file);
+		if (!relativePath.startsWith(".") && !relativePath.startsWith("/")) {
+			relativePath = "./" + relativePath;
+		}
 		if (!".".equals(relativePath)) {
-			if (!output.processLine(new SimpleLine(relativePath))) {
+			if (!output.processLine(Line.EMPTY_LINE)) {
+				return false;
+			}
+			if (!output.processLine(new SimpleLine(relativePath + ":"))) {
 				return false;
 			}
 		}
-		return output.processLine(new SimpleLine("total: " + LsCommand.getSizeString(args, totalBytes)));
+		if (args.isLongFormat()) {
+			return output.processLine(new SimpleLine("total: " + LsCommand.getSizeString(args, totalBytes)));
+		}
+		return true;
 	}
 
 }
