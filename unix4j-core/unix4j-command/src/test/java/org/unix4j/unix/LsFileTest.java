@@ -66,6 +66,12 @@ public class LsFileTest {
 		final Config config = new Config(tester);
 		tester.run(Unix4j.use(config).ls(Ls.Options.l.a.r).tail(1).grep(Grep.Options.c, "\\s\\.$"));//last line should end with "." file
 	}
+	@Test
+	public void ls_lah_TotalLine() {
+		final FileTest tester = new FileTest(this.getClass());
+		final Config config = new Config(tester);
+		tester.run(Unix4j.use(config).ls(Ls.Options.l.a.h).head(1));
+	}
 
 	@Test
 	public void ls_R() {
