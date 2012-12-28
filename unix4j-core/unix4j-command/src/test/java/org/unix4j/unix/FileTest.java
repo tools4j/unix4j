@@ -112,7 +112,7 @@ class FileTest {
 		for (final File input : inputFiles) {
 			System.err.println("INPUT:");
 			System.err.println("---------------------------------------------------------------");
-			System.err.println(Unix4j.fromFile(input).toStringResult());
+			System.err.println(input.isDirectory() ? ("(DIR) " + input.getAbsolutePath()) : Unix4j.fromFile(input).toStringResult());
 			System.err.println("---------------------------------------------------------------");
 		}
 		System.err.println("EXPECTED OUTPUT:");

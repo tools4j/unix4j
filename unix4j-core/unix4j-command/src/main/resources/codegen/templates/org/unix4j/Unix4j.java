@@ -3,6 +3,8 @@ package org.unix4j;
 
 import org.unix4j.builder.Unix4jCommandBuilder;
 import org.unix4j.builder.DefaultUnix4jCommandBuilder;
+import org.unix4j.command.NoOp;
+import org.unix4j.context.ExecutionContextFactory;
 
 <#foreach def in commandDefs>
 <#if countUsesStandardInput(def, false) != 0 && def.options?size != 0>
@@ -21,13 +23,29 @@ import ${def.pkg.name}.${def.command.simpleName}Options;
 public final class Unix4j {
 
 	/**
-	 * Returns a builder to create a command or command chain providing no
-	 * input to the first command.
+	 * Returns a builder to create a command or command chain. The builder is 
+	 * initialized with a {@link NoOp} command which will be replaced by the 
+	 * first command joined to this builder's command chain.
 	 * 
 	 * @return the builder to create the command or command chain
 	 */
 	public static Unix4jCommandBuilder builder() {
 		return new DefaultUnix4jCommandBuilder();
+	}
+
+	/**
+	 * Returns a builder that uses the specified factory to create contexts for 
+	 * command execution. The builder is initialized with a {@link NoOp} command 
+	 * which will be replaced by the first command joined to this builder's 
+	 * command chain.
+	 * 
+	 * @param contextFactory
+	 *            the factory used to create execution contexts that are passed
+	 *            to the execute method when a command is executed
+	 * @return the builder to create the command or command chain
+	 */
+	public static Unix4jCommandBuilder use(ExecutionContextFactory contextFactory) {
+		return new DefaultUnix4jCommandBuilder(contextFactory);
 	}
 	
 <#foreach def in commandDefs>

@@ -59,7 +59,7 @@ class FileComparators {
 			@Override
 			public int compare(File f1, File f2) {
 				final String relName1 = FileUtil.getRelativePath(relativeTo, f1);
-				final String relName2 = FileUtil.getRelativePath(relativeTo, f1);
+				final String relName2 = FileUtil.getRelativePath(relativeTo, f2);
 				return relName1.compareTo(relName2);
 			}
 		};

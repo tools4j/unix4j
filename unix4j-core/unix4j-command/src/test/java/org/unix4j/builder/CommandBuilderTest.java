@@ -9,6 +9,7 @@ import org.unix4j.io.StreamOutput;
 import org.unix4j.unix.Ls;
 import org.unix4j.unix.Sort;
 import org.unix4j.unix.grep.GrepOption;
+import org.unix4j.variable.Arg;
 
 public class CommandBuilderTest {
 
@@ -73,11 +74,10 @@ public class CommandBuilderTest {
 		unix4j.echo("Hello world");
 	}
 
-	//FIXME this test must be possible
-//	@Test
-//	public void testEcho2() {
-//		unix4j.echo("Hello", "world");
-//	}
+	@Test
+	public void testEcho2() {
+		unix4j.echo("Hello", "world");
+	}
 
 	@Test
 	public void testEchoGrepMatch() {
@@ -94,11 +94,11 @@ public class CommandBuilderTest {
 		unix4j.echo("Hello WORLD").grep(GrepOption.ignoreCase, "world");
 	}
 
-//TODO need to port xargs first
-//	@Test
-//	public void testLsXargsEcho() {
-//		unix4j.ls().xargs().echo("XARGS OUTPUT:", Xargs.XARG);
-//	}
+	@Test
+	public void testLsXargsEcho() {
+		unix4j.ls().xargs().echo("XARGS OUTPUT:", Arg.$0);
+	}
+
 //TODO Need to load a file from the resources directory
 //	@Test
 //	public void testFromFile() {

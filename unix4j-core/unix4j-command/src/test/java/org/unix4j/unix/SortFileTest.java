@@ -17,8 +17,7 @@ public class SortFileTest {
 		tester.run(Unix4j.fromFile(tester.getInputFile()).sort());
 		tester.run(Unix4j.builder().sort(tester.getInputFile()));
 		tester.run(Unix4j.builder().sort("" + tester.getInputFile()));
-		//FIXME make this work (String converted into [File]
-//		tester.run(Unix4j.builder().sort("--files", tester.getInputFileName()));
+		tester.run(Unix4j.builder().sort("--files", tester.getInputFileName()));
 	}
 
 	@Test
