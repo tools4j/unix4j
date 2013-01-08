@@ -10,7 +10,6 @@
 
 	<groupId>org.unix4j</groupId>
 	<artifactId>unix4j-perf</artifactId>
-	<version>${project.parent.version}</version>
 
 	<dependencies>
 		<dependency>

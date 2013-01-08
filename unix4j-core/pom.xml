@@ -10,7 +10,6 @@
 
 	<groupId>org.unix4j</groupId>
 	<artifactId>unix4j-core</artifactId>
-	<version>${project.parent.version}</version>
 	<packaging>pom</packaging>
 
 	<modules>
