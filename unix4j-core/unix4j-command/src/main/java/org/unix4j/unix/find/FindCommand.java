@@ -22,13 +22,13 @@ class FindCommand extends AbstractCommand<FindArguments> {
 		super(Find.NAME, arguments);
 	}
 
-	private List<String> getArgumentPaths(ExecutionContext context, FindArguments args) {
+	private List<File> getArgumentPaths(ExecutionContext context, FindArguments args) {
 		if (args.isPathSet()) {
-			return FileUtil.expandPaths(context.getCurrentDirectory(), args.getPath());
+			return FileUtil.expandFiles(context.getCurrentDirectory(), args.getPath());
 		} else {
 			//no input files or paths ==> use just the current directory
-			final ArrayList<String> list = new ArrayList<String>(1);
-			list.add(context.getCurrentDirectory().getPath());
+			final ArrayList<File> list = new ArrayList<File>(1);
+			list.add(context.getCurrentDirectory());
 			return list;
 		}
 	}
@@ -36,7 +36,7 @@ class FindCommand extends AbstractCommand<FindArguments> {
 	@Override
 	public LineProcessor execute(final ExecutionContext context, final LineProcessor output) {
 		final FindArguments args = getArguments(context);
-		final List<String> paths = getArgumentPaths(context, args);
+		final List<File> paths = getArgumentPaths(context, args);
 		return new LineProcessor() {
 			@Override
 			public boolean processLine(Line line) {
@@ -44,16 +44,15 @@ class FindCommand extends AbstractCommand<FindArguments> {
 			}
 			@Override
 			public void finish() {
-				for(final String path: paths){
-					final File file = new File(path);
+				for(final File path: paths){
 					final boolean keepGoing;
 
-					if(!file.exists()){
+					if(!path.exists()){
 						keepGoing = output.processLine(new SimpleLine(format("find: `%s': No such file or directory", path)));
-					} else if(file.isDirectory()){
-						keepGoing = listFiles(file, file, output, args);
+					} else if(path.isDirectory()){
+						keepGoing = listFiles(path, path, output, args);
 					} else {
-						keepGoing = output.processLine(new SimpleLine(path));
+						keepGoing = output.processLine(new SimpleLine(path.getPath()));
 					}
 					if(!keepGoing){
 						break;
@@ -84,7 +83,6 @@ class FindCommand extends AbstractCommand<FindArguments> {
 				}
 			}
 		}
-
 		return true;//we want more output
 	}
 }
