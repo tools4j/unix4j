@@ -26,13 +26,12 @@
 			to the working directory (or -- if provided -- relative to the path 
 			given after the {@code "--path"} operand name).
 		</method>
-		<method args="name" usesStandardInput="false">
-			Finds all files matching the specified {@code name} in or below the 
-			user's current working directory and writes the file names to the
-			standard output. 
-			
-			The files names written to the output are relative paths referring
-			to the working directory.
+		<method args="path" usesStandardInput="false">
+            Finds all files in or below the directory specified by {@code path}
+            and writes the file names to the standard output.
+
+            The files names written to the output are paths relative to the
+            specified {@code path} operand.
 		</method>
 		<method args="path,name" usesStandardInput="false">
 			Finds all files matching the specified {@code name} in or below the 
@@ -276,7 +275,11 @@
 			output. This option corresponds to the --delimiter0 option of xargs.		
 		</option>
 	</options>
-	<operands default="name">
+	<operands default="path">
+        <operand name="path" type="String">
+            Starting point for the search in the directory hierarchy;
+            wildcards * and ? are supported.
+        </operand>
 		<operand name="name" type="String">
 			Name pattern to match the file name after removing the path with the
 			leading directories; wildcards * and ? are supported, or full 
@@ -292,16 +295,12 @@
 			before or after the specified {@code time} operand; consider the
 			{@code -time...} options for details of the comparison.
 		</operand>
-		<operand name="path" type="String">
-			Starting point for the search in the directory hierarchy; 
-			wildcards * and ? are supported.
-		</operand>
 		<operand name="args" type="String...">
 			String arguments defining the options and operands for the command. 
 			Options can be specified by acronym (with a leading dash "-") or by 
 			long name (with two leading dashes "--"). Operands other than the
-			default "--name" operand have to be prefixed with the operand name
-			(e.g. "--paths" for subsequent path operand values). 
+			default "--path" operand have to be prefixed with the operand name
+			(e.g. "--name" for subsequent path operand values).
 		</operand>
 		<operand name="options" type="FindOptions">
 			Options for the file search.
