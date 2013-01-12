@@ -26,10 +26,9 @@ class TailLinesFromEndProcessor extends AbstractTailProcessor {
 	@Override
 	public void finish() {
 		final LineProcessor output = getOutput();
-		for (final Line line : tailLines) {
-			if (!output.processLine(line)) {
-				break;
-			}
+		boolean more = true;
+		while (!tailLines.isEmpty() && more) {
+			more = output.processLine(tailLines.removeFirst());//remove to free memory
 		}
 		tailLines.clear();
 		output.finish();
