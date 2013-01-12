@@ -41,12 +41,8 @@ public class TailCharsFromEndProcessor extends AbstractTailProcessor {
 			final Line cutLine = SimpleLine.subLine(line, offset, line.length(), false);
 			more = output.processLine(cutLine);
 		}
-		if (more) {
-			for (final Line line : tailLines) {
-				if (!output.processLine(line)) {
-					break;
-				}
-			}
+		while (!tailLines.isEmpty() && more) {
+			more = output.processLine(tailLines.removeFirst());//remove to free memory
 		}
 		counter.reset();
 		tailLines.clear();
