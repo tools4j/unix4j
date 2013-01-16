@@ -18,7 +18,7 @@
 		<module>unix4j-tools</module>
 		<module>unix4j-core</module>
 		<module>unix4j-perf</module>
-	</modules>
+    </modules>
 
 	<licenses>
 		<license>
