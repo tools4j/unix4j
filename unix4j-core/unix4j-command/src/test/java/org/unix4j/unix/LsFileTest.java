@@ -47,6 +47,7 @@ public class LsFileTest {
 	public void ls_la() {
 		final FileTest tester = new FileTest(this.getClass(), MatchMode.Regex);
 		final Config config = new Config(tester);
+        Unix4j.use(config).ls(Ls.Options.l.a).toStdOut();
 		tester.run(Unix4j.use(config).ls(Ls.Options.l.a));
 	}
 	@Test
