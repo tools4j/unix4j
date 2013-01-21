@@ -17,17 +17,59 @@
             <version>4.10</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.unix4j</groupId>
-            <artifactId>unix4j-base</artifactId>
-            <version>0.3-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.unix4j</groupId>
-            <artifactId>unix4j-command</artifactId>
-            <version>0.3-SNAPSHOT</version>
-        </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>snapshots</id>
+            <activation>
+                <property>
+                    <name>env</name>
+                    <value>snapshots</value>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.unix4j</groupId>
+                    <artifactId>unix4j-command</artifactId>
+                    <version>LATEST</version>
+                </dependency>
+            </dependencies>
+            <repositories>
+                <repository>
+                    <id>sonatype-snapshots</id>
+                    <name>sonatype-snapshots</name>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                    <layout>default</layout>
+                </repository>
+            </repositories>
+        </profile>
+
+        <profile>
+            <id>staging</id>
+            <activation>
+                <property>
+                    <name>env</name>
+                    <value>staging</value>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.unix4j</groupId>
+                    <artifactId>unix4j-command</artifactId>
+                    <version>RELEASE</version>
+                </dependency>
+            </dependencies>
+            <repositories>
+                <repository>
+                    <id>sonatype-staging</id>
+                    <name>sonatype-staging</name>
+                    <url>https://oss.sonatype.org/content/repositories/staging</url>
+                    <layout>default</layout>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
 
     <build>
         <plugins>
