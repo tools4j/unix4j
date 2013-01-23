@@ -15,7 +15,7 @@ class FileAttributes {
 	
 	/**
 	 * Singleton instance loading the Java7 version if possible with support for
-	 * all file times.
+	 * more file attributes.
 	 */
 	public static final FileAttributes INSTANCE = Java7Util.newInstance(FileAttributes.class, new FileAttributes());
 	
