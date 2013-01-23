@@ -4,3 +4,12 @@ target
 .settings
 chmod-javadoc.sh
 rsync-javadoc.sh
+.idea
+settings.xml
+unix4j-core/unix4j-base/unix4j-base.iml
+unix4j-core/unix4j-command/unix4j-command.iml
+unix4j-core/unix4j-core.iml
+unix4j-examples/unix4j-examples.iml
+unix4j-perf/unix4j-perf.iml
+unix4j-tools/unix4j-tools.iml
+unix4j.iml
