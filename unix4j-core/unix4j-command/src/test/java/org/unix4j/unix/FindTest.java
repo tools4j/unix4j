@@ -6,8 +6,6 @@ import org.unix4j.context.DefaultExecutionContext;
 import org.unix4j.context.ExecutionContext;
 import org.unix4j.context.ExecutionContextFactory;
 
-import java.io.File;
-
 public class FindTest {
     private static final class Config implements ExecutionContextFactory {
         private final FileTest tester;
@@ -27,6 +25,11 @@ public class FindTest {
     public void testFind() {
         final FileTest tester = new FileTest(this.getClass());
         final Config config = new Config(tester);
-        Unix4j.use(config).find(".", "/home/ben/dev/*/groovy/*/*", "target/*", "asdf").toStdOut();
+//        Unix4j.use(config).find(".", "/home/ben/dev/*/groovy/*/*", "target/*", "asdf").toStdOut();
+//        Unix4j.use(config).find(".", "*.java").toStdOut();
+//        Unix4j.use(config).find(-100).toStdOut();
+        Unix4j.use(config).find(Find.Options.typeDirectory, ".", "*java").toStdOut();
+//        Unix4j.use(config).find(-100).toStdOut();
+//      Unix4j.use(config).find(Find.Options.timeNewer, ".", new Date(3600*1000)).toStdOut();
     }
 }
