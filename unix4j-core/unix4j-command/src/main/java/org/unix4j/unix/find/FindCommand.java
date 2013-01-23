@@ -37,7 +37,8 @@ class FindCommand extends AbstractCommand<FindArguments> {
 				filter.add(new RegexNameFilter(name, args.isIgnoreCase()));
 			} else {
 				if (name.contains("*") || name.contains("?")) {
-					filter.add(new RegexNameFilter(name.replace('?', '.').replace("*", ".*"), args.isIgnoreCase()));
+					final String pattern = name.replace(".", "\\.").replace('?', '.').replace("*", ".*");
+					filter.add(new RegexNameFilter(pattern, args.isIgnoreCase()));
 				} else {
 					filter.add(new NameFilter(args.getName(), args.isIgnoreCase()));
 				}
