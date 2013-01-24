@@ -60,6 +60,14 @@
                     <version>${env.unix4j.version}</version>
                 </dependency>
             </dependencies>
+            <repositories>
+                <repository>
+                    <id>staging-repository</id>
+                    <name>staging-repository</name>
+                    <url>${env.staging.repository.url}</url>
+                    <layout>default</layout>
+                </repository>
+            </repositories>
         </profile>
 
         <profile>
