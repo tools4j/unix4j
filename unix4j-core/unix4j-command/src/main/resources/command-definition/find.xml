@@ -45,8 +45,8 @@
 			Finds all files matching the specified file {@code size} in or below 
 			the user's current working directory and writes the file names to 
 			the standard output. Matching files use at least {@code size} bytes
-			on disk if {@code size} is non-negative, or at most {@code size} 
-			bytes if {@code size} is negative. 
+			on disk if {@code size} is positive, or at most {@code abs(size)} 
+			bytes if {@code size} is zero or negative. 
 			
 			The files names written to the output are relative paths referring
 			to the working directory.
@@ -55,8 +55,8 @@
 			Finds all files matching the specified file {@code size} in or below
 			the directory specified by {@code path} and writes the file names
 			to the standard output. Matching files use at least {@code size} 
-			bytes on disk if {@code size} is non-negative, or at most 
-			{@code size} bytes if {@code size} is negative. 
+			bytes on disk if {@code size} is positive, or at most 
+			{@code abs(size)} bytes if {@code size} is zero or negative. 
 
 			The files names written to the output are paths relative to the
 			specified {@code path} operand.
@@ -65,8 +65,9 @@
 			Finds all files matching the specified file {@code name} and 
 			{@code size} in or below the user's current working directory and
 			writes the file names to the standard output. Matching files use 
-			at least {@code size} bytes on disk if {@code size} is non-negative, 
-			or at most {@code size} bytes if {@code size} is negative. 
+			at least {@code size} bytes on disk if {@code size} is positive, 
+			or at most {@code abs(size)} bytes if {@code size} is zero or 
+			negative. 
 
 			The files names written to the output are relative paths referring
 			to the working directory.
@@ -75,8 +76,8 @@
 			Finds all files matching the specified file {@code name} and 
 			{@code size} in or below the directory specified by {@code path} 
 			and writes the file names to the standard output. Matching files 
-			use at least {@code size} bytes on disk if {@code size} is 
-			non-negative, or at most {@code size} bytes if {@code size} is 
+			use at least {@code size} bytes on disk if {@code size} is positive, 
+			or at most {@code abs(size)} bytes if {@code size} is zero or 
 			negative. 
 
 			The files names written to the output are paths relative to the
@@ -102,8 +103,8 @@
 			Finds all files matching the specified file {@code size} in or below 
 			the user's current working directory and writes the file names to 
 			the standard output. Matching files use at least {@code size} bytes
-			on disk if {@code size} is non-negative, or at most {@code size} 
-			bytes if {@code size} is negative. 
+			on disk if {@code size} is positive, or at most {@code abs(size)} 
+			bytes if {@code size} is zero or negative. 
 
 			The files names written to the output are relative paths referring
 			to the working directory.
@@ -112,8 +113,8 @@
 			Finds all files matching the specified file {@code size} in or below
 			the directory specified by {@code path} and writes the file names
 			to the standard output. Matching files use at least {@code size} 
-			bytes on disk if {@code size} is non-negative, or at most 
-			{@code size} bytes if {@code size} is negative. 
+			bytes on disk if {@code size} is positive, or at most 
+			{@code abs(size)} bytes if {@code size} is zero or negative. 
 
 			The files names written to the output are paths relative to the
 			specified {@code path} operand.
@@ -142,8 +143,8 @@
 			Finds all files matching the specified file {@code name} and 
 			{@code size} in or below the user's current working directory and
 			writes the file names to the standard output. Matching files use 
-			at least {@code size} bytes on disk if {@code size} is non-negative, 
-			or at most {@code size} bytes if {@code size} is negative. 
+			at least {@code size} bytes on disk if {@code size} is positive, or 
+			at most {@code abs(size)} bytes if {@code size} is zero or negative. 
 
 			The files names written to the output are relative paths referring
 			to the working directory.
@@ -152,9 +153,9 @@
 			Finds all files matching the specified file {@code name} and 
 			{@code size} in or below the directory specified by {@code path} 
 			and writes the file names to the standard output. Matching files 
-			use at least {@code size} bytes on disk if {@code size} is 
-			non-negative, or at most {@code size} bytes if {@code size} is 
-			negative. 
+			use at least {@code size} bytes on disk if {@code size} is positive, 
+			or at most {@code abs(size)} bytes if {@code size} is zero or 
+			negative.
 
 			The files names written to the output are paths relative to the
 			specified {@code path} operand.
@@ -185,10 +186,10 @@
 			{@code time} (depending on the given {@code -time...} options). 
 			
 			Matching files use at least {@code size} bytes on disk if 
-			{@code size} is non-negative, or at most {@code size} bytes if 
-			{@code size} is negative. The names of the matching files found in 
-			or below the user's current working directory are written to the 
-			standard output.
+			{@code size} is positive, or at most {@code abs(size)} bytes if 
+			{@code size} is zero or negative. The names of the matching files 
+			found in or below the user's current working directory are written 
+			to the standard output.
 
 			The files names written to the output are relative paths referring
 			to the working directory.
@@ -199,10 +200,10 @@
 			{@code time} (depending on the given {@code -time...} options). 
 			
 			Matching files use at least {@code size} bytes on disk if 
-			{@code size} is non-negative, or at most {@code size} bytes if 
-			{@code size} is negative. The names of the matching files found in
-			or below the directory specified by {@code path} are written to 
-			the standard output. 
+			{@code size} is positive, or at most {@code abs(size)} bytes if 
+			{@code size} is zero or negative. The names of the matching files 
+			found in or below the directory specified by {@code path} are 
+			written to the standard output. 
 
 			The files names written to the output are paths relative to the
 			specified {@code path} operand.
@@ -235,13 +236,13 @@
 		</option>
 		<option name="ignoreCase" acronym="i">
 			Use case insensitive matching when applying the file name pattern
-			specified by the name operand. 
+			specified by the name operand
 
 			(This option is ignored if no name operand is specified).
 		</option>
 		<option name="timeNewer" acronym="n">
 			Consider only files that have been created, modified or accessed
-			after or at the time specified by the time operand
+			after or at the time specified by the time operand (the default)
 			
 			(This option is ignored if no time operand is specified).
 		</option>
@@ -288,7 +289,8 @@
 		</operand>
 		<operand name="size" type="long">
 			Consider only files using at least {@code size} bytes or at most
-			{@code size} bytes if {@code size} is negative.
+			{@code size} bytes if {@code size} is positive, or at most 
+			{@code abs(size)} bytes if {@code size} is zero or negative.
 		</operand>
 		<operand name="time" type="java.util.Date">
 			Consider only files that have been created, modified or accessed
