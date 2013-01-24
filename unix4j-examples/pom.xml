@@ -57,7 +57,7 @@
                 <dependency>
                     <groupId>org.unix4j</groupId>
                     <artifactId>unix4j-command</artifactId>
-                    <version>RELEASE</version>
+                    <version>${env.unix4j.version}</version>
                 </dependency>
             </dependencies>
         </profile>
