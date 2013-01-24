@@ -60,14 +60,6 @@
                     <version>RELEASE</version>
                 </dependency>
             </dependencies>
-            <repositories>
-                <repository>
-                    <id>sonatype-staging</id>
-                    <name>sonatype-staging</name>
-                    <url>https://oss.sonatype.org/content/repositories/staging</url>
-                    <layout>default</layout>
-                </repository>
-            </repositories>
         </profile>
 
         <profile>
