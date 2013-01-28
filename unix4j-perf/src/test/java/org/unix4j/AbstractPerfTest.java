@@ -27,8 +27,11 @@ public class AbstractPerfTest {
 
 	protected void run(final Unix4jCommandBuilder command, final String linuxEquivalentCommand) {
 		final String testName = getTestName();
+        System.out.println("============================================================");
+        System.out.println("TEST: " + testName);
+        System.out.println("============================================================");
 
-		final long executionTime = runCommand(command);
+        final long executionTime = runCommand(command);
 		System.out.println(testName + ".executionTime=" + executionTime);
 		System.out.println("");
 
@@ -72,7 +75,7 @@ public class AbstractPerfTest {
 	}
 
 	private long runCommand(final Unix4jCommandBuilder command) {
-		startTimer();
+        startTimer();
 		command.toDevNull();
 		return getRunningTime();
 	}
@@ -83,7 +86,7 @@ public class AbstractPerfTest {
 										   TestBaseline unix4jBaseline,
 										   TestBaseline linuxBaseline) {
 
-		System.out.println("============================================================");
+		System.out.println("SUMMARY:");
 		System.out.println(format("Test name...........................%s", testName));
 		System.out.println(format("Command.............................%s", command.toString()));
 		System.out.println(format("Execution time - Current............%s ms", currentExecutionTime));

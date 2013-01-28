@@ -49,8 +49,6 @@ public enum LargeTestFiles {
 			final File smallFile = getSmallFile();
 			file = new File(smallFile.getParent(), filePath);
 			createLargeFileIfItDoesntExist(file, smallFile, meg);
-		} else {
-			System.out.println("File already exists:" + filePath);
 		}
 	}
 
@@ -69,8 +67,6 @@ public enum LargeTestFiles {
 				System.out.println("");
 				fileWriter.flush();
 				fileWriter.close();
-			} else {
-				System.out.println("File at " + destinationFile + " already exists...");
 			}
 		} catch (Exception e){
 			throw new RuntimeException(e);
