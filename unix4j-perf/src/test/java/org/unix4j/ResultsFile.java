@@ -36,9 +36,9 @@ public class ResultsFile {
 		try {
 			properties.put(testName, executionTimeInMillis);
 			properties.store(new FileOutputStream(filename), null);
-			System.out.println(format("Execution time written to: %s", filename));
-			System.out.println(format("Save and check-in this file to unix4j-perf/src/test/resources%s to create a new baseline file.", TestBaseline.Factory.UNIX4J.getUserFilename()));
-		} catch (IOException e) {
+			System.out.println(format("Execution time written to: %s.", filename) + format(" Save and check-in this file to unix4j-perf/src/test/resources%s to create a new baseline file.", TestBaseline.Factory.UNIX4J.getUserFilename()));
+            System.out.println();
+        } catch (IOException e) {
 			new RuntimeException(e);
 		}
 	}
