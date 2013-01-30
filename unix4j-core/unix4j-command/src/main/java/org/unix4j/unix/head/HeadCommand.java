@@ -46,7 +46,7 @@ class HeadCommand extends AbstractCommand<HeadArguments> {
 		return getStandardInputProcessor(context, output, args);
 	}
 	
-	private LineProcessor getStandardInputProcessor(ExecutionContext context, LineProcessor output, HeadArguments args) {
+	private AbstractHeadProcessor getStandardInputProcessor(ExecutionContext context, LineProcessor output, HeadArguments args) {
 		if (args.isChars()) {
 			//count chars
 			return new HeadCharsProcessor(this, context, output);
@@ -57,9 +57,9 @@ class HeadCommand extends AbstractCommand<HeadArguments> {
 	}
 	
 	private LineProcessor getFileInputProcessor(List<FileInput> inputs, ExecutionContext context, final LineProcessor output, HeadArguments args) {
-		final LineProcessor standardInputProcessor = getStandardInputProcessor(context, output, args);
+		final AbstractHeadProcessor headProcessor = getStandardInputProcessor(context, output, args);
 		if (inputs.size() <= 1 || args.isSuppressHeaders()) {
-			return new RedirectInputLineProcessor(inputs, standardInputProcessor);
+			return new RedirectInputLineProcessor(inputs, headProcessor);
 		} else {
 			//write header line per file
 			final InputProcessor inputProcessor = new DefaultInputProcessor() {
@@ -73,9 +73,10 @@ class HeadCommand extends AbstractCommand<HeadArguments> {
 					}
 					final String fileInfo = input instanceof FileInput ? ((FileInput)input).getFileInfo() : input.toString();
 					output.processLine(new SimpleLine("==> " + fileInfo + " <=="));
+                    headProcessor.resetCounter();
 				}
 			};
-			return new MultipleInputLineProcessor(inputs, inputProcessor, standardInputProcessor);
+			return new MultipleInputLineProcessor(inputs, inputProcessor, headProcessor);
 		}
 	}
 }

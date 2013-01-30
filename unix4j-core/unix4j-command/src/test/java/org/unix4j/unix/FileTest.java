@@ -53,9 +53,6 @@ class FileTest {
 	public FileTest(final Class<?> testClass, int inputFileCount) {
 		this(testClass, inputFileCount, MatchMode.Exact, StackTraceUtil.getCurrentMethodStackTraceElement(1));
 	}
-	public FileTest(final Class<?> testClass, int inputFileCount, MatchMode matchMode) {
-		this(testClass, inputFileCount, matchMode, StackTraceUtil.getCurrentMethodStackTraceElement(1));
-	}
 	private FileTest(final Class<?> testClass, int inputFileCount, MatchMode matchMode, StackTraceElement stackTraceElement) {
 		this.inputFiles = new ArrayList<File>(inputFileCount);
 		final String testMethodName = stackTraceElement.getMethodName();
@@ -82,8 +79,7 @@ class FileTest {
 		return getTestFile(testClass, testMethod, fileName, null);
 	}
 	private static final File getTestFile(Class<?> testClass, String testMethod, String fileName, String defaultFileName) {
-		final String packageDir = testClass.getPackage().getName().replace('.', '-');
-		final String testDir = packageDir + "/" + testClass.getSimpleName();
+        final String testDir = getTestDir(testClass);
 		final String filePath= "/" + testDir + "/" + fileName;
 		URL fileURL = testClass.getResource(filePath);
 		if (fileURL == null) {
@@ -99,7 +95,12 @@ class FileTest {
 		return new File(fileURL.getFile());
 	}
 
-	public File getInputFile() {
+    private static String getTestDir(Class<?> testClass) {
+        final String packageDir = testClass.getPackage().getName().replace('.', '-');
+        return packageDir + "/" + testClass.getSimpleName();
+    }
+
+    public File getInputFile() {
 		if (inputFiles.size() == 1) {
 			return inputFiles.get(0);
 		}
@@ -128,6 +129,10 @@ class FileTest {
 			ok &= matchMode.matches(exp, act);
 		}
 		if (!ok) {
+            System.out.println("Actual:");
+            for(final String line: actualOutputLines){
+                System.out.println(line);
+            }
 			throw printFailureCommandToStandardErr(command, actualOutputLines);
 		}
 	}
