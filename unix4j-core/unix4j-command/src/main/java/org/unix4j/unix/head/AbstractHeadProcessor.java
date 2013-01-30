@@ -23,4 +23,8 @@ abstract class AbstractHeadProcessor extends AbstractLineProcessor<HeadArguments
 		counter.reset();
 		getOutput().finish();
 	}
+
+    public void resetCounter(){
+        counter.reset();
+    }
 }

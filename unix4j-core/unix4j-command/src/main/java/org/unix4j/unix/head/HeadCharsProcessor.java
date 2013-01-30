@@ -19,7 +19,7 @@ final class HeadCharsProcessor extends AbstractHeadProcessor {
 			if (after < count) {
 				 more = getOutput().processLine(line);
 			} else {
-				final int len = (int)(before-after);
+				final int len = (int)(count-before);
 				final Line cutLine = SimpleLine.subLine(line, 0, len, false);
 				more = getOutput().processLine(cutLine);
 			}
