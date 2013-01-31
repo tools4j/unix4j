@@ -46,15 +46,24 @@ public class HeadFileTest {
         tester.run(Unix4j.use(config).head(Head.Options.c, 1000000, tester.getInputFile()));
     }
 
-    @Ignore
     @Test
     public void head_multipleFiles() {
-        final FileTest tester = new FileTest(this.getClass(), 2);
+        final FileTest tester = new FileTest(this.getClass(), FileTest.MatchMode.Regex, 2);
         tester.run(Unix4j.head(10, tester.getInputFiles()));
+        tester.run(Unix4j.head(10, tester.getInputFileNames()));
+        tester.run(Unix4j.head(tester.getInputFiles())); //By default, head returns top 10 lines
+        tester.run(Unix4j.builder().head(combine(arr("--count", "10", "--paths"), tester.getInputFileNames())));
+        tester.run(Unix4j.builder().head(combine(arr("--paths"), tester.getInputFileNames())));
+    }
 
-//        final FileTest tester = new FileTest(this.getClass(), 2);
-//        tester.run(Unix4j.builder().sort(Sort.Options.check, tester.getInputFiles()));
-//        tester.run(Unix4j.builder().sort(combine(arr("--check", "--paths"), tester.getInputFileNames())));
-//        tester.run(Unix4j.builder().sort(combine(tester.getInputFileNames(), "-c")));
+    private static String[] arr(String... s) {
+        return s;
+    }
+
+    private static String[] combine(String[] a, String... b) {
+        final String[] merged = new String[a.length + b.length];
+        System.arraycopy(a, 0, merged, 0, a.length);
+        System.arraycopy(b, 0, merged, a.length, b.length);
+        return merged;
     }
 }
