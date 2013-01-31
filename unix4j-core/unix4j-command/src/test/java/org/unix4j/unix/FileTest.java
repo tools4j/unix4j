@@ -53,6 +53,9 @@ class FileTest {
 	public FileTest(final Class<?> testClass, int inputFileCount) {
 		this(testClass, inputFileCount, MatchMode.Exact, StackTraceUtil.getCurrentMethodStackTraceElement(1));
 	}
+    public FileTest(final Class<?> testClass, MatchMode matchMode, int inputFileCount) {
+        this(testClass, inputFileCount, matchMode, StackTraceUtil.getCurrentMethodStackTraceElement(1));
+    }
 	private FileTest(final Class<?> testClass, int inputFileCount, MatchMode matchMode, StackTraceElement stackTraceElement) {
 		this.inputFiles = new ArrayList<File>(inputFileCount);
 		final String testMethodName = stackTraceElement.getMethodName();

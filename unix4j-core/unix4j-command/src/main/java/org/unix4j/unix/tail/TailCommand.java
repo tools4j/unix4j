@@ -63,9 +63,9 @@ class TailCommand extends AbstractCommand<TailArguments> {
 	}
 	
 	private LineProcessor getFileInputProcessor(List<FileInput> inputs, ExecutionContext context, final LineProcessor output, TailArguments args) {
-		final AbstractTailProcessor standardInputProcessor = getStandardInputProcessor(context, output, args);
+		final AbstractTailProcessor tailProcessor = getStandardInputProcessor(context, output, args);
 		if (inputs.size() <= 1 || args.isSuppressHeaders()) {
-			return new RedirectInputLineProcessor(inputs, standardInputProcessor);
+			return new RedirectInputLineProcessor(inputs, tailProcessor);
 		} else {
 			//write header line per file
 			final InputProcessor inputProcessor = new DefaultInputProcessor() {
@@ -80,8 +80,13 @@ class TailCommand extends AbstractCommand<TailArguments> {
 					final String fileInfo = input instanceof FileInput ? ((FileInput)input).getFileInfo() : input.toString();
 					output.processLine(new SimpleLine("==> " + fileInfo + " <=="));
 				}
-			};
-			return new MultipleInputLineProcessor(inputs, inputProcessor, standardInputProcessor);
+
+                @Override
+                public void finish(Input input, LineProcessor output) {
+                    tailProcessor.finish();
+                }
+            };
+			return new MultipleInputLineProcessor(inputs, inputProcessor, tailProcessor);
 		}
 	}
 
