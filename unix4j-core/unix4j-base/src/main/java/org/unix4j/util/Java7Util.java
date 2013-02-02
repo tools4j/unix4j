@@ -2,7 +2,7 @@ package org.unix4j.util;
 
 /**
  * Utility class with static methods to help loading a Java 7 version of a class
- * if it is available, and the java 6 version otherwise.
+ * if it is available, and the Java 6 version otherwise.
  */
 public class Java7Util {
 
