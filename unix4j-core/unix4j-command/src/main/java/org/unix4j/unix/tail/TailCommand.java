@@ -83,7 +83,8 @@ class TailCommand extends AbstractCommand<TailArguments> {
 
                 @Override
                 public void finish(Input input, LineProcessor output) {
-                    tailProcessor.finish();
+                    super.finish(input, output);
+                    tailProcessor.resetCountersAndFlush();
                 }
             };
 			return new MultipleInputLineProcessor(inputs, inputProcessor, tailProcessor);
