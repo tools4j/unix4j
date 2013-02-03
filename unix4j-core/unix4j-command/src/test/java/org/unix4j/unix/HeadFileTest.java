@@ -1,6 +1,5 @@
 package org.unix4j.unix;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.context.DefaultExecutionContext;
