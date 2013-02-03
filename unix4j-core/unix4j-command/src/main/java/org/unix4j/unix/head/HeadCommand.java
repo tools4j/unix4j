@@ -73,9 +73,14 @@ class HeadCommand extends AbstractCommand<HeadArguments> {
 					}
 					final String fileInfo = input instanceof FileInput ? ((FileInput)input).getFileInfo() : input.toString();
 					output.processLine(new SimpleLine("==> " + fileInfo + " <=="));
-                    headProcessor.resetCounter();
 				}
-			};
+
+                @Override
+                public void finish(Input input, LineProcessor output) {
+                    super.finish(input, output);
+                    headProcessor.resetCounter();
+                }
+            };
 			return new MultipleInputLineProcessor(inputs, inputProcessor, headProcessor);
 		}
 	}

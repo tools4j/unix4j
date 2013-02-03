@@ -10,7 +10,12 @@ class TailCharsFromStartProcessor extends AbstractTailProcessor {
 
 	private final Counter counter = new Counter();
 
-	public TailCharsFromStartProcessor(TailCommand command, ExecutionContext context, LineProcessor output) {
+    @Override
+    public void resetCountersAndFlush() {
+        counter.reset();
+    }
+
+    public TailCharsFromStartProcessor(TailCommand command, ExecutionContext context, LineProcessor output) {
 		super(command, context, output);
 	}
 
@@ -34,7 +39,7 @@ class TailCharsFromStartProcessor extends AbstractTailProcessor {
 
 	@Override
 	public void finish() {
-		counter.reset();
+        resetCountersAndFlush();
 		getOutput().finish();
 	}
 }

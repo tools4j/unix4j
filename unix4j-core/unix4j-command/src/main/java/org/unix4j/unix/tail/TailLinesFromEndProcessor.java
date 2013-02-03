@@ -10,7 +10,17 @@ class TailLinesFromEndProcessor extends AbstractTailProcessor {
 	
 	private final LinkedList<Line> tailLines = new LinkedList<Line>();
 
-	public TailLinesFromEndProcessor(TailCommand command, ExecutionContext context, LineProcessor output) {
+    @Override
+    public void resetCountersAndFlush() {
+        final LineProcessor output = getOutput();
+        boolean more = true;
+        while (!tailLines.isEmpty() && more) {
+            more = output.processLine(tailLines.removeFirst());//remove to free memory
+        }
+        tailLines.clear();
+    }
+
+    public TailLinesFromEndProcessor(TailCommand command, ExecutionContext context, LineProcessor output) {
 		super(command, context, output);
 	}
 
@@ -26,11 +36,7 @@ class TailLinesFromEndProcessor extends AbstractTailProcessor {
 	@Override
 	public void finish() {
 		final LineProcessor output = getOutput();
-		boolean more = true;
-		while (!tailLines.isEmpty() && more) {
-			more = output.processLine(tailLines.removeFirst());//remove to free memory
-		}
-		tailLines.clear();
+		resetCountersAndFlush();
 		output.finish();
 	}
 }

@@ -13,7 +13,24 @@ public class TailCharsFromEndProcessor extends AbstractTailProcessor {
 	private final Counter counter = new Counter();
 	private final LinkedList<Line> tailLines = new LinkedList<Line>();
 
-	public TailCharsFromEndProcessor(TailCommand command, ExecutionContext context, LineProcessor output) {
+    @Override
+    public void resetCountersAndFlush() {
+        final LineProcessor output = getOutput();
+        boolean more = true;
+        if (counter.getCount() > count) {
+            final Line line = tailLines.removeFirst();
+            final int offset = (int)(counter.getCount() - count);
+            final Line cutLine = SimpleLine.subLine(line, offset, line.length(), false);
+            more = output.processLine(cutLine);
+        }
+        while (!tailLines.isEmpty() && more) {
+            more = output.processLine(tailLines.removeFirst());//remove to free memory
+        }
+        counter.reset();
+        tailLines.clear();
+    }
+
+    public TailCharsFromEndProcessor(TailCommand command, ExecutionContext context, LineProcessor output) {
 		super(command, context, output);
 	}
 
@@ -34,18 +51,7 @@ public class TailCharsFromEndProcessor extends AbstractTailProcessor {
 	@Override
 	public void finish() {
 		final LineProcessor output = getOutput();
-		boolean more = true;
-		if (counter.getCount() > count) {
-			final Line line = tailLines.removeFirst();
-			final int offset = (int)(counter.getCount() - count);
-			final Line cutLine = SimpleLine.subLine(line, offset, line.length(), false);
-			more = output.processLine(cutLine);
-		}
-		while (!tailLines.isEmpty() && more) {
-			more = output.processLine(tailLines.removeFirst());//remove to free memory
-		}
-		counter.reset();
-		tailLines.clear();
+        resetCountersAndFlush();
 		output.finish();
 	}
 	

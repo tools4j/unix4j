@@ -9,6 +9,9 @@ import org.unix4j.processor.LineProcessor;
  */
 abstract class AbstractTailProcessor extends AbstractLineProcessor<TailArguments> {
 	protected final long count;
+
+    public abstract void resetCountersAndFlush();
+
 	public AbstractTailProcessor(TailCommand command, ExecutionContext context, LineProcessor output) {
 		super(command, context, output);
 		final TailArguments args = getArguments();
