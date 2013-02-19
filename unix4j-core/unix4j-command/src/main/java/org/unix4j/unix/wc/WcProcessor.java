@@ -9,7 +9,6 @@ import org.unix4j.processor.LineProcessor;
  * Standard input processor for line, word and char count.
  */
 final class WcProcessor extends AbstractLineProcessor<WcArguments> {
-
 	private final Counters counters;
 
 	public WcProcessor(WcCommand command, ExecutionContext context, LineProcessor output) {
@@ -29,5 +28,4 @@ final class WcProcessor extends AbstractLineProcessor<WcArguments> {
 		counters.writeCountsLine(output);
 		output.finish();
 	}
-	
 }

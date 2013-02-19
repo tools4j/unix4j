@@ -29,6 +29,9 @@ public class Counter {
 		count -= dec;
 		return count;
 	}
+    public int getWidth(){
+        return String.valueOf(getCount()).length();
+    }
 	
 	@Override
 	public String toString() {

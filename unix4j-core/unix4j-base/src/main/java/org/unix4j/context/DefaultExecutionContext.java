@@ -42,6 +42,9 @@ public class DefaultExecutionContext implements ExecutionContext {
 	public void setCurrentDirectory(File currentDirectory) {
 		this.currentDirectory = currentDirectory;
 	}
+    public void setCurrentDirectory(String currentDirectory) {
+        setCurrentDirectory(new File(currentDirectory));
+    }
 	@Override
 	public File getCurrentDirectory() {
 		if (currentDirectory == null) {

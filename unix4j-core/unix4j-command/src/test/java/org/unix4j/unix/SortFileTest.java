@@ -5,6 +5,7 @@ import java.io.File;
 import org.junit.Assert;
 import org.junit.Test;
 import org.unix4j.Unix4j;
+import org.unix4j.util.FileTestUtils;
 
 /**
  * Unit test for {@code Sort} reading the input from test files.
@@ -13,7 +14,7 @@ public class SortFileTest {
 
 	@Test
 	public void sort() {
-		final FileTest tester = new FileTest(this.getClass());
+		final CommandFileTest tester = new CommandFileTest(this.getClass());
 		tester.run(Unix4j.fromFile(tester.getInputFile()).sort());
 		tester.run(Unix4j.builder().sort(tester.getInputFile()));
 		tester.run(Unix4j.builder().sort("" + tester.getInputFile()));
@@ -22,7 +23,7 @@ public class SortFileTest {
 
 	@Test
 	public void sortReverse() {
-		final FileTest tester = new FileTest(this.getClass());
+		final CommandFileTest tester = new CommandFileTest(this.getClass());
 		tester.run(Unix4j.fromFile(tester.getInputFile()).sort(Sort.Options.reverse));
 		tester.run(Unix4j.builder().sort(Sort.Options.reverse, tester.getInputFile()));
 		tester.run(Unix4j.builder().sort("-r", tester.getInputFileName()));
@@ -32,7 +33,7 @@ public class SortFileTest {
 
 	@Test
 	public void sortNumeric() {
-		final FileTest tester = new FileTest(this.getClass());
+		final CommandFileTest tester = new CommandFileTest(this.getClass());
 		tester.run(Unix4j.builder().sort(Sort.Options.numericSort, tester.getInputFiles()));
 		tester.run(Unix4j.builder().sort(combine(arr("-n"), tester.getInputFileNames())));
 		tester.run(Unix4j.builder().sort(combine(arr("--numericSort", "--"), tester.getInputFileNames())));
@@ -42,7 +43,7 @@ public class SortFileTest {
 
 	@Test
 	public void sortGeneralNumeric() {
-		final FileTest tester = new FileTest(this.getClass());
+		final CommandFileTest tester = new CommandFileTest(this.getClass());
 		tester.run(Unix4j.builder().sort(Sort.Options.generalNumericSort, tester.getInputFiles()));
 		tester.run(Unix4j.builder().sort(combine(arr("-g"), tester.getInputFileNames())));
 		tester.run(Unix4j.builder().sort(combine(arr("--generalNumericSort", "--paths"), tester.getInputFileNames())));
@@ -51,7 +52,7 @@ public class SortFileTest {
 
 	@Test
 	public void sortNumericIntegers() {
-		final FileTest tester = new FileTest(this.getClass());
+		final CommandFileTest tester = new CommandFileTest(this.getClass());
 		tester.run(Unix4j.builder().sort(Sort.Options.numericSort, tester.getInputFiles()));
 		tester.run(Unix4j.builder().sort(combine(tester.getInputFileNames(), "-n")));
 		tester.run(Unix4j.builder().sort(combine(arr("--numericSort", "--paths"), tester.getInputFileNames())));
@@ -59,7 +60,7 @@ public class SortFileTest {
 	
 	@Test
 	public void sortMerge() {
-		final FileTest tester = new FileTest(this.getClass(), 3);
+		final CommandFileTest tester = new CommandFileTest(this.getClass(), 3);
 		tester.run(Unix4j.builder().sort(Sort.Options.merge, tester.getInputFiles()));
 		tester.run(Unix4j.builder().sort(combine(arr("--merge", "--paths"), tester.getInputFileNames())));
 		tester.run(Unix4j.builder().sort(combine(tester.getInputFileNames(), "-m")));
@@ -67,7 +68,7 @@ public class SortFileTest {
 	
 	@Test
 	public void sortCheck() {
-		final FileTest tester = new FileTest(this.getClass(), 2);
+		final CommandFileTest tester = new CommandFileTest(this.getClass(), 2);
 		tester.run(Unix4j.builder().sort(Sort.Options.check, tester.getInputFiles()));
 		tester.run(Unix4j.builder().sort(combine(arr("--check", "--paths"), tester.getInputFileNames())));
 		tester.run(Unix4j.builder().sort(combine(tester.getInputFileNames(), "-c")));
@@ -75,7 +76,7 @@ public class SortFileTest {
 
 	@Test
 	public void sortCheckExitValueOK() {
-		final File file = FileTest.getTestFile(getClass(), "sortCheckSucceed.input");
+		final File file = FileTestUtils.getTestFile(getClass(), "sortCheckSucceed.input");
 		int exitVal;
 		
 		exitVal = Unix4j.builder().sort(Sort.Options.check, file).toExitValue();
@@ -88,7 +89,7 @@ public class SortFileTest {
 
 	@Test
 	public void sortCheckExitValueFAILURE() {
-		final File file = FileTest.getTestFile(getClass(), "sortCheckFail.input");
+		final File file = FileTestUtils.getTestFile(getClass(), "sortCheckFail.input");
 		int exitVal;
 		
 		exitVal = Unix4j.builder().sort(Sort.Options.check, file).toExitValue();

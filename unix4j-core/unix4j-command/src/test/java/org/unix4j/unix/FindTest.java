@@ -8,8 +8,8 @@ import org.unix4j.context.ExecutionContextFactory;
 
 public class FindTest {
     private static final class Config implements ExecutionContextFactory {
-        private final FileTest tester;
-        public Config(FileTest tester) {
+        private final CommandFileTest tester;
+        public Config(CommandFileTest tester) {
             this.tester = tester;
         }
         @Override
@@ -23,7 +23,7 @@ public class FindTest {
 
     @Test
     public void testFind() {
-        final FileTest tester = new FileTest(this.getClass());
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
         final Config config = new Config(tester);
 //        Unix4j.use(config).find(".", "/home/ben/dev/*/groovy/*/*", "target/*", "asdf").toStdOut();
 //        Unix4j.use(config).find(".", "*.java").toStdOut();

@@ -12,8 +12,8 @@ import org.unix4j.context.ExecutionContextFactory;
 public class TailFileTest {
 	
 	private static final class Config implements ExecutionContextFactory {
-		private final FileTest tester;
-		public Config(FileTest tester) {
+		private final CommandFileTest tester;
+		public Config(CommandFileTest tester) {
 			this.tester = tester;
 		}
 		@Override
@@ -26,21 +26,21 @@ public class TailFileTest {
 
 	@Test
 	public void tail_simple_countFromEnd() {
-		final FileTest tester = new FileTest(this.getClass());
+		final CommandFileTest tester = new CommandFileTest(this.getClass());
 		final Config config = new Config(tester);
 		tester.run(Unix4j.use(config).tail(8, tester.getInputFile()));
 	}
 
     @Test
     public void tail_byChars_countFromEnd() {
-        final FileTest tester = new FileTest(this.getClass());
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
         final Config config = new Config(tester);
         tester.run(Unix4j.use(config).tail(Tail.Options.c, 100, tester.getInputFile()));
     }
 
     @Test
     public void tail_multipleFiles_countFromEnd() {
-        final FileTest tester = new FileTest(this.getClass(), FileTest.MatchMode.Regex, 2);
+        final CommandFileTest tester = new CommandFileTest(this.getClass(), CommandFileTest.MatchMode.Regex, 2);
         tester.run(Unix4j.tail(10, tester.getInputFiles()));
         tester.run(Unix4j.tail(10, tester.getInputFileNames()));
         tester.run(Unix4j.tail(tester.getInputFiles())); //By default, tail returns top 10 lines
@@ -50,21 +50,21 @@ public class TailFileTest {
 
     @Test
     public void tail_simple_countFromStart() {
-        final FileTest tester = new FileTest(this.getClass());
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
         final Config config = new Config(tester);
         tester.run(Unix4j.use(config).tail(Tail.Options.countFromStart, 8, tester.getInputFile()));
     }
 
     @Test
     public void tail_byChars_countFromStart() {
-        final FileTest tester = new FileTest(this.getClass());
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
         final Config config = new Config(tester);
         tester.run(Unix4j.use(config).tail(Tail.Options.c.countFromStart, 100, tester.getInputFile()));
     }
 
     @Test
     public void tail_multipleFiles_countFromStart() {
-        final FileTest tester = new FileTest(this.getClass(), FileTest.MatchMode.Regex, 2);
+        final CommandFileTest tester = new CommandFileTest(this.getClass(), CommandFileTest.MatchMode.Regex, 2);
         tester.run(Unix4j.tail(10, tester.getInputFiles()));
         tester.run(Unix4j.tail(10, tester.getInputFileNames()));
         tester.run(Unix4j.tail(tester.getInputFiles())); //By default, tail returns top 10 lines
@@ -75,7 +75,7 @@ public class TailFileTest {
 
     @Test
     public void tail_byChars_specifyMoreCharsThanInInput() {
-        final FileTest tester = new FileTest(this.getClass());
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
         final Config config = new Config(tester);
         tester.run(Unix4j.use(config).tail(Tail.Options.c, 1000000, tester.getInputFile()));
     }
