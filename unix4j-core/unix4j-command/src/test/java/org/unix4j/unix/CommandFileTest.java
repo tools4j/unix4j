@@ -9,6 +9,7 @@ import junit.framework.ComparisonFailure;
 
 import org.unix4j.Unix4j;
 import org.unix4j.builder.Unix4jCommandBuilder;
+import org.unix4j.util.FileTestUtils;
 import org.unix4j.util.StackTraceUtil;
 
 /**
@@ -23,7 +24,7 @@ import org.unix4j.util.StackTraceUtil;
  * The file "default.input" is used if the method specific "testMe.input" file
  * does not exist.
  */
-class FileTest {
+class CommandFileTest {
 	public enum MatchMode {
 		Exact {
 			@Override
@@ -43,71 +44,45 @@ class FileTest {
 	private final List<File> inputFiles;
 	private final List<String> expectedOutputLines;
 	private final MatchMode matchMode;
+    private final File testDir;
 
-	public FileTest(final Class<?> testClass) {
+
+	public CommandFileTest(final Class<?> testClass) {
 		this(testClass, 1, MatchMode.Exact, StackTraceUtil.getCurrentMethodStackTraceElement(1));
 	}
-	public FileTest(final Class<?> testClass, MatchMode matchMode) {
+	public CommandFileTest(final Class<?> testClass, MatchMode matchMode) {
 		this(testClass, 1, matchMode, StackTraceUtil.getCurrentMethodStackTraceElement(1));
 	}
-	public FileTest(final Class<?> testClass, int inputFileCount) {
+	public CommandFileTest(final Class<?> testClass, int inputFileCount) {
 		this(testClass, inputFileCount, MatchMode.Exact, StackTraceUtil.getCurrentMethodStackTraceElement(1));
 	}
-    public FileTest(final Class<?> testClass, MatchMode matchMode, int inputFileCount) {
+    public CommandFileTest(final Class<?> testClass, MatchMode matchMode, int inputFileCount) {
         this(testClass, inputFileCount, matchMode, StackTraceUtil.getCurrentMethodStackTraceElement(1));
     }
-	private FileTest(final Class<?> testClass, int inputFileCount, MatchMode matchMode, StackTraceElement stackTraceElement) {
-		this.inputFiles = new ArrayList<File>(inputFileCount);
+	private CommandFileTest(final Class<?> testClass, int inputFileCount, MatchMode matchMode, StackTraceElement stackTraceElement) {
+
+        this.testDir = FileTestUtils.getTestDir(testClass);
+        this.inputFiles = new ArrayList<File>(inputFileCount);
 		final String testMethodName = stackTraceElement.getMethodName();
-		final File outputFile = getTestFile(testClass, testMethodName, testMethodName + ".output");
+		final File outputFile = FileTestUtils.getTestFile(testClass, testMethodName, testMethodName + ".output");
 		if (inputFileCount == 1) {
-			final File inputFile = getTestFile(testClass, testMethodName, testMethodName + ".input", "default.input");
+			final File inputFile = FileTestUtils.getTestFile(testClass, testMethodName, testMethodName + ".input", "default.input");
 			inputFiles.add(inputFile);
 		} else {
 			for (int i = 0; i < inputFileCount; i++) {
-				final File inputFile = getTestFile(testClass, testMethodName, testMethodName + ".input." + (i+1));
+				final File inputFile = FileTestUtils.getTestFile(testClass, testMethodName, testMethodName + ".input." + (i + 1));
 				inputFiles.add(inputFile);
 			}
 		}
 		this.expectedOutputLines = Unix4j.fromFile(outputFile).toStringList();
 		this.matchMode = matchMode;
 	}
-	
-	public static final File getTestFile(Class<?> testClass, String fileName) {
-		final StackTraceElement stackTraceElement = StackTraceUtil.getCurrentMethodStackTraceElement(1);
-		return getTestFile(testClass, stackTraceElement.getMethodName(), fileName);
-		
-	}
-	private static final File getTestFile(Class<?> testClass, String testMethod, String fileName) {
-		return getTestFile(testClass, testMethod, fileName, null);
-	}
-	private static final File getTestFile(Class<?> testClass, String testMethod, String fileName, String defaultFileName) {
-        final String testDir = getTestDir(testClass);
-		final String filePath= "/" + testDir + "/" + fileName;
-		URL fileURL = testClass.getResource(filePath);
-		if (fileURL == null) {
-			if (defaultFileName == null) {
-				throw new IllegalArgumentException("test file for " + testClass.getName() + "." + testMethod + " not found, expected file: " + filePath);
-			}
-			final String defaultPath= "/" + testDir + "/" + defaultFileName;
-			fileURL = testClass.getResource(defaultPath);
-			if (fileURL == null) {
-				throw new IllegalArgumentException("test file for " + testClass.getName() + "." + testMethod + " not found, expected file: " + filePath + " or default file: " + defaultPath);
-			}
-		}
-		return new File(fileURL.getFile());
-	}
-
-    private static String getTestDir(Class<?> testClass) {
-        final String packageDir = testClass.getPackage().getName().replace('.', '-');
-        return packageDir + "/" + testClass.getSimpleName();
-    }
 
     public File getInputFile() {
 		if (inputFiles.size() == 1) {
 			return inputFiles.get(0);
 		}
-		throw new IllegalStateException("there are " + inputFiles.size() + " inpput files, use getInputFiles() instead");
+		throw new IllegalStateException("there are " + inputFiles.size() + " input files, use getInputFiles() instead");
 	}
 	public String getInputFileName() {
 		return getInputFile().toString();
@@ -123,7 +98,11 @@ class FileTest {
 		return names;
 	}
 
-	public void run(final Unix4jCommandBuilder command){
+    public File getTestDir() {
+        return testDir;
+    }
+
+    public void run(final Unix4jCommandBuilder command){
 		final List<String> actualOutputLines = command.toStringList();
 		boolean ok = expectedOutputLines.size() == actualOutputLines.size();
 		for (int i = 0; ok && i < expectedOutputLines.size(); i++) {

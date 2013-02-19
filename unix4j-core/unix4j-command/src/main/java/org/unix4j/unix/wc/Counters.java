@@ -16,7 +16,7 @@ import org.unix4j.util.StringUtil;
  */
 class Counters {
 
-	private final static int MIN_COUNT_PADDING = 2;
+	public final static int MIN_COUNT_PADDING = 2;
 
 	private final EnumMap<CounterType, Counter> counters = new EnumMap<CounterType, Counter>(CounterType.class);
 	private boolean lastLineWasEmpty;
@@ -89,10 +89,18 @@ class Counters {
 	private int getWidestCount() {
 		int max = 0;
 		for (final Counter counter : counters.values()) {
-			max = Math.max(0, String.valueOf(counter.getCount()).length());
+			max = Math.max(max, counter.getWidth());
 		}
 		return max;
 	}
+
+    public int getFixedWidthOfColumnsInOutput() {
+        if(counters.size() == 1){
+            return counters.values().iterator().next().getWidth();
+        } else {
+            return getWidestCount() + MIN_COUNT_PADDING;
+        }
+    }
 
 	/**
 	 * Writes the counts line to the specified {@code output}.
@@ -104,6 +112,20 @@ class Counters {
 		writeCountsLineWithFileInfo(output, null);
 	}
 
+
+    /**
+     * Writes the counts line to the specified {@code output} appending the
+     * specified file information.
+     *
+     * @param output
+     *            the output destination
+     * @param fileInfo
+     *            the file information, usually a file name or path
+     */
+    public void writeCountsLineWithFileInfo(LineProcessor output, String fileInfo) {
+        writeCountsLineWithFileInfo(output, fileInfo, getFixedWidthOfColumnsInOutput());
+    }
+
 	/**
 	 * Writes the counts line to the specified {@code output} appending the
 	 * specified file information.
@@ -112,24 +134,21 @@ class Counters {
 	 *            the output destination
 	 * @param fileInfo
 	 *            the file information, usually a file name or path
+  	 * @param fixedWidthOfColumnsInOutput
+     *        the fixed width of the outputted counts.  Will usually be the width
+     *        of the widest count, plus two characters
 	 */
-	public void writeCountsLineWithFileInfo(LineProcessor output, String fileInfo) {
+	public void writeCountsLineWithFileInfo(LineProcessor output, String fileInfo, int fixedWidthOfColumnsInOutput) {
 		dontCountSingleEmptyLine();
-
 		final CharSequence countString;
-		if (counters.size() > 1) {
-			final StringBuilder sb = new StringBuilder();
-			final int widestCount = getWidestCount();
-			final int countDigits = widestCount + MIN_COUNT_PADDING;
-			for (final Counter counter : counters.values()) {
-				final String formattedCount = StringUtil.fixSizeString(countDigits, false, ' ', counter.getCount());
-				sb.append(formattedCount);
-			}
-			countString = sb;
-		} else {
-			final Counter counter = counters.values().iterator().next();
-			countString = String.valueOf(counter.getCount());
-		}
+        final StringBuilder sb = new StringBuilder();
+
+        for (final Counter counter : counters.values()) {
+            final String formattedCount = StringUtil.fixSizeString(fixedWidthOfColumnsInOutput, false, ' ', counter.getCount());
+            sb.append(formattedCount);
+        }
+        countString = sb;
+
 		if (fileInfo == null) {
 			output.processLine(new SimpleLine(countString));
 		} else {
@@ -145,5 +164,4 @@ class Counters {
 			}
 		}
 	}
-
 }

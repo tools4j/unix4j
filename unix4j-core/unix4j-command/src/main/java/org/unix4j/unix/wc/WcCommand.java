@@ -6,9 +6,7 @@ import java.util.List;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.context.ExecutionContext;
 import org.unix4j.io.FileInput;
-import org.unix4j.processor.LineProcessor;
-import org.unix4j.processor.MultipleInputLineProcessor;
-import org.unix4j.processor.RedirectInputLineProcessor;
+import org.unix4j.processor.*;
 import org.unix4j.unix.Wc;
 import org.unix4j.util.FileUtil;
 
@@ -29,30 +27,25 @@ class WcCommand extends AbstractCommand<WcArguments> {
 		if (args.isFilesSet()) {
 			inputs = FileInput.multiple(args.getFiles());
 		} else if (args.isPathsSet()) {
-			final List<File> files = FileUtil.expandFiles(args.getPaths());
+			final List<File> files = FileUtil.expandFiles(context.getCurrentDirectory(), args.getPaths());
 			inputs = FileInput.multiple(files);
 		} else {
 			//standard input
 			return getStandardInputProcessor(context, output);
 		}
 		
-		if (inputs.size() > 1) {
-			//totals line at end
-			final WcMultiFileProcessor processor = new WcMultiFileProcessor(args);
-			return new MultipleInputLineProcessor(inputs, processor, output) {
-				@Override
-				protected void finishMultiple(java.util.List<? extends org.unix4j.io.Input> inputs, LineProcessor output) {
-					processor.writeTotalsLine(output);
-				}
-			};
+        if(inputs.size() == 1){
+			return new InputLineProcessor(inputs.get(0), new WcFileProcessor(args), output);
+
+        } else if(inputs.size() > 1){
+            return new WcMultipleFilesProcessor(inputs, output, args);
+
 		} else {
-			final LineProcessor standardInputProcessor = getStandardInputProcessor(context, output);
-			return new RedirectInputLineProcessor(inputs, standardInputProcessor);
+			throw new IllegalStateException("No inputs specified");
 		}
 	}
 	
 	private WcProcessor getStandardInputProcessor(ExecutionContext context, final LineProcessor output) {
 		return new WcProcessor(this, context, output);
 	}
-
 }

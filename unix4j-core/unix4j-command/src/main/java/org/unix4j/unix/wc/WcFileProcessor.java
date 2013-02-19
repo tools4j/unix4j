@@ -7,17 +7,13 @@ import org.unix4j.processor.DefaultInputProcessor;
 import org.unix4j.processor.LineProcessor;
 
 /**
- * Input processor for line, word and char count for multiple input files. The
- * totals line can be printed by {@link #writeTotalsLine(LineProcessor)}.
+ * Input processor for line, word and char count for a single file.
  */
-class WcMultiFileProcessor extends DefaultInputProcessor {
-
+class WcFileProcessor extends DefaultInputProcessor {
 	private final Counters current;
-	private final Counters totals;
-	
-	public WcMultiFileProcessor(WcArguments args) {
+
+	public WcFileProcessor(WcArguments args) {
 		current = new Counters(args);
-		totals = new Counters(args);
 	}
 
 	@Override
@@ -29,13 +25,7 @@ class WcMultiFileProcessor extends DefaultInputProcessor {
 	@Override
 	public void finish(Input input, LineProcessor output) {
 		final String fileInfo = input instanceof FileInput ? ((FileInput)input).getFileInfo() : input.toString();
-		totals.updateTotal(current);
 		current.writeCountsLineWithFileInfo(output, fileInfo);
 		current.reset();
 	}
-	
-	public void writeTotalsLine(LineProcessor output) {
-		totals.writeCountsLineWithFileInfo(output, "total");
-	}
-
 }

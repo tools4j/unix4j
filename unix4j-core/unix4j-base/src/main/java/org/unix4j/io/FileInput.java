@@ -21,10 +21,15 @@ public class FileInput extends ReaderInput {
 		this.fileInfo = fileReader.toString();
 	}
 
-	public FileInput(File file) {
-		super(createFileReader(file));
+	public FileInput(File currentDirectory, File file) {
+		super(createFileReader(currentDirectory, file));
 		this.fileInfo = file.toString();
 	}
+
+    public FileInput(File file) {
+        super(createFileReader(file));
+        this.fileInfo = file.toString();
+    }
 
 	public FileInput(FileInputStream fileStream) {
 		super(new InputStreamReader(fileStream));
@@ -100,6 +105,15 @@ public class FileInput extends ReaderInput {
 			throw new RuntimeException(e);
 		}
 	}
+
+    private static FileReader createFileReader(File currentDirectory, File path) {
+        try {
+            final File file = new File(currentDirectory, path.getPath());
+            return new FileReader(file);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
 	
 	/**
 	 * Returns the file info string, for instance a file path or file name.

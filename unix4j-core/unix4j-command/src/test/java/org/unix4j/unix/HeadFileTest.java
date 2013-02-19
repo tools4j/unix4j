@@ -12,8 +12,8 @@ import org.unix4j.context.ExecutionContextFactory;
 public class HeadFileTest {
 	
 	private static final class Config implements ExecutionContextFactory {
-		private final FileTest tester;
-		public Config(FileTest tester) {
+		private final CommandFileTest tester;
+		public Config(CommandFileTest tester) {
 			this.tester = tester;
 		}
 		@Override
@@ -26,28 +26,28 @@ public class HeadFileTest {
 
 	@Test
 	public void head_simple() {
-		final FileTest tester = new FileTest(this.getClass());
+		final CommandFileTest tester = new CommandFileTest(this.getClass());
 		final Config config = new Config(tester);
 		tester.run(Unix4j.use(config).head(8, tester.getInputFile()));
 	}
 
     @Test
     public void head_byChars() {
-        final FileTest tester = new FileTest(this.getClass());
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
         final Config config = new Config(tester);
         tester.run(Unix4j.use(config).head(Head.Options.c, 100, tester.getInputFile()));
     }
 
     @Test
     public void head_byChars_specifyMoreCharsThanInInput() {
-        final FileTest tester = new FileTest(this.getClass());
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
         final Config config = new Config(tester);
         tester.run(Unix4j.use(config).head(Head.Options.c, 1000000, tester.getInputFile()));
     }
 
     @Test
     public void head_multipleFiles() {
-        final FileTest tester = new FileTest(this.getClass(), FileTest.MatchMode.Regex, 2);
+        final CommandFileTest tester = new CommandFileTest(this.getClass(), CommandFileTest.MatchMode.Regex, 2);
         tester.run(Unix4j.head(10, tester.getInputFiles()));
         tester.run(Unix4j.head(10, tester.getInputFileNames()));
         tester.run(Unix4j.head(tester.getInputFiles())); //By default, head returns top 10 lines
