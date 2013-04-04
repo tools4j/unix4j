@@ -1,9 +1,9 @@
 package org.unix4j.unix;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 import org.unix4j.Unix4j;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * Unit test for simple App.

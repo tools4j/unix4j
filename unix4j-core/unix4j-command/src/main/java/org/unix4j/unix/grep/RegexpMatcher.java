@@ -1,8 +1,8 @@
 package org.unix4j.unix.grep;
 
-import org.unix4j.line.Line;
-
 import java.util.regex.Pattern;
+
+import org.unix4j.line.Line;
 
 /**
  * A matcher using regular expressions to match the pattern with a line. Uses

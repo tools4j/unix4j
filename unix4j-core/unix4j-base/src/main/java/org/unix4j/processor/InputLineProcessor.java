@@ -4,8 +4,6 @@ import org.unix4j.command.ExitValueException;
 import org.unix4j.io.Input;
 import org.unix4j.line.Line;
 
-import java.util.List;
-
 /**
  * A line processor for a single input
  */

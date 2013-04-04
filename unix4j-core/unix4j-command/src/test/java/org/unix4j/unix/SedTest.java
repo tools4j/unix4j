@@ -1,12 +1,13 @@
 package org.unix4j.unix;
 
-import org.junit.Test;
-import org.unix4j.Unix4j;
-import org.unix4j.util.MultilineString;
+import static org.junit.Assert.assertEquals;
 
 import java.io.StringWriter;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+import org.unix4j.Unix4j;
+import org.unix4j.unix.sed.SedOptions;
+import org.unix4j.util.MultilineString;
 
 public class SedTest {
 	private final static MultilineString input;
@@ -36,8 +37,8 @@ public class SedTest {
 				.appendLine("two")
 				.appendLine("def\\d123");
 
-		final String script = "s/blah/hasblah/";
-		assertSed( input, script, expectedOutput );
+		assertSubstitute(input, "blah", "hasblah", expectedOutput);
+		assertScript( input, "s/blah/hasblah/", expectedOutput );
 	}
 
 	@Test
@@ -53,8 +54,8 @@ public class SedTest {
 				.appendLine("two")
 				.appendLine("def\\d123");
 
-		final String script = "s/blah/hasblah/g";
-		assertSed(input, script, expectedOutput);
+		assertSubstitute(input, "blah", "hasblah", Sed.Options.global, expectedOutput);
+		assertScript(input, "s/blah/hasblah/g", expectedOutput);
 	}
 
 	@Test
@@ -80,8 +81,8 @@ public class SedTest {
 				.appendLine("two")
 				.appendLine("def\\d123");
 
-		final String script = "s/\\s/_/g";
-		assertSed(input, script, expectedOutput);
+		assertSubstitute(input, "\\s", "_", Sed.Options.global, expectedOutput);
+		assertScript(input, "s/\\s/_/g", expectedOutput);
 	}
 
 	@Test
@@ -97,8 +98,8 @@ public class SedTest {
 				.appendLine("two")
 				.appendLine("def\\d123");
 
-		final String script = "s/(This) (is) (a) (test)/$4 $3 $2 $1/";
-		assertSed( input, script, expectedOutput );
+		assertSubstitute(input, "(This) (is) (a) (test)", "$4 $3 $2 $1", expectedOutput);
+		assertScript( input, "s/(This) (is) (a) (test)/$4 $3 $2 $1/", expectedOutput );
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -114,8 +115,8 @@ public class SedTest {
 				.appendLine("two")
 				.appendLine("def\\d123");
 
-		final String script = "s/(This) (is) (a) (test)/$4 $3 $ $2 $1/";
-		assertSed( input, script, expectedOutput );
+		assertSubstitute(input, "(This) (is) (a) (test)", "$4 $3 $ $2 $1", expectedOutput);
+		assertScript( input, "s/(This) (is) (a) (test)/$4 $3 $ $2 $1/", expectedOutput );
 	}
 
 	@Test
@@ -131,11 +132,24 @@ public class SedTest {
 				.appendLine("two")
 				.appendLine("def\\d123");
 
-		final String script = "s/(This) (is) (a) (test)/$4 $3 \\$ $2 $1/";
-		assertSed( input, script, expectedOutput );
+		assertSubstitute(input, "(This) (is) (a) (test)", "$4 $3 \\$ $2 $1", expectedOutput);
+		assertScript( input, "s/(This) (is) (a) (test)/$4 $3 \\$ $2 $1/", expectedOutput );
 	}
 
-	private void assertSed(final MultilineString input, final String script, final MultilineString expectedOutput){
+	private void assertSubstitute(final MultilineString input, final String regexp, String replacement, final MultilineString expectedOutput){
+		assertSubstitute(input, regexp, replacement, null, expectedOutput);
+	}
+	private void assertSubstitute(final MultilineString input, final String regexp, String replacement, SedOptions options, final MultilineString expectedOutput){
+		final StringWriter actualOutputStringWriter = new StringWriter();
+		if (options != null) {
+			Unix4j.from(input.toInput()).sed(options, regexp, replacement).toWriter(actualOutputStringWriter);
+		} else {
+			Unix4j.from(input.toInput()).sed(regexp, replacement).toWriter(actualOutputStringWriter);
+		}
+		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
+		actualOutput.assertMultilineStringEquals(expectedOutput);
+	}
+	private void assertScript(final MultilineString input, final String script, final MultilineString expectedOutput){
 		final StringWriter actualOutputStringWriter = new StringWriter();
 		Unix4j.from(input.toInput()).sed(script).toWriter(actualOutputStringWriter);
 		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());

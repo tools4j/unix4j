@@ -1,7 +1,6 @@
 package org.unix4j.unix;
 
 import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 

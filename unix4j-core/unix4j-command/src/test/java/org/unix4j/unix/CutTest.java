@@ -1,16 +1,16 @@
 package org.unix4j.unix;
 
+import static java.lang.String.format;
+import static junit.framework.Assert.assertTrue;
+
+import java.util.Arrays;
+
 import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.io.StringOutput;
 import org.unix4j.util.ArrayUtil;
 import org.unix4j.util.MultilineString;
 import org.unix4j.util.Range;
-
-import java.util.Arrays;
-
-import static java.lang.String.format;
-import static junit.framework.Assert.assertTrue;
 
 public class CutTest {
 	private final static MultilineString input;

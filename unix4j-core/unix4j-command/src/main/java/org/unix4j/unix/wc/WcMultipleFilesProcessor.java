@@ -1,13 +1,13 @@
 package org.unix4j.unix.wc;
 
+import java.util.List;
+import java.util.NavigableMap;
+import java.util.TreeMap;
+
 import org.unix4j.io.FileInput;
 import org.unix4j.io.Input;
 import org.unix4j.line.Line;
 import org.unix4j.processor.LineProcessor;
-
-import java.util.List;
-import java.util.NavigableMap;
-import java.util.TreeMap;
 
 /**
  * Input processor for line, word and char count for multiple input files.
