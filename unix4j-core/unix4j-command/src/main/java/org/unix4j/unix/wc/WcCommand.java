@@ -6,7 +6,8 @@ import java.util.List;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.context.ExecutionContext;
 import org.unix4j.io.FileInput;
-import org.unix4j.processor.*;
+import org.unix4j.processor.InputLineProcessor;
+import org.unix4j.processor.LineProcessor;
 import org.unix4j.unix.Wc;
 import org.unix4j.util.FileUtil;
 

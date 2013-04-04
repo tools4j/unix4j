@@ -1,15 +1,15 @@
 package org.unix4j.unix;
 
+import static java.lang.String.format;
+
+import java.io.File;
+import java.util.regex.Pattern;
+
 import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.util.FileUtil;
 import org.unix4j.util.MultilineString;
 import org.unix4j.util.StackTraceUtil;
-
-import java.io.File;
-import java.util.regex.Pattern;
-
-import static java.lang.String.format;
 
 /**
  * Unit test for simple App.

@@ -1,5 +1,8 @@
 package org.unix4j.unix.grep;
 
+import java.io.File;
+import java.util.List;
+
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.context.ExecutionContext;
 import org.unix4j.io.FileInput;
@@ -9,9 +12,6 @@ import org.unix4j.processor.MultipleInputLineProcessor;
 import org.unix4j.processor.RedirectInputLineProcessor;
 import org.unix4j.unix.Grep;
 import org.unix4j.util.FileUtil;
-
-import java.io.File;
-import java.util.List;
 
 /**
  * Implementation of the {@link Grep grep} command.

@@ -5,25 +5,195 @@
 
 	<command name="sed" class="org.unix4j.unix.Sed" package="org.unix4j.unix.sed"/>
 	<name>sed - stream editor for filtering and transforming text</name>
-	<synopsis>sed script</synopsis>
+	<synopsis>
+		sed script
+		
+		sed s/orig/rep/flags, flags=gp#
+		sed =
+		sed a \
+		sed i \
+		sed c \
+		sed /pat/ d
+		sed /pat/ p
+		sed addr q
+		sed y/src/dst/
+		options: -n --quiet --silent	
+	</synopsis>
 	<description ref="sed.html"/>
 	<notes>
 	</notes>
 	<methods>
 		<method args="args" usesStandardInput="false">
-			Executes the given sed script.
+			Executes the sed script specified by the given arguments and writes
+			the result to the standard output. 
+			
+			Options can be specified by acronym (with a leading dash "-") or by 
+			long name (with two leading dashes "--"). Operands other than the 
+			default "--script" operand have to be prefixed with the operand name. 
 		</method>
 		<method args="script" usesStandardInput="false">
-			Executes the given sed script.
+			Executes the given sed script, such as "s/original/replacement/g".
+		</method>
+		<method args="regexp,replacement" usesStandardInput="false">
+			Substitutes the replacement string for instances of the regexp in 
+			the matched line.
+			
+			An ampersand ('&amp;') appearing in the replacement is be replaced 
+			by the line matching the regexp. The characters "\n", where n is a 
+			digit, are replaced by the text matched by the corresponding 
+			backreference expression.  The special meaning of '&amp;' and "\n" 
+			in this context can be suppressed by preceding it by a backslash. 
+
+			A line can be split by substituting a newline ('\n') into it. 
+			
+			A substitution is considered to have been performed even if the 
+			replacement string is identical to the string that it replaces. 
+		</method>
+		<method args="regexp,replacement,occurrence" usesStandardInput="false">
+			Substitutes the replacement string for instances of the regexp in 
+			the matched line. Only the given occurrences of the regexp found 
+			within the matched string are substituted. 
+			
+			An ampersand ('&amp;') appearing in the replacement is be replaced 
+			by the line matching the regexp. The characters "\n", where n is a 
+			digit, are replaced by the text matched by the corresponding 
+			backreference expression.  The special meaning of '&amp;' and "\n" 
+			in this context can be suppressed by preceding it by a backslash. 
+
+			A line can be split by substituting a newline ('\n') into it. 
+			
+			A substitution is considered to have been performed even if the 
+			replacement string is identical to the string that it replaces. 
+		</method>
+		<method args="options,regexp" usesStandardInput="false">
+			Executes the sed command specified by the given options or executes
+			the print command p if no command option has been declared.
+		</method>
+		<method args="options,string1,string2" usesStandardInput="false">
+			Executes the sed command specified by the given options or executes
+			the substitute command s if no command option has been declared.
+		</method>
+		<method args="options,string1,string2,occurrence" usesStandardInput="false">
+			Executes the sed command specified by the given options or executes
+			the substitute command s if no command option has been declared.
+			
+			The string1 operand usually contains the regular expression matched 
+			against a line for all commands except for command y where string1 
+			contains the source characters for the translation.
+			
+			The string2 operand contains the replacement string for the 
+			substitute command s. It contains the appended, inserted or changed 
+			text for the commands a, i and c, respectively, and the destination 
+			characters for the translate command y. All other commands ignore
+			the string2 operand.
 		</method>
 	</methods>
-	<options/>
+	<options>
+		<option acronym="n" name="quiet">
+			Suppress the default output (in which each line, after it is 
+			examined for editing, is written to standard output). Only lines 
+			explicitly selected for output are written.		
+		</option>
+		<option acronym="g" name="global">
+			Globally substitute for all non-overlapping instances of the regexp 
+			rather than just the first one. 
+			
+			(This option is ignored if the occurrence operand is specified).
+		</option>
+		<option acronym="p" name="print">
+			Write the matched line to standard output.
+		</option>
+		<option acronym="l" name="lineNumber">
+			Writes the current line number on a separate line to the standard 
+			output.
+		</option>
+		<option acronym="s" name="substitute" exclusiveGroup="command">
+			Substitutes the replacement string for instances of the regexp in 
+			the matched line.
+			
+			An ampersand ('&amp;') appearing in the replacement is be replaced 
+			by the line matching the regexp. The characters "\n", where n is a 
+			digit, are replaced by the text matched by the corresponding 
+			backreference expression.  The special meaning of '&amp;' and "\n" 
+			in this context can be suppressed by preceding it by a backslash. 
+
+			A line can be split by substituting a newline ('\n') into it. 
+			
+			A substitution is considered to have been performed even if the 
+			replacement string is identical to the string that it replaces. 
+		</option>
+		<option acronym="a" name="append" exclusiveGroup="command">
+			Append string2 as a separate line after the matched line.
+		</option>
+		<option acronym="i" name="insert" exclusiveGroup="command">
+			Insert string2 as a separate line before the matched line.
+		</option>
+		<option acronym="c" name="change" exclusiveGroup="command">
+			Write string2 as a separate line instead of the matched line.
+		</option>
+		<option acronym="d" name="delete" exclusiveGroup="command">
+			Delete the matched line.
+		</option>
+		<option acronym="y" name="translate" exclusiveGroup="command">
+			Replace all occurrences of characters in string1 with the 
+			corresponding characters in string2. If the number of characters in 
+			the two strings are not equal, or if any of the characters in 
+			string1 appear more than once, the results are undefined.
+		</option>
+	</options>
 	<operands default="script">
 		<operand name="script" type="String">
-			Sed script
+			Sed script as one string, such as "s/original/replacement/g".
+		</operand>
+		<operand name="regexp" type="String">
+			Regular expression matched against a line.
+		</operand>
+		<operand name="string1" type="String">
+			Regular expression matched against a line for all commands except 
+			for command y where string1 contains the source characters for the 
+			translation.
+		</operand>
+		<operand name="replacement" type="String">
+			Replacement string for substitute command. An ampersand ('&amp;') 
+			appearing in the replacement string is replaced by the string 
+			matching the regular expression. The characters "\n", where n is a 
+			digit, are replaced by the text matched by the corresponding 
+			backreference expression. The special meaning of '&amp;' and "\n" in 
+			this context can be suppressed by preceding it by a backslash.  
+		</operand>
+		<operand name="string2" type="String">
+			Replacement string for substitute command s; appended, inserted or
+			changed text for a, i and c command; destination characters for
+			translate command y; ignored by all other commands.
+			
+			If string2 is a replacement string for the substitute command: an 
+			ampersand ('&amp;') appearing in the replacement string is replaced 
+			by the string matching the regular expression; the characters "\n", 
+			where n is a digit, are replaced by the text matched by the 
+			corresponding backreference expression. The special meaning of 
+			'&amp;' and "\n" in this context can be suppressed by preceding it 
+			by a backslash.
+
+			(This operand only applies to the commands s, a, i, c and y and is 
+			ignored by all other commands).
+		</operand>
+		<operand name="occurrence" type="int...">
+			Substitute for the given occurrences only of the regexp found within 
+			the matched string; the occurrence indices are one-based. If empty 
+			or omitted, all occurrences are substituted.
+			
+			(This operand only applies to the substitute command and is ignored
+			by all other commands).
 		</operand>
 		<operand name="args" type="String...">
-			Sed script
+			String arguments defining the options and operands for the command. 
+			Options can be specified by acronym (with a leading dash "-") or by 
+			long name (with two leading dashes "--"). Operands other than the
+			default "--script" operand have to be prefixed with the operand name
+			(e.g. "--occurrence" for subsequent occurrence indices).
+		</operand>
+		<operand name="options" type="SedOptions">
+			Sed options and commands
 		</operand>
 	</operands>
 </command-def>

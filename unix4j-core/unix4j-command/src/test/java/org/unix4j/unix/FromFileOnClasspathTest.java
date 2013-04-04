@@ -1,11 +1,11 @@
 package org.unix4j.unix;
 
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
+
 import org.junit.Ignore;
 import org.junit.Test;
 import org.unix4j.Unix4j;
-
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 
 public class FromFileOnClasspathTest {
 	@Test

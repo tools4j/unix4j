@@ -1,12 +1,12 @@
 package org.unix4j.unix;
 
-import org.junit.Test;
-import org.unix4j.Unix4j;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 import java.io.InputStream;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import org.junit.Test;
+import org.unix4j.Unix4j;
 
 public class FromInputStream {
 	@Test
