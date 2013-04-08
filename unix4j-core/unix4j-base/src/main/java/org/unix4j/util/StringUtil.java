@@ -232,6 +232,42 @@ public class StringUtil {
 		return 0;
 	}
 
+	/**
+	 * Finds and returns the first whitespace character in the given sequence,
+	 * or the length of the string if no whitespace is found.
+	 * 
+	 * @param s
+	 *            the character sequence
+	 * @return the index containing the first whitespace character, or the
+	 *         length of the character sequence if all characters are blank
+	 */
+	public static int findWhitespace(CharSequence s) {
+		return findWhitespace(s, 0);
+	}
+
+	/**
+	 * Finds and returns the first whitespace character in the given sequence at
+	 * or after start. Returns the length of the string if no whitespace is
+	 * found.
+	 * 
+	 * @param s
+	 *            the character sequence
+	 * @param start
+	 *            the first index to consider in the char sequence
+	 * @return the index containing the first whitespace character at or after
+	 *         start, or the length of the character sequence if all characters
+	 *         are blank
+	 */
+	public static int findWhitespace(CharSequence s, int start) {
+		final int len = s.length();
+		for (int i = start; i < len; i++) {
+			if (Character.isWhitespace(s.charAt(i))) {
+				return i;
+			}
+		}
+		return len;
+	}
+
 	// no instances
 	private StringUtil() {
 		super();

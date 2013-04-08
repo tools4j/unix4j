@@ -5,13 +5,16 @@ import org.unix4j.line.SimpleLine;
 import org.unix4j.processor.LineProcessor;
 
 class AppendProcessor extends AbstractTextProcessor {
-	public AppendProcessor(SedArguments args, LineProcessor output) {
-		super(args, output);
+	public AppendProcessor(Command command, SedArguments args, LineProcessor output) {
+		super(command, args, output);
+	}
+	public AppendProcessor(Command command, String script, SedArguments args, LineProcessor output) {
+		super(command, script, args, output);
 	}
 
 	@Override
 	public boolean processLine(Line line) {
-		final boolean matches = line.toString().matches(regexp);
+		final boolean matches = regexp.matcher(line).find();
 		if (matches || !args.isQuiet()) {
 			if (!output.processLine(line)) {
 				return false;

@@ -1,10 +1,5 @@
 package org.unix4j.unix.sed;
 
-import static org.unix4j.util.Assert.assertArgTrue;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.context.ExecutionContext;
 import org.unix4j.processor.LineProcessor;
@@ -22,47 +17,25 @@ class SedCommand extends AbstractCommand<SedArguments> {
 	public LineProcessor execute(ExecutionContext context, final LineProcessor output) {
 		final SedArguments args = getArguments(context);
 		if (args.isScriptSet()) {
-			return executeScript(args, output);
-		}
-		if (args.isSubstitute()) {
-			return new SubstituteProcessor(args, output);
-		}
-		if (args.isAppend()) {
-			return new AppendProcessor(args, output);
-		}
-		if (args.isInsert()) {
-			return new InsertProcessor(args, output);
-		}
-		if (args.isChange()) {
-			return new ChangeProcessor(args, output);
-		}
-		if (args.isDelete()) {
-			return new DeleteProcessor(args, output);
-		}
-		if (args.isTranslate()) {
-			return new TranslateProcessor(args, output);
+			//command specified in script
+			final String script = args.getScript();
+			final Command command = Command.fromScript(script);
+			if (command == null) {
+				throw new IllegalArgumentException("command missing or invalid in sed script: " + script);
+			}
+			return command.createProcessorFor(script, args, output);
 		}
 
-		//default command
-		if (args.isReplacementSet() || args.isString2Set()) {
-			return new SubstituteProcessor(args, output);
+		//command from args, or default if not specified
+		Command command = Command.fromArgs(args);
+		if (command == null) {
+			//default command
+			if (args.isReplacementSet() || args.isString2Set()) {
+				command = Command.substitute;
+			} else {
+				command = Command.print;
+			}
 		}
-		return new PrintProcessor(args, output);
-	}
-	
-	private LineProcessor executeScript(SedArguments args, final LineProcessor output) {
-		final String SED_REGEX = "s/(.*?)(?<!\\\\)/(.*?)(?<!\\\\)/(g)?";
-		final Pattern pattern = Pattern.compile(SED_REGEX);
-		final String script = args.getScript();
-
-		assertArgTrue("Invalid sed script, must be in the form s/<search>/<replace>/[g]", script.matches(SED_REGEX));
-		final Matcher m = pattern.matcher(script);
-		m.find();
-		final String regexp = m.group(1);
-		final String replacement = m.group(2);
-		final String globalSearchAndReplaceStr = m.group(3);
-		final boolean isGlobal = globalSearchAndReplaceStr != null && globalSearchAndReplaceStr.equals("g");
-
-		return new SubstituteProcessor(regexp, replacement, -1, isGlobal, args, output);
+		return command.createProcessorFor(args, output);
 	}
 }
