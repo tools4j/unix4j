@@ -37,36 +37,37 @@ final class SubstituteProcessor extends AbstractRegexpProcessor {
 		if (mid < 0 || end < 0) {
 			throw new IllegalArgumentException("invalid script for sed " + command + " command: " + script);
 		}
-		args = parseFlags(command, args, script, end);
+		args = parseSubstituteFlags(command, args, script, end + 1);
 		args.setRegexp(script.substring(start + 1, mid));
 		args.setReplacement(script.substring(mid + 1, end));
 		return args;
 	}
 
-	private static SedArguments parseFlags(Command command, SedArguments args, String script, int end) {
-		if (end + 1 < script.length()) {
+	private static SedArguments parseSubstituteFlags(Command command, SedArguments args, String script, int start) {
+		final int end = StringUtil.findWhitespace(script, start);
+		if (end < StringUtil.findEndTrimWhitespace(script)) {
+			throw new IllegalArgumentException("extra non-whitespace characters found after substitute command in sed script: " + script);
+		}
+		if (start < end) {
 			final SedOptions.Default options = new SedOptions.Default(args.getOptions());
-			int last = script.length() - 1;
-			//skip trailing whitespace
-			while (last > end && Character.isWhitespace(script.charAt(last))) {
-				last--;
-			}
-			//g and p flags
-			while (last > end) {
-				final char flag = script.charAt(last);
+			//g, p, I flags
+			int index;
+			for (index = end - 1; index >= start; index--) {
+				final char flag = script.charAt(index);
 				if (flag == 'g') {
 					options.set(SedOption.global);
 				} else if (flag == 'p') {
 					options.set(SedOption.print);
+				} else if (flag == 'I') {
+					options.set(SedOption.ignoreCase);
 				} else {
 					break;
 				}
-				last--;
 			}
 			args = new SedArguments(options);
 			//occurrence index
-			if (last > end) {
-				final String occurrenceStr = script.substring(end + 1, last + 1);
+			if (index >= start) {
+				final String occurrenceStr = script.substring(start, index + 1);
 				final int occurrence;
 				try {
 					occurrence = Integer.parseInt(occurrenceStr);

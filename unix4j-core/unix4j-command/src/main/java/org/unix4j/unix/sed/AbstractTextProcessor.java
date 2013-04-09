@@ -22,11 +22,12 @@ abstract class AbstractTextProcessor extends AbstractRegexpProcessor {
 		if (end < 0) {
 			throw new IllegalArgumentException("invalid script for sed " + command + " command: " + script);
 		}
+		args = parsePatternFlags(command, args, script, end + 1);
 		args.setString1(script.substring(start + 1, end));
 		final int whitespaceStart = StringUtil.findWhitespace(script, end + 1);
 		final int commandStart = StringUtil.findStartTrimWhitespace(script, whitespaceStart);
 		final int backslashStart = StringUtil.findStartTrimWhitespace(script, commandStart + 1);
-		if (backslashStart < script.length() && script.charAt(commandStart) == command.command) {
+		if (backslashStart < script.length() && script.charAt(commandStart) == command.commandChar) {
 			final int textStart = StringUtil.findStartTrimWhitespace(script, backslashStart + 1);
 			final int textEnd = StringUtil.findEndTrimWhitespace(script);
 			args.setString2(script.substring(textStart, textEnd));
