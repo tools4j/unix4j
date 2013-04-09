@@ -123,10 +123,10 @@ public enum Command {
 			return new TranslateProcessor(this, script, args, output);
 		}
 	};
-	protected final char command;
+	protected final char commandChar;
 
 	private Command(char command) {
-		this.command = command;
+		this.commandChar = command;
 	}
 
 	/**
@@ -175,25 +175,70 @@ public enum Command {
 	 * 
 	 * @param script
 	 *            the script to analyse
-	 * @return the matching command
+	 * @return the matching command or null if not found
 	 */
 	public static Command fromScript(String script) {
+		final int len = script.length();
 		final int scriptStart = StringUtil.findStartTrimWhitespace(script);
-		if (scriptStart < script.length()) {
+		if (scriptStart < len) {
 			final char firstChar = script.charAt(scriptStart);
-			if (firstChar == substitute.command) {
+			if (firstChar == substitute.commandChar) {
 				return substitute;
-			} else if (firstChar == translate.command) {
+			} else if (firstChar == translate.commandChar) {
 				return substitute;
 			} else {
-				final int whitespaceStart = StringUtil.findWhitespace(script, scriptStart);
-				final int commandStart = StringUtil.findStartTrimWhitespace(script, whitespaceStart);
-				if (commandStart < script.length()) {
-					final char commandChar = script.charAt(commandStart);
-					for (final Command command : Command.values()) {
-						if (commandChar == command.command) {
-							return command;
-						}
+				final int scriptEnd = AbstractSedProcessor.indexOfNextDelimiter(script, scriptStart);
+				if (scriptEnd < 0) {
+					throw new IllegalArgumentException("sed regexp pattern is not terminated, expected a second unescaped '" + firstChar + "' character in: " + script);
+				}
+				final int whitespaceStart = StringUtil.findWhitespace(script, scriptEnd);
+
+				// either
+				// (a) the command is the first char after the whitespace
+				// following the pattern
+				// (b) the command is one of the characters in the pattern flags
+				// after the second delimiter
+
+				// (a) try to find the command char in the pattern flags
+				Command command = fromCommandChars(script, scriptEnd + 1, whitespaceStart);
+
+				// (b) ok after the whitespace then
+				if (command == null && whitespaceStart < len) {
+					final int commandStart = StringUtil.findStartTrimWhitespace(script, whitespaceStart);
+					command = fromCommandChars(script, commandStart, commandStart + 1);
+				}
+
+				// success?
+				if (command == null) {
+					throw new IllegalArgumentException("command expected in sed script: " + script);
+				}
+				return command;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Returns the command constant if any of the string characters between
+	 * start and end matches one of the command characters. Returns null if no
+	 * command character is found.
+	 * 
+	 * @param string
+	 *            the string with the command chararcter candidates
+	 * @param start
+	 *            the start index in string, inclusive
+	 * @param end
+	 *            the end index in string, exclusive
+	 * @return the matching command or null if not found
+	 */
+	private static Command fromCommandChars(String string, int start, int end) {
+		final int s = Math.max(0, start);
+		final int e = Math.min(string.length(), end);
+		if (s < e) {
+			for (final Command command : Command.values()) {
+				for (int i = s; i < e; i++) {
+					if (string.charAt(i) == command.commandChar) {
+						return command;
 					}
 				}
 			}
@@ -208,7 +253,7 @@ public enum Command {
 	 * 
 	 * @param args
 	 *            the sed command arguments
-	 * @return the matching command
+	 * @return the matching command or null if not found
 	 */
 	public static Command fromArgs(SedArguments args) {
 		for (final Command command : values()) {

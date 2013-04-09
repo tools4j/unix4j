@@ -19,6 +19,7 @@ class PrintProcessor extends AbstractRegexpProcessor {
 		if (start < 0 || end < 0) {
 			throw new IllegalArgumentException("invalid script for sed " + command + " command: " + script);
 		}
+		args = parsePatternFlags(command, args, script, end + 1);
 		args.setRegexp(script.substring(start + 1, end));
 		return args;
 	}

@@ -107,6 +107,9 @@
 			Writes the current line number on a separate line to the standard 
 			output.
 		</option>
+		<option acronym="I" name="ignoreCase">
+			Use case insensitive pattern matching.
+		</option>
 		<option acronym="s" name="substitute" exclusiveGroup="command">
 			Substitutes the replacement string for instances of the regexp in 
 			the matched line.

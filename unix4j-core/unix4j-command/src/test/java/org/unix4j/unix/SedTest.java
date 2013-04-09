@@ -70,6 +70,50 @@ public class SedTest {
 	}
 
 	@Test
+	public void testSed_searchAndReplaceIgnoreCase() {
+		final MultilineString expectedOutput = new MultilineString();
+		expectedOutput
+				.appendLine("This is a test hasblah blah blah")
+				.appendLine("This is a test hasblah blah")
+				.appendLine("This is a test one two three")
+				.appendLine("one")
+				.appendLine("a")
+				.appendLine("")
+				.appendLine("two")
+				.appendLine("def\\d123");
+
+		assertSubstitute(input, "Blah", "hasblah", expectedOutput, Sed.Options.ignoreCase);
+		assertStringArgs(input, expectedOutput, "--ignoreCase", "--regexp", "Blah", "--replacement", "hasblah");
+		assertStringArgs(input, expectedOutput, "--ignoreCase", "--string1", "Blah", "--string2", "hasblah");
+
+		assertScript( input, "s/Blah/hasblah/I", expectedOutput );
+		assertStringArgs(input, expectedOutput, "s/Blah/hasblah/I");
+		assertStringArgs(input, expectedOutput, "--script", "s/Blah/hasblah/I");
+	}
+
+	@Test
+	public void testSed_searchAndReplaceGlobalIgnoreCase() {
+		final MultilineString expectedOutput = new MultilineString();
+		expectedOutput
+				.appendLine("This is a test hasblah hasblah hasblah")
+				.appendLine("This is a test hasblah hasblah")
+				.appendLine("This is a test one two three")
+				.appendLine("one")
+				.appendLine("a")
+				.appendLine("")
+				.appendLine("two")
+				.appendLine("def\\d123");
+
+		assertSubstitute(input, "bLaH", "hasblah", expectedOutput, Sed.Options.g.I);
+		assertStringArgs(input, expectedOutput, "--ignoreCase", "--global", "--regexp", "bLaH", "--replacement", "hasblah");
+		assertStringArgs(input, expectedOutput, "-gI", "--string1", "bLaH", "--string2", "hasblah");
+
+		assertScript( input, "s/bLaH/hasblah/gI", expectedOutput );
+		assertStringArgs(input, expectedOutput, "s/bLaH/hasblah/Ig");
+		assertStringArgs(input, expectedOutput, "--script", "s/bLaH/hasblah/gI");
+	}
+
+	@Test
 	public void testSed_searchAndReplaceOccurrence1() {
 		final MultilineString expectedOutput = new MultilineString();
 		expectedOutput
@@ -332,6 +376,10 @@ public class SedTest {
 		
 		assertScript( input, "/blah/ p", expectedOutput );
 		assertStringArgs(input, expectedOutput, "/blah/ p");
+
+		//print also without space... yea I hate sed!
+		assertScript( input, "/blah/p", expectedOutput );
+		assertStringArgs(input, expectedOutput, "/blah/p");
 	}
 
 	@Test
@@ -350,6 +398,47 @@ public class SedTest {
 
 		assertStringArgs( input, expectedOutput, "-n", "/blah/ p");
 		assertStringArgs( input, expectedOutput, "/blah/ p", "--quiet");
+	}
+
+	@Test
+	public void testSed_printQuietCaseDoesNotMatch() {
+		final MultilineString expectedOutput = new MultilineString();
+
+		assertSed(input, "Blah", expectedOutput, Sed.Options.quiet);//should be the default command here
+		assertSed(input, "Blah", expectedOutput, Sed.Options.n.p);
+		assertSed(input, "Blah", expectedOutput, Sed.Options.print.quiet);
+		assertStringArgs(input, expectedOutput, "--quiet", "--regexp", "Blah");
+		assertStringArgs(input, expectedOutput, "--quiet", "--print", "--regexp", "Blah");
+		assertStringArgs(input, expectedOutput, "-n", "-p", "--regexp", "Blah");
+
+		assertStringArgs( input, expectedOutput, "-n", "/Blah/ p");
+		assertStringArgs( input, expectedOutput, "/Blah/ p", "--quiet");
+
+		assertStringArgs( input, expectedOutput, "-n", "/Blah/p");
+		assertStringArgs( input, expectedOutput, "/Blah/p", "--quiet");
+	}
+
+	@Test
+	public void testSed_printQuietCaseInsensitive() {
+		final MultilineString expectedOutput = new MultilineString();
+		expectedOutput
+			.appendLine("This is a test blah blah blah")
+			.appendLine("This is a test blah blah");
+
+		assertSed(input, "Blah", expectedOutput, Sed.Options.quiet.ignoreCase);//should be the default command here
+		assertSed(input, "Blah", expectedOutput, Sed.Options.n.p.I);
+		assertSed(input, "Blah", expectedOutput, Sed.Options.print.quiet.ignoreCase);
+		assertStringArgs(input, expectedOutput, "--quiet", "--ignoreCase", "--regexp", "Blah");
+		assertStringArgs(input, expectedOutput, "--quiet", "--print", "--ignoreCase", "--regexp", "Blah");
+		assertStringArgs(input, expectedOutput, "-n", "-p", "-I", "--regexp", "Blah");
+		assertStringArgs(input, expectedOutput, "-npI", "--regexp", "Blah");
+
+		assertStringArgs( input, expectedOutput, "-n", "/Blah/I p");
+		assertStringArgs( input, expectedOutput, "/Blah/I p", "--quiet");
+
+		assertStringArgs( input, expectedOutput, "-n", "/Blah/Ip");
+		assertStringArgs( input, expectedOutput, "-n", "/Blah/pI");
+		assertStringArgs( input, expectedOutput, "/Blah/Ip", "--quiet");
 	}
 
 	private void assertSed(final MultilineString input, final String regexp, final MultilineString expectedOutput){

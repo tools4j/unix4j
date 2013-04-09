@@ -18,6 +18,7 @@ class DeleteProcessor extends AbstractRegexpProcessor {
 		if (end < 0) {
 			throw new IllegalArgumentException("invalid script for sed " + command + " command: " + script);
 		}
+		args = parsePatternFlags(command, args, script, end + 1);
 		args.setRegexp(script.substring(start + 1, end));
 		return args;
 	}
