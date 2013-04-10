@@ -471,6 +471,27 @@ public class SedTest {
 		assertStringArgs(input, expectedOutput, "/blah/a \\ This is an appended line\t");
 	}
 	
+	@Test(expected=IllegalArgumentException.class)
+	public void testSed_appendMissingBackslash1() {
+		assertScript(input, "/blah/ a", new MultilineString());
+	}
+	@Test(expected=IllegalArgumentException.class)
+	public void testSed_appendMissingBackslash2() {
+		assertScript(input, "/blah/a", new MultilineString());
+	}
+	@Test(expected=IllegalArgumentException.class)
+	public void testSed_appendMissingBackslash3() {
+		assertScript(input, "/blah/a   ", new MultilineString());
+	}
+	@Test(expected=IllegalArgumentException.class)
+	public void testSed_appendMissingBackslash4() {
+		assertScript(input, "/blah/a This is an appended line", new MultilineString());
+	}
+	@Test(expected=IllegalArgumentException.class)
+	public void testSed_appendMissingBackslash5() {
+		assertScript(input, "/blah/ a This is an appended line", new MultilineString());
+	}
+
 	@Test
 	public void testSed_insert() {
 		final MultilineString expectedOutput = new MultilineString();
@@ -648,6 +669,27 @@ public class SedTest {
 		Unix4j.from(input.toInput()).sed(args).toWriter(actualOutputStringWriter);
 		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
 		actualOutput.assertMultilineStringEquals(expectedOutput);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testSed_unterminatedRegexp() {
+		assertScript(input, "/blah", new MultilineString());
+	}
+	@Test(expected=IllegalArgumentException.class)
+	public void testSed_unterminatedRegexpForSubstitute() {
+		assertScript(input, "s/blah", new MultilineString());
+	}
+	@Test(expected=IllegalArgumentException.class)
+	public void testSed_unterminatedReplacementForSubstitute() {
+		assertScript(input, "s/blah/blo", new MultilineString());
+	}
+	@Test(expected=IllegalArgumentException.class)
+	public void testSed_unterminatedSourceForTranslate() {
+		assertScript(input, "y/blah", new MultilineString());
+	}
+	@Test(expected=IllegalArgumentException.class)
+	public void testSed_unterminatedDestinationForTranslate() {
+		assertScript(input, "y/blah/BLAH", new MultilineString());
 	}
 
 	@Test(expected = NullPointerException.class)

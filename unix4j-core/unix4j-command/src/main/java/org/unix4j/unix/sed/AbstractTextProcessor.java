@@ -26,13 +26,9 @@ abstract class AbstractTextProcessor extends AbstractRegexpProcessor {
 		args.setString1(script.substring(start + 1, end));
 		final int commandStart = findCommand(command, script, end + 1);
 		final int backslashStart = findBackslash(command, script, commandStart + 1);
-		if (backslashStart < script.length() && script.charAt(commandStart) == command.commandChar) {
-			final int textStart = StringUtil.findStartTrimNewlineChars(script, backslashStart + 1);
-			final int textEnd = StringUtil.findEndTrimNewlineChars(script);
-			args.setString2(script.substring(textStart, textEnd));
-		} else {
-			throw new IllegalArgumentException("invalid script (missing \\ before text?) for sed " + command + " command: " + script);
-		}
+		final int textStart = StringUtil.findStartTrimNewlineChars(script, backslashStart + 1);
+		final int textEnd = StringUtil.findEndTrimNewlineChars(script);
+		args.setString2(script.substring(textStart, textEnd));
 		return args;
 	}
 
