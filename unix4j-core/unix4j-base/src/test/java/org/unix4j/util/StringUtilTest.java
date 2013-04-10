@@ -92,4 +92,34 @@ public class StringUtilTest {
 			Assert.assertEquals(Arrays.asList(expected[i]), actual);
 		}
 	}
+	
+	@Test
+	public void findStartAndEndTrimWhitespaceChars() {
+		final String s = "\n\r\n\r \thello \r\r\n\n";
+		Assert.assertEquals(6, StringUtil.findStartTrimWhitespace(s));
+		Assert.assertEquals(s.length() - 5, StringUtil.findEndTrimWhitespace(s));
+		for (int i = 0; i < s.length(); i++) {
+			final int expected = i <= 6 ? 6 : i < s.length() - 5 ? i : s.length();
+			Assert.assertEquals(expected, StringUtil.findStartTrimWhitespace(s, i));
+		}
+	}
+	@Test
+	public void findStartAndEndTrimNewlineChars() {
+		final String s = "\n\r\n\r  hello \r\r\n\n";
+		Assert.assertEquals(3, StringUtil.findStartTrimNewlineChars(s));
+		Assert.assertEquals(s.length() - 3, StringUtil.findEndTrimNewlineChars(s));
+		for (int i = 0; i < s.length(); i++) {
+			final int expected = i <= 3 ? 3 : i < s.length() - 3 ? i : s.length();
+			Assert.assertEquals(expected, StringUtil.findStartTrimNewlineChars(s, i));
+		}
+	}
+	@Test
+	public void findWhitespace() {
+		final String s = "Bla\n\r\n\r \thello \r\r\n\nblabla";
+		Assert.assertEquals(3, StringUtil.findWhitespace(s));
+		for (int i = 0; i < s.length(); i++) {
+			final int expected = i <= 3 ? 3 : i < 9 ? i : i < 14 ? 14 : i < s.length() - 6 ? i : s.length();
+			Assert.assertEquals(expected, StringUtil.findWhitespace(s, i));
+		}
+	}
 }

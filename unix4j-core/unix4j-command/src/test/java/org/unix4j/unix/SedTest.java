@@ -377,7 +377,7 @@ public class SedTest {
 		assertScript( input, "/blah/ p", expectedOutput );
 		assertStringArgs(input, expectedOutput, "/blah/ p");
 
-		//print also without space... yea I hate sed!
+		//also without space... yea I hate sed!
 		assertScript( input, "/blah/p", expectedOutput );
 		assertStringArgs(input, expectedOutput, "/blah/p");
 	}
@@ -394,7 +394,7 @@ public class SedTest {
 		assertSed(input, "blah", expectedOutput, Sed.Options.print.quiet);
 		assertStringArgs(input, expectedOutput, "--quiet", "--regexp", "blah");
 		assertStringArgs(input, expectedOutput, "--quiet", "--print", "--regexp", "blah");
-		assertStringArgs(input, expectedOutput, "-n", "-p", "--regexp", "blah");
+		assertStringArgs(input, expectedOutput, "-np", "--regexp", "blah");
 
 		assertStringArgs( input, expectedOutput, "-n", "/blah/ p");
 		assertStringArgs( input, expectedOutput, "/blah/ p", "--quiet");
@@ -441,6 +441,119 @@ public class SedTest {
 		assertStringArgs( input, expectedOutput, "/Blah/Ip", "--quiet");
 	}
 	
+	@Test
+	public void testSed_append() {
+		final MultilineString expectedOutput = new MultilineString();
+		expectedOutput
+				.appendLine("This is a test blah blah blah")
+				.appendLine(" This is an appended line\t")
+				.appendLine("This is a test blah blah")
+				.appendLine(" This is an appended line\t")
+				.appendLine("This is a test one two three")
+				.appendLine("one")
+				.appendLine("a")
+				.appendLine("")
+				.appendLine("two")
+				.appendLine("def\\d123");
+		
+		assertSed(input, "blah", " This is an appended line\t", expectedOutput, Sed.Options.append);
+		assertSed(input, "blah", " This is an appended line\t", expectedOutput, Sed.Options.a);
+		assertStringArgs(input, expectedOutput, "-a", "--string1", "blah", "--string2", " This is an appended line\t");
+		assertStringArgs(input, expectedOutput, "--append", "--string1", "blah", "--string2", " This is an appended line\t");
+		
+		assertScript(input, "/blah/ a\\ This is an appended line\t", expectedOutput );
+		assertScript(input, "/blah/ a \\\n This is an appended line\t\n", expectedOutput );
+		assertStringArgs(input, expectedOutput, "/blah/ a \\ This is an appended line\t");
+
+		//also without space... yea I hate sed!
+		assertScript(input, "/blah/a \\ This is an appended line\t", expectedOutput );
+		assertScript(input, "/blah/a \\\n This is an appended line\t\n", expectedOutput );
+		assertStringArgs(input, expectedOutput, "/blah/a \\ This is an appended line\t");
+	}
+	
+	@Test
+	public void testSed_insert() {
+		final MultilineString expectedOutput = new MultilineString();
+		expectedOutput
+				.appendLine(" This is an inserted line\t")
+				.appendLine("This is a test blah blah blah")
+				.appendLine(" This is an inserted line\t")
+				.appendLine("This is a test blah blah")
+				.appendLine("This is a test one two three")
+				.appendLine("one")
+				.appendLine("a")
+				.appendLine("")
+				.appendLine("two")
+				.appendLine("def\\d123");
+		
+		assertSed(input, "blah", " This is an inserted line\t", expectedOutput, Sed.Options.insert);
+		assertSed(input, "blah", " This is an inserted line\t", expectedOutput, Sed.Options.i);
+		assertStringArgs(input, expectedOutput, "-i", "--string1", "blah", "--string2", " This is an inserted line\t");
+		assertStringArgs(input, expectedOutput, "--insert", "--string1", "blah", "--string2", " This is an inserted line\t");
+		
+		assertScript(input, "/blah/ i \\ This is an inserted line\t", expectedOutput );
+		assertScript(input, "/blah/ i\\\n This is an inserted line\t\n", expectedOutput );
+		assertStringArgs(input, expectedOutput, "/blah/ i \\ This is an inserted line\t");
+
+		//also without space... yea I hate sed!
+		assertScript(input, "/blah/i \\ This is an inserted line\t", expectedOutput );
+		assertScript(input, "/blah/i \\\n This is an inserted line\t\n", expectedOutput );
+		assertStringArgs(input, expectedOutput, "/blah/i \\ This is an inserted line\t");
+	}
+	
+	@Test
+	public void testSed_change() {
+		final MultilineString expectedOutput = new MultilineString();
+		expectedOutput
+				.appendLine(" This is an changed line\t")
+				.appendLine(" This is an changed line\t")
+				.appendLine("This is a test one two three")
+				.appendLine("one")
+				.appendLine("a")
+				.appendLine("")
+				.appendLine("two")
+				.appendLine("def\\d123");
+		
+		assertSed(input, "blah", " This is an changed line\t", expectedOutput, Sed.Options.change);
+		assertSed(input, "blah", " This is an changed line\t", expectedOutput, Sed.Options.c);
+		assertStringArgs(input, expectedOutput, "-c", "--string1", "blah", "--string2", " This is an changed line\t");
+		assertStringArgs(input, expectedOutput, "--change", "--string1", "blah", "--string2", " This is an changed line\t");
+		
+		assertScript(input, "/blah/ c \\ This is an changed line\t", expectedOutput );
+		assertScript(input, "/blah/ c\\\n This is an changed line\t\n", expectedOutput );
+		assertStringArgs(input, expectedOutput, "/blah/ c \\ This is an changed line\t");
+
+		//also without space... yea I hate sed!
+		assertScript(input, "/blah/c \\ This is an changed line\t", expectedOutput );
+		assertScript(input, "/blah/c \\\n This is an changed line\t\n", expectedOutput );
+		assertStringArgs(input, expectedOutput, "/blah/c \\ This is an changed line\t");
+	}
+
+	@Test
+	public void testSed_delete() {
+		final MultilineString expectedOutput = new MultilineString();
+		expectedOutput
+				.appendLine("This is a test one two three")
+				.appendLine("one")
+				.appendLine("a")
+				.appendLine("")
+				.appendLine("two")
+				.appendLine("def\\d123");
+		
+		assertSed(input, "blah", expectedOutput, Sed.Options.delete);
+		assertSed(input, "blah", expectedOutput, Sed.Options.d);
+		assertSed(input, "BLAH", expectedOutput, Sed.Options.delete.ignoreCase);
+		assertStringArgs(input, expectedOutput, "-dI", "--regexp", "bLaH");
+		assertStringArgs(input, expectedOutput, "--delete", "--regexp", "blah");
+		
+		assertScript(input, "/blah/ d", expectedOutput );
+		assertScript(input, "/blah/d", expectedOutput );
+		assertScript(input, "/BLAH/dI", expectedOutput );
+		assertStringArgs(input, expectedOutput, "/blah/ d");
+		assertStringArgs(input, expectedOutput, "/bLaH/Id");
+		assertStringArgs(input, expectedOutput, "/bLaH/dI");
+	}
+
 	@Test
 	public void testSed_translate() {
 		final MultilineString expectedOutput = new MultilineString();
