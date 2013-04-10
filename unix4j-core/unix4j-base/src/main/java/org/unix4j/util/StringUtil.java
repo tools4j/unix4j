@@ -181,7 +181,7 @@ public class StringUtil {
 
 	/**
 	 * Finds and returns the start of the given sequence after trimming
-	 * whitespace characters.
+	 * whitespace characters from the left.
 	 * 
 	 * @param s
 	 *            the character sequence
@@ -194,7 +194,8 @@ public class StringUtil {
 
 	/**
 	 * Finds and returns the start of the given sequence after trimming
-	 * whitespace characters, starting at the given {@code start} index.
+	 * whitespace characters from the left, starting at the given {@code start}
+	 * index.
 	 * 
 	 * @param s
 	 *            the character sequence
@@ -215,8 +216,8 @@ public class StringUtil {
 
 	/**
 	 * Finds and returns the end of the given character sequence after trimming
-	 * white space characters as defined by {@link Character#isWhitespace(char)}
-	 * .
+	 * white space characters from the right. Whitespace characters are defined
+	 * by {@link Character#isWhitespace(char)}. .
 	 * 
 	 * @param s
 	 *            the character sequence
@@ -227,6 +228,73 @@ public class StringUtil {
 		for (int i = s.length(); i > 0; i--) {
 			if (!Character.isWhitespace(s.charAt(i - 1))) {
 				return i;
+			}
+		}
+		return 0;
+	}
+
+	/**
+	 * Finds and returns the start of the given sequence after trimming newline
+	 * characters from the left. The following character sequences are treated
+	 * as newline characters: "\n", "\r\n".
+	 * 
+	 * @param s
+	 *            the character sequence
+	 * @return the index containing the first character that is not part of a
+	 *         newline sequence, or the length of the character sequence if all
+	 *         characters are newline chars
+	 */
+	public static int findStartTrimNewlineChars(CharSequence s) {
+		return findStartTrimNewlineChars(s, 0);
+	}
+
+	/**
+	 * Finds and returns the start of the given sequence after trimming newline
+	 * characters from the left, starting at the given {@code start}
+	 * index. . The following character sequences are treated
+	 * as newline characters: "\n", "\r\n".
+	 * 
+	 * @param s
+	 *            the character sequence
+	 * @param start
+	 *            the first index to consider in the char sequence
+	 * @return the index containing the first character that is not part of a
+	 *         newline sequence, or the length of the character sequence if all
+	 *         characters are newline chars
+	 */
+	public static int findStartTrimNewlineChars(CharSequence s, int start) {
+		final int len = s.length();
+		for (int i = start; i < len; ) {
+			final int ch = s.charAt(i);
+			i++;
+			if (ch != '\n') {
+				if (ch != '\r' || i >= len || s.charAt(i) != '\n') {
+					return i-1;
+				}
+				i++;//increment again, it was "\r\n"
+			}
+		}
+		return len;
+	}
+
+	/**
+	 * Finds and returns the end of the given character sequence after trimming
+	 * new line characters from the right. The following character sequences are
+	 * treated as newline characters: "\n", "\r\n".
+	 * 
+	 * @param s
+	 *            the character sequence
+	 * @return the index after the last character that is not part of a newline
+	 *         sequence, or zero if all characters are newline chars
+	 */
+	public static int findEndTrimNewlineChars(CharSequence s) {
+		for (int i = s.length(); i > 0;) {
+			if (s.charAt(i - 1) != '\n') {
+				return i;
+			}
+			i--;
+			if (i > 0 && s.charAt(i - 1) == '\r') {
+				i--;
 			}
 		}
 		return 0;
