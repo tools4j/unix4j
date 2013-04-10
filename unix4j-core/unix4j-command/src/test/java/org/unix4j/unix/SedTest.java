@@ -440,6 +440,45 @@ public class SedTest {
 		assertStringArgs( input, expectedOutput, "-n", "/Blah/pI");
 		assertStringArgs( input, expectedOutput, "/Blah/Ip", "--quiet");
 	}
+	
+	@Test
+	public void testSed_translate() {
+		final MultilineString expectedOutput = new MultilineString();
+		expectedOutput
+				.appendLine("This is a tEst Blah Blah Blah")
+				.appendLine("This is a tEst Blah Blah")
+				.appendLine("This is a tEst onE two thrEE")
+				.appendLine("onE")
+				.appendLine("a")
+				.appendLine("")
+				.appendLine("two")
+				.appendLine("dEf\\d456");
+
+		assertSed(input, "be123", "BE456", expectedOutput, Sed.Options.translate);
+		assertSed(input, "be123", "BE456", expectedOutput, Sed.Options.y);
+		assertSed(input, "be123", "BE456", expectedOutput, Sed.Options.translate);
+		assertStringArgs(input, expectedOutput, "-y", "--string1", "be123", "--string2", "BE456");
+		
+		assertScript( input, "y/be123/BE456/", expectedOutput );
+		assertStringArgs(input, expectedOutput, "y/be123/BE456/");
+	}
+
+	@Test
+	public void testSed_translateExotics() {
+		final StringBuilder input = new StringBuilder();
+		final StringBuilder output = new StringBuilder();
+		final StringBuilder src = new StringBuilder();
+		final StringBuilder dst = new StringBuilder();
+		for (int i = 0; i < 256; i++) {
+			input.append((char)i).append((char)(i + 256)).append((char)(i + 512));
+			output.append((char)i).append("_").append(":");
+			src.append((char)(i + 256)).append((char)(i + 512));
+			dst.append("_").append(":");
+		}
+
+		final String actual = Unix4j.fromString(input.toString()).sed(Sed.Options.translate, src.toString(), dst.toString()).toStringResult();
+		assertEquals(output.toString(), actual);
+	}
 
 	private void assertSed(final MultilineString input, final String regexp, final MultilineString expectedOutput){
 		assertSed(input, regexp, expectedOutput, SedOption.EMPTY);
@@ -450,6 +489,16 @@ public class SedTest {
 			Unix4j.from(input.toInput()).sed(options, regexp).toWriter(actualOutputStringWriter);
 		} else {
 			Unix4j.from(input.toInput()).sed(regexp).toWriter(actualOutputStringWriter);
+		}
+		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
+		actualOutput.assertMultilineStringEquals(expectedOutput);
+	}
+	private void assertSed(final MultilineString input, final String string1, String string2, final MultilineString expectedOutput, SedOptions options){
+		final StringWriter actualOutputStringWriter = new StringWriter();
+		if (options != null) {
+			Unix4j.from(input.toInput()).sed(options, string1, string2).toWriter(actualOutputStringWriter);
+		} else {
+			Unix4j.from(input.toInput()).sed(string1, string2).toWriter(actualOutputStringWriter);
 		}
 		final MultilineString actualOutput = new MultilineString(actualOutputStringWriter.toString());
 		actualOutput.assertMultilineStringEquals(expectedOutput);
