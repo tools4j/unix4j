@@ -185,7 +185,7 @@ public enum Command {
 			if (firstChar == substitute.commandChar) {
 				return substitute;
 			} else if (firstChar == translate.commandChar) {
-				return substitute;
+				return translate;
 			} else {
 				final int scriptEnd = AbstractSedProcessor.indexOfNextDelimiter(script, scriptStart);
 				if (scriptEnd < 0) {
