@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 
@@ -81,40 +80,39 @@ public class FileUtilTest {
         asserter.assertNext(testDir.getPath() + "/dir3/test-file-3.txt");
     }
 
-    @Ignore //doesn't work
     @Test
     public void testExpandFiles_relativePaths(){
         final File testDir = FileTestUtils.getTestFile(this.getClass(), "testExpandFiles");
 
-        List<File> actualFiles = FileUtil.expandFiles(testDir.getPath(), "*");
+        List<File> actualFiles = FileUtil.expandFiles(testDir.getPath() + "/*");
         FileAsserter asserter = new FileAsserter(actualFiles);
-        asserter.assertNext("blah");
-        asserter.assertNext("dir1");
-        asserter.assertNext("dir2");
-        asserter.assertNext("dir3");
+        asserter.assertNext(testDir, "blah");
+        asserter.assertNext(testDir, "dir1");
+        asserter.assertNext(testDir, "dir2");
+        asserter.assertNext(testDir, "dir3");
 
-        actualFiles = FileUtil.expandFiles(testDir.getPath(), "*");
+        actualFiles = FileUtil.expandFiles(testDir.getPath() + "*");
         asserter = new FileAsserter(actualFiles);
-        asserter.assertNext(testDir.getPath());
+        asserter.assertNext(testDir, ".");
 
-        actualFiles = FileUtil.expandFiles(testDir.getPath(), "blah/blah.txt");
+        actualFiles = FileUtil.expandFiles(testDir.getPath() + "/blah/blah.txt");
         asserter = new FileAsserter(actualFiles);
-        asserter.assertNext("blah/blah.txt");
+        asserter.assertNext(testDir, "./blah/blah.txt");
 
-        actualFiles = FileUtil.expandFiles(testDir.getPath(), "blah/blah*");
+        actualFiles = FileUtil.expandFiles(testDir.getPath() + "/blah/blah*");
         asserter = new FileAsserter(actualFiles);
-        asserter.assertNext("blah/blah.txt");
+        asserter.assertNext(testDir, "./blah/blah.txt");
 
-        actualFiles = FileUtil.expandFiles(testDir.getPath(), "dir*/test*");
+        actualFiles = FileUtil.expandFiles(testDir.getPath() + "/dir*/test*");
         asserter = new FileAsserter(actualFiles);
-        asserter.assertNext("dir1/test-file-1.txt");
-        asserter.assertNext("dir1/test-file-1a.txt");
-        asserter.assertNext("dir2/test-file-2.txt");
-        asserter.assertNext("dir3/test-file-3.txt");
+        asserter.assertNext(testDir, "./dir1/test-file-1.txt");
+        asserter.assertNext(testDir, "./dir1/test-file-1a.txt");
+        asserter.assertNext(testDir, "./dir2/test-file-2.txt");
+        asserter.assertNext(testDir, "./dir3/test-file-3.txt");
     }
 
 
-    @Test
+	@Test
     public void testFiles(){
         final File testDir =  FileTestUtils.getTestFile(this.getClass(), "testFiles");
         assertTrue(new File(testDir, "blah/blah.txt").exists());
@@ -129,8 +127,29 @@ public class FileUtilTest {
             this.actualFiles = actualFiles.iterator();
         }
 
-        private void assertNext(final String expectedFileOrDirName){
-            assertEquals(expectedFileOrDirName, actualFiles.next().getPath());
-        }
+		/**
+		 * Assert the absoulte path of the next actual file.
+		 * 
+		 * @param expectedFileOrDirName
+		 *            the expected absolute path of the direcctory or file
+		 */
+		public void assertNext(final String expectedFileOrDirName) {
+			assertEquals(expectedFileOrDirName, actualFiles.next().getPath());
+		}
+        
+		/**
+		 * Assert the relative path of the next actual file.
+		 * 
+		 * @param relativeRoot
+		 *            the root directory for the relative path
+		 * @param expectedRelativePath
+		 *            the expected path relative to the given
+		 *            {@code relativeRoot}
+		 * @see FileUtil#getRelativePath(File, File)
+		 */
+		public void assertNext(final File relativeRoot, String expectedRelativePath) {
+			final String actualRelativePath = FileUtil.getRelativePath(relativeRoot, actualFiles.next());
+			assertEquals(expectedRelativePath, actualRelativePath);
+		}
     }
 }
