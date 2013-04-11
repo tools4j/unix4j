@@ -19,7 +19,7 @@ public class TailFileTest {
 		@Override
 		public ExecutionContext createExecutionContext() {
 			final DefaultExecutionContext context = new DefaultExecutionContext();
-			context.setCurrentDirectory(tester.getInputFile());
+			context.setCurrentDirectory(tester.getTestDir());
 			return context;
 		}
 	};
@@ -40,12 +40,13 @@ public class TailFileTest {
 
     @Test
     public void tail_multipleFiles_countFromEnd() {
-        final CommandFileTest tester = new CommandFileTest(this.getClass(), CommandFileTest.MatchMode.Regex, 2);
-        tester.run(Unix4j.tail(10, tester.getInputFiles()));
-        tester.run(Unix4j.tail(10, tester.getInputFileNames()));
-        tester.run(Unix4j.tail(tester.getInputFiles())); //By default, tail returns top 10 lines
-        tester.run(Unix4j.builder().tail(combine(arr("--count", "10", "--paths"), tester.getInputFileNames())));
-        tester.run(Unix4j.builder().tail(combine(arr("--paths"), tester.getInputFileNames())));
+        final CommandFileTest tester = new CommandFileTest(this.getClass(), 2);
+        final Config config = new Config(tester);
+        tester.run(Unix4j.use(config).tail(10, tester.getInputFiles()));
+        tester.run(Unix4j.use(config).tail(10, tester.getInputFileNames()));
+        tester.run(Unix4j.use(config).tail(tester.getInputFiles())); //By default, tail returns top 10 lines
+        tester.run(Unix4j.use(config).tail(combine(arr("--count", "10", "--paths"), tester.getInputFileNames())));
+        tester.run(Unix4j.use(config).tail(combine(arr("--paths"), tester.getInputFileNames())));
     }
 
     @Test
@@ -64,12 +65,13 @@ public class TailFileTest {
 
     @Test
     public void tail_multipleFiles_countFromStart() {
-        final CommandFileTest tester = new CommandFileTest(this.getClass(), CommandFileTest.MatchMode.Regex, 2);
-        tester.run(Unix4j.tail(10, tester.getInputFiles()));
-        tester.run(Unix4j.tail(10, tester.getInputFileNames()));
-        tester.run(Unix4j.tail(tester.getInputFiles())); //By default, tail returns top 10 lines
-        tester.run(Unix4j.builder().tail(combine(arr("-s", "--count", "10", "--paths"), tester.getInputFileNames())));
-        tester.run(Unix4j.builder().tail(combine(arr("-s", "--paths"), tester.getInputFileNames())));
+        final CommandFileTest tester = new CommandFileTest(this.getClass(), 2);
+        final Config config = new Config(tester);
+        tester.run(Unix4j.use(config).tail(10, tester.getInputFiles()));
+        tester.run(Unix4j.use(config).tail(10, tester.getInputFileNames()));
+        tester.run(Unix4j.use(config).tail(tester.getInputFiles())); //By default, tail returns top 10 lines
+        tester.run(Unix4j.use(config).tail(combine(arr("-s", "--count", "10", "--paths"), tester.getInputFileNames())));
+        tester.run(Unix4j.use(config).tail(combine(arr("-s", "--paths"), tester.getInputFileNames())));
     }
 
 

@@ -36,10 +36,10 @@ class WcCommand extends AbstractCommand<WcArguments> {
 		}
 		
         if(inputs.size() == 1){
-			return new InputLineProcessor(inputs.get(0), new WcFileProcessor(args), output);
+			return new InputLineProcessor(inputs.get(0), new WcFileProcessor(context, args), output);
 
         } else if(inputs.size() > 1){
-            return new WcMultipleFilesProcessor(inputs, output, args);
+            return new WcMultipleFilesProcessor(context, inputs, output, args);
 
 		} else {
 			throw new IllegalStateException("No inputs specified");

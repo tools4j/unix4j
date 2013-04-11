@@ -62,7 +62,7 @@ class TailCommand extends AbstractCommand<TailArguments> {
 		}
 	}
 	
-	private LineProcessor getFileInputProcessor(List<FileInput> inputs, ExecutionContext context, final LineProcessor output, TailArguments args) {
+	private LineProcessor getFileInputProcessor(List<FileInput> inputs, final ExecutionContext context, final LineProcessor output, TailArguments args) {
 		final AbstractTailProcessor tailProcessor = getStandardInputProcessor(context, output, args);
 		if (inputs.size() <= 1 || args.isSuppressHeaders()) {
 			return new RedirectInputLineProcessor(inputs, tailProcessor);
@@ -77,7 +77,7 @@ class TailCommand extends AbstractCommand<TailArguments> {
 					} else {
 						output.processLine(Line.EMPTY_LINE);
 					}
-					final String fileInfo = input instanceof FileInput ? ((FileInput)input).getFileInfo() : input.toString();
+					final String fileInfo = input instanceof FileInput ? ((FileInput)input).getFileInfo(context.getCurrentDirectory()) : input.toString();
 					output.processLine(new SimpleLine("==> " + fileInfo + " <=="));
 				}
 

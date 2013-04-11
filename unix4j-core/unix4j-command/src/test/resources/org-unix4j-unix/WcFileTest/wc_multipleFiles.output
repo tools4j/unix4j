@@ -1,5 +1,5 @@
-    19   181  1057 /(?:[^/]+/)+wc_multipleFiles.input.1
-    10    98   569 /(?:[^/]+/)+wc_multipleFiles.input.2
-     5    63   339 /(?:[^/]+/)+wc_multipleFiles.input.3
-     0     0     0 /(?:[^/]+/)+wc_multipleFiles.input.4
+    19   181  1057 wc_multipleFiles.input.1
+    10    98   569 wc_multipleFiles.input.2
+     5    63   339 wc_multipleFiles.input.3
+     0     0     0 wc_multipleFiles.input.4
     34   342  1965 total

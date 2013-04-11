@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
+import org.unix4j.context.ExecutionContext;
 import org.unix4j.io.FileInput;
 import org.unix4j.io.Input;
 import org.unix4j.line.Line;
@@ -13,6 +14,7 @@ import org.unix4j.processor.LineProcessor;
  * Input processor for line, word and char count for multiple input files.
  */
 class WcMultipleFilesProcessor implements LineProcessor {
+	private final ExecutionContext context;
 	private final NavigableMap<String, Counters> inputCounters;
 	private final Counters totals;
     private final WcArguments args;
@@ -20,10 +22,11 @@ class WcMultipleFilesProcessor implements LineProcessor {
     private final LineProcessor output;
     private Counters currentInputCounter;
 
-    public WcMultipleFilesProcessor(final List<FileInput> inputs, final LineProcessor output, WcArguments args) {
-        inputCounters = new TreeMap<String, Counters>();
-        currentInputCounter = new Counters(args);
-        totals = new Counters(args);
+    public WcMultipleFilesProcessor(final ExecutionContext context, final List<FileInput> inputs, final LineProcessor output, WcArguments args) {
+    	this.context = context;
+    	this.inputCounters = new TreeMap<String, Counters>();
+    	this.currentInputCounter = new Counters(args);
+    	this.totals = new Counters(args);
         this.args = args;
         this.inputs = inputs;
         this.output = output;
@@ -46,7 +49,7 @@ class WcMultipleFilesProcessor implements LineProcessor {
     }
 
 	private void finishSingleInput(Input input) {
-		final String fileInfo = input instanceof FileInput ? ((FileInput)input).getFileInfo() : input.toString();
+		final String fileInfo = input instanceof FileInput ? ((FileInput)input).getFileInfo(context.getCurrentDirectory()) : input.toString();
 		totals.updateTotal(currentInputCounter);
         inputCounters.put(fileInfo, currentInputCounter);
         currentInputCounter = new Counters(args);

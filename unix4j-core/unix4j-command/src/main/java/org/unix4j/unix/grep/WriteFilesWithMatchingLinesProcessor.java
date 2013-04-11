@@ -15,11 +15,13 @@ import org.unix4j.processor.LineProcessor;
  */
 final class WriteFilesWithMatchingLinesProcessor extends DefaultInputProcessor implements LineProcessor {
 	
+	private final ExecutionContext context;
 	private final LineMatcher matcher;
 	private boolean matches = false;
 	private final LineProcessor output;
 
 	public WriteFilesWithMatchingLinesProcessor(GrepCommand command, ExecutionContext context, LineProcessor output, LineMatcher matcher) {
+		this.context = context;
 		this.matcher = matcher;
 		this.output = output;
 	}
@@ -45,7 +47,7 @@ final class WriteFilesWithMatchingLinesProcessor extends DefaultInputProcessor i
 	@Override
 	public void finish(Input input, LineProcessor output) {
 		if (matches) {
-			final String fileInfo = input instanceof FileInput ? ((FileInput)input).getFileInfo() : input.toString();
+			final String fileInfo = input instanceof FileInput ? ((FileInput)input).getFileInfo(context.getCurrentDirectory()) : input.toString();
 			output.processLine(new SimpleLine(fileInfo));
 		}
 	}
