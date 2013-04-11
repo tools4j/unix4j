@@ -181,7 +181,18 @@ public class FileUtil {
 			}
 			listFiles(p, parts, expandedFiles);
 		} else {
-			expandedFiles.add(file);
+			if (file.exists()) {
+				expandedFiles.add(file);
+			} else {
+				//try file as relative path
+				file = new File(currentDirectory, file.getPath());
+				if (file.exists()) {
+					expandedFiles.add(file);
+				} else {
+					//what now? throw exception? trace error?
+					throw new IllegalArgumentException("file not found: " + file + " [currentDirectory=" + currentDirectory + "]");
+				}
+			}
 		}
 	}
 

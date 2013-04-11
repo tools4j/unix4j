@@ -1,4 +1,4 @@
-^==> /(?:[^/]+/)+tail_multipleFiles_countFromEnd.input.1 <==$
+==> tail_multipleFiles_countFromEnd.input.1 <==
 aaaaaaaaaa
 aaaaaaaaa
 aaaaaaaa
@@ -10,7 +10,7 @@ aaa
 aa
 a
 
-^==> /(?:[^/]+/)+tail_multipleFiles_countFromEnd.input.2 <==$
+==> tail_multipleFiles_countFromEnd.input.2 <==
 xxxxxxxxxx
 xxxxxxxxx
 xxxxxxxx

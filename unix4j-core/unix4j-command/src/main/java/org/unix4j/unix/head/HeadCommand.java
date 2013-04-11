@@ -56,7 +56,7 @@ class HeadCommand extends AbstractCommand<HeadArguments> {
 		}
 	}
 	
-	private LineProcessor getFileInputProcessor(List<FileInput> inputs, ExecutionContext context, final LineProcessor output, HeadArguments args) {
+	private LineProcessor getFileInputProcessor(List<FileInput> inputs, final ExecutionContext context, final LineProcessor output, HeadArguments args) {
 		final AbstractHeadProcessor headProcessor = getStandardInputProcessor(context, output, args);
 		if (inputs.size() <= 1 || args.isSuppressHeaders()) {
 			return new RedirectInputLineProcessor(inputs, headProcessor);
@@ -71,7 +71,7 @@ class HeadCommand extends AbstractCommand<HeadArguments> {
 					} else {
 						output.processLine(Line.EMPTY_LINE);
 					}
-					final String fileInfo = input instanceof FileInput ? ((FileInput)input).getFileInfo() : input.toString();
+					final String fileInfo = input instanceof FileInput ? ((FileInput)input).getFileInfo(context.getCurrentDirectory()) : input.toString();
 					output.processLine(new SimpleLine("==> " + fileInfo + " <=="));
 				}
 

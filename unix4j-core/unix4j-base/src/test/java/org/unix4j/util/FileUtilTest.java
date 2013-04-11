@@ -119,13 +119,23 @@ public class FileUtilTest {
         assertTrue(new File(testDir, "./blah/blah.txt").exists());
     }
 
-    private static class FileAsserter{
-        private final Iterator<File> actualFiles;
+	/**
+	 * Helper class to assert actual files one by one, either by their
+	 * {@link #assertNext(String) absolute} or {@link #assertNext(File, String)
+	 * relative} path.
+	 */
+	private static class FileAsserter {
+		private final Iterator<File> actualFiles;
 
-
-        private FileAsserter(List<File> actualFiles) {
-            this.actualFiles = actualFiles.iterator();
-        }
+		/**
+		 * Constructor with actual files to assert.
+		 * 
+		 * @param actualFiles
+		 *            the actual files to assert.
+		 */
+		public FileAsserter(List<File> actualFiles) {
+			this.actualFiles = actualFiles.iterator();
+		}
 
 		/**
 		 * Assert the absoulte path of the next actual file.
@@ -136,7 +146,7 @@ public class FileUtilTest {
 		public void assertNext(final String expectedFileOrDirName) {
 			assertEquals(expectedFileOrDirName, actualFiles.next().getPath());
 		}
-        
+
 		/**
 		 * Assert the relative path of the next actual file.
 		 * 
@@ -151,5 +161,5 @@ public class FileUtilTest {
 			final String actualRelativePath = FileUtil.getRelativePath(relativeRoot, actualFiles.next());
 			assertEquals(expectedRelativePath, actualRelativePath);
 		}
-    }
+	}
 }

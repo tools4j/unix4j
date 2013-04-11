@@ -1,4 +1,4 @@
-^==> /(?:[^/]+/)+head_multipleFiles.input.1 <==$
+==> head_multipleFiles.input.1 <==
 a
 aa
 aaa
@@ -10,7 +10,7 @@ aaaaaaaa
 aaaaaaaaa
 aaaaaaaaaa
 
-^==> /(?:[^/]+/)+head_multipleFiles.input.2 <==$
+==> head_multipleFiles.input.2 <==
 x
 xx
 xxx

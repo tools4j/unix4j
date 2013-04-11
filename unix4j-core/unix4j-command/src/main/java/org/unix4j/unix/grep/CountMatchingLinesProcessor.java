@@ -16,11 +16,13 @@ import org.unix4j.util.Counter;
  */
 final class CountMatchingLinesProcessor extends DefaultInputProcessor implements LineProcessor {
 	
+	private final ExecutionContext context;
 	private final LineMatcher matcher;
 	private final Counter counter = new Counter();
 	private final LineProcessor output;
 
 	public CountMatchingLinesProcessor(GrepCommand command, ExecutionContext context, LineProcessor output, LineMatcher matcher) {
+		this.context = context;
 		this.matcher = matcher;
 		this.output = output;
 	}
@@ -44,7 +46,7 @@ final class CountMatchingLinesProcessor extends DefaultInputProcessor implements
 
 	@Override
 	public void finish(Input input, LineProcessor output) {
-		final String fileInfo = input instanceof FileInput ? ((FileInput)input).getFileInfo() : input.toString();
+		final String fileInfo = input instanceof FileInput ? ((FileInput)input).getFileInfo(context.getCurrentDirectory()) : input.toString();
 		output.processLine(new SimpleLine(counter.getCount() + ": " + fileInfo));
 	}
 	

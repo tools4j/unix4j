@@ -19,7 +19,7 @@ public class HeadFileTest {
 		@Override
 		public ExecutionContext createExecutionContext() {
 			final DefaultExecutionContext context = new DefaultExecutionContext();
-			context.setCurrentDirectory(tester.getInputFile());
+			context.setCurrentDirectory(tester.getTestDir());
 			return context;
 		}
 	};
@@ -47,12 +47,13 @@ public class HeadFileTest {
 
     @Test
     public void head_multipleFiles() {
-        final CommandFileTest tester = new CommandFileTest(this.getClass(), CommandFileTest.MatchMode.Regex, 2);
-        tester.run(Unix4j.head(10, tester.getInputFiles()));
-        tester.run(Unix4j.head(10, tester.getInputFileNames()));
-        tester.run(Unix4j.head(tester.getInputFiles())); //By default, head returns top 10 lines
-        tester.run(Unix4j.builder().head(combine(arr("--count", "10", "--paths"), tester.getInputFileNames())));
-        tester.run(Unix4j.builder().head(combine(arr("--paths"), tester.getInputFileNames())));
+        final CommandFileTest tester = new CommandFileTest(this.getClass(), 2);
+		final Config config = new Config(tester);
+        tester.run(Unix4j.use(config).head(10, tester.getInputFiles()));
+        tester.run(Unix4j.use(config).head(10, tester.getInputFileNames()));
+        tester.run(Unix4j.use(config).head(tester.getInputFiles())); //By default, head returns top 10 lines
+        tester.run(Unix4j.use(config).head(combine(arr("--count", "10", "--paths"), tester.getInputFileNames())));
+        tester.run(Unix4j.use(config).head(combine(arr("--paths"), tester.getInputFileNames())));
     }
 
     private static String[] arr(String... s) {
