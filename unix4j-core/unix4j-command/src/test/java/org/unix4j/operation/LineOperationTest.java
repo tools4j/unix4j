@@ -12,7 +12,7 @@ import org.unix4j.line.Line;
 import org.unix4j.processor.LineProcessor;
 
 /**
- * Unit tests for {@link LineOperation} and {@link LineOperationCommand}.
+ * Unit tests for {@link LineOperation} and {@link AdHocCommand}.
  */
 public class LineOperationTest {
 	

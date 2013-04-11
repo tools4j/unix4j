@@ -21,7 +21,7 @@ import org.unix4j.io.StringOutput;
 import org.unix4j.io.WriterOutput;
 import org.unix4j.line.Line;
 import org.unix4j.operation.LineOperation;
-import org.unix4j.operation.LineOperationCommand;
+import org.unix4j.operation.AdHocCommand;
 
 /**
  * Default implementation for a {@link CommandBuilder}. Builds a {@link NoOp}
@@ -79,7 +79,7 @@ public class DefaultCommandBuilder implements CommandBuilder {
 	
 	@Override
 	public CommandBuilder apply(LineOperation operation) {
-		return join(new LineOperationCommand(operation));
+		return join(new AdHocCommand(operation));
 	}
 
 	@Override

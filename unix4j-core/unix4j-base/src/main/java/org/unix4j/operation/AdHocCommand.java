@@ -4,29 +4,36 @@ import org.unix4j.command.AbstractCommand;
 import org.unix4j.command.Arguments;
 import org.unix4j.context.ExecutionContext;
 import org.unix4j.line.Line;
-import org.unix4j.operation.LineOperationCommand.Args;
+import org.unix4j.operation.AdHocCommand.Args;
 import org.unix4j.processor.LineProcessor;
 
 /**
  * Implementation of an ad-hoc command based on a {@link LineOperation}.
  */
-public class LineOperationCommand extends AbstractCommand<Args> {
+public class AdHocCommand extends AbstractCommand<Args> {
 
 	/**
 	 * The "adhoc" name for this command.
 	 */
 	public static final String NAME = "adhoc";
 
-	public LineOperationCommand(LineOperation operation) {
+	public AdHocCommand(LineOperation operation) {
 		super(NAME, new Args(operation));
 	}
 
 	/**
-	 * Arguments for LineOperationCommand.
+	 * Arguments for {@link AdHocCommand}.
 	 */
 	public static final class Args implements Arguments<Args> {
 		private final LineOperation operation;
 
+		/**
+		 * Constructor with the single operation argument passed to the
+		 * constructor of {@link AdHocCommand}.
+		 * 
+		 * @param operation
+		 *            the operation argument
+		 */
 		public Args(LineOperation operation) {
 			if (operation == null) {
 				throw new NullPointerException("operation cannot be null");
