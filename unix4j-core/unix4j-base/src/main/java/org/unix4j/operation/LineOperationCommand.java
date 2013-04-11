@@ -8,14 +8,14 @@ import org.unix4j.operation.LineOperationCommand.Args;
 import org.unix4j.processor.LineProcessor;
 
 /**
- * A command based on a {@link LineOperation}.
+ * Implementation of an ad-hoc command based on a {@link LineOperation}.
  */
 public class LineOperationCommand extends AbstractCommand<Args> {
 
 	/**
-	 * The "lineop" name for this command.
+	 * The "adhoc" name for this command.
 	 */
-	public static final String NAME = "lineop";
+	public static final String NAME = "adhoc";
 
 	public LineOperationCommand(LineOperation operation) {
 		super(NAME, new Args(operation));
