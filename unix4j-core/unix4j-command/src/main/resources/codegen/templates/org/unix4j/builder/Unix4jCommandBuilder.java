@@ -3,6 +3,7 @@ package org.unix4j.builder;
 
 import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.Command;
+import org.unix4j.operation.LineOperation;
 
 <#foreach def in commandDefs> 
 import ${def.command.pkg.name}.${def.command.simpleName};
@@ -51,6 +52,10 @@ public interface Unix4jCommandBuilder extends CommandBuilder,
 	@Override
 	Unix4jCommandBuilder join(Command<?> command);
 	
+	//override with specialized return type
+	@Override
+	Unix4jCommandBuilder apply(LineOperation operation);
+
 	//override with specialized return type
 	@Override
 	Unix4jCommandBuilder reset();
