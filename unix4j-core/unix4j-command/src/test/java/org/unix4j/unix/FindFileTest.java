@@ -1,0 +1,334 @@
+package org.unix4j.unix;
+
+import org.junit.Ignore;
+import org.junit.Test;
+import org.unix4j.Unix4j;
+import org.unix4j.context.DefaultExecutionContext;
+import org.unix4j.context.ExecutionContext;
+import org.unix4j.context.ExecutionContextFactory;
+
+public class FindFileTest {
+	
+	private static final class Config implements ExecutionContextFactory {
+		private final CommandFileTest tester;
+		public Config(CommandFileTest tester) {
+			this.tester = tester;
+		}
+		@Override
+		public ExecutionContext createExecutionContext() {
+			final DefaultExecutionContext context = new DefaultExecutionContext();
+			context.setCurrentDirectory(tester.getInputFile());
+			return context;
+		}
+	};
+
+    @Ignore
+	@Test
+	public void find_simple() {
+		final CommandFileTest tester = new CommandFileTest(this.getClass());
+		final Config config = new Config(tester);
+        tester.run(Unix4j.use(config).find(tester.getInputFile().getPath()));
+	}
+
+    @Ignore
+    @Test
+    public void find_withName() {
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
+        final Config config = new Config(tester);
+        tester.run(Unix4j.use(config).find(tester.getInputFile().getPath(), "a.txt"));
+    }
+
+    //		<method args="args" usesStandardInput="false">
+    //			Finds all files matching the search criteria specified by the given
+    //			arguments and writes the file names to the standard output.
+    //
+    //			Options can be specified by acronym (with a leading dash "-") or by
+    //			long name (with two leading dashes "--"). Operands other than the
+    //			default "--name" operand have to be prefixed with the operand name.
+    //
+    //			The files names written to the output are relative paths referring
+    //			to the working directory (or -- if provided -- relative to the path
+    //			given after the {@code "--path"} operand name).
+    //		</method>
+    //		<method args="path" usesStandardInput="false">
+    //            Finds all files in or below the directory specified by {@code path}
+    //            and writes the file names to the standard output.
+    //
+    //            The files names written to the output are paths relative to the
+    //            specified {@code path} operand.
+    //		</method>
+    //		<method args="path,name" usesStandardInput="false">
+    //			Finds all files matching the specified {@code name} in or below the
+    //			directory specified by {@code path} and writes the file names to
+    //			the standard output.
+    //
+    //			The files names written to the output are paths relative to the
+    //			specified {@code path} operand.
+    //		</method>
+    //		<method args="size" usesStandardInput="false">
+    //			Finds all files matching the specified file {@code size} in or below
+    //			the user's current working directory and writes the file names to
+    //			the standard output. Matching files use at least {@code size} bytes
+    //			on disk if {@code size} is positive, or at most {@code abs(size)}
+    //			bytes if {@code size} is zero or negative.
+    //
+    //			The files names written to the output are relative paths referring
+    //			to the working directory.
+    //		</method>
+    //		<method args="path,size" usesStandardInput="false">
+    //			Finds all files matching the specified file {@code size} in or below
+    //			the directory specified by {@code path} and writes the file names
+    //			to the standard output. Matching files use at least {@code size}
+    //			bytes on disk if {@code size} is positive, or at most
+    //			{@code abs(size)} bytes if {@code size} is zero or negative.
+    //
+    //			The files names written to the output are paths relative to the
+    //			specified {@code path} operand.
+    //		</method>
+    //		<method args="size,name" usesStandardInput="false">
+    //			Finds all files matching the specified file {@code name} and
+    //			{@code size} in or below the user's current working directory and
+    //			writes the file names to the standard output. Matching files use
+    //			at least {@code size} bytes on disk if {@code size} is positive,
+    //			or at most {@code abs(size)} bytes if {@code size} is zero or
+    //			negative.
+    //
+    //			The files names written to the output are relative paths referring
+    //			to the working directory.
+    //		</method>
+    //		<method args="path,size,name" usesStandardInput="false">
+    //			Finds all files matching the specified file {@code name} and
+    //			{@code size} in or below the directory specified by {@code path}
+    //			and writes the file names to the standard output. Matching files
+    //			use at least {@code size} bytes on disk if {@code size} is positive,
+    //			or at most {@code abs(size)} bytes if {@code size} is zero or
+    //			negative.
+    //
+    //			The files names written to the output are paths relative to the
+    //			specified {@code path} operand.
+    //		</method>
+    //		<method args="options,name" usesStandardInput="false">
+    //			Finds all files matching the specified {@code name} in or below the
+    //			user's current working directory and writes the file names to the
+    //			standard output.
+    //
+    //			The files names written to the output are relative paths referring
+    //			to the working directory.
+    //		</method>
+    //		<method args="options,path,name" usesStandardInput="false">
+    //			Finds all files matching the specified {@code name} in or below the
+    //			directory specified by {@code path} and writes the file names to
+    //			the standard output.
+    //
+    //			The files names written to the output are paths relative to the
+    //			specified {@code path} operand.
+    //		</method>
+    //		<method args="options,size" usesStandardInput="false">
+    //			Finds all files matching the specified file {@code size} in or below
+    //			the user's current working directory and writes the file names to
+    //			the standard output. Matching files use at least {@code size} bytes
+    //			on disk if {@code size} is positive, or at most {@code abs(size)}
+    //			bytes if {@code size} is zero or negative.
+    //
+    //			The files names written to the output are relative paths referring
+    //			to the working directory.
+    //		</method>
+    //		<method args="options,path,size" usesStandardInput="false">
+    //			Finds all files matching the specified file {@code size} in or below
+    //			the directory specified by {@code path} and writes the file names
+    //			to the standard output. Matching files use at least {@code size}
+    //			bytes on disk if {@code size} is positive, or at most
+    //			{@code abs(size)} bytes if {@code size} is zero or negative.
+    //
+    //			The files names written to the output are paths relative to the
+    //			specified {@code path} operand.
+    //		</method>
+    //		<method args="options,time" usesStandardInput="false">
+    //			Finds all files that have been created, modified or accessed before
+    //			or after the specified {@code time} (depending on the given
+    //			{@code -time...} options). The names of the matching files found in
+    //			or below the user's current working directory are written to the
+    //			standard output.
+    //
+    //			The files names written to the output are relative paths referring
+    //			to the working directory.
+    //		</method>
+    //		<method args="options,path,time" usesStandardInput="false">
+    //			Finds all files that have been created, modified or accessed before
+    //			or after the specified {@code time} (depending on the given
+    //			{@code -time...} options). The names of the matching files found in
+    //			or below the directory specified by {@code path} are written to
+    //			the standard output.
+    //
+    //			The files names written to the output are paths relative to the
+    //			specified {@code path} operand.
+    //		</method>
+    //		<method args="options,size,name" usesStandardInput="false">
+    //			Finds all files matching the specified file {@code name} and
+    //			{@code size} in or below the user's current working directory and
+    //			writes the file names to the standard output. Matching files use
+    //			at least {@code size} bytes on disk if {@code size} is positive, or
+    //			at most {@code abs(size)} bytes if {@code size} is zero or negative.
+    //
+    //			The files names written to the output are relative paths referring
+    //			to the working directory.
+    //		</method>
+    //		<method args="options,path,size,name" usesStandardInput="false">
+    //			Finds all files matching the specified file {@code name} and
+    //			{@code size} in or below the directory specified by {@code path}
+    //			and writes the file names to the standard output. Matching files
+    //			use at least {@code size} bytes on disk if {@code size} is positive,
+    //			or at most {@code abs(size)} bytes if {@code size} is zero or
+    //			negative.
+    //
+    //			The files names written to the output are paths relative to the
+    //			specified {@code path} operand.
+    //		</method>
+    //		<method args="options,time,name" usesStandardInput="false">
+    //			Finds all files matching the given {@code name} that have been
+    //			created, modified or accessed before or after the specified
+    //			{@code time} (depending on the given {@code -time...} options). The
+    //			names of the matching files found in or below the user's current
+    //			working directory are written to the standard output.
+    //
+    //			The files names written to the output are relative paths referring
+    //			to the working directory.
+    //		</method>
+    //		<method args="options,path,time,name" usesStandardInput="false">
+    //			Finds all files matching the given {@code name} that have been
+    //			created, modified or accessed before or after the specified
+    //			{@code time} (depending on the given {@code -time...} options). The
+    //			names of the matching files found in or below the directory
+    //			specified by {@code path} are written to the standard output.
+    //
+    //			The files names written to the output are paths relative to the
+    //			specified {@code path} operand.
+    //		</method>
+    //		<method args="options,size,time,name" usesStandardInput="false">
+    //			Finds all files matching the given {@code name} and {@code size} and
+    //			have been created, modified or accessed before or after the specified
+    //			{@code time} (depending on the given {@code -time...} options).
+    //
+    //			Matching files use at least {@code size} bytes on disk if
+    //			{@code size} is positive, or at most {@code abs(size)} bytes if
+    //			{@code size} is zero or negative. The names of the matching files
+    //			found in or below the user's current working directory are written
+    //			to the standard output.
+    //
+    //			The files names written to the output are relative paths referring
+    //			to the working directory.
+    //		</method>
+    //		<method args="options,path,size,time,name" usesStandardInput="false">
+    //			Finds all files matching the given {@code name} and {@code size} and
+    //			have been created, modified or accessed before or after the specified
+    //			{@code time} (depending on the given {@code -time...} options).
+    //
+    //			Matching files use at least {@code size} bytes on disk if
+    //			{@code size} is positive, or at most {@code abs(size)} bytes if
+    //			{@code size} is zero or negative. The names of the matching files
+    //			found in or below the directory specified by {@code path} are
+    //			written to the standard output.
+    //
+    //			The files names written to the output are paths relative to the
+    //			specified {@code path} operand.
+    //		</method>
+    //	</methods>
+    //	<options>
+    //		<!--
+    //		-type  c
+    //		The primary shall evaluate as true if the type of the file is c, where c is 'b', 'c', 'd', 'l', 'p', 'f', or 's' for
+    //		block special file, character special file, directory, symbolic link, FIFO, regular file, or socket, respectively.
+    //		 -->
+    //		<option name="typeDirectory" acronym="d" exclusiveGroup="type">
+    //			Consider only directories
+    //		</option>
+    //		<option name="typeFile" acronym="f" exclusiveGroup="type">
+    //			Consider only regular files
+    //		</option>
+    //		<option name="typeSymlink" acronym="l" exclusiveGroup="type">
+    //			Consider only symbolic links
+    //		</option>
+    //		<option name="typeOther" acronym="x" exclusiveGroup="type">
+    //			Consider only files that are neither of directory (d),
+    //			regular file (f) or symlink (l).
+    //		</option>
+    //		<option name="regex" acronym="r">
+    //			Use full regular expression syntax for the patterns specified by the
+    //			name operand
+    //
+    //			(This option is ignored if no name operand is specified).
+    //		</option>
+    //		<option name="ignoreCase" acronym="i">
+    //			Use case insensitive matching when applying the file name pattern
+    //			specified by the name operand
+    //
+    //			(This option is ignored if no name operand is specified).
+    //		</option>
+    //		<option name="timeNewer" acronym="n">
+    //			Consider only files that have been created, modified or accessed
+    //			after or at the time specified by the time operand (the default)
+    //
+    //			(This option is ignored if no time operand is specified).
+    //		</option>
+    //		<option name="timeOlder" acronym="o">
+    //			Consider only files that have been created, modified or accessed
+    //			before or at the time specified by the time operand
+    //
+    //			(This option is ignored if no time operand is specified).
+    //		</option>
+    //		<option name="timeCreate" acronym="c" exclusiveGroup="time">
+    //			The time operand refers to the creation time of the file
+    //
+    //			(This option is ignored if no time operand is specified).
+    //		</option>
+    //		<option name="timeAccess" acronym="a" exclusiveGroup="time">
+    //			The time operand refers to the last access time of the file
+    //
+    //			(This option is ignored if no time operand is specified).
+    //		</option>
+    //		<option name="timeModified" acronym="m" exclusiveGroup="time">
+    //			The time operand refers to the last modification time of the file
+    //			(the default)
+    //
+    //			(This option is ignored if no time operand is specified).
+    //		</option>
+    //		<option name="print0" acronym="z">
+    //			Print the full file name on the standard output, followed by a null
+    //			character (instead of the newline character used by default). This
+    //			allows file names that contain newlines or other types of white
+    //			space to be correctly interpreted by programs that process the find
+    //			output. This option corresponds to the --delimiter0 option of xargs.
+    //		</option>
+    //	</options>
+    //	<operands default="path">
+    //        <operand name="path" type="String">
+    //            Starting point for the search in the directory hierarchy;
+    //            wildcards * and ? are supported.
+    //        </operand>
+    //		<operand name="name" type="String">
+    //			Name pattern to match the file name after removing the path with the
+    //			leading directories; wildcards * and ? are supported, or full
+    //			regular expressions if either of the options {@code -regex (-r)} or
+    //			{@code -iregex (-i)} is specified.
+    //		</operand>
+    //		<operand name="size" type="long">
+    //			Consider only files using at least {@code size} bytes or at most
+    //			{@code size} bytes if {@code size} is positive, or at most
+    //			{@code abs(size)} bytes if {@code size} is zero or negative.
+    //		</operand>
+    //		<operand name="time" type="java.util.Date">
+    //			Consider only files that have been created, modified or accessed
+    //			before or after the specified {@code time} operand; consider the
+    //			{@code -time...} options for details of the comparison.
+    //		</operand>
+    //		<operand name="args" type="String...">
+    //			String arguments defining the options and operands for the command.
+    //			Options can be specified by acronym (with a leading dash "-") or by
+    //			long name (with two leading dashes "--"). Operands other than the
+    //			default "--path" operand have to be prefixed with the operand name
+    //			(e.g. "--name" for subsequent path operand values).
+    //		</operand>
+    //		<operand name="options" type="FindOptions">
+    //			Options for the file search.
+    //		</operand>
+}

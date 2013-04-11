@@ -14,11 +14,11 @@ import org.junit.Test;
 public class FileUtilTest {
 
 	/*
-("/home/john", "/home/john") --> "."
-("/home/john", "/home/john/notes.txt") --> "notes.txt"
-("/home/john", "/home/john/documents/important") --> "./documents/important"
-("/home/john", "/home/smith/public") --> "../smith/public"
-("/home/john", "/var/tmp/test.out") --> "/var/tmp/test.out"
+    ("/home/john", "/home/john") --> "."
+    ("/home/john", "/home/john/notes.txt") --> "notes.txt"
+    ("/home/john", "/home/john/documents/important") --> "./documents/important"
+    ("/home/john", "/home/smith/public") --> "../smith/public"
+    ("/home/john", "/var/tmp/test.out") --> "/var/tmp/test.out"
 	 */
 	@Test
 	public void testRelativePath_1_equal() {
