@@ -5,6 +5,7 @@ import org.unix4j.command.Command;
 import org.unix4j.command.NoOp;
 import org.unix4j.context.DefaultExecutionContext;
 import org.unix4j.context.ExecutionContextFactory;
+import org.unix4j.operation.LineOperation;
 
 <#foreach def in commandDefs> 
 import ${def.command.pkg.name}.${def.command.simpleName};
@@ -61,6 +62,12 @@ public class DefaultUnix4jCommandBuilder extends DefaultCommandBuilder implement
 		return this;
 	}
 	
+	@Override
+	public Unix4jCommandBuilder apply(LineOperation operation) {
+		super.apply(operation);
+		return this;
+	}
+
 	@Override
 	public Unix4jCommandBuilder reset() {
 		super.reset();

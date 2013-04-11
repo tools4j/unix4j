@@ -20,6 +20,8 @@ import org.unix4j.io.StreamOutput;
 import org.unix4j.io.StringOutput;
 import org.unix4j.io.WriterOutput;
 import org.unix4j.line.Line;
+import org.unix4j.operation.LineOperation;
+import org.unix4j.operation.LineOperationCommand;
 
 /**
  * Default implementation for a {@link CommandBuilder}. Builds a {@link NoOp}
@@ -73,6 +75,11 @@ public class DefaultCommandBuilder implements CommandBuilder {
 		}
 		this.command = this.command.join(command);
 		return this;
+	}
+	
+	@Override
+	public CommandBuilder apply(LineOperation operation) {
+		return join(new LineOperationCommand(operation));
 	}
 
 	@Override

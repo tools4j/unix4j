@@ -2,6 +2,7 @@ package org.unix4j.builder;
 
 import org.unix4j.command.Command;
 import org.unix4j.command.NoOp;
+import org.unix4j.operation.LineOperation;
 
 /**
  * A builder used to build a single command or a chain of joined commands. Every
@@ -33,6 +34,24 @@ public interface CommandBuilder extends To {
 	 *             if the command argument is null
 	 */
 	CommandBuilder join(Command<?> command);
+	
+	/**
+	 * Adds a new command based on the specified operation and adds it to the
+	 * chain of commands held by this builder.
+	 * <p>
+	 * If this is the fist joined command, the builder <i>builds</i> the command
+	 * created from the operation and returns or executes it if {@link #build()} 
+	 * or {@code toXXX(..)} is called, respectively. If the command argument joins
+	 * already existing commands, the last command in the chain redirects its
+	 * output to the standard input of the specified command.
+	 * 
+	 * @param operation
+	 *            the operation on which the added command is based
+	 * @return the builder for chained method invocation to join other commands
+	 * @throws NullPointerException
+	 *             if the operation argument is null
+	 */
+	CommandBuilder apply(LineOperation operation);
 
 	/**
 	 * Resets this command builder to its initial state. All joined commands are
