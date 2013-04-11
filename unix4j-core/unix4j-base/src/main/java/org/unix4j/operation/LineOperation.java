@@ -5,9 +5,9 @@ import org.unix4j.line.Line;
 import org.unix4j.processor.LineProcessor;
 
 /**
- * An interface to operate on input lines. Output lines can be written to an
- * output object. An input line can lead to single or multiple output lines or
- * to no output at all.
+ * An interface implemented by simple ad-hoc commands that are taking a single
+ * line as input. Output lines can be written to an output object. An input line
+ * can lead to single or multiple output lines or to no output at all.
  */
 public interface LineOperation {
 	/**
