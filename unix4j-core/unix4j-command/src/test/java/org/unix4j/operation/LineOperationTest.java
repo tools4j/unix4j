@@ -12,7 +12,7 @@ import org.unix4j.line.Line;
 import org.unix4j.processor.LineProcessor;
 
 /**
- * Unit tests for {@link LineOperation} and {@link LineOperationCommand}.
+ * Unit tests for {@link LineOperation} and {@link AdHocCommand}.
  */
 public class LineOperationTest {
 	
@@ -39,7 +39,7 @@ public class LineOperationTest {
 			}
 		};
 		test(op, 0, 1, 2, 3, 4, 5, 6);
-		Assert.assertEquals("lineop --operation passthrough", Unix4j.builder().apply(op).build().toString());
+		Assert.assertEquals("adhoc --operation passthrough", Unix4j.builder().apply(op).build().toString());
 	}
 
 	@Test
@@ -83,6 +83,22 @@ public class LineOperationTest {
 			}
 		};
 		test(op, 0, 2, 4, 6);
+	}
+
+	@Test
+	public void testNoOutputAfterFinish() {
+		final LineOperation op = new LineOperation() {
+			@Override
+			public void operate(ExecutionContext context, Line input, LineProcessor output) {
+				output.processLine(input);
+				output.processLine(input);
+				output.finish();
+				output.processLine(input);//should not be written to output
+				output.processLine(input);//should not be written to output
+				output.processLine(input);//should not be written to output
+			}
+		};
+		test(op, 0, 0);
 	}
 
 	private void test(LineOperation op, int... expectedLines) {
