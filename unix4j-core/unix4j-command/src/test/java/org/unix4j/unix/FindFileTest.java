@@ -7,328 +7,249 @@ import org.unix4j.context.DefaultExecutionContext;
 import org.unix4j.context.ExecutionContext;
 import org.unix4j.context.ExecutionContextFactory;
 
+import java.io.File;
+
 public class FindFileTest {
-	
+
 	private static final class Config implements ExecutionContextFactory {
 		private final CommandFileTest tester;
-		public Config(CommandFileTest tester) {
+        private final File currentDirectory;
+
+        public Config(CommandFileTest tester) {
 			this.tester = tester;
+            this.currentDirectory = null;
 		}
+        public Config(final CommandFileTest tester, final File currentDirectory) {
+            this.tester = tester;
+            this.currentDirectory = currentDirectory;
+        }
 		@Override
 		public ExecutionContext createExecutionContext() {
 			final DefaultExecutionContext context = new DefaultExecutionContext();
-			context.setCurrentDirectory(tester.getInputFile());
+            if(currentDirectory != null){
+                context.setCurrentDirectory(currentDirectory);
+            } else {
+                context.setCurrentDirectory(tester.getInputFile());
+            }
 			return context;
 		}
 	};
 
-    @Ignore
-	@Test
-	public void find_simple() {
-		final CommandFileTest tester = new CommandFileTest(this.getClass());
-		final Config config = new Config(tester);
-        tester.run(Unix4j.use(config).find(tester.getInputFile().getPath()));
-	}
 
-    @Ignore
+    //(cd default.input && find .)
     @Test
-    public void find_withName() {
+    @Ignore
+    public void find_currentDir(){
         final CommandFileTest tester = new CommandFileTest(this.getClass());
-        final Config config = new Config(tester);
-        tester.run(Unix4j.use(config).find(tester.getInputFile().getPath(), "a.txt"));
+        final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
+        final Config config = new Config(tester, currentDirectory);
+        tester.run(Unix4j.use(config).find("."));
     }
 
-    //		<method args="args" usesStandardInput="false">
-    //			Finds all files matching the search criteria specified by the given
-    //			arguments and writes the file names to the standard output.
-    //
-    //			Options can be specified by acronym (with a leading dash "-") or by
-    //			long name (with two leading dashes "--"). Operands other than the
-    //			default "--name" operand have to be prefixed with the operand name.
-    //
-    //			The files names written to the output are relative paths referring
-    //			to the working directory (or -- if provided -- relative to the path
-    //			given after the {@code "--path"} operand name).
-    //		</method>
-    //		<method args="path" usesStandardInput="false">
-    //            Finds all files in or below the directory specified by {@code path}
-    //            and writes the file names to the standard output.
-    //
-    //            The files names written to the output are paths relative to the
-    //            specified {@code path} operand.
-    //		</method>
-    //		<method args="path,name" usesStandardInput="false">
-    //			Finds all files matching the specified {@code name} in or below the
-    //			directory specified by {@code path} and writes the file names to
-    //			the standard output.
-    //
-    //			The files names written to the output are paths relative to the
-    //			specified {@code path} operand.
-    //		</method>
-    //		<method args="size" usesStandardInput="false">
-    //			Finds all files matching the specified file {@code size} in or below
-    //			the user's current working directory and writes the file names to
-    //			the standard output. Matching files use at least {@code size} bytes
-    //			on disk if {@code size} is positive, or at most {@code abs(size)}
-    //			bytes if {@code size} is zero or negative.
-    //
-    //			The files names written to the output are relative paths referring
-    //			to the working directory.
-    //		</method>
-    //		<method args="path,size" usesStandardInput="false">
-    //			Finds all files matching the specified file {@code size} in or below
-    //			the directory specified by {@code path} and writes the file names
-    //			to the standard output. Matching files use at least {@code size}
-    //			bytes on disk if {@code size} is positive, or at most
-    //			{@code abs(size)} bytes if {@code size} is zero or negative.
-    //
-    //			The files names written to the output are paths relative to the
-    //			specified {@code path} operand.
-    //		</method>
-    //		<method args="size,name" usesStandardInput="false">
-    //			Finds all files matching the specified file {@code name} and
-    //			{@code size} in or below the user's current working directory and
-    //			writes the file names to the standard output. Matching files use
-    //			at least {@code size} bytes on disk if {@code size} is positive,
-    //			or at most {@code abs(size)} bytes if {@code size} is zero or
-    //			negative.
-    //
-    //			The files names written to the output are relative paths referring
-    //			to the working directory.
-    //		</method>
-    //		<method args="path,size,name" usesStandardInput="false">
-    //			Finds all files matching the specified file {@code name} and
-    //			{@code size} in or below the directory specified by {@code path}
-    //			and writes the file names to the standard output. Matching files
-    //			use at least {@code size} bytes on disk if {@code size} is positive,
-    //			or at most {@code abs(size)} bytes if {@code size} is zero or
-    //			negative.
-    //
-    //			The files names written to the output are paths relative to the
-    //			specified {@code path} operand.
-    //		</method>
-    //		<method args="options,name" usesStandardInput="false">
-    //			Finds all files matching the specified {@code name} in or below the
-    //			user's current working directory and writes the file names to the
-    //			standard output.
-    //
-    //			The files names written to the output are relative paths referring
-    //			to the working directory.
-    //		</method>
-    //		<method args="options,path,name" usesStandardInput="false">
-    //			Finds all files matching the specified {@code name} in or below the
-    //			directory specified by {@code path} and writes the file names to
-    //			the standard output.
-    //
-    //			The files names written to the output are paths relative to the
-    //			specified {@code path} operand.
-    //		</method>
-    //		<method args="options,size" usesStandardInput="false">
-    //			Finds all files matching the specified file {@code size} in or below
-    //			the user's current working directory and writes the file names to
-    //			the standard output. Matching files use at least {@code size} bytes
-    //			on disk if {@code size} is positive, or at most {@code abs(size)}
-    //			bytes if {@code size} is zero or negative.
-    //
-    //			The files names written to the output are relative paths referring
-    //			to the working directory.
-    //		</method>
-    //		<method args="options,path,size" usesStandardInput="false">
-    //			Finds all files matching the specified file {@code size} in or below
-    //			the directory specified by {@code path} and writes the file names
-    //			to the standard output. Matching files use at least {@code size}
-    //			bytes on disk if {@code size} is positive, or at most
-    //			{@code abs(size)} bytes if {@code size} is zero or negative.
-    //
-    //			The files names written to the output are paths relative to the
-    //			specified {@code path} operand.
-    //		</method>
-    //		<method args="options,time" usesStandardInput="false">
-    //			Finds all files that have been created, modified or accessed before
-    //			or after the specified {@code time} (depending on the given
-    //			{@code -time...} options). The names of the matching files found in
-    //			or below the user's current working directory are written to the
-    //			standard output.
-    //
-    //			The files names written to the output are relative paths referring
-    //			to the working directory.
-    //		</method>
-    //		<method args="options,path,time" usesStandardInput="false">
-    //			Finds all files that have been created, modified or accessed before
-    //			or after the specified {@code time} (depending on the given
-    //			{@code -time...} options). The names of the matching files found in
-    //			or below the directory specified by {@code path} are written to
-    //			the standard output.
-    //
-    //			The files names written to the output are paths relative to the
-    //			specified {@code path} operand.
-    //		</method>
-    //		<method args="options,size,name" usesStandardInput="false">
-    //			Finds all files matching the specified file {@code name} and
-    //			{@code size} in or below the user's current working directory and
-    //			writes the file names to the standard output. Matching files use
-    //			at least {@code size} bytes on disk if {@code size} is positive, or
-    //			at most {@code abs(size)} bytes if {@code size} is zero or negative.
-    //
-    //			The files names written to the output are relative paths referring
-    //			to the working directory.
-    //		</method>
-    //		<method args="options,path,size,name" usesStandardInput="false">
-    //			Finds all files matching the specified file {@code name} and
-    //			{@code size} in or below the directory specified by {@code path}
-    //			and writes the file names to the standard output. Matching files
-    //			use at least {@code size} bytes on disk if {@code size} is positive,
-    //			or at most {@code abs(size)} bytes if {@code size} is zero or
-    //			negative.
-    //
-    //			The files names written to the output are paths relative to the
-    //			specified {@code path} operand.
-    //		</method>
-    //		<method args="options,time,name" usesStandardInput="false">
-    //			Finds all files matching the given {@code name} that have been
-    //			created, modified or accessed before or after the specified
-    //			{@code time} (depending on the given {@code -time...} options). The
-    //			names of the matching files found in or below the user's current
-    //			working directory are written to the standard output.
-    //
-    //			The files names written to the output are relative paths referring
-    //			to the working directory.
-    //		</method>
-    //		<method args="options,path,time,name" usesStandardInput="false">
-    //			Finds all files matching the given {@code name} that have been
-    //			created, modified or accessed before or after the specified
-    //			{@code time} (depending on the given {@code -time...} options). The
-    //			names of the matching files found in or below the directory
-    //			specified by {@code path} are written to the standard output.
-    //
-    //			The files names written to the output are paths relative to the
-    //			specified {@code path} operand.
-    //		</method>
-    //		<method args="options,size,time,name" usesStandardInput="false">
-    //			Finds all files matching the given {@code name} and {@code size} and
-    //			have been created, modified or accessed before or after the specified
-    //			{@code time} (depending on the given {@code -time...} options).
-    //
-    //			Matching files use at least {@code size} bytes on disk if
-    //			{@code size} is positive, or at most {@code abs(size)} bytes if
-    //			{@code size} is zero or negative. The names of the matching files
-    //			found in or below the user's current working directory are written
-    //			to the standard output.
-    //
-    //			The files names written to the output are relative paths referring
-    //			to the working directory.
-    //		</method>
-    //		<method args="options,path,size,time,name" usesStandardInput="false">
-    //			Finds all files matching the given {@code name} and {@code size} and
-    //			have been created, modified or accessed before or after the specified
-    //			{@code time} (depending on the given {@code -time...} options).
-    //
-    //			Matching files use at least {@code size} bytes on disk if
-    //			{@code size} is positive, or at most {@code abs(size)} bytes if
-    //			{@code size} is zero or negative. The names of the matching files
-    //			found in or below the directory specified by {@code path} are
-    //			written to the standard output.
-    //
-    //			The files names written to the output are paths relative to the
-    //			specified {@code path} operand.
-    //		</method>
-    //	</methods>
-    //	<options>
-    //		<!--
-    //		-type  c
-    //		The primary shall evaluate as true if the type of the file is c, where c is 'b', 'c', 'd', 'l', 'p', 'f', or 's' for
-    //		block special file, character special file, directory, symbolic link, FIFO, regular file, or socket, respectively.
-    //		 -->
-    //		<option name="typeDirectory" acronym="d" exclusiveGroup="type">
-    //			Consider only directories
-    //		</option>
-    //		<option name="typeFile" acronym="f" exclusiveGroup="type">
-    //			Consider only regular files
-    //		</option>
-    //		<option name="typeSymlink" acronym="l" exclusiveGroup="type">
-    //			Consider only symbolic links
-    //		</option>
-    //		<option name="typeOther" acronym="x" exclusiveGroup="type">
-    //			Consider only files that are neither of directory (d),
-    //			regular file (f) or symlink (l).
-    //		</option>
-    //		<option name="regex" acronym="r">
-    //			Use full regular expression syntax for the patterns specified by the
-    //			name operand
-    //
-    //			(This option is ignored if no name operand is specified).
-    //		</option>
-    //		<option name="ignoreCase" acronym="i">
-    //			Use case insensitive matching when applying the file name pattern
-    //			specified by the name operand
-    //
-    //			(This option is ignored if no name operand is specified).
-    //		</option>
-    //		<option name="timeNewer" acronym="n">
-    //			Consider only files that have been created, modified or accessed
-    //			after or at the time specified by the time operand (the default)
-    //
-    //			(This option is ignored if no time operand is specified).
-    //		</option>
-    //		<option name="timeOlder" acronym="o">
-    //			Consider only files that have been created, modified or accessed
-    //			before or at the time specified by the time operand
-    //
-    //			(This option is ignored if no time operand is specified).
-    //		</option>
-    //		<option name="timeCreate" acronym="c" exclusiveGroup="time">
-    //			The time operand refers to the creation time of the file
-    //
-    //			(This option is ignored if no time operand is specified).
-    //		</option>
-    //		<option name="timeAccess" acronym="a" exclusiveGroup="time">
-    //			The time operand refers to the last access time of the file
-    //
-    //			(This option is ignored if no time operand is specified).
-    //		</option>
-    //		<option name="timeModified" acronym="m" exclusiveGroup="time">
-    //			The time operand refers to the last modification time of the file
-    //			(the default)
-    //
-    //			(This option is ignored if no time operand is specified).
-    //		</option>
-    //		<option name="print0" acronym="z">
-    //			Print the full file name on the standard output, followed by a null
-    //			character (instead of the newline character used by default). This
-    //			allows file names that contain newlines or other types of white
-    //			space to be correctly interpreted by programs that process the find
-    //			output. This option corresponds to the --delimiter0 option of xargs.
-    //		</option>
-    //	</options>
-    //	<operands default="path">
-    //        <operand name="path" type="String">
-    //            Starting point for the search in the directory hierarchy;
-    //            wildcards * and ? are supported.
-    //        </operand>
-    //		<operand name="name" type="String">
-    //			Name pattern to match the file name after removing the path with the
-    //			leading directories; wildcards * and ? are supported, or full
-    //			regular expressions if either of the options {@code -regex (-r)} or
-    //			{@code -iregex (-i)} is specified.
-    //		</operand>
-    //		<operand name="size" type="long">
-    //			Consider only files using at least {@code size} bytes or at most
-    //			{@code size} bytes if {@code size} is positive, or at most
-    //			{@code abs(size)} bytes if {@code size} is zero or negative.
-    //		</operand>
-    //		<operand name="time" type="java.util.Date">
-    //			Consider only files that have been created, modified or accessed
-    //			before or after the specified {@code time} operand; consider the
-    //			{@code -time...} options for details of the comparison.
-    //		</operand>
-    //		<operand name="args" type="String...">
-    //			String arguments defining the options and operands for the command.
-    //			Options can be specified by acronym (with a leading dash "-") or by
-    //			long name (with two leading dashes "--"). Operands other than the
-    //			default "--path" operand have to be prefixed with the operand name
-    //			(e.g. "--name" for subsequent path operand values).
-    //		</operand>
-    //		<operand name="options" type="FindOptions">
-    //			Options for the file search.
-    //		</operand>
+    //(cd default.input && find ./)
+    @Test
+    @Ignore
+    public void find_currentDirWithDotSlash(){
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
+        final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
+        final Config config = new Config(tester, currentDirectory);
+        tester.run(Unix4j.use(config).find("./"));
+    }
+
+    //(cd default.input/folder && find ../)
+    @Test
+    @Ignore
+    public void find_parentPath(){
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
+        final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input/folder");
+        final Config config = new Config(tester, currentDirectory);
+        tester.run(Unix4j.use(config).find("../"));
+    }
+
+    //(cd default.input/mydir/SUBDIR && find ../../)
+    @Test
+    @Ignore
+    public void find_parentOfParentPath(){
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
+        final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input/mydir/SUBDIR");
+        final Config config = new Config(tester, currentDirectory);
+        tester.run(Unix4j.use(config).find("../../"));
+    }
+
+    //(cd default.input/mydir && find ../mydir)
+    @Test
+    @Ignore
+    public void find_parentBackToChild(){
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
+        final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input/mydir");
+        final Config config = new Config(tester, currentDirectory);
+        tester.run(Unix4j.use(config).find("../mydir"));
+    }
+
+    //(cd default.input && find mydir)
+    @Test
+    @Ignore
+    public void find_specifiedDir(){
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
+        final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
+        final Config config = new Config(tester, currentDirectory);
+        tester.run(Unix4j.use(config).find("mydir"));
+    }
+
+    //(cd default.input && find mydir/SUBDIR)
+    @Test
+    @Ignore
+    public void find_specifiedSubDir(){
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
+        final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
+        final Config config = new Config(tester, currentDirectory);
+        tester.run(Unix4j.use(config).find("mydir/SUBDIR"));
+    }
+
+    //(cd default.input && find ./mydir)
+    @Test
+    @Ignore
+    public void find_specifiedDirWithDotSlash(){
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
+        final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
+        final Config config = new Config(tester, currentDirectory);
+        tester.run(Unix4j.use(config).find("./mydir"));
+    }
+
+    //(cd default.input && find ./mydir/SUBDIR)
+    @Test
+    @Ignore
+    public void find_specifiedSubDirWithDotSlash(){
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
+        final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
+        final Config config = new Config(tester, currentDirectory);
+        tester.run(Unix4j.use(config).find("./mydir/SUBDIR"));
+    }
+
+    //(cd default.input && find . -type f)
+    @Test
+    @Ignore
+    public void find_typeFile(){
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
+        final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
+        final Config config = new Config(tester, currentDirectory);
+        tester.run(Unix4j.use(config).find(Find.Options.typeFile, currentDirectory.getPath()));
+    }
+
+    //(cd default.input && find . -type d)
+    @Test
+    @Ignore
+    public void find_typeDir(){
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
+        final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
+        final Config config = new Config(tester, currentDirectory);
+        tester.run(Unix4j.use(config).find(Find.Options.typeDirectory, currentDirectory.getPath()));
+    }
+
+    //(cd default.input && find . -type f -name a.txt)
+    @Test
+    @Ignore
+    public void find_typeFileWithName(){
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
+        final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
+        final Config config = new Config(tester, currentDirectory);
+        tester.run(Unix4j.use(config).find(Find.Options.typeFile, currentDirectory.getPath(), "a.txt"));
+        tester.run(Unix4j.use(config).find(Find.Options.f, currentDirectory.getPath(), "a.txt"));
+    }
+
+    //(cd default.input && find . -name bb.*)
+    @Test
+    @Ignore
+    public void find_withNameWildcard(){
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
+        final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
+        final Config config = new Config(tester, currentDirectory);
+        tester.run(Unix4j.use(config).find(currentDirectory.getPath(), "bb.*"));
+    }
+
+    //(cd default.input && find . -name bb.t*)
+    @Test
+    @Ignore
+    public void find_withNameWildcard2(){
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
+        final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
+        final Config config = new Config(tester, currentDirectory);
+        tester.run(Unix4j.use(config).find(currentDirectory.getPath(), "bb.t*"));
+    }
+
+    //(cd default.input && find . -type f -iname bb.txt)
+    @Test
+    @Ignore
+    public void find_typeFileWithNameIgnoreCase(){
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
+        final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
+        final Config config = new Config(tester, currentDirectory);
+        tester.run(Unix4j.use(config).find(Find.Options.ignoreCase, currentDirectory.getPath(), "bb.txt"));
+        tester.run(Unix4j.use(config).find(Find.Options.i, currentDirectory.getPath(), "bb.txt"));
+    }
+
+    //(cd default.input && find . -iname bb.t*)
+    @Test
+    @Ignore
+    public void find_withNameWildcardIgnoreCae(){
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
+        final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
+        final Config config = new Config(tester, currentDirectory);
+        tester.run(Unix4j.use(config).find(Find.Options.ignoreCase, currentDirectory.getPath(), "bb.t*"));
+        tester.run(Unix4j.use(config).find(Find.Options.i, currentDirectory.getPath(), "bb.t*"));
+    }
+
+    //(cd default.input && find -E . -regex "a.*\.txt")
+    @Test
+    @Ignore
+    public void find_regexWithNoMatchesAsIsMatchingWholePath(){
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
+        final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
+        final Config config = new Config(tester, currentDirectory);
+        tester.run(Unix4j.use(config).find(Find.Options.regex, currentDirectory.getPath(), "a.*\\.txt"));
+        tester.run(Unix4j.use(config).find(Find.Options.r, currentDirectory.getPath(), "a.*\\.txt"));
+    }
+
+    //(cd default.input && find -E . -regex ".*a\.txt")
+    @Test
+    @Ignore
+    public void find_regexSimple(){
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
+        final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
+        final Config config = new Config(tester, currentDirectory);
+        tester.run(Unix4j.use(config).find(Find.Options.regex, currentDirectory.getPath(), ".*a\\.txt"));
+        tester.run(Unix4j.use(config).find(Find.Options.r, currentDirectory.getPath(), ".*a\\.txt"));
+    }
+
+    //(cd default.input && find . -type f -size +1k)
+    @Test
+    @Ignore
+    public void find_sizesLargerThanOneK(){
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
+        final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
+        final Config config = new Config(tester, currentDirectory);
+        tester.run(Unix4j.use(config).find(currentDirectory.getPath(), 1024));
+    }
+
+    //(cd default.input && find . -type f -size -1k)
+    @Test
+    @Ignore
+    public void find_sizesSmallerThanOneK(){
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
+        final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
+        final Config config = new Config(tester, currentDirectory);
+        tester.run(Unix4j.use(config).find(currentDirectory.getPath(), -1024));
+        tester.run(Unix4j.use(config).find(currentDirectory.getPath(), -1024));
+    }
+
+    //(cd default.input && find . -type f -size -1k -name aa.*)
+    @Test
+    @Ignore
+    public void find_sizesSmallerThanOneKWithGivenName(){
+        final CommandFileTest tester = new CommandFileTest(this.getClass());
+        final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
+        final Config config = new Config(tester, currentDirectory);
+        tester.run(Unix4j.use(config).find(currentDirectory.getPath(), -1024, "aa.*"));
+        tester.run(Unix4j.use(config).find(currentDirectory.getPath(), -1024, "aa.*"));
+    }
 }
