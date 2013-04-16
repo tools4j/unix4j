@@ -15,10 +15,6 @@ public class FindFileTest {
 		private final CommandFileTest tester;
         private final File currentDirectory;
 
-        public Config(CommandFileTest tester) {
-			this.tester = tester;
-            this.currentDirectory = null;
-		}
         public Config(final CommandFileTest tester, final File currentDirectory) {
             this.tester = tester;
             this.currentDirectory = currentDirectory;
