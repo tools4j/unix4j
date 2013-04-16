@@ -1,26 +1,27 @@
 package org.unix4j.unix;
 
-import org.junit.Ignore;
+import java.io.File;
+import java.util.Date;
+
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.context.DefaultExecutionContext;
 import org.unix4j.context.ExecutionContext;
 import org.unix4j.context.ExecutionContextFactory;
 
-import java.io.File;
-import java.util.Date;
-
-@Ignore
+//@Ignore
 public class FindFileTimeDependentTest {
+	
+	/**
+	 * Name of the file that is created during the test.
+	 */
+	private static final String FILE_TO_CREATE = "new-file1.txt";
 
 	private static final class Config implements ExecutionContextFactory {
 		private final CommandFileTest tester;
         private final File currentDirectory;
 
-        public Config(CommandFileTest tester) {
-			this.tester = tester;
-            this.currentDirectory = null;
-		}
         public Config(final CommandFileTest tester, final File currentDirectory) {
             this.tester = tester;
             this.currentDirectory = currentDirectory;
@@ -36,6 +37,16 @@ public class FindFileTimeDependentTest {
 			return context;
 		}
 	};
+	
+	@BeforeClass
+	public static void beforeClass() {
+        final CommandFileTest tester = new CommandFileTest(FindFileTimeDependentTest.class);
+        final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
+        final File fileCreatedAfterTime = new File(currentDirectory.getPath() + "/" + FILE_TO_CREATE);
+        if (fileCreatedAfterTime.exists()) {
+        	fileCreatedAfterTime.delete();
+        }
+	}
 
     @Test
     public void find_fileCreatedBeforeNow(){
@@ -52,7 +63,7 @@ public class FindFileTimeDependentTest {
         final Config config = new Config(tester, currentDirectory);
         final Date timeBeforeCreate = new Date();
         Thread.sleep(1000);
-        Unix4j.echo("blah").toFile(currentDirectory.getPath() + "/new-file1.txt");
+        Unix4j.echo("blah").toFile(currentDirectory.getPath() + "/" + FILE_TO_CREATE);
         tester.run(Unix4j.use(config).find(Find.Options.typeFile.timeNewer.timeCreate, currentDirectory.getPath(), timeBeforeCreate));
     }
 
