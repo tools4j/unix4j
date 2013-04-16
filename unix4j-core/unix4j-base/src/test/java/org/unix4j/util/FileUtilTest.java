@@ -31,6 +31,11 @@ public class FileUtilTest {
 		Assert.assertEquals("notes.txt", actual);
 	}
 	@Test
+	public void testRelativePath_2_directParentWithDotPrefix() {
+		final String actual = FileUtil.getRelativePath(new File("/home/john"), new File("/home/john/notes.txt"), true);
+		Assert.assertEquals("./notes.txt", actual);
+	}
+	@Test
 	public void testRelativePath_3_indirectParent() {
 		final String actual = FileUtil.getRelativePath(new File("/home/john"), new File("/home/john/documents/important"));
 		Assert.assertEquals("./documents/important", actual);

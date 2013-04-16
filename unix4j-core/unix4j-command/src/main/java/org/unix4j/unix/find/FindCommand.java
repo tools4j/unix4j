@@ -116,7 +116,7 @@ class FindCommand extends AbstractCommand<FindArguments> {
 	}
 	private boolean outputFileLine(LineProcessor output, File relativeTo, File file) {
 		if (fileFilter.accept(file)) {
-			final String filePath = FileUtil.getRelativePath(relativeTo, file);
+			final String filePath = FileUtil.getRelativePath(relativeTo, file, true);
 			return output.processLine(new SimpleLine(filePath, lineEnding));
 		}
 		return true;
