@@ -1,26 +1,21 @@
 package org.unix4j.unix;
 
-import org.junit.Ignore;
+import java.io.File;
+import java.util.Date;
+
 import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.context.DefaultExecutionContext;
 import org.unix4j.context.ExecutionContext;
 import org.unix4j.context.ExecutionContextFactory;
 
-import java.io.File;
-import java.util.Date;
-
-@Ignore
+//@Ignore
 public class FindFileTimeDependentTest {
 
 	private static final class Config implements ExecutionContextFactory {
 		private final CommandFileTest tester;
         private final File currentDirectory;
 
-        public Config(CommandFileTest tester) {
-			this.tester = tester;
-            this.currentDirectory = null;
-		}
         public Config(final CommandFileTest tester, final File currentDirectory) {
             this.tester = tester;
             this.currentDirectory = currentDirectory;
@@ -41,6 +36,10 @@ public class FindFileTimeDependentTest {
     public void find_fileCreatedBeforeNow(){
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
+        final File fileCreatedAfterTime = new File(currentDirectory.getPath() + "/new-file1.txt");
+        if (fileCreatedAfterTime.exists()) {
+        	fileCreatedAfterTime.delete();
+        }
         final Config config = new Config(tester, currentDirectory);
         tester.run(Unix4j.use(config).find(Find.Options.typeFile.timeOlder.timeCreate, currentDirectory.getPath(), new Date()));
     }

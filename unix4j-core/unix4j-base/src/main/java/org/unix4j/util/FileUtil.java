@@ -28,7 +28,7 @@ public class FileUtil {
 	/**
 	 * Returns the user's current working directory taken from the system
 	 * property "user.dir".
-	 *
+	 * 
 	 * @return the user's current working directory
 	 * @see System#getProperties()
 	 */
@@ -39,7 +39,7 @@ public class FileUtil {
 	/**
 	 * Returns the specified files in a new mutable array list. This is similar
 	 * to {@link Arrays#asList(Object...)} but the returned list is expandable.
-	 *
+	 * 
 	 * @param files
 	 *            the files to add to a new list
 	 * @return a new array list containing the specified files
@@ -80,7 +80,7 @@ public class FileUtil {
 	 * "../smith/public/holidays.pdf"</li>
 	 * <li>("/home/john", "/var/tmp/test.out") &rarr; "/var/tmp/test.out"</li>
 	 * </ol>
-	 *
+	 * 
 	 * @param root
 	 *            the root directory for the relative path
 	 * @param file
@@ -88,11 +88,32 @@ public class FileUtil {
 	 * @return the path of {@code file} relative to {@code root}
 	 */
 	public static String getRelativePath(File root, File file) {
+		return getRelativePath(root, file, false);
+	}
+
+	/**
+	 * Same as {@link #getRelativePath(File, File)}, but rule (2) is prefixed
+	 * with "./" if {@code dotStarDirectForChildren=true}.
+	 * 
+	 * @param root
+	 *            the root directory for the relative path
+	 * @param file
+	 *            the file whose path should be returned
+	 * @param dotStarDirectForChildren
+	 *            if {@code true} and {@code root} is the direct parent
+	 *            directory of {@code file}, the returned simple file name is
+	 *            prefixed with "./"; if {@code false} the method behaves
+	 *            exactly as {@link #getRelativePath(File, File)}
+	 * 
+	 * @return the path of {@code file} relative to {@code root}
+	 * @see #getRelativePath(File, File)
+	 */
+	public static String getRelativePath(File root, File file, boolean dotStarDirectForChildren) {
 		if (root.equals(file)) {
 			return ".";
 		}
 		if (root.equals(file.getParentFile())) {
-			return file.getName();
+			return dotStarDirectForChildren ? "./" + file.getName() : file.getName();
 		}
 		final List<String> rootParts = getPathElements(root);
 		final List<String> fileParts = getPathElements(file);
@@ -127,7 +148,7 @@ public class FileUtil {
 	 * <p>
 	 * For instance, a list with the 3 elements "var", "tmp", "out.txt" is
 	 * returned for an input file "/var/tmp/out.txt".
-	 *
+	 * 
 	 * @param file
 	 *            the file whose path elements should be returned
 	 * @return the path elements of {@code file}
@@ -147,7 +168,7 @@ public class FileUtil {
 	 * Expands files if necessary, meaning that input files with wildcards are
 	 * expanded. If the specified {@code files} list contains no wildcard, the
 	 * files are simply returned; all wildcard files are expanded.
-	 *
+	 * 
 	 * @param paths
 	 *            the file paths, possibly containing wildcard parts
 	 * @return the expanded files resolving wildcards
@@ -156,13 +177,13 @@ public class FileUtil {
 		return expandFiles(FileUtil.getUserDir(), paths);
 	}
 
-    public static List<File> expandFiles(File currentDirectory, String... paths) {
-        final List<File> expanded = new ArrayList<File>(paths.length);
-        for (final String path : paths) {
-            addFileExpanded(currentDirectory, new File(path), expanded);
-        }
-        return expanded;
-    }
+	public static List<File> expandFiles(File currentDirectory, String... paths) {
+		final List<File> expanded = new ArrayList<File>(paths.length);
+		for (final String path : paths) {
+			addFileExpanded(currentDirectory, new File(path), expanded);
+		}
+		return expanded;
+	}
 
 	private static void addFileExpanded(File currentDirectory, File file, List<File> expandedFiles) {
 		if (isWildcardFileName(file.getPath())) {
@@ -184,12 +205,12 @@ public class FileUtil {
 			if (file.exists()) {
 				expandedFiles.add(file);
 			} else {
-				//try file as relative path
+				// try file as relative path
 				file = new File(currentDirectory, file.getPath());
 				if (file.exists()) {
 					expandedFiles.add(file);
 				} else {
-					//what now? throw exception? trace error?
+					// what now? throw exception? trace error?
 					throw new IllegalArgumentException("file not found: " + file + " [currentDirectory=" + currentDirectory + "]");
 				}
 			}
@@ -220,7 +241,7 @@ public class FileUtil {
 	 * repeated 0 to many times, "?" for exactly one arbitrary character. Both
 	 * characters can be escaped with a preceding
 	 * "\" character (also escaped, that is, "\\").
-	 *
+	 * 
 	 * @param name
 	 *            the name or pattern without path
 	 * @return a file name filter matching either the name or the pattern
@@ -254,7 +275,7 @@ public class FileUtil {
 	 * characters. The characters "*" and "?" are considered wildcard chars if
 	 * they are not escaped with a preceding
 	 * "\" character (also escaped, that is, "\\").
-	 *
+	 * 
 	 * @param name
 	 *            the name or path
 	 * @return true if the name contains unescaped wildcard characters
@@ -272,11 +293,11 @@ public class FileUtil {
 
 	/**
 	 * This method returns the output directory of a given class.
-	 *
+	 * 
 	 * Example: Given a class: com.abc.def.MyClass Which is outputted to a
 	 * directory: /home/ben/myproject/target/com/abc/dev/MyClass.class This
 	 * method will return: /home/ben/myproject/target
-	 *
+	 * 
 	 * @param clazz
 	 * @return A file representing the output directory containing the class and
 	 *         parent packages
@@ -293,11 +314,11 @@ public class FileUtil {
 
 	/**
 	 * This method returns the parent directory of a given class.
-	 *
+	 * 
 	 * Example: Given a class: com.abc.def.MyClass Which is outputted to a
 	 * directory: /home/ben/myproject/target/com/abc/def/MyClass.class This
 	 * method will return: /home/ben/myproject/target/com/abc/def
-	 *
+	 * 
 	 * @param clazz
 	 * @return A file representing the output directory containing the class and
 	 *         parent packages
@@ -311,12 +332,13 @@ public class FileUtil {
 
 	/**
 	 * This method returns the parent directory of a given class.
-	 *
+	 * 
 	 * Example: Given a class: com.abc.def.MyClass Which is outputted to a
 	 * directory: /home/ben/myproject/target/com/abc/def/MyClass.class This
 	 * method will return: /home/ben/myproject/target/com/abc/def
-	 *
-	 * @param className fully qualified class name
+	 * 
+	 * @param className
+	 *            fully qualified class name
 	 * @return A file representing the output directory containing the class and
 	 *         parent packages
 	 */
