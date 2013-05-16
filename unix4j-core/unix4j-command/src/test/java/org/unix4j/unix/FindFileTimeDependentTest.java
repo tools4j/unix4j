@@ -18,6 +18,11 @@ public class FindFileTimeDependentTest {
 	 */
 	private static final String FILE_TO_CREATE = "new-file1.txt";
 
+	/**
+	 * Name of the file that is updated during the test.
+	 */
+	private static final String FILE_TO_UPDATE = "existing-file1.txt";
+
 	private static final class Config implements ExecutionContextFactory {
 		private final CommandFileTest tester;
         private final File currentDirectory;
@@ -53,7 +58,7 @@ public class FindFileTimeDependentTest {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
         final Config config = new Config(tester, currentDirectory);
-        tester.run(Unix4j.use(config).find(Find.Options.typeFile.timeOlder.timeCreate, currentDirectory.getPath(), new Date()));
+        tester.run(Unix4j.use(config).find(Find.Options.typeFile.timeOlder.timeCreate, ".", new Date()));
     }
 
     @Test
@@ -64,7 +69,7 @@ public class FindFileTimeDependentTest {
         final Date timeBeforeCreate = new Date();
         Thread.sleep(1000);
         Unix4j.echo("blah").toFile(currentDirectory.getPath() + "/" + FILE_TO_CREATE);
-        tester.run(Unix4j.use(config).find(Find.Options.typeFile.timeNewer.timeCreate, currentDirectory.getPath(), timeBeforeCreate));
+        tester.run(Unix4j.use(config).find(Find.Options.typeFile.timeNewer.timeCreate, ".", timeBeforeCreate));
     }
 
     @Test
@@ -72,7 +77,7 @@ public class FindFileTimeDependentTest {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
         final Config config = new Config(tester, currentDirectory);
-        tester.run(Unix4j.use(config).find(Find.Options.typeFile.timeNewer.timeCreate, currentDirectory.getPath(), new Date()));
+        tester.run(Unix4j.use(config).find(Find.Options.typeFile.timeNewer.timeCreate, ".", new Date()));
     }
 
     @Test
@@ -80,7 +85,7 @@ public class FindFileTimeDependentTest {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
         final Config config = new Config(tester, currentDirectory);
-        tester.run(Unix4j.use(config).find(Find.Options.typeFile.timeOlder.timeCreate, currentDirectory.getPath(), new Date(0)));
+        tester.run(Unix4j.use(config).find(Find.Options.typeFile.timeOlder.timeCreate, ".", new Date(0)));
     }
 
     @Test
@@ -90,7 +95,7 @@ public class FindFileTimeDependentTest {
         final Config config = new Config(tester, currentDirectory);
         final Date timeBeforeUpdate = new Date();
         Thread.sleep(1000);
-        Unix4j.echo("blah").toFile(currentDirectory.getPath() + "/existing-file1.txt");
-        tester.run(Unix4j.use(config).find(Find.Options.typeFile.timeNewer.timeModified, currentDirectory.getPath(), timeBeforeUpdate));
+        Unix4j.echo("blah").toFile(new File(currentDirectory, FILE_TO_UPDATE));
+        tester.run(Unix4j.use(config).find(Find.Options.typeFile.timeNewer.timeModified, ".", timeBeforeUpdate));
     }
 }

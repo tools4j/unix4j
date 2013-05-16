@@ -36,6 +36,9 @@ class CompositeFileFilter implements FileFilter {
 				}
 			};
 		}
+		if (componentFilters.size() == 1) {
+			return componentFilters.get(0);
+		}
 		return this;
 	}
 	

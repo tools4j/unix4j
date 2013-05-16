@@ -10,8 +10,10 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-
-public class FileUtilTest {
+/**
+ * Unit test for {@link RelativePathBase}.
+ */
+public class RelativePathBaseTest {
 
 	/*
     ("/home/john", "/home/john") --> "."
@@ -22,29 +24,34 @@ public class FileUtilTest {
 	 */
 	@Test
 	public void testRelativePath_1_equal() {
-		final String actual = FileUtil.getRelativePath(new File("/home/john"), new File("/home/john"));
+		final String actual = new RelativePathBase("/home/john").getRelativePathFor("/home/john");
 		Assert.assertEquals(".", actual);
 	}
 	@Test
 	public void testRelativePath_2_directParent() {
-		final String actual = FileUtil.getRelativePath(new File("/home/john"), new File("/home/john/notes.txt"));
+		final String actual = new RelativePathBase("/home/john").getRelativePathFor("/home/john/notes.txt");
 		Assert.assertEquals("notes.txt", actual);
 	}
 	@Test
+	public void testRelativePath_2_directParentWithDotPrefix() {
+		final String actual = new RelativePathBase("/home/john", RelativePathBase.ALL_CHILDREN_WITH_DOT_PREFIX).getRelativePathFor("/home/john/notes.txt");
+		Assert.assertEquals("./notes.txt", actual);
+	}
+	@Test
 	public void testRelativePath_3_indirectParent() {
-		final String actual = FileUtil.getRelativePath(new File("/home/john"), new File("/home/john/documents/important"));
+		final String actual = new RelativePathBase("/home/john").getRelativePathFor("/home/john/documents/important");
 		Assert.assertEquals("./documents/important", actual);
 	}
 	@Test
 	public void testRelativePath_4_commonAncestor() {
-		final String actual1 = FileUtil.getRelativePath(new File("/home/john"), new File("/home/smith/public/holidays.pdf"));
+		final String actual1 = new RelativePathBase("/home/john").getRelativePathFor("/home/smith/public/holidays.pdf");
 		Assert.assertEquals("../smith/public/holidays.pdf", actual1);
-		final String actual2 = FileUtil.getRelativePath(new File("/home/john/documents"), new File("/home/smith/public/holidays.pdf"));
+		final String actual2 = new RelativePathBase("/home/john/documents").getRelativePathFor("/home/smith/public/holidays.pdf");
 		Assert.assertEquals("../../smith/public/holidays.pdf", actual2);
 	}
 	@Test
 	public void testRelativePath_5_noCommonAncestor() {
-		final String actual = FileUtil.getRelativePath(new File(FileUtil.ROOT + "home/john"), new File(FileUtil.ROOT + "var/tmp/test.out"));
+		final String actual = new RelativePathBase(FileUtil.ROOT + "home/john").getRelativePathFor(FileUtil.ROOT + "var/tmp/test.out");
 		Assert.assertEquals(FileUtil.ROOT.replace('\\', '/') + "var/tmp/test.out", actual);
 	}
 
