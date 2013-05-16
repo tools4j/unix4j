@@ -6,7 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
 
 /**
- * Helper to access file attribtues if compiled and run with Java 7 or newer. 
+ * Helper to access file attributes if compiled and run with Java 7 or newer. 
  */
 /* NOTE: must be public for reflection */
 public class FileAttributes7 extends FileAttributes {
