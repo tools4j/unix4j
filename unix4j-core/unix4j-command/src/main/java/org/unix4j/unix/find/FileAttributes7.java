@@ -9,13 +9,13 @@ import java.nio.file.attribute.BasicFileAttributes;
  * Helper to access file attribtues if compiled and run with Java 7 or newer. 
  */
 /* NOTE: must be public for reflection */
-public class FileAttribtues7 extends FileAttributes {
+public class FileAttributes7 extends FileAttributes {
 	
 	/**
 	 * Done use this constructor, use {@link FileAttributes#INSTANCE} instead.
 	 */
 	//must be public for reflection
-	public FileAttribtues7() {
+	public FileAttributes7() {
 		super();
 	}
 
