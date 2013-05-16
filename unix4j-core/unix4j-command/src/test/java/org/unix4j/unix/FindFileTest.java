@@ -43,7 +43,6 @@ public class FindFileTest {
 
     //(cd default.input && find ./)
     @Test
-    @Ignore	//NOTE: prefixes are .// instead of ./, i.e. expected result is really stupid, do we really want this?
     public void find_currentDirWithDotSlash(){
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
@@ -61,7 +60,6 @@ public class FindFileTest {
     }
 
     @Test
-    @Ignore	//NOTE: prefixes are .// instead of ./, i.e. expected result is really stupid, do we really want this?
     public void find_parentPathWithSlash(){
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input/folder");
