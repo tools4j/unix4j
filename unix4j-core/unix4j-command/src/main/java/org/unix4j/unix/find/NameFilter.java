@@ -15,6 +15,6 @@ class NameFilter implements FileFilter {
 	}
 	@Override
 	public boolean accept(File file) {
-		return ignoreCase ? name.equals(file.getName()) : name.equalsIgnoreCase(file.getName());
+		return ignoreCase ? name.equalsIgnoreCase(file.getName()) : name.equals(file.getName());
 	}
 }

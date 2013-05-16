@@ -14,33 +14,43 @@ import org.unix4j.line.SimpleLine;
 import org.unix4j.processor.LineProcessor;
 import org.unix4j.unix.Find;
 import org.unix4j.util.FileUtil;
+import org.unix4j.util.RelativePathBase;
 
 /**
  * Implementation of the {@link Find find} command.
  */
 class FindCommand extends AbstractCommand<FindArguments> {
 	
-	private final FileFilter fileFilter;
+	private final FileFilter staticFileFilter;
+	private final RegexFilter regexFilter;
 	private final String lineEnding;
 	
 	public FindCommand(FindArguments args) {
 		super(Find.NAME, args);
-		this.fileFilter = createFileFilterFromArgs(args);
+		this.regexFilter = createRegexFilterFromArgs(args);
+		this.staticFileFilter = createFileFilterFromArgs(args);
 		this.lineEnding = args.isPrint0() ? String.valueOf(Line.ZERO) : Line.LINE_ENDING;
 	}
 
+	private RegexFilter createRegexFilterFromArgs(FindArguments args) {
+		if (args.isNameSet()) {
+			if (args.isRegex()) {
+				return new RegexFilter(args.getName(), args.isIgnoreCase());
+			}
+		}
+		//no regex filter
+		return null;
+	}
 	private FileFilter createFileFilterFromArgs(FindArguments args) {
 		final CompositeFileFilter filter = new CompositeFileFilter();
 		if (args.isNameSet()) {
 			final String name = args.getName();
-			if (args.isRegex()) {
-				filter.add(new RegexNameFilter(name, args.isIgnoreCase()));
-			} else {
+			if (!args.isRegex()) {
 				if (name.contains("*") || name.contains("?")) {
 					final String pattern = name.replace(".", "\\.").replace('?', '.').replace("*", ".*");
-					filter.add(new RegexNameFilter(pattern, args.isIgnoreCase()));
+					filter.add(new RegexFilter(pattern, args.isIgnoreCase()));
 				} else {
-					filter.add(new NameFilter(args.getName(), args.isIgnoreCase()));
+					filter.add(new NameFilter(name, args.isIgnoreCase()));
 				}
 			}
 		}
@@ -76,15 +86,20 @@ class FindCommand extends AbstractCommand<FindArguments> {
 			}
 			@Override
 			public void finish() {
-				for(final File path: paths){
+				final RelativePathBase base = new RelativePathBase(context.getCurrentDirectory(), RelativePathBase.CHILDREN_WITHOUT_PREFIX);
+				final FileFilter fileFilter = getFileFilterFor(base);
+				for(File path: paths){
 					final boolean keepGoing;
 
+					if (!path.isAbsolute()) {
+						path = new File(base.getBase(), path.toString());
+					}
 					if(!path.exists()){
 						keepGoing = output.processLine(new SimpleLine(format("find: `%s': No such file or directory", path), lineEnding));
 					} else if(path.isDirectory()){
-						keepGoing = listFiles(path, path, output, args);
+						keepGoing = listFiles(fileFilter, base, path, output, args);
 					} else {
-						keepGoing = outputFileLine(output, path, path);
+						keepGoing = outputFileLine(fileFilter, output, base, path);
 					}
 					if(!keepGoing){
 						break;
@@ -92,21 +107,30 @@ class FindCommand extends AbstractCommand<FindArguments> {
 				}
 				output.finish();
 			}
+			private FileFilter getFileFilterFor(RelativePathBase base) {
+				if (regexFilter == null) {
+					return staticFileFilter;
+				}
+				final CompositeFileFilter compositeFilter = new CompositeFileFilter();
+				compositeFilter.add(staticFileFilter);
+				compositeFilter.add(regexFilter.getRelativePathFilterForBase(base));
+				return compositeFilter;
+			}
 		};
 	}
 
-	private boolean listFiles(File relativeTo, File parent, LineProcessor output, FindArguments args) {
+	private boolean listFiles(FileFilter fileFilter, RelativePathBase relativeTo, File parent, LineProcessor output, FindArguments args) {
 		//print directory files and recurse
-		if (outputFileLine(output, relativeTo, parent)) {
+		if (outputFileLine(fileFilter, output, relativeTo, parent)) {
 			final List<File> files = FileUtil.toList(parent.listFiles());
 			for (File file : files) {
 				//System.out.println("Examining file: " + file.getAbsolutePath());
 				if (file.isDirectory()) {
-					if (!listFiles(relativeTo, file, output, args)) {
+					if (!listFiles(fileFilter, relativeTo, file, output, args)) {
 						return false;
 					}
 				} else {
-					if (!outputFileLine(output, relativeTo, file)) {
+					if (!outputFileLine(fileFilter, output, relativeTo, file)) {
 						return false;
 					}
 				}
@@ -114,9 +138,9 @@ class FindCommand extends AbstractCommand<FindArguments> {
 		}
 		return true;//we want more output
 	}
-	private boolean outputFileLine(LineProcessor output, File relativeTo, File file) {
+	private boolean outputFileLine(FileFilter fileFilter, LineProcessor output, RelativePathBase relativeTo, File file) {
 		if (fileFilter.accept(file)) {
-			final String filePath = FileUtil.getRelativePath(relativeTo, file, true);
+			final String filePath = relativeTo.getRelativePathFor(file);
 			return output.processLine(new SimpleLine(filePath, lineEnding));
 		}
 		return true;

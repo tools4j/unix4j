@@ -88,58 +88,7 @@ public class FileUtil {
 	 * @return the path of {@code file} relative to {@code root}
 	 */
 	public static String getRelativePath(File root, File file) {
-		return getRelativePath(root, file, false);
-	}
-
-	/**
-	 * Same as {@link #getRelativePath(File, File)}, but rule (2) is prefixed
-	 * with "./" if {@code dotStarDirectForChildren=true}.
-	 * 
-	 * @param root
-	 *            the root directory for the relative path
-	 * @param file
-	 *            the file whose path should be returned
-	 * @param dotStarDirectForChildren
-	 *            if {@code true} and {@code root} is the direct parent
-	 *            directory of {@code file}, the returned simple file name is
-	 *            prefixed with "./"; if {@code false} the method behaves
-	 *            exactly as {@link #getRelativePath(File, File)}
-	 * 
-	 * @return the path of {@code file} relative to {@code root}
-	 * @see #getRelativePath(File, File)
-	 */
-	public static String getRelativePath(File root, File file, boolean dotStarDirectForChildren) {
-		if (root.equals(file)) {
-			return ".";
-		}
-		if (root.equals(file.getParentFile())) {
-			return dotStarDirectForChildren ? "./" + file.getName() : file.getName();
-		}
-		final List<String> rootParts = getPathElements(root);
-		final List<String> fileParts = getPathElements(file);
-
-		final int len = Math.min(rootParts.size(), fileParts.size());
-		int common = 0;
-		while (common < len && rootParts.get(common).equals(fileParts.get(common))) {
-			common++;
-		}
-		if (common == 0) {
-			return file.getAbsolutePath().replace('\\', '/');
-		}
-		final StringBuilder sb = new StringBuilder();
-		if (common < rootParts.size()) {
-			for (int i = common; i < rootParts.size(); i++) {
-				sb.append("../");
-			}
-		} else {
-			sb.append("./");
-		}
-		for (int i = common; i < fileParts.size(); i++) {
-			sb.append(fileParts.get(i)).append('/');
-
-		}
-		// cut off last '/' and return string
-		return sb.deleteCharAt(sb.length() - 1).toString();
+		return new RelativePathBase(root).getRelativePathFor(file);
 	}
 
 	/**
