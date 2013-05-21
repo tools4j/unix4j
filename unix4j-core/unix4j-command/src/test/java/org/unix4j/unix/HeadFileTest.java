@@ -7,7 +7,7 @@ import org.unix4j.context.ExecutionContext;
 import org.unix4j.context.ExecutionContextFactory;
 
 /**
- * Unit test for {@code Sort} reading the input from test files.
+ * Unit test for {@code Head} reading the input from test files.
  */
 public class HeadFileTest {
 	
