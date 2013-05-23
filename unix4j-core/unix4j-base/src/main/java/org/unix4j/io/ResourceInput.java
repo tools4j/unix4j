@@ -17,7 +17,7 @@ public class ResourceInput extends StreamInput {
 	 *            slash, e.g.: {@code "/test-file.txt"}; if the file is in a
 	 *            package, then the package should be specified prefixed with a
 	 *            forward slash, and with each dot "." replaced with a forward
-	 *            slash. e.g.: {@code "/org/company/my/package/test-file.txt"}
+	 *            slash. e.g.: {@code "/org/company/mypackage/test-file.txt"}
 	 * @see Class#getResource(String)
 	 * @see Class#getResourceAsStream(String)
 	 */

@@ -4,7 +4,7 @@
 The cd utility changes the working directory of the current command execution. 
 If no directory operand is given, the cd utility changes to the user home 
 directory as defined by the execution context (usually the directory specified 
-by the {@code "user.home"} {@link java.lang.System#getProperties() system property}).  
+by the {@code "user.home"} system property).  
 If the cd argument is a {@link java.io.File File} and it is a directory, the 
 current working directory is changed to the given file (relative paths are not 
 resolved with the current working directory). If a string argument is passed to 
@@ -12,6 +12,12 @@ the cd utility, it is treated as a file argument and relative paths are resolved
 on the basis of the (old) current working directory. Wildcards are possible if 
 the first matching file represents a directory. If the specified file or path 
 argument does not represent a valid directory, an exception is thrown.
+</p>
+<p>
+See also:
+<ul>
+	<li>{@link java.lang.System#getProperties()}</li>
+</ul>
 </p>
 </body>
 </html>
