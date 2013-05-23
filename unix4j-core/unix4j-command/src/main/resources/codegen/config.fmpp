@@ -7,6 +7,7 @@ modes: [
 data: {
     commandDefs: org.unix4j.codegen.CommandDefinitionDataLoader(
         ../../command-definition/cat.xml
+        ../../command-definition/cd.xml
         ../../command-definition/cut.xml
         ../../command-definition/echo.xml
         ../../command-definition/find.xml
@@ -23,6 +24,7 @@ data: {
     )
     optionSetDefs: org.unix4j.codegen.OptionSetDefinitionDataLoader(
         ../../command-definition/cat.xml
+        ../../command-definition/cd.xml
         ../../command-definition/cut.xml
         ../../command-definition/echo.xml
         ../../command-definition/find.xml

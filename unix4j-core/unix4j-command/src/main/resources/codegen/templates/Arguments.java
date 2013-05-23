@@ -19,7 +19,7 @@ import java.util.Arrays;
 
 import org.unix4j.command.Arguments;
 import org.unix4j.context.ExecutionContext;
-<#if hasArgsOperand(def)>
+<#if hasArgsOperand(def) || hasStringOperand(def)>
 import org.unix4j.convert.ValueConverter;
 </#if>
 <#if def.options?size != 0>
@@ -31,7 +31,7 @@ import org.unix4j.util.ArgsUtil;
 <#if hasTrueOperand>
 import org.unix4j.util.ArrayUtil;
 </#if>
-<#if hasArgsOperand(def)>
+<#if hasArgsOperand(def) || hasStringOperand(def)>
 import org.unix4j.variable.Arg;
 import org.unix4j.variable.VariableContext;
 </#if>
@@ -122,15 +122,6 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 		this.args = args;
 		this.argsIsSet = true;
 	}
-
-	private Object resolveVariable(VariableContext context, String variable) {
-		final Object value = context.getValue(variable);
-		if (value != null) {
-			return value;
-		}
-		throw new IllegalArgumentException("cannot resolve variable " + variable + 
-				" in command: ${commandName} " + this);
-	}
 	private Object[] resolveVariables(VariableContext context, String... unresolved) {
 		final Object[] resolved = new Object[unresolved.length];
 		for (int i = 0; i < resolved.length; i++) {
@@ -142,6 +133,24 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 			}
 		}
 		return resolved;
+	}
+	private <V> V convertList(ExecutionContext context, String operandName, Class<V> operandType, List<Object> values) {
+		if (values.size() == 1) {
+			final Object value = values.get(0);
+			return convert(context, operandName, operandType, value);
+		}
+		return convert(context, operandName, operandType, values);
+	}
+	</#if>
+	<#if hasArgsOperand(def) || hasStringOperand(def)>
+
+	private Object resolveVariable(VariableContext context, String variable) {
+		final Object value = context.getValue(variable);
+		if (value != null) {
+			return value;
+		}
+		throw new IllegalArgumentException("cannot resolve variable " + variable + 
+				" in command: ${commandName} " + this);
 	}
 	private <V> V convert(ExecutionContext context, String operandName, Class<V> operandType, Object value) {
 		final ValueConverter<V> converter = context.getValueConverterFor(operandType);
@@ -165,13 +174,6 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 		throw new IllegalArgumentException("cannot convert --" + operandName + 
 				" value '" + value + "' into the type " + operandType.getName() + 
 				" for ${commandName} command");
-	}
-	private <V> V convertList(ExecutionContext context, String operandName, Class<V> operandType, List<Object> values) {
-		if (values.size() == 1) {
-			final Object value = values.get(0);
-			return convert(context, operandName, operandType, value);
-		}
-		return convert(context, operandName, operandType, values);
 	}
 	</#if>
 	
@@ -237,10 +239,11 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 	<#foreach operand in def.operands?values>
 	<#if !isOptions(operand) && operand.redirection?length == 0>
 	/**
-	 * Returns {@code <${operand.name}>}: ${operand.desc}
+	 * Returns the {@code <${operand.name}>} operand value<#if isStringOperand(operand)> (variables are NOT resolved)</#if>: ${operand.desc}
 	 * 
-	 * @return the {@code <${operand.name}>} operand value
+	 * @return the {@code <${operand.name}>} operand value (variables are not resolved)
 	 * @throws IllegalStateException if this operand has never been set
+	 * <#if isStringOperand(operand)>@see #${getter(operand)}(ExecutionContext)</#if>
 	 */
 	public ${normalizeVarArgType(operand.type, false)} ${getter(operand)}() {
 		if (${operand.name}IsSet) {
@@ -248,13 +251,32 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 		}
 		throw new IllegalStateException("operand has not been set: " + ${operand.name});
 	}
+	<#if isStringOperand(operand)>
+	/**
+	 * Returns the {@code <${operand.name}>} (variables are resolved): ${operand.desc}
+	 * 
+	 * @param context the execution context used to resolve variables
+	 * @return the {@code <${operand.name}>} operand value after resolving variables
+	 * @throws IllegalStateException if this operand has never been set
+	 * @see #${getter(operand)}()
+	 */
+	public String ${getter(operand)}(ExecutionContext context) {
+		final String value = ${getter(operand)}();
+		if (Arg.isVariable(value)) {
+			final Object resolved = resolveVariable(context.getVariableContext(), value);
+			final String converted = convert(context, "${operand.name}", String.class, resolved);
+			return converted;
+		}
+		return value;
+	}
+	</#if>
 
 	/**
 	 * Returns true if the {@code <${operand.name}>} operand has been set. 
 <#if !isArgsOperand(operand)>
 	 * <p>
-	 * Note that this method returns true if {@link #${setter(operand)}(${normalizeVarArgType(rawType(operand.type), false)})}
-	 * also if null was passed to the method.
+	 * Note that this method returns true even if {@code null} was passed to the
+	 * {@link #${setter(operand)}(${normalizeVarArgType(rawType(operand.type), false)})} method.
 </#if> 
 	 * 
 	 * @return	true if the setter for the {@code <${operand.name}>} operand has 

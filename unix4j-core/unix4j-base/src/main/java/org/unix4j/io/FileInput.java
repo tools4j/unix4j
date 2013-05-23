@@ -46,6 +46,9 @@ public class FileInput extends ReaderInput {
 	public FileInput(String file) {
 		this(new File(file));
 	}
+	public FileInput(File currentDirectory, String file) {
+		this(currentDirectory, new File(file));
+	}
 
 	/**
 	 * Creates a new {@link FileInput} object for each of the specified files
@@ -119,7 +122,7 @@ public class FileInput extends ReaderInput {
 
 	private static FileReader createFileReader(File currentDirectory, File path) {
 		try {
-			final File file = new File(currentDirectory, path.getPath());
+			final File file = FileUtil.toAbsoluteFile(currentDirectory, path);
 			return new FileReader(file);
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException(e);

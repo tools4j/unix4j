@@ -8,10 +8,16 @@ import java.util.Properties;
 import org.unix4j.convert.ConverterRegistry;
 import org.unix4j.convert.DefaultConverterRegistry;
 import org.unix4j.convert.ValueConverter;
+import org.unix4j.util.FileUtil;
 import org.unix4j.variable.DefaultVariableContext;
+import org.unix4j.variable.ExecutionContextVariableResolver;
+import org.unix4j.variable.MapVariableResolver;
 import org.unix4j.variable.VariableContext;
 
-
+/**
+ * Default execution context implementation with setters for some values and 
+ * meaningful defaults for instance taken from system properties.
+ */
 public class DefaultExecutionContext implements ExecutionContext {
 	
 	/**
@@ -44,6 +50,10 @@ public class DefaultExecutionContext implements ExecutionContext {
 	}
     public void setCurrentDirectory(String currentDirectory) {
         setCurrentDirectory(new File(currentDirectory));
+    }
+    @Override
+    public File getRelativeToCurrentDirectory(File file) {
+    	return FileUtil.toAbsoluteFile(getCurrentDirectory(), file);
     }
 	@Override
 	public File getCurrentDirectory() {
@@ -95,15 +105,21 @@ public class DefaultExecutionContext implements ExecutionContext {
 	public VariableContext getVariableContext() {
 		if (variableContext == null) {
 			variableContext = new DefaultVariableContext();
+			variableContext.addVariableResolver(MapVariableResolver.getEnv());
+			variableContext.addVariableResolver(MapVariableResolver.getSystemProperties());
+			variableContext.addVariableResolver(new ExecutionContextVariableResolver(this));
 		}
 		return variableContext;
 	}
 	@Override
-	public <V> ValueConverter<V> getValueConverterFor(Class<V> type) {
+	public ConverterRegistry getConverterRegistry() {
 		if (converterRegistry == null) {
 			converterRegistry = new DefaultConverterRegistry();
 		}
-		return converterRegistry.getValueConverterFor(type);
+		return converterRegistry;
 	}
-	
+	@Override
+	public <V> ValueConverter<V> getValueConverterFor(Class<V> type) {
+		return getConverterRegistry().getValueConverterFor(type);
+	}
 }

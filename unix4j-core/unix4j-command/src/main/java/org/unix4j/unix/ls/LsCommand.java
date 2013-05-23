@@ -27,7 +27,7 @@ class LsCommand extends AbstractCommand<LsArguments> {
 		if (args.isFilesSet()) {
 			return new ArrayList<File>(Arrays.asList(args.getFiles()));
 		} else if (args.isPathsSet()) {
-			return FileUtil.expandFiles(args.getPaths());
+			return FileUtil.expandFiles(context.getCurrentDirectory(), args.getPaths());
 		}
 		//no input files or paths ==> use just the current directory
 		final ArrayList<File> list = new ArrayList<File>(1);

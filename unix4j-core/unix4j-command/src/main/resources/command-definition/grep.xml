@@ -140,10 +140,13 @@
 		</operand>
 		<operand name="paths" type="String...">
 			Pathnames of the input files to be searched for the pattern;
-			wildcards * and ? are supported.
+			wildcards * and ? are supported; relative paths are resolved on the
+            basis of the current working directory.
 		</operand>
 		<operand name="files" type="java.io.File...">
-			The input files to be searched for the pattern.
+			The input files to be searched for the pattern; relative paths are 
+			not resolved (use the string paths argument to enable relative path 
+			resolving based on the current working directory).
 		</operand>
 		<operand name="args" type="String...">
 			String arguments defining the options and operands for the command. 

@@ -29,7 +29,7 @@ class UniqCommand extends AbstractCommand<UniqArguments> {
 			final FileInput input = new FileInput(args.getFile());
 			return getFileInputProcessor(Collections.singletonList(input), context, output, args);
 		} else if (args.isPathSet()) {
-			final List<File> files = FileUtil.expandFiles(args.getPath());
+			final List<File> files = FileUtil.expandFiles(context.getCurrentDirectory(), args.getPath());
 			final List<FileInput> inputs = FileInput.multiple(files);
 			return getFileInputProcessor(inputs, context, output, args);
 		}
