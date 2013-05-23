@@ -6,35 +6,59 @@ import java.util.Map;
 import org.unix4j.context.ExecutionContext;
 
 /**
- * Variable resolver for values defined by the {@link ExecutionContext}.
+ * Variable resolver for values defined by the {@link ExecutionContext}. The
+ * {@link Variable} constants define variable names for execution context
+ * values.
  */
 public class ExecutionContextVariableResolver implements VariableResolver {
-	
+	/**
+	 * Variable name constants for {@link ExecutionContext} values.
+	 */
 	public static enum Variable {
+		/**
+		 * Variable {@code $pwd} to access
+		 * {@link ExecutionContext#getCurrentDirectory()}.
+		 */
 		CurrentDirectory("$pwd") {
 			@Override
 			public Object getValue(ExecutionContext executionContext) {
 				return executionContext.getCurrentDirectory();
 			}
 		},
+		/**
+		 * Variable {@code $whoami} to access {@link ExecutionContext#getUser()}
+		 * .
+		 */
 		User("$whoami") {
 			@Override
 			public Object getValue(ExecutionContext executionContext) {
 				return executionContext.getUser();
 			}
-		}, 
+		},
+		/**
+		 * Variable {@code $home} to access
+		 * {@link ExecutionContext#getUserHome()}.
+		 */
 		UserHome("$home") {
 			@Override
 			public Object getValue(ExecutionContext executionContext) {
 				return executionContext.getUserHome();
 			}
-		}, 
+		},
+		/**
+		 * Variable {@code $temp} to access
+		 * {@link ExecutionContext#getTempDirectory()}.
+		 */
 		TempDirectory("$temp") {
 			@Override
 			public Object getValue(ExecutionContext executionContext) {
 				return executionContext.getTempDirectory();
 			}
 		},
+		/**
+		 * Variable {@code $locale} to access
+		 * {@link ExecutionContext#getLocale()}.
+		 */
 		Locale("$locale") {
 			@Override
 			public Object getValue(ExecutionContext executionContext) {
@@ -42,12 +66,15 @@ public class ExecutionContextVariableResolver implements VariableResolver {
 			}
 		};
 		private final String unixName;
+
 		private Variable(String unixName) {
 			this.unixName = unixName;
 		}
+
 		public String getUnixName() {
 			return unixName;
 		}
+
 		public static Variable getByVariableName(String variableName) {
 			for (final Variable v : values()) {
 				if (v.getUnixName().equals(variableName)) {
@@ -56,6 +83,7 @@ public class ExecutionContextVariableResolver implements VariableResolver {
 			}
 			return null;
 		}
+
 		abstract public Object getValue(ExecutionContext executionContext);
 	}
 
