@@ -21,16 +21,15 @@
 		<method name="fromStrings" args="strings" usesStandardInput="false">
 			Uses the given strings as input for the next command. Each string
 			usually represents a single line of the input; however, if any of 
-			the strings contains line ending codes (UNIX or DOS independent it 
-			is split into from the host operating system), it is split into 
-			multiple lines.  
+			the strings contains line ending codes (UNIX or DOS independent from
+			the host operating system), it is split into multiple lines.  
 		</method>
 		<method name="from" args="lines" usesStandardInput="false">
 			Uses the strings in the specified {@code input} collection as input
 			lines for the next command. Each string usually represents a single
 			line of the input; however, if any of the strings contains line
-			ending codes (UNIX or DOS independent it is split into from the host
-			operating system), it is split into multiple lines.
+			ending codes (UNIX or DOS independent from the host operating 
+			system), it is split into multiple lines.
 		</method>
 		<method name="fromFile" args="path" usesStandardInput="false">
 			Redirects the contents of the given file into the next command. This 
@@ -86,7 +85,7 @@
 			current working directory).
 		</operand>
 		<operand name="resource" type="String" redirection="setInput(new org.unix4j.io.ResourceInput(${value}))">
-			a path to the file to to redirect to the next command The will need
+			a path to the file to redirect to the next command. The will need
 			to be on the classpath. If the file is in the root directory, the 
 			filename should be prefixed with a forward slash. e.g.:
 		 	{@code "/test-file.txt"}
@@ -94,7 +93,7 @@
 		 	If the file is in a package, then the package should be specified
 		 	prefixed with a forward slash, and with each dot "." replaced with a
 		 	forward slash. e.g.:
-			{@code "/org/company/my/package/test-file.txt"}
+			{@code "/org/company/mypackage/test-file.txt"}
 		</operand>
 		<operand name="stream" type="java.io.InputStream" redirection="setInput(new org.unix4j.io.StreamInput(${value}))">
 			the input stream to read from
