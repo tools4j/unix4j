@@ -5,12 +5,15 @@ import java.util.Map;
 
 /**
  * Simple variable resolver implementation backed by a map of variable names to
- * values.
+ * values. The variable name is a key in the backing name-to-value map
+ * (including the dollar sign of the variable name). If a map is already
+ * available and the variable names can be derived from the map keys,
+ * {@link MapVariableResolver} may be the better alternative.
  */
 public class SimpleVariableResolver implements VariableResolver {
-	
+
 	private final Map<String, Object> nameToValue = new LinkedHashMap<String, Object>();
-	
+
 	/**
 	 * Sets the specified value for the variable with the given name. If the
 	 * value is null, the variable is cleared. Returns the old value held by the
@@ -34,7 +37,7 @@ public class SimpleVariableResolver implements VariableResolver {
 	public Object getValue(String name) {
 		return nameToValue.get(name);
 	}
-	
+
 	@Override
 	public String toString() {
 		return nameToValue.toString();
