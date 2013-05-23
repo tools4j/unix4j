@@ -112,11 +112,15 @@
 	</options>
 	<operands default="path">
 		<operand name="file" type="java.io.File">
-			The files or directories used as starting point for the listing.		
+			The files or directories used as starting point for the listing; 
+			relative paths are not resolved (use the string path argument to 
+			enable relative path resolving based on the current working 
+			directory).		
 		</operand>
 		<operand name="path" type="String">
 			The files or directories used as starting point for the listing; 
-			wildcards * and ? are supported.		
+			wildcards * and ? are supported; relative paths are resolved on the
+            basis of the current working directory.
 		</operand>
 		<operand name="args" type="String...">
 			String arguments defining the options and operands for the command. 

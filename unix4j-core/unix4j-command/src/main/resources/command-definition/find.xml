@@ -279,7 +279,8 @@
 	<operands default="path">
         <operand name="path" type="String">
             Starting point for the search in the directory hierarchy;
-            wildcards * and ? are supported.
+            wildcards * and ? are supported; relative paths are resolved on the
+            basis of the current working directory.
         </operand>
 		<operand name="name" type="String">
 			Name pattern to match the file name after removing the path with the

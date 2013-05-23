@@ -9,6 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.unix4j.variable.Arg;
+
 /**
  * Utility class with static methods involving files.
  */
@@ -92,6 +94,33 @@ public class FileUtil {
 	}
 
 	/**
+	 * Returns an absolute file for the given input file, resolving relative
+	 * paths on the basis of the given {@code currentDirectory}. If the given
+	 * {@code file} represents an absolute path or a variable, it is returned
+	 * unchanged. If {@code currentDirectory==null},
+	 * {@link File#getAbsoluteFile()} is returned.
+	 * 
+	 * @param currentDirectory
+	 *            the current directory
+	 * @param file
+	 *            the file to be returned as absolute file
+	 * @return the absolute path version of the given file with
+	 *         {@code currentDirectory} as basis for relative paths
+	 * @see File#isAbsolute()
+	 * @see Arg#isVariable(String)
+	 * @see File#getAbsoluteFile()
+	 */
+	public static File toAbsoluteFile(File currentDirectory, File file) {
+		if (file.isAbsolute() || Arg.isVariable(file.getPath())) {
+			return file;
+		}
+		if (currentDirectory == null) {
+			return file.getAbsoluteFile();
+		}
+		return new File(currentDirectory, file.getPath()).getAbsoluteFile();
+	}
+
+	/**
 	 * Returns all path elements of the given {@code file}. The absolute path of
 	 * the file is used to evaluate the path elements.
 	 * <p>
@@ -126,6 +155,18 @@ public class FileUtil {
 		return expandFiles(FileUtil.getUserDir(), paths);
 	}
 
+	/**
+	 * Expands files if necessary, meaning that input files with wildcards are
+	 * expanded. If the specified {@code files} list contains no wildcard, the
+	 * files are simply returned; all wildcard files are expanded. The given
+	 * current directory serves as basis for all relative paths.
+	 * 
+	 * @param currentDirectory
+	 *            the basis for all relative paths
+	 * @param paths
+	 *            the file paths, possibly containing wildcard parts
+	 * @return the expanded files resolving wildcards
+	 */
 	public static List<File> expandFiles(File currentDirectory, String... paths) {
 		final List<File> expanded = new ArrayList<File>(paths.length);
 		for (final String path : paths) {
@@ -135,6 +176,9 @@ public class FileUtil {
 	}
 
 	private static void addFileExpanded(File currentDirectory, File file, List<File> expandedFiles) {
+		if (!file.isAbsolute()) {
+			file = new File(currentDirectory, file.getPath());
+		}
 		if (isWildcardFileName(file.getPath())) {
 			final List<String> parts = new LinkedList<String>();
 			File f = file;

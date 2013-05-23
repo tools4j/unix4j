@@ -91,9 +91,7 @@ class FindCommand extends AbstractCommand<FindArguments> {
 				for(File path: paths){
 					final boolean keepGoing;
 
-					if (!path.isAbsolute()) {
-						path = new File(base.getBase(), path.toString());
-					}
+					path = context.getRelativeToCurrentDirectory(path);
 					if(!path.exists()){
 						keepGoing = output.processLine(new SimpleLine(format("find: `%s': No such file or directory", path), lineEnding));
 					} else if(path.isDirectory()){

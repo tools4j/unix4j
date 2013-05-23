@@ -37,7 +37,7 @@ class TailCommand extends AbstractCommand<TailArguments> {
 			final List<FileInput> inputs = FileInput.multiple(args.getFiles());
 			return getFileInputProcessor(inputs, context, output, args);
 		} else if (args.isPathsSet()) {
-			final List<File> files = FileUtil.expandFiles(args.getPaths());
+			final List<File> files = FileUtil.expandFiles(context.getCurrentDirectory(), args.getPaths());
 			final List<FileInput> inputs = FileInput.multiple(files);
 			return getFileInputProcessor(inputs, context, output, args);
 		}

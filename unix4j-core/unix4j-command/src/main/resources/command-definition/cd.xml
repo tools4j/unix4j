@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<command-def	xmlns="http://www.unix4j.org/command-def" 
+				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xsi:schemaLocation="http://www.unix4j.org/command-def command-def.xsd">
+	
+	<command name="cd" class="org.unix4j.unix.Cd" package="org.unix4j.unix.cd"/>
+	<name>
+		cd - change the working directory
+	</name>
+	<synopsis>
+		input &gt; command
+	</synopsis>
+	<description ref="cd.html"/>
+	<notes/>
+	<methods>
+		<method name="cd" args="" usesStandardInput="false">
+			Changes the current directory to the user home directory as defined 
+			by the execution context (usually the directory specified by the 
+			{@code "user.home"} {@link java.lang.System#getProperties() system property}). 
+		</method>
+		<method name="cd" args="file" usesStandardInput="false">
+			The current working directory is changed to the given file. If the 
+			specified file argument does not represent a valid directory, an 
+			exception is thrown. Note that relative paths are not resolved with 
+			the (old) current working directory. Use the String path to enable 
+			relative path resolving and wildcards.
+		</method>
+		<method name="cd" args="path" usesStandardInput="false">
+			The current working directory is changed to the given file. Relative
+			paths are resolved on the basis of the (old) current working 
+			directory. Wildcards are possible if the first matching file 
+			represents a directory. If the first file specified by the given 
+			path argument is not a valid directory, an exception is thrown.			
+		</method>
+	</methods>
+	<options/>
+	<operands default="path">
+		<operand name="file" type="java.io.File">
+			the file to use as input; relative paths are not resolved (use the
+			string path argument to enable relative path resolving based on the
+			current working directory).
+		</operand>
+		<operand name="path" type="String">
+			the directory to become the new current working directory; 
+			wildcards * and ? are supported; relative paths are resolved on the
+            basis of the current working directory.
+		</operand>
+	</operands>
+</command-def>

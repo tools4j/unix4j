@@ -50,7 +50,7 @@ class SortCommand extends AbstractCommand<SortArguments> {
 			final List<FileInput> inputs = FileInput.multiple(args.getFiles());
 			return new RedirectInputLineProcessor(inputs, standardInputProcessor);
 		} else if (args.isPathsSet()) {
-			final List<File> files = FileUtil.expandFiles(args.getPaths());
+			final List<File> files = FileUtil.expandFiles(context.getCurrentDirectory(), args.getPaths());
 			final List<FileInput> inputs = FileInput.multiple(files);
 			return new RedirectInputLineProcessor(inputs, standardInputProcessor);
 		}
@@ -63,7 +63,7 @@ class SortCommand extends AbstractCommand<SortArguments> {
 			final List<FileInput> inputs = FileInput.multiple(args.getFiles());
 			return new MergeProcessor(this, context, output, inputs);
 		} else if (args.isPathsSet()) {
-			final List<File> files = FileUtil.expandFiles(args.getPaths());
+			final List<File> files = FileUtil.expandFiles(context.getCurrentDirectory(), args.getPaths());
 			final List<FileInput> inputs = FileInput.multiple(files);
 			return new MergeProcessor(this, context, output, inputs);
 		} else {
@@ -79,7 +79,7 @@ class SortCommand extends AbstractCommand<SortArguments> {
 		if (args.isFilesSet()) {
 			inputs = FileInput.multiple(args.getFiles());
 		} else if (args.isPathsSet()) {
-			final List<File> files = FileUtil.expandFiles(args.getPaths());
+			final List<File> files = FileUtil.expandFiles(context.getCurrentDirectory(), args.getPaths());
 			inputs = FileInput.multiple(files);
 		}
 		if (inputs != null) {

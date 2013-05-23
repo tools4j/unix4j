@@ -61,11 +61,14 @@
 	</options>
 	<operands default="paths">
 		<operand name="files" type="java.io.File...">
-			The input files to be printed.
+			The input files to be printed; relative paths are not resolved (use 
+			the string path argument to enable relative path resolving based on 
+			the current working directory).
 		</operand>
 		<operand name="paths" type="String...">
 			Pathnames of the input files to be printed; wildcards * and ? are
-			supported.  
+			supported; relative paths are resolved on the basis of the current 
+			working directory.
 		</operand>
 		<operand name="args" type="String...">
 			String arguments defining the options and file operands for the 

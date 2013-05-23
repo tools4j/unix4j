@@ -85,6 +85,17 @@
 <#function setter operand>
 	<#return "set" + operand.name?cap_first>
 </#function>
+<#function isStringOperand operand>
+	<#return operand.type == "String">
+</#function>
+<#function hasStringOperand def>
+	<#foreach operand in def.operands?values>
+		<#if isStringOperand(operand)>
+			<#return true>
+		</#if>
+	</#foreach>
+	<#return false>
+</#function>
 <#function getOptionsArgIfAny def args>
 	<#foreach arg in args>
 		<#if isOptionsArg(def, arg)>

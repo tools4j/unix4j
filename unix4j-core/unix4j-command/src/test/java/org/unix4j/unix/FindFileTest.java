@@ -1,13 +1,12 @@
 package org.unix4j.unix;
 
-import org.junit.Ignore;
+import java.io.File;
+
 import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.context.DefaultExecutionContext;
 import org.unix4j.context.ExecutionContext;
 import org.unix4j.context.ExecutionContextFactory;
-
-import java.io.File;
 
 public class FindFileTest {
 

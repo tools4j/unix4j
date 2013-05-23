@@ -273,10 +273,13 @@
 	<operands default="paths">
 		<operand name="paths" type="String...">
 			Pathnames of the files to be sorted, merged, or checked; wildcards * 
-			and ? are supported.
+			and ? are supported; relative paths are resolved on the
+            basis of the current working directory.
 		</operand>
 		<operand name="files" type="java.io.File...">
-			The files to be sorted or merged.
+			The files to be sorted or merged; relative paths are not resolved 
+			(use the string paths argument to enable relative path resolving 
+			based on the current working directory).
 		</operand>
 		<operand name="comparator" type="java.util.Comparator&lt;? super org.unix4j.line.Line>">
 			The comparator to use for the line comparisons.
