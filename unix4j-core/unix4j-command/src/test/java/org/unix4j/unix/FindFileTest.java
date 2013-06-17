@@ -212,7 +212,8 @@ public class FindFileTest {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
         final Config config = new Config(tester, currentDirectory);
-        tester.run(Unix4j.use(config).find(".", 1024));
+        tester.run(Unix4j.use(config).find(Find.Options.typeFile, ".", 1024));
+        tester.run(Unix4j.use(config).find(Find.Options.f, ".", 1024));
     }
 
     //(cd default.input && find . -type f -size -1k)
