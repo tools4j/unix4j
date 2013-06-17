@@ -8,7 +8,6 @@
 		<version>0.3-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.unix4j</groupId>
 	<artifactId>unix4j-core</artifactId>
 	<packaging>pom</packaging>
 
