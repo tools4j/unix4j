@@ -73,11 +73,12 @@ public class FindFileTimeDependentTest {
     }
 
     @Test
-    public void find_fileCreatedAfterNow(){
+    public void find_fileCreatedAfterNow() throws InterruptedException{
+        Thread.sleep(1000);
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
         final Config config = new Config(tester, currentDirectory);
-        tester.run(Unix4j.use(config).find(Find.Options.typeFile.timeNewer.timeCreate, ".", new Date()));
+        tester.run(Unix4j.use(config).find(Find.Options.typeFile.timeNewer.timeCreate, ".", new Date(System.currentTimeMillis() + 1)));
     }
 
     @Test
@@ -90,6 +91,7 @@ public class FindFileTimeDependentTest {
 
     @Test
     public void find_fileUpdated() throws InterruptedException {
+        Thread.sleep(1000);
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
         final Config config = new Config(tester, currentDirectory);
