@@ -7,8 +7,6 @@
 		<artifactId>unix4j-core</artifactId>
 		<version>0.3-SNAPSHOT</version>
 	</parent>
-
-	<groupId>org.unix4j</groupId>
 	<artifactId>unix4j-base</artifactId>
 
 	<dependencies>

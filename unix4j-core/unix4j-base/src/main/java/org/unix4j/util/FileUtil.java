@@ -20,6 +20,7 @@ public class FileUtil {
 
 	// absolute prefix also: \\\\ i.e. actually \\ for network drive
 	public static final String ROOT_WINDOWS = "C:\\";
+	public static final String ROOT_WINDOWS_NETWORK = "\\\\";
 
 	public static final String ROOT = isWindows() ? ROOT_WINDOWS : ROOT_UNIX;
 
@@ -189,9 +190,20 @@ public class FileUtil {
 				f = f.getParentFile();
 			} while (f != null);
 			if (p.isDirectory()) {
+				//we pass p (the first directory) as starting directory
 				parts.remove(0);
-			} else {
-				p = currentDirectory;
+			} else if (p.getPath().endsWith("\\")) {
+				//must be a drive, such as \\mydrive\bla with parts {"", "mydrive", "bla"}
+				parts.remove(0);
+			}
+			
+			//descend again until first wildcard part is found
+			while (!parts.isEmpty() && !isWildcardFileName(parts.get(0))) {
+				p = new File(p, parts.remove(0));
+			}
+			if (!p.isDirectory()) {
+				// what now? throw exception? trace error?
+				throw new IllegalArgumentException("file not found: " + file + " [root=" + p + ", currentDirectory=" + currentDirectory + "]");
 			}
 			listFiles(p, parts, expandedFiles);
 		} else {
@@ -199,9 +211,9 @@ public class FileUtil {
 				expandedFiles.add(file);
 			} else {
 				// try file as relative path
-				file = new File(currentDirectory, file.getPath());
-				if (file.exists()) {
-					expandedFiles.add(file);
+				final File relFile = new File(currentDirectory, file.getPath());
+				if (relFile.exists()) {
+					expandedFiles.add(relFile);
 				} else {
 					// what now? throw exception? trace error?
 					throw new IllegalArgumentException("file not found: " + file + " [currentDirectory=" + currentDirectory + "]");
@@ -232,8 +244,8 @@ public class FileUtil {
 	 * <p>
 	 * The wildcards "*" and "?" are supported. "*" stands for any character
 	 * repeated 0 to many times, "?" for exactly one arbitrary character. Both
-	 * characters can be escaped with a preceding
-	 * "\" character (also escaped, that is, "\\").
+	 * characters can be escaped with a preceding backslash character \ (Unix 
+	 * and MAC) or % character (Windows).
 	 * 
 	 * @param name
 	 *            the name or pattern without path
@@ -241,10 +253,21 @@ public class FileUtil {
 	 */
 	public static FilenameFilter getFileNameFilter(String name) {
 		if (isWildcardFileName(name)) {
-			name = name.replace(".", "/");
-			name = name.replace("\\*", "\\/").replace("*", ".*").replace("\\/", "\\*");
-			name = name.replace("\\?", "\\/").replace("?", ".").replace("\\/", "\\?");
-			name = name.replace("/", "\\.");
+			if (isWindows()) {
+				//escape char is %
+				name = name.replace("%%", "%_");
+				name = name.replace("%.", "%/").replace(".", "%.").replace("%/", "%.");
+				name = name.replace("%*", "%/").replace("*", ".*").replace("%/", "%*");
+				name = name.replace("%?", "%/").replace("?", ".").replace("%/", "%?");
+				name = name.replace("%_", "%%");
+			} else {
+				//escape char is \
+				name = name.replace("\\\\", "\\_");
+				name = name.replace("\\.", "\\/").replace(".", "\\.").replace("\\/", "\\.");
+				name = name.replace("\\*", "\\/").replace("*", ".*").replace("\\/", "\\*");
+				name = name.replace("\\?", "\\/").replace("?", ".").replace("\\/", "\\?");
+				name = name.replace("\\_", "\\\\");
+			}
 			final Pattern pattern = Pattern.compile(name);
 			return new FilenameFilter() {
 				@Override
@@ -266,8 +289,8 @@ public class FileUtil {
 	/**
 	 * Returns true if the given name or path contains unescaped wildcard
 	 * characters. The characters "*" and "?" are considered wildcard chars if
-	 * they are not escaped with a preceding
-	 * "\" character (also escaped, that is, "\\").
+	 * they are not escaped with a preceding backslash character \ (Unix and 
+	 * MAC) or % character (Windows).
 	 * 
 	 * @param name
 	 *            the name or path
@@ -275,11 +298,13 @@ public class FileUtil {
 	 */
 	public static boolean isWildcardFileName(String name) {
 		if (name.contains("*") || name.contains("?")) {
-			// quick match
-			if (name.replace("\\*", "").contains("*") || name.replace("\\?", "").contains("?")) {
-				// non-escaped match
-				return true;
+			final String unescaped;
+			if (isWindows()) {
+				unescaped = name.replace("%%", "%_").replace("%*", "%_").replace("%?", "%_");
+			} else {
+				unescaped = name.replace("\\\\", "\\_").replace("\\*", "\\_").replace("\\?", "\\_");				
 			}
+			return unescaped.contains("*") || unescaped.contains("?");
 		}
 		return false;
 	}

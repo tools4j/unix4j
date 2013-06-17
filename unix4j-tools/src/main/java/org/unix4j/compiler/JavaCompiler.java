@@ -72,13 +72,22 @@ public class JavaCompiler {
 		}
 	}
 	private List<Class<?>> loadClasses(StandardJavaFileManager fileManager, File classOutputFolder, List<JavaFile> classFiles) throws ClassNotFoundException, MalformedURLException {
-		final ClassLoader loader = new URLClassLoader(new URL[] {classOutputFolder.toURI().toURL()}, fileManager.getClassLoader(StandardLocation.CLASS_PATH));
-		final List<Class<?>> classes = new ArrayList<Class<?>>(classFiles.size());
-		for (final JavaFile classFile : classFiles) {
-			final Class<?> clazz = loader.loadClass(classFile.getClassName());
-			classes.add(clazz);
+		final URLClassLoader loader = new URLClassLoader(new URL[] {classOutputFolder.toURI().toURL()}, fileManager.getClassLoader(StandardLocation.CLASS_PATH));
+		try {
+			final List<Class<?>> classes = new ArrayList<Class<?>>(classFiles.size());
+			for (final JavaFile classFile : classFiles) {
+				final Class<?> clazz = loader.loadClass(classFile.getClassName());
+				classes.add(clazz);
+			}
+			return classes;
+		} finally {
+			try {
+				loader.close();
+			} catch (IOException e) {
+				System.err.println("close failed: " + e);
+				e.printStackTrace();
+			}
 		}
-		return classes;
 	}
 	
 	private static String toAbsoluteString(File... files) {
