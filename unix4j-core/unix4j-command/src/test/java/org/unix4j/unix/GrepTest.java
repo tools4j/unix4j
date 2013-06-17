@@ -1,12 +1,13 @@
 package org.unix4j.unix;
 
-import static junit.framework.Assert.assertEquals;
-
 import java.io.File;
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.unix4j.Unix4j;
+import org.unix4j.builder.Unix4jCommandBuilder;
 import org.unix4j.context.DefaultExecutionContext;
 import org.unix4j.context.ExecutionContext;
 import org.unix4j.context.ExecutionContextFactory;
@@ -45,9 +46,8 @@ public class GrepTest {
         final String path2 = outputDirPath + "/org-unix4j-unix/GrepTest/folder/bb.txt";
         assertEquals("2", Unix4j.use(contextFactory).grep("everything", path1, path2).wc(Wc.Options.l).toStringResult());
         assertEquals("2", Unix4j.use(contextFactory).grep(Pattern.compile(".*everything.*"), path1, path2).wc(Wc.Options.l).toStringResult());
-        assertEquals("1: ./org-unix4j-unix/GrepTest/bb.txt\n" +
-                     "1: ./org-unix4j-unix/GrepTest/folder/bb.txt",
-                     Unix4j.use(contextFactory).grep(Grep.Options.count, "everything", path1, path2).toStringResult());
+        assertEquals2(	"1: ./org-unix4j-unix/GrepTest/bb.txt", 
+        				"1: ./org-unix4j-unix/GrepTest/folder/bb.txt", Unix4j.use(contextFactory).grep(Grep.Options.count, "everything", path1, path2));
     }
 
     @Test
@@ -68,12 +68,16 @@ public class GrepTest {
 
     @Test
     public void testCountOnRelativeFiles(){
-        assertEquals("118: commuting.txt\n7: commuting2.txt", Unix4j.use(contextFactory).grep(Grep.Options.count, "the", "*.txt").toStringResult());
+    	assertEquals2("118: commuting.txt", "7: commuting2.txt", Unix4j.use(contextFactory).grep(Grep.Options.count, "the", "*.txt"));
     }
 
     @Test
     public void testCountOnRelativeFilesWithCd(){
-        assertEquals("118: commuting.txt\n7: commuting2.txt", Unix4j.cd(outputDir).grep(Grep.Options.count, "the", "*.txt").toStringResult());
+    	assertEquals2("118: commuting.txt", "7: commuting2.txt", Unix4j.cd(outputDir).grep(Grep.Options.count, "the", "*.txt"));
+    }
+    
+    private static void assertEquals2(String line1, String line2, Unix4jCommandBuilder actual) {
+    	assertEquals(Arrays.asList(line1, line2), actual.toStringList());
     }
 
 }
