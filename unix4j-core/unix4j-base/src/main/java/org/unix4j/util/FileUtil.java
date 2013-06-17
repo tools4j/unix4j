@@ -176,7 +176,8 @@ public class FileUtil {
 		return expanded;
 	}
 
-	private static void addFileExpanded(File currentDirectory, File file, List<File> expandedFiles) {
+	private static void addFileExpanded(File currentDirectory, File file,
+			List<File> expandedFiles) {
 		if (!file.isAbsolute()) {
 			file = new File(currentDirectory, file.getPath());
 		}
@@ -190,20 +191,23 @@ public class FileUtil {
 				f = f.getParentFile();
 			} while (f != null);
 			if (p.isDirectory()) {
-				//we pass p (the first directory) as starting directory
+				// we pass p (the first directory) as starting directory
 				parts.remove(0);
 			} else if (p.getPath().endsWith("\\")) {
-				//must be a drive, such as \\mydrive\bla with parts {"", "mydrive", "bla"}
+				// must be a drive, such as \\mydrive\bla with parts {"",
+				// "mydrive", "bla"}
 				parts.remove(0);
 			}
-			
-			//descend again until first wildcard part is found
+
+			// descend again until first wildcard part is found
 			while (!parts.isEmpty() && !isWildcardFileName(parts.get(0))) {
 				p = new File(p, parts.remove(0));
 			}
 			if (!p.isDirectory()) {
 				// what now? throw exception? trace error?
-				throw new IllegalArgumentException("file not found: " + file + " [root=" + p + ", currentDirectory=" + currentDirectory + "]");
+				throw new IllegalArgumentException("file not found: " + file
+						+ " [root=" + p + ", currentDirectory="
+						+ currentDirectory + "]");
 			}
 			listFiles(p, parts, expandedFiles);
 		} else {
@@ -216,7 +220,9 @@ public class FileUtil {
 					expandedFiles.add(relFile);
 				} else {
 					// what now? throw exception? trace error?
-					throw new IllegalArgumentException("file not found: " + file + " [currentDirectory=" + currentDirectory + "]");
+					throw new IllegalArgumentException("file not found: "
+							+ file + " [currentDirectory=" + currentDirectory
+							+ "]");
 				}
 			}
 		}
@@ -244,7 +250,7 @@ public class FileUtil {
 	 * <p>
 	 * The wildcards "*" and "?" are supported. "*" stands for any character
 	 * repeated 0 to many times, "?" for exactly one arbitrary character. Both
-	 * characters can be escaped with a preceding backslash character \ (Unix 
+	 * characters can be escaped with a preceding backslash character \ (Unix
 	 * and MAC) or % character (Windows).
 	 * 
 	 * @param name
@@ -254,18 +260,24 @@ public class FileUtil {
 	public static FilenameFilter getFileNameFilter(String name) {
 		if (isWildcardFileName(name)) {
 			if (isWindows()) {
-				//escape char is %
+				// escape char is %
 				name = name.replace("%%", "%_");
-				name = name.replace("%.", "%/").replace(".", "%.").replace("%/", "%.");
-				name = name.replace("%*", "%/").replace("*", ".*").replace("%/", "%*");
-				name = name.replace("%?", "%/").replace("?", ".").replace("%/", "%?");
+				name = name.replace("%.", "%/").replace(".", "%.")
+						.replace("%/", "%.");
+				name = name.replace("%*", "%/").replace("*", ".*")
+						.replace("%/", "%*");
+				name = name.replace("%?", "%/").replace("?", ".")
+						.replace("%/", "%?");
 				name = name.replace("%_", "%%");
 			} else {
-				//escape char is \
+				// escape char is \
 				name = name.replace("\\\\", "\\_");
-				name = name.replace("\\.", "\\/").replace(".", "\\.").replace("\\/", "\\.");
-				name = name.replace("\\*", "\\/").replace("*", ".*").replace("\\/", "\\*");
-				name = name.replace("\\?", "\\/").replace("?", ".").replace("\\/", "\\?");
+				name = name.replace("\\.", "\\/").replace(".", "\\.")
+						.replace("\\/", "\\.");
+				name = name.replace("\\*", "\\/").replace("*", ".*")
+						.replace("\\/", "\\*");
+				name = name.replace("\\?", "\\/").replace("?", ".")
+						.replace("\\/", "\\?");
 				name = name.replace("\\_", "\\\\");
 			}
 			final Pattern pattern = Pattern.compile(name);
@@ -289,7 +301,7 @@ public class FileUtil {
 	/**
 	 * Returns true if the given name or path contains unescaped wildcard
 	 * characters. The characters "*" and "?" are considered wildcard chars if
-	 * they are not escaped with a preceding backslash character \ (Unix and 
+	 * they are not escaped with a preceding backslash character \ (Unix and
 	 * MAC) or % character (Windows).
 	 * 
 	 * @param name
@@ -300,9 +312,11 @@ public class FileUtil {
 		if (name.contains("*") || name.contains("?")) {
 			final String unescaped;
 			if (isWindows()) {
-				unescaped = name.replace("%%", "%_").replace("%*", "%_").replace("%?", "%_");
+				unescaped = name.replace("%%", "%_").replace("%*", "%_")
+						.replace("%?", "%_");
 			} else {
-				unescaped = name.replace("\\\\", "\\_").replace("\\*", "\\_").replace("\\?", "\\_");				
+				unescaped = name.replace("\\\\", "\\_").replace("\\*", "\\_")
+						.replace("\\?", "\\_");
 			}
 			return unescaped.contains("*") || unescaped.contains("?");
 		}
@@ -342,7 +356,8 @@ public class FileUtil {
 	 *         parent packages
 	 */
 	public static File getDirectoryOfClassFile(Class<?> clazz) {
-		final String resource = "/" + clazz.getName().replace(".", "/") + ".class";
+		final String resource = "/" + clazz.getName().replace(".", "/")
+				+ ".class";
 		final URL classFileURL = clazz.getResource(resource);
 		final File classFile = new File(classFileURL.getFile());
 		return classFile.getParentFile();
