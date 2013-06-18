@@ -25,10 +25,10 @@ public class LsFormatterLong7 extends LsFormatterLong {
 	@Override
 	protected String getOwner(File file, LsArguments args) {
 		try {
-			final String group = Files.getOwner(file.toPath()).getName();
-			return StringUtil.fixSizeString(7, true, group);
+			final String owner = Files.getOwner(file.toPath()).getName();
+			return StringUtil.fixSizeString(7, true, owner);
 		} catch (IOException e) {
-			return super.getGroup(file, args);
+			return super.getOwner(file, args);
 		}
 	}
 
