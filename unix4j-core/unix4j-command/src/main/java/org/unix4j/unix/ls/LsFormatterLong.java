@@ -64,11 +64,22 @@ class LsFormatterLong implements LsFormatter {
 	}
 
 	protected String getFilePermissions(File file, LsArguments args) {
-		return (file.isDirectory() ? 'd' : '-') +
-					"?--?--" +
-					(file.canRead() ? 'r' : '-') +
-					(file.canWrite() ? 'w' : '-') +
-					(file.canExecute() ? 'x' : '-');
+		final boolean r = file.canRead();
+		final boolean w = file.canWrite();
+		final boolean x = file.canExecute();
+		return (file.isDirectory() ? "d" : "-") +
+				//owner
+				(r ? 'r' : '-') +
+				(w ? 'w' : '-') +
+				(x ? 'x' : '-') +
+				//group
+				(r ? '.' : '-') +
+				(w ? '.' : '-') +
+				(x ? '.' : '-') +
+				//other
+				(r ? '.' : '-') +
+				(w ? '.' : '-') +
+				(x ? '.' : '-');
 	}
 
 	protected String getOwner(File file, LsArguments args) {
@@ -90,11 +101,11 @@ class LsFormatterLong implements LsFormatter {
 
 	protected String getDateTime(File file, LsArguments args) {
 		final Calendar cal = calendar.get();
-		cal.setTimeInMillis(System.currentTimeMillis());
+		cal.setTimeInMillis(System.currentTimeMillis());//set current date to get current year below
 		final int curYear = cal.get(Calendar.YEAR);
 		cal.setTimeInMillis(getLastModifiedMS(file, args));
 		final int fileYear = cal.get(Calendar.YEAR);
-		final String month = cal.getDisplayName(Calendar.MONDAY, Calendar.SHORT, Locale.getDefault());
+		final String month = cal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault());
 
 		final String sM = StringUtil.fixSizeString(3, true, month);
 		final String sD = StringUtil.fixSizeString(2, false, ' ', cal.get(Calendar.DAY_OF_MONTH));

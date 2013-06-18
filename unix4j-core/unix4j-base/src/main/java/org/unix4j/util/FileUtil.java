@@ -262,13 +262,13 @@ public class FileUtil {
 			if (isWindows()) {
 				// escape char is %
 				name = name.replace("%%", "%_");
-				name = name.replace("%.", "%/").replace(".", "%.")
-						.replace("%/", "%.");
+				name = name.replace("%.", "%/").replace(".", "\\.")
+						.replace("%/", "\\.");
 				name = name.replace("%*", "%/").replace("*", ".*")
-						.replace("%/", "%*");
+						.replace("%/", "\\*");
 				name = name.replace("%?", "%/").replace("?", ".")
-						.replace("%/", "%?");
-				name = name.replace("%_", "%%");
+						.replace("%/", "\\?");
+				name = name.replace("%_", "%");
 			} else {
 				// escape char is \
 				name = name.replace("\\\\", "\\_");
