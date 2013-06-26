@@ -28,22 +28,22 @@ public class WcFileTest {
 	public void wc_singleFile() {
 		final CommandFileTest tester = new CommandFileTest(this.getClass());
 		final Config config = new Config(tester);
-		tester.run(Unix4j.use(config).wc(tester.getInputFile()));
-        tester.run(Unix4j.use(config).wc(tester.getInputFile().getPath()));
+		tester.runAndAssert(Unix4j.use(config).wc(tester.getInputFile()));
+        tester.runAndAssert(Unix4j.use(config).wc(tester.getInputFile().getPath()));
 	}
 
     @Test
     public void wc_singleFile_withRelativePath() {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final Config config = new Config(tester);
-        tester.run(Unix4j.use(config).wc(tester.getInputFile().getName()));
+        tester.runAndAssert(Unix4j.use(config).wc(tester.getInputFile().getName()));
     }
 
     @Test
     public void wc_multipleFiles() {
         final CommandFileTest tester = new CommandFileTest(this.getClass(), 4);
         final Config config = new Config(tester);
-        tester.run(Unix4j.use(config).wc(tester.getInputFiles()));
-        tester.run(Unix4j.use(config).wc(tester.getInputFileNames()));
+        tester.runAndAssert(Unix4j.use(config).wc(tester.getInputFiles()));
+        tester.runAndAssert(Unix4j.use(config).wc(tester.getInputFileNames()));
     }
 }
