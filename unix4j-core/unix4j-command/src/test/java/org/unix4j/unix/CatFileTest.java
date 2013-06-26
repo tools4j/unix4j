@@ -29,59 +29,59 @@ public class CatFileTest {
 	public void cat_simple() {
 		final CommandFileTest tester = new CommandFileTest(this.getClass());
 		final Config config = new Config(tester);
-		tester.run(Unix4j.use(config).cat(tester.getInputFile()));
+		tester.runAndAssert(Unix4j.use(config).cat(tester.getInputFile()));
 	}
 
     @Test
     public void cat_usingArgs() {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final Config config = new Config(tester);
-        tester.run(Unix4j.use(config).echo(tester.getInputFileName()).xargs().cat(Arg.$0));
+        tester.runAndAssert(Unix4j.use(config).echo(tester.getInputFileName()).xargs().cat(Arg.$0));
     }
 
     @Test
     public void cat_withLineNumbers(){
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final Config config = new Config(tester);
-        tester.run(Unix4j.use(config).cat(Cat.Options.numberLines, tester.getInputFile()));
+        tester.runAndAssert(Unix4j.use(config).cat(Cat.Options.numberLines, tester.getInputFile()));
     }
 
     @Test
     public void cat_numberNonBlankLines(){
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final Config config = new Config(tester);
-        tester.run(Unix4j.use(config).cat(Cat.Options.numberNonBlankLines, tester.getInputFile()));
+        tester.runAndAssert(Unix4j.use(config).cat(Cat.Options.numberNonBlankLines, tester.getInputFile()));
     }
 
     @Test
     public void cat_squeezeEmptyLines(){
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final Config config = new Config(tester);
-        tester.run(Unix4j.use(config).cat(Cat.Options.squeezeEmptyLines, tester.getInputFile()));
+        tester.runAndAssert(Unix4j.use(config).cat(Cat.Options.squeezeEmptyLines, tester.getInputFile()));
     }
 
     @Test
     public void cat_multipleFiles() {
         final CommandFileTest tester = new CommandFileTest(this.getClass(), 2);
 		final Config config = new Config(tester);
-        tester.run(Unix4j.use(config).cat(tester.getInputFiles()));
-        tester.run(Unix4j.use(config).cat(tester.getInputFileNames()));
-        tester.run(Unix4j.use(config).cat(tester.getInputFiles()));
-        tester.run(Unix4j.use(config).cat(combine(arr("--paths"), tester.getInputFileNames())));
-        tester.run(Unix4j.use(config).cat(Cat.Options.squeezeEmptyLines, tester.getInputFiles()));
+        tester.runAndAssert(Unix4j.use(config).cat(tester.getInputFiles()));
+        tester.runAndAssert(Unix4j.use(config).cat(tester.getInputFileNames()));
+        tester.runAndAssert(Unix4j.use(config).cat(tester.getInputFiles()));
+        tester.runAndAssert(Unix4j.use(config).cat(combine(arr("--paths"), tester.getInputFileNames())));
+        tester.runAndAssert(Unix4j.use(config).cat(Cat.Options.squeezeEmptyLines, tester.getInputFiles()));
     }
 
     @Test
     public void cat_multipleFiles_squeezeEmptyLines() {
         final CommandFileTest tester = new CommandFileTest(this.getClass(), 2);
         final Config config = new Config(tester);
-        tester.run(Unix4j.use(config).cat(Cat.Options.squeezeEmptyLines, tester.getInputFiles()));
-        tester.run(Unix4j.use(config).cat(Cat.Options.s, tester.getInputFiles()));
-        tester.run(Unix4j.use(config).cat(Cat.Options.squeezeEmptyLines, tester.getInputFileNames()));
-        tester.run(Unix4j.use(config).cat(Cat.Options.squeezeEmptyLines, tester.getInputFiles()));
-        tester.run(Unix4j.use(config).cat(combine(arr("--squeezeEmptyLines","--paths"), tester.getInputFileNames())));
-        tester.run(Unix4j.use(config).cat(combine(arr("-s","--paths"), tester.getInputFileNames())));
-        tester.run(Unix4j.use(config).cat(Cat.Options.squeezeEmptyLines, tester.getInputFiles()));
+        tester.runAndAssert(Unix4j.use(config).cat(Cat.Options.squeezeEmptyLines, tester.getInputFiles()));
+        tester.runAndAssert(Unix4j.use(config).cat(Cat.Options.s, tester.getInputFiles()));
+        tester.runAndAssert(Unix4j.use(config).cat(Cat.Options.squeezeEmptyLines, tester.getInputFileNames()));
+        tester.runAndAssert(Unix4j.use(config).cat(Cat.Options.squeezeEmptyLines, tester.getInputFiles()));
+        tester.runAndAssert(Unix4j.use(config).cat(combine(arr("--squeezeEmptyLines", "--paths"), tester.getInputFileNames())));
+        tester.runAndAssert(Unix4j.use(config).cat(combine(arr("-s", "--paths"), tester.getInputFileNames())));
+        tester.runAndAssert(Unix4j.use(config).cat(Cat.Options.squeezeEmptyLines, tester.getInputFiles()));
     }
 
     private static String[] arr(String... s) {
