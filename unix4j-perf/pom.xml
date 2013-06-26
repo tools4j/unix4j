@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.unix4j</groupId>
 		<artifactId>unix4j</artifactId>
-		<version>0.3</version>
+		<version>0.4-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>unix4j-perf</artifactId>
