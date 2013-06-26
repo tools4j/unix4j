@@ -28,50 +28,50 @@ public class TailFileTest {
 	public void tail_simple_countFromEnd() {
 		final CommandFileTest tester = new CommandFileTest(this.getClass());
 		final Config config = new Config(tester);
-		tester.run(Unix4j.use(config).tail(8, tester.getInputFile()));
+		tester.runAndAssert(Unix4j.use(config).tail(8, tester.getInputFile()));
 	}
 
     @Test
     public void tail_byChars_countFromEnd() {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final Config config = new Config(tester);
-        tester.run(Unix4j.use(config).tail(Tail.Options.c, 100, tester.getInputFile()));
+        tester.runAndAssert(Unix4j.use(config).tail(Tail.Options.c, 100, tester.getInputFile()));
     }
 
     @Test
     public void tail_multipleFiles_countFromEnd() {
         final CommandFileTest tester = new CommandFileTest(this.getClass(), 2);
         final Config config = new Config(tester);
-        tester.run(Unix4j.use(config).tail(10, tester.getInputFiles()));
-        tester.run(Unix4j.use(config).tail(10, tester.getInputFileNames()));
-        tester.run(Unix4j.use(config).tail(tester.getInputFiles())); //By default, tail returns top 10 lines
-        tester.run(Unix4j.use(config).tail(combine(arr("--count", "10", "--paths"), tester.getInputFileNames())));
-        tester.run(Unix4j.use(config).tail(combine(arr("--paths"), tester.getInputFileNames())));
+        tester.runAndAssert(Unix4j.use(config).tail(10, tester.getInputFiles()));
+        tester.runAndAssert(Unix4j.use(config).tail(10, tester.getInputFileNames()));
+        tester.runAndAssert(Unix4j.use(config).tail(tester.getInputFiles())); //By default, tail returns top 10 lines
+        tester.runAndAssert(Unix4j.use(config).tail(combine(arr("--count", "10", "--paths"), tester.getInputFileNames())));
+        tester.runAndAssert(Unix4j.use(config).tail(combine(arr("--paths"), tester.getInputFileNames())));
     }
 
     @Test
     public void tail_simple_countFromStart() {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final Config config = new Config(tester);
-        tester.run(Unix4j.use(config).tail(Tail.Options.countFromStart, 8, tester.getInputFile()));
+        tester.runAndAssert(Unix4j.use(config).tail(Tail.Options.countFromStart, 8, tester.getInputFile()));
     }
 
     @Test
     public void tail_byChars_countFromStart() {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final Config config = new Config(tester);
-        tester.run(Unix4j.use(config).tail(Tail.Options.c.countFromStart, 100, tester.getInputFile()));
+        tester.runAndAssert(Unix4j.use(config).tail(Tail.Options.c.countFromStart, 100, tester.getInputFile()));
     }
 
     @Test
     public void tail_multipleFiles_countFromStart() {
         final CommandFileTest tester = new CommandFileTest(this.getClass(), 2);
         final Config config = new Config(tester);
-        tester.run(Unix4j.use(config).tail(10, tester.getInputFiles()));
-        tester.run(Unix4j.use(config).tail(10, tester.getInputFileNames()));
-        tester.run(Unix4j.use(config).tail(tester.getInputFiles())); //By default, tail returns top 10 lines
-        tester.run(Unix4j.use(config).tail(combine(arr("-s", "--count", "10", "--paths"), tester.getInputFileNames())));
-        tester.run(Unix4j.use(config).tail(combine(arr("-s", "--paths"), tester.getInputFileNames())));
+        tester.runAndAssert(Unix4j.use(config).tail(10, tester.getInputFiles()));
+        tester.runAndAssert(Unix4j.use(config).tail(10, tester.getInputFileNames()));
+        tester.runAndAssert(Unix4j.use(config).tail(tester.getInputFiles())); //By default, tail returns top 10 lines
+        tester.runAndAssert(Unix4j.use(config).tail(combine(arr("-s", "--count", "10", "--paths"), tester.getInputFileNames())));
+        tester.runAndAssert(Unix4j.use(config).tail(combine(arr("-s", "--paths"), tester.getInputFileNames())));
     }
 
 
@@ -79,7 +79,7 @@ public class TailFileTest {
     public void tail_byChars_specifyMoreCharsThanInInput() {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final Config config = new Config(tester);
-        tester.run(Unix4j.use(config).tail(Tail.Options.c, 1000000, tester.getInputFile()));
+        tester.runAndAssert(Unix4j.use(config).tail(Tail.Options.c, 1000000, tester.getInputFile()));
     }
 
 

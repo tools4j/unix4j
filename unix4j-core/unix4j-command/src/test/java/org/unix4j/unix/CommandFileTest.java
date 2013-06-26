@@ -2,6 +2,7 @@ package org.unix4j.unix;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import junit.framework.ComparisonFailure;
@@ -101,20 +102,44 @@ class CommandFileTest {
         return testDir;
     }
 
-    public void run(final Unix4jCommandBuilder command){
-		final List<String> actualOutputLines = command.toStringList();
-		boolean ok = expectedOutputLines.size() == actualOutputLines.size();
-		for (int i = 0; ok && i < expectedOutputLines.size(); i++) {
-			final String exp = expectedOutputLines.get(i);
-			final String act = actualOutputLines.get(i);
-			ok &= matchMode.matches(exp, act);
-		}
-		if (!ok) {
+    public void runAndAssert(final Unix4jCommandBuilder command){
+        final List<String> actualOutputLines = command.toStringList();
+        boolean ok = expectedOutputLines.size() == actualOutputLines.size();
+        for (int i = 0; ok && i < expectedOutputLines.size(); i++) {
+            final String exp = expectedOutputLines.get(i);
+            final String act = actualOutputLines.get(i);
+            ok = matchMode.matches(exp, act);
+        }
+        if (!ok) {
             System.out.println("Actual:");
             for(final String line: actualOutputLines){
                 System.out.println(line);
             }
-			throw printFailureCommandToStandardErr(command, actualOutputLines);
+            throw printFailureCommandToStandardErr(command, actualOutputLines);
+        }
+    }
+
+    public void runAndAssertIgnoringOrder(final Unix4jCommandBuilder command){
+		final List<String> actualOutputLines = command.toStringList();
+
+        List<String> actualOutputLinesSorted = new ArrayList<String>(actualOutputLines);
+        Collections.sort(actualOutputLinesSorted);
+
+        List<String> expectedOutputLinesSorted = new ArrayList<String>(expectedOutputLines);
+        Collections.sort(expectedOutputLinesSorted);
+
+        boolean ok = expectedOutputLines.size() == actualOutputLines.size();
+		for (int i = 0; ok && i < expectedOutputLines.size(); i++) {
+			final String exp = expectedOutputLinesSorted.get(i);
+			final String act = actualOutputLinesSorted.get(i);
+			ok = matchMode.matches(exp, act);
+		}
+		if (!ok) {
+            System.out.println("Actual:");
+            for(final String line: actualOutputLinesSorted){
+                System.out.println(line);
+            }
+			throw printFailureCommandToStandardErr(command, actualOutputLinesSorted);
 		}
 	}
 

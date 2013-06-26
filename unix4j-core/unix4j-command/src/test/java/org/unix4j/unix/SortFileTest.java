@@ -15,63 +15,63 @@ public class SortFileTest {
 	@Test
 	public void sort() {
 		final CommandFileTest tester = new CommandFileTest(this.getClass());
-		tester.run(Unix4j.fromFile(tester.getInputFile()).sort());
-		tester.run(Unix4j.builder().sort(tester.getInputFile()));
-		tester.run(Unix4j.builder().sort("" + tester.getInputFile()));
-		tester.run(Unix4j.builder().sort("--files", tester.getInputFileName()));
+		tester.runAndAssert(Unix4j.fromFile(tester.getInputFile()).sort());
+		tester.runAndAssert(Unix4j.builder().sort(tester.getInputFile()));
+		tester.runAndAssert(Unix4j.builder().sort("" + tester.getInputFile()));
+		tester.runAndAssert(Unix4j.builder().sort("--files", tester.getInputFileName()));
 	}
 
 	@Test
 	public void sortReverse() {
 		final CommandFileTest tester = new CommandFileTest(this.getClass());
-		tester.run(Unix4j.fromFile(tester.getInputFile()).sort(Sort.Options.reverse));
-		tester.run(Unix4j.builder().sort(Sort.Options.reverse, tester.getInputFile()));
-		tester.run(Unix4j.builder().sort("-r", tester.getInputFileName()));
-		tester.run(Unix4j.builder().sort("--reverse", "--", tester.getInputFileName()));
-		tester.run(Unix4j.builder().sort(tester.getInputFileName(), "--reverse"));
+		tester.runAndAssert(Unix4j.fromFile(tester.getInputFile()).sort(Sort.Options.reverse));
+		tester.runAndAssert(Unix4j.builder().sort(Sort.Options.reverse, tester.getInputFile()));
+		tester.runAndAssert(Unix4j.builder().sort("-r", tester.getInputFileName()));
+		tester.runAndAssert(Unix4j.builder().sort("--reverse", "--", tester.getInputFileName()));
+		tester.runAndAssert(Unix4j.builder().sort(tester.getInputFileName(), "--reverse"));
 	}
 
 	@Test
 	public void sortNumeric() {
 		final CommandFileTest tester = new CommandFileTest(this.getClass());
-		tester.run(Unix4j.builder().sort(Sort.Options.numericSort, tester.getInputFiles()));
-		tester.run(Unix4j.builder().sort(combine(arr("-n"), tester.getInputFileNames())));
-		tester.run(Unix4j.builder().sort(combine(arr("--numericSort", "--"), tester.getInputFileNames())));
-		tester.run(Unix4j.builder().sort(combine(arr("--numericSort", "--paths"), tester.getInputFileNames())));
-		tester.run(Unix4j.builder().sort(combine(tester.getInputFileNames(), "--numericSort")));
+		tester.runAndAssert(Unix4j.builder().sort(Sort.Options.numericSort, tester.getInputFiles()));
+		tester.runAndAssert(Unix4j.builder().sort(combine(arr("-n"), tester.getInputFileNames())));
+		tester.runAndAssert(Unix4j.builder().sort(combine(arr("--numericSort", "--"), tester.getInputFileNames())));
+		tester.runAndAssert(Unix4j.builder().sort(combine(arr("--numericSort", "--paths"), tester.getInputFileNames())));
+		tester.runAndAssert(Unix4j.builder().sort(combine(tester.getInputFileNames(), "--numericSort")));
 	}
 
 	@Test
 	public void sortGeneralNumeric() {
 		final CommandFileTest tester = new CommandFileTest(this.getClass());
-		tester.run(Unix4j.builder().sort(Sort.Options.generalNumericSort, tester.getInputFiles()));
-		tester.run(Unix4j.builder().sort(combine(arr("-g"), tester.getInputFileNames())));
-		tester.run(Unix4j.builder().sort(combine(arr("--generalNumericSort", "--paths"), tester.getInputFileNames())));
-		tester.run(Unix4j.builder().sort(combine(arr("--generalNumericSort", "--"), tester.getInputFileNames())));
+		tester.runAndAssert(Unix4j.builder().sort(Sort.Options.generalNumericSort, tester.getInputFiles()));
+		tester.runAndAssert(Unix4j.builder().sort(combine(arr("-g"), tester.getInputFileNames())));
+		tester.runAndAssert(Unix4j.builder().sort(combine(arr("--generalNumericSort", "--paths"), tester.getInputFileNames())));
+		tester.runAndAssert(Unix4j.builder().sort(combine(arr("--generalNumericSort", "--"), tester.getInputFileNames())));
 	}
 
 	@Test
 	public void sortNumericIntegers() {
 		final CommandFileTest tester = new CommandFileTest(this.getClass());
-		tester.run(Unix4j.builder().sort(Sort.Options.numericSort, tester.getInputFiles()));
-		tester.run(Unix4j.builder().sort(combine(tester.getInputFileNames(), "-n")));
-		tester.run(Unix4j.builder().sort(combine(arr("--numericSort", "--paths"), tester.getInputFileNames())));
+		tester.runAndAssert(Unix4j.builder().sort(Sort.Options.numericSort, tester.getInputFiles()));
+		tester.runAndAssert(Unix4j.builder().sort(combine(tester.getInputFileNames(), "-n")));
+		tester.runAndAssert(Unix4j.builder().sort(combine(arr("--numericSort", "--paths"), tester.getInputFileNames())));
 	}
 	
 	@Test
 	public void sortMerge() {
 		final CommandFileTest tester = new CommandFileTest(this.getClass(), 3);
-		tester.run(Unix4j.builder().sort(Sort.Options.merge, tester.getInputFiles()));
-		tester.run(Unix4j.builder().sort(combine(arr("--merge", "--paths"), tester.getInputFileNames())));
-		tester.run(Unix4j.builder().sort(combine(tester.getInputFileNames(), "-m")));
+		tester.runAndAssert(Unix4j.builder().sort(Sort.Options.merge, tester.getInputFiles()));
+		tester.runAndAssert(Unix4j.builder().sort(combine(arr("--merge", "--paths"), tester.getInputFileNames())));
+		tester.runAndAssert(Unix4j.builder().sort(combine(tester.getInputFileNames(), "-m")));
 	}
 	
 	@Test
 	public void sortCheck() {
 		final CommandFileTest tester = new CommandFileTest(this.getClass(), 2);
-		tester.run(Unix4j.builder().sort(Sort.Options.check, tester.getInputFiles()));
-		tester.run(Unix4j.builder().sort(combine(arr("--check", "--paths"), tester.getInputFileNames())));
-		tester.run(Unix4j.builder().sort(combine(tester.getInputFileNames(), "-c")));
+		tester.runAndAssert(Unix4j.builder().sort(Sort.Options.check, tester.getInputFiles()));
+		tester.runAndAssert(Unix4j.builder().sort(combine(arr("--check", "--paths"), tester.getInputFileNames())));
+		tester.runAndAssert(Unix4j.builder().sort(combine(tester.getInputFileNames(), "-c")));
 	}
 
 	@Test

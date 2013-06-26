@@ -37,7 +37,7 @@ public class FindFileTest {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
         final Config config = new Config(tester, currentDirectory);
-        tester.run(Unix4j.use(config).find("."));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find("."));
     }
 
     //(cd default.input && find ./)
@@ -46,7 +46,7 @@ public class FindFileTest {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
         final Config config = new Config(tester, currentDirectory);
-        tester.run(Unix4j.use(config).find("./"));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find("./"));
     }
 
     //(cd default.input/folder && find ..)
@@ -55,7 +55,7 @@ public class FindFileTest {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input/folder");
         final Config config = new Config(tester, currentDirectory);
-        tester.run(Unix4j.use(config).find(".."));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find(".."));
     }
 
     @Test
@@ -63,7 +63,7 @@ public class FindFileTest {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input/folder");
         final Config config = new Config(tester, currentDirectory);
-        tester.run(Unix4j.use(config).find("../"));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find("../"));
     }
 
     //(cd default.input/mydir/SUBDIR && find ../..)
@@ -72,7 +72,7 @@ public class FindFileTest {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input/mydir/SUBDIR");
         final Config config = new Config(tester, currentDirectory);
-        tester.run(Unix4j.use(config).find("../.."));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find("../.."));
     }
 
     //(cd default.input/mydir && find ../mydir)
@@ -81,7 +81,7 @@ public class FindFileTest {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input/mydir");
         final Config config = new Config(tester, currentDirectory);
-        tester.run(Unix4j.use(config).find("../mydir"));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find("../mydir"));
     }
 
     //(cd default.input && find mydir)
@@ -90,7 +90,7 @@ public class FindFileTest {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
         final Config config = new Config(tester, currentDirectory);
-        tester.run(Unix4j.use(config).find("mydir"));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find("mydir"));
     }
 
     //(cd default.input && find mydir/SUBDIR)
@@ -99,7 +99,7 @@ public class FindFileTest {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
         final Config config = new Config(tester, currentDirectory);
-        tester.run(Unix4j.use(config).find("mydir/SUBDIR"));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find("mydir/SUBDIR"));
     }
 
     //(cd default.input && find ./mydir)
@@ -108,7 +108,7 @@ public class FindFileTest {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
         final Config config = new Config(tester, currentDirectory);
-        tester.run(Unix4j.use(config).find("./mydir"));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find("./mydir"));
     }
 
     //(cd default.input && find ./mydir/SUBDIR)
@@ -117,7 +117,7 @@ public class FindFileTest {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
         final Config config = new Config(tester, currentDirectory);
-        tester.run(Unix4j.use(config).find("./mydir/SUBDIR"));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find("./mydir/SUBDIR"));
     }
 
     //(cd default.input && find . -type f)
@@ -126,7 +126,7 @@ public class FindFileTest {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
         final Config config = new Config(tester, currentDirectory);
-        tester.run(Unix4j.use(config).find(Find.Options.typeFile, ".", "*"));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find(Find.Options.typeFile, ".", "*"));
     }
 
     //(cd default.input && find . -type d)
@@ -135,7 +135,7 @@ public class FindFileTest {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
         final Config config = new Config(tester, currentDirectory);
-        tester.run(Unix4j.use(config).find(Find.Options.typeDirectory, ".", "*"));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find(Find.Options.typeDirectory, ".", "*"));
     }
 
     //(cd default.input && find . -type f -name a.txt)
@@ -144,8 +144,8 @@ public class FindFileTest {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
         final Config config = new Config(tester, currentDirectory);
-        tester.run(Unix4j.use(config).find(Find.Options.typeFile, ".", "a.txt"));
-        tester.run(Unix4j.use(config).find(Find.Options.f, ".", "a.txt"));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find(Find.Options.typeFile, ".", "a.txt"));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find(Find.Options.f, ".", "a.txt"));
     }
 
     //(cd default.input && find . -name bb.*)
@@ -154,7 +154,7 @@ public class FindFileTest {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
         final Config config = new Config(tester, currentDirectory);
-        tester.run(Unix4j.use(config).find(".", "bb.*"));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find(".", "bb.*"));
     }
 
     //(cd default.input && find . -name bb.t*)
@@ -163,7 +163,7 @@ public class FindFileTest {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
         final Config config = new Config(tester, currentDirectory);
-        tester.run(Unix4j.use(config).find(".", "bb.t*"));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find(".", "bb.t*"));
     }
 
     //(cd default.input && find . -type f -iname bb.txt)
@@ -172,8 +172,8 @@ public class FindFileTest {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
         final Config config = new Config(tester, currentDirectory);
-        tester.run(Unix4j.use(config).find(Find.Options.ignoreCase, ".", "bb.txt"));
-        tester.run(Unix4j.use(config).find(Find.Options.i, ".", "bb.txt"));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find(Find.Options.ignoreCase, ".", "bb.txt"));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find(Find.Options.i, ".", "bb.txt"));
     }
 
     //(cd default.input && find . -iname bb.t*)
@@ -182,8 +182,8 @@ public class FindFileTest {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
         final Config config = new Config(tester, currentDirectory);
-        tester.run(Unix4j.use(config).find(Find.Options.ignoreCase, ".", "bb.t*"));
-        tester.run(Unix4j.use(config).find(Find.Options.i, ".", "bb.t*"));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find(Find.Options.ignoreCase, ".", "bb.t*"));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find(Find.Options.i, ".", "bb.t*"));
     }
 
     //(cd default.input && find -E . -regex "a.*\.txt")
@@ -192,8 +192,8 @@ public class FindFileTest {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
         final Config config = new Config(tester, currentDirectory);
-        tester.run(Unix4j.use(config).find(Find.Options.regex, ".", "a.*\\.txt"));
-        tester.run(Unix4j.use(config).find(Find.Options.r, ".", "a.*\\.txt"));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find(Find.Options.regex, ".", "a.*\\.txt"));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find(Find.Options.r, ".", "a.*\\.txt"));
     }
 
     //(cd default.input && find -E . -regex ".*a\.txt")
@@ -202,8 +202,8 @@ public class FindFileTest {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
         final Config config = new Config(tester, currentDirectory);
-        tester.run(Unix4j.use(config).find(Find.Options.regex, ".", ".*a\\.txt"));
-        tester.run(Unix4j.use(config).find(Find.Options.r, ".", ".*a\\.txt"));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find(Find.Options.regex, ".", ".*a\\.txt"));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find(Find.Options.r, ".", ".*a\\.txt"));
     }
 
     //(cd default.input && find . -type f -size +1k)
@@ -212,8 +212,8 @@ public class FindFileTest {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
         final Config config = new Config(tester, currentDirectory);
-        tester.run(Unix4j.use(config).find(Find.Options.typeFile, ".", 1024));
-        tester.run(Unix4j.use(config).find(Find.Options.f, ".", 1024));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find(Find.Options.typeFile, ".", 1024));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find(Find.Options.f, ".", 1024));
     }
 
     //(cd default.input && find . -type f -size -1k)
@@ -222,8 +222,8 @@ public class FindFileTest {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
         final Config config = new Config(tester, currentDirectory);
-        tester.run(Unix4j.use(config).find(Find.Options.typeFile, ".", -1024));
-        tester.run(Unix4j.use(config).find(Find.Options.f, ".", -1024));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find(Find.Options.typeFile, ".", -1024));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find(Find.Options.f, ".", -1024));
     }
 
     //(cd default.input && find . -type f -size -1k -name a.*)
@@ -232,7 +232,7 @@ public class FindFileTest {
         final CommandFileTest tester = new CommandFileTest(this.getClass());
         final File currentDirectory = new File(tester.getInputFile().getParentFile().getPath() + "/default.input");
         final Config config = new Config(tester, currentDirectory);
-        tester.run(Unix4j.use(config).find(Find.Options.typeFile, ".", -1024, "a.*"));
-        tester.run(Unix4j.use(config).find(Find.Options.f, ".", -1024, "a.*"));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find(Find.Options.typeFile, ".", -1024, "a.*"));
+        tester.runAndAssertIgnoringOrder(Unix4j.use(config).find(Find.Options.f, ".", -1024, "a.*"));
     }
 }
