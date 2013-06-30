@@ -1,6 +1,7 @@
 package org.unix4j.unix.grep;
 
 import org.unix4j.line.Line;
+import org.unix4j.util.StringUtil;
 
 /**
  * Performs fixed string comparisons to decide whether the pattern matches a
@@ -25,11 +26,11 @@ abstract class FixedStringMatcher implements LineMatcher {
 	}
 	public static class IgnoreCase extends FixedStringMatcher {
 		public IgnoreCase(GrepArguments args) {
-			super(args.getRegexp().toUpperCase());
+			super(args.getRegexp());
 		}
 		@Override
 		public boolean matches(Line line) {
-			return line.getContent().toUpperCase().contains(pattern);
+			return StringUtil.containsIgnoreCase(line.getContent(), pattern);
 		}
 	}
 	public static class WholeLine extends FixedStringMatcher {
@@ -50,4 +51,5 @@ abstract class FixedStringMatcher implements LineMatcher {
 			return line.getContent().equalsIgnoreCase(pattern);
 		}
 	}
+	
 }
