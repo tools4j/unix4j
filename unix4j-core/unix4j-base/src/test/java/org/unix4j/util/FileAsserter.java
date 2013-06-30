@@ -1,10 +1,8 @@
 package org.unix4j.util;
 
-import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.fail;
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.List;
 
 /**
