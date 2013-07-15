@@ -20,6 +20,7 @@ public final class CompositeComparator<T> implements Comparator<T> {
 	 * @param comparators
 	 *            the underlying comparators
 	 */
+	@SuppressWarnings("unchecked")
 	public CompositeComparator(Comparator<? super T>... comparators) {
 		this(Arrays.asList(comparators));
 	}
