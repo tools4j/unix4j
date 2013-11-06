@@ -36,6 +36,10 @@ abstract class AbstractSortProcessor extends AbstractLineProcessor<SortArguments
 				comparator = ScientificNumberStringComparator.INSTANCE;
 			} else if (args.isHumanNumericSort()) {
 				throw new RuntimeException("option " + SortOption.humanNumericSort + " is not implemented");
+			} else if (args.isDictionaryOrder()) {
+				throw new RuntimeException("option " + SortOption.dictionaryOrder + " is not implemented");
+			} else if (args.isMonthSort()) {
+				throw new RuntimeException("option " + SortOption.monthSort + " is not implemented");
 			} else if (args.isVersionSort()) {
 				throw new RuntimeException("option " + SortOption.versionSort + " is not implemented");
 			} else { 

@@ -346,8 +346,10 @@ public class StringUtil {
 	 * Returns true if and only if the string {@code s} contains the specified
 	 * target string performing case insensitive string comparison.
 	 * 
-	 * @param s
-	 *            the sequence to search for
+	 * @param source
+	 *            the characters being searched.
+	 * @param target
+	 *            the characters being searched for.
 	 * @return true if this string contains <code>s</code>, false otherwise
 	 * @throws NullPointerException
 	 *             if <code>s</code> is <code>null</code>
@@ -395,8 +397,10 @@ public class StringUtil {
 	 * search. The source is the character array being searched, and the target
 	 * is the string being searched for.
 	 * 
-	 * @param str
-	 *            the substring to search for.
+	 * @param source
+	 *            the characters being searched.
+	 * @param target
+	 *            the characters being searched for.
 	 * @return the index of the first occurrence of the specified substring
 	 *         (ignoring the case), or {@code -1} if there is no such
 	 *         occurrence.

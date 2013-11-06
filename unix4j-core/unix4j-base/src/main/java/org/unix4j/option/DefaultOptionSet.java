@@ -37,7 +37,7 @@ public class DefaultOptionSet<E extends Enum<E> & Option> implements OptionSet<E
 	 * @param rest
 	 *            the remaining options to be set
 	 */
-	@SafeVarargs
+	@SuppressWarnings("unchecked")
 	public DefaultOptionSet(E first, E... rest) {
 		this.optionType = first.getDeclaringClass();
 		this.options = EnumSet.of(first, rest);

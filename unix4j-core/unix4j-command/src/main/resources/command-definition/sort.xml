@@ -21,7 +21,7 @@
 		properly terminated with a line ending (usually the last line in a file)
 		</note>
 		<!-- TODO implement sort options and remove the following notes -->
-		<note>The following sort order options are currently not supported: {@code dictionaryOrder}, {@code numericSort}, {@code versionSort}</note>
+		<note>The following sort order options are currently not supported: {@code dictionaryOrder}, {@code humanNumericSort}, {@code monthSort}, {@code versionSort}</note>
 	</notes>
 	<methods>
 		<method args="" usesStandardInput="true">
