@@ -42,7 +42,7 @@ public class GenericCommandBuilder {
 	 *             command methods defined by that interface or if multiple
 	 *             ambiguous implementations exist
 	 */
-	@SafeVarargs
+	@SuppressWarnings("unchecked")
 	public static <B extends CommandBuilder> B createCommandBuilder(Class<B> commandBuilderInterface, CommandInterface<? extends Command<?>>... commandFactories) {
 		return createCommandBuilder(commandBuilderInterface, new DefaultCommandBuilder(), commandFactories);
 	}
@@ -86,7 +86,7 @@ public class GenericCommandBuilder {
 		private final DefaultCommandBuilder defaultCommandBuilder;
 		private final Map<MethodSignature, Object> signatureToTarget = new HashMap<GenericCommandBuilder.MethodSignature, Object>();
 
-		@SafeVarargs
+		@SuppressWarnings("unchecked")
 		public GenericCommandHandler(Class<B> commandBuilderInterface, DefaultCommandBuilder defaultCommandBuilder, CommandInterface<? extends Command<?>>... commandFactories) {
 			this.defaultCommandBuilder = defaultCommandBuilder;
 			final Map<MethodSignature, Object> factoryMethods = new HashMap<GenericCommandBuilder.MethodSignature, Object>();

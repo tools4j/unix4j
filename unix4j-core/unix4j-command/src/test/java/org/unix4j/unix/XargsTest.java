@@ -122,6 +122,13 @@ public class XargsTest {
 		actual(Unix4j.from(input).cat().xargs(1).toStringList());
 	}
 
+	@Test
+	public void testXargsWithEchoAndArgsVariableThenSortThenGrep() {
+		expect("A\0B\0C\0\0D");
+		expect("tabs and spaces Bla");
+		actual(Unix4j.from(input).cat().xargs().echo(Arg.$all).sort().grep("B").toStringList());
+	}
+
 	private void expect(String... expectedLines) {
 		for (final String expectedLine : expectedLines) {
 			this.expectedLines.add(expectedLine);

@@ -27,7 +27,7 @@
 				</dependencies>
 				<configuration>
 					<cfgFile>src/main/resources/codegen/config.fmpp</cfgFile>
-					<outputDirectory>target/generated-sources/main/java</outputDirectory>
+					<outputDirectory>target/generated-sources/main</outputDirectory>
 					<templateDirectory>src/main/resources/codegen/templates</templateDirectory>
 				</configuration>
 				<executions>
@@ -50,7 +50,7 @@
 						</goals>
 						<configuration>
 							<sources>
-								<source>src/main/generated</source>
+								<source>target/generated-sources/main</source>
 							</sources>
 						</configuration>
 					</execution>
