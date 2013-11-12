@@ -128,19 +128,6 @@ public class XargsTest {
 		expect("tabs and spaces Bla");
 		actual(Unix4j.from(input).cat().xargs().echo(Arg.$all).sort().grep("B").toStringList());
 	}
-	
-	//Unix4j.find(dictFolder.getAbsolutePath(), "data.*").xargs().tail(Tail.Options.s, "26", Arg.$all).toStdOut();
-	@Test
-	public void testXargsWithTailAndSomeOptions() {
-		expect("A\0B\0C\0\0D");
-		expect("tabs and spaces Bla");
-		//actual(Unix4j.find(new File(System.getProperty("user.home")).getAbsolutePath()).xargs().tail(Tail.Options.s, 2, Arg.$all).toStringList());
-//		actual(Unix4j.find(Find.Options.typeFile, "*.txt").xargs().tail("-s", "--count", "10", "--paths", Arg.$all).toStringList());
-		System.out.println(Unix4j.find(Find.Options.typeFile, "*.txt").xargs().tail("-s", "--count", "1", "--paths", Arg.$0).toString());
-		actual(Unix4j.find(Find.Options.typeFile, "*.txt").xargs(1).tail("-s", "--count", "-10000", "--paths", Arg.$0).toStringList());
-//		actual(Unix4j.from(input).tail("-s", "--count", "1").toStringList());
-		//actual(Unix4j.find(Find.Options.typeFile, "*.txt").xargs().tail("-s", "--count", "1", "--paths", Arg.$all).toStringList());
-	}
 
 	private void expect(String... expectedLines) {
 		for (final String expectedLine : expectedLines) {
