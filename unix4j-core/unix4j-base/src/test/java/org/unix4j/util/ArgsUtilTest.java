@@ -20,6 +20,7 @@ public class ArgsUtilTest {
 	private static final String DEFAULT = "default";
 	private static final String PATTERN = "pattern";
 	private static final String PATHS	= "paths";
+	private static final String SIZE	= "size";
 
 	private Map<String, List<Object>> actual;
 	private Map<String, List<Object>> expected;
@@ -206,6 +207,12 @@ public class ArgsUtilTest {
 		expect(PATTERN, "error");
 		expect(PATHS, "*");
 		actualGrep("--ignoreCase", "--" + PATHS, "*", "--", "error");
+	}
+
+	@Test
+	public void testFindWithNegativeSizeOperand() {
+		expect(SIZE, "-1000");
+		actual("--size", "-1000");
 	}
 
 	@Test

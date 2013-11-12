@@ -105,7 +105,7 @@ public class ArgsUtil {
 							name = sarg.substring(2);// cut off the dashes --
 							values = null;
 						}
-					} else if (sarg.startsWith("-")) {
+					} else if (sarg.startsWith("-") && !isDigit(sarg, 2)) {
 						isOperandValue = false;
 						// a short option name string
 						add(optionsKey, map, name, values);
@@ -134,6 +134,10 @@ public class ArgsUtil {
 		return map;
 	}
 	
+	private static boolean isDigit(String s, int pos) {
+		return s.length() > pos && Character.isDigit(s.charAt(pos));
+	}
+
 	private static String getDefaultKey(Map<String, List<Object>> map, List<String> defaultKeys) {
 		for (final String defaultKey : defaultKeys) {
 			if (!map.containsKey(defaultKey)) {

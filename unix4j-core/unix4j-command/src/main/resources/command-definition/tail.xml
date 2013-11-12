@@ -96,7 +96,8 @@
 		<operand name="count" type="long">
 			The last {@code count} lines of each input file are
 			copied to standard output, starting from 1 (characters instead of 
-			lines if the {@code -c} option is specified). Must be a non-negative 
+			lines if the {@code -c} option is specified, and offset from start  
+			instead of end with {@code -s} option). Must be a non-negative 
 			integer or an exception is thrown. If {@code count} is greater than 
 			the number number of lines (characters) in the input, the
 			application will not error and send the whole file to the output.
