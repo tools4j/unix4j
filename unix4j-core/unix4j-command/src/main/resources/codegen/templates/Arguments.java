@@ -322,6 +322,7 @@ public final class ${argumentsName} implements Arguments<${argumentsName}> {
 		<#if hasArgsOperand(def)>
 		if (argsIsSet) {
 			for (String arg : args) {
+				if (sb.length() > 0) sb.append(' ');
 				sb.append(arg);
 			}
 		} else {
