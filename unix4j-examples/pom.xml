@@ -21,6 +21,24 @@
 
     <profiles>
         <profile>
+            <id>local</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>env</name>
+                    <value>local</value>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.unix4j</groupId>
+                    <artifactId>unix4j-command</artifactId>
+                    <version>LATEST</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
             <id>snapshots</id>
             <activation>
                 <property>
