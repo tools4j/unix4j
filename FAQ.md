@@ -1,0 +1,2 @@
+#### The commands implemented in Unix4j are just a small subset of all unix commands.  Do you plan to implement any more commands? ####
+Indeed we do.  The small subset of commands that are implemented were chosen as a basic starting point.  If you wish to see another command implemented, please review the list [here](http://code.google.com/p/unix4j/issues/list?can=2&q=type=NewCommand), vote for the command if it is in the list, otherwise please raise a new issue with the type `"NewCommand"`.
