@@ -12,7 +12,21 @@ In Unix4j this would look like:
 Unix4j.cat("test.txt").grep("Tuesday").sed("s/kilogram/kg/g").sort();
 ```
 
-Currently supported commands are: cat, cd, cut, echo, find, grep, head, ls, sed, sort, tail, uniq, wc, xargs.
+Currently supported commands are: 
+[cat](http://www.unix4j.org/javadoc/org/unix4j/unix/Cat.html),
+[cd](http://www.unix4j.org/javadoc/org/unix4j/unix/Cd.html),
+[cut](http://www.unix4j.org/javadoc/org/unix4j/unix/Cut.html),
+[echo](http://www.unix4j.org/javadoc/org/unix4j/unix/Echo.html),
+[find](http://www.unix4j.org/javadoc/org/unix4j/unix/Find.html),
+[grep](http://www.unix4j.org/javadoc/org/unix4j/unix/Grep.html),
+[head](http://www.unix4j.org/javadoc/org/unix4j/unix/Head.html),
+[ls](http://www.unix4j.org/javadoc/org/unix4j/unix/Ls.html),
+[sed](http://www.unix4j.org/javadoc/org/unix4j/unix/Sed.html),
+[sort](http://www.unix4j.org/javadoc/org/unix4j/unix/Sort.html),
+[tail](http://www.unix4j.org/javadoc/org/unix4j/unix/Tail.html),
+[uniq](http://www.unix4j.org/javadoc/org/unix4j/unix/Uniq.html),
+[wc](http://www.unix4j.org/javadoc/org/unix4j/unix/Wc.html),
+[xargs](http://www.unix4j.org/javadoc/org/unix4j/unix/Xargs.html).
 
 ## Maven ##
 ```xml
