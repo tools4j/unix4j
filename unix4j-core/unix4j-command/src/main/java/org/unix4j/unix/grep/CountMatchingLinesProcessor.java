@@ -53,5 +53,6 @@ final class CountMatchingLinesProcessor extends DefaultInputProcessor implements
 	@Override
 	public void finish() {
 		output.processLine(new SimpleLine(String.valueOf(counter.getCount())));
+		output.finish();
 	}
 }
