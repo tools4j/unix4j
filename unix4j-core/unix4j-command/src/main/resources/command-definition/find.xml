@@ -289,9 +289,9 @@
 			{@code -iregex (-i)} is specified.
 		</operand>
 		<operand name="size" type="long">
-			Consider only files using at least {@code size} bytes or at most
-			{@code size} bytes if {@code size} is positive, or at most 
-			{@code abs(size)} bytes if {@code size} is zero or negative.
+			Consider only files using at least {@code size} bytes if {@code size}
+			is positive, or at most {@code abs(size)} bytes if {@code size} is zero
+			or negative.
 		</operand>
 		<operand name="time" type="java.util.Date">
 			Consider only files that have been created, modified or accessed
