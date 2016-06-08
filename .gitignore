@@ -15,3 +15,4 @@ unix4j-tools/unix4j-tools.iml
 unix4j.iml
 unix4j-core/unix4j-base/codecover
 unix4j-core/unix4j-command/codecover
+.DS_Store
