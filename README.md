@@ -68,9 +68,10 @@ Unix4j.grep(Grep.Options.v, "apple", "fruitlist.txt").toStdOut();
 
 ##### Some command usage examples
 [CommandBuilderTest.java](blob/master/unix4j-core/unix4j-command/src/test/java/org/unix4j/builder/CommandBuilderTest.java)
+[ExampleTest.java](https://github.com/tools4j/unix4j/blob/master/unix4j-examples/src/test/java/org/unix4j/example/ExampleTest.java)
 
 ##### FAQ
 [Questions & Answers](https://github.com/tools4j/unix4j/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3Aquestion)
 
-##### API Javadoc:
+##### API Javadoc
 http://www.unix4j.org/javadoc/index.html
