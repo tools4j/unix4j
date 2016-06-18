@@ -33,7 +33,7 @@
                 <dependency>
                     <groupId>org.unix4j</groupId>
                     <artifactId>unix4j-command</artifactId>
-                    <version>LATEST</version>
+                    <version>${project.version}</version>
                 </dependency>
             </dependencies>
         </profile>

@@ -7,9 +7,11 @@ import org.unix4j.Unix4j;
 import org.unix4j.builder.Unix4jCommandBuilder;
 import org.unix4j.io.Output;
 import org.unix4j.io.StreamOutput;
+import org.unix4j.unix.Cut;
 import org.unix4j.unix.Ls;
 import org.unix4j.unix.Sort;
 import org.unix4j.unix.grep.GrepOption;
+import org.unix4j.util.Range;
 import org.unix4j.variable.Arg;
 
 public class ExampleTest {
@@ -56,6 +58,41 @@ public class ExampleTest {
 	@Test
 	public void testLsFile() {
 		unix4j.ls("src");
+	}
+
+	@Test
+	public void testCut_4_5_6_7_8() {
+		unix4j.fromString("some string").cut(Cut.Options.c, 4, 5, 6, 7, 8);
+	}
+
+	@Test
+	public void testCut_4_to_8() {
+		unix4j.fromString("some string").cut(Cut.Options.c, Range.between(4, 8));
+	}
+
+	@Test
+	public void testCut_4_5_6_to_8_string_args() {
+		unix4j.fromString("some string").cut("-c", "4,5,6-8");
+	}
+
+	@Test
+	public void testCut_1_string_args() {
+		unix4j.fromString("some string").cut("-c", "1");
+	}
+
+	@Test
+	public void testCut_to_8_string_args() {
+		unix4j.fromString("some string").cut("-c", "-8");
+	}
+
+	@Test
+	public void testCut_4_to_8_string_args() {
+		unix4j.fromString("some string").cut("-c", "4-8");
+	}
+
+	@Test
+	public void testCut_4_to_string_args() {
+		unix4j.fromString("some string").cut("-c", "4-");
 	}
 
 	@Test
