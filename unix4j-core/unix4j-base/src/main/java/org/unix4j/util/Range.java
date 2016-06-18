@@ -79,6 +79,11 @@ public class Range{
 		return this;
 	}
 
+	@Override
+	public String toString() {
+		return compositeRange.toString();
+	}
+
 	/**
 	 * @param indexes a list of indexes to include in the range
 	 * @return A new range object consisting of this range.
