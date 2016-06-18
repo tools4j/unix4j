@@ -105,7 +105,7 @@ public class ArgsUtil {
 							name = sarg.substring(2);// cut off the dashes --
 							values = null;
 						}
-					} else if (sarg.startsWith("-") && !isDigit(sarg, 2)) {
+					} else if (sarg.startsWith("-") && !isDigit(sarg, 1)) {
 						isOperandValue = false;
 						// a short option name string
 						add(optionsKey, map, name, values);

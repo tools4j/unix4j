@@ -1,5 +1,8 @@
 package org.unix4j.convert;
 
+import org.unix4j.convert.EnumConverters.StringToEnumConverter;
+import org.unix4j.util.Range;
+
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -8,8 +11,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
-
-import org.unix4j.convert.EnumConverters.StringToEnumConverter;
 
 /**
  * Default implementation for {@code ConverterRegistry} storing the converters
@@ -40,6 +41,7 @@ public class DefaultConverterRegistry implements ConverterRegistry {
 		registerValueConverter(OutputStream.class, OutputStreamConverters.DEFAULT);
 		registerValueConverter(URL.class, URLConverters.DEFAULT);
 		registerValueConverter(Pattern.class, PatternConverters.DEFAULT);
+		registerValueConverter(Range.class, RangeConverters.DEFAULT);
 	}
 
 	@Override
