@@ -1,3 +1,5 @@
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.unix4j/unix4j-command/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.unix4j/unix4j-command)
+
 <b>Unix4j</b> is an implementation of Unix command line tools in Java. You can use the commands that you know from Unix in a Java program---you can pipe the results of one command to another as you know it from Unix.
 
 Unix4j gives you the power of unix commands, e.g. text processing, file management, with the benefits that come from a strongly typed and testable language such as Java.
