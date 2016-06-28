@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/tools4j/unix4j.svg?branch=master)](https://travis-ci.org/tools4j/unix4j)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.unix4j/unix4j-command/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.unix4j/unix4j-command)
 
 <b>Unix4j</b> is an implementation of Unix command line tools in Java. You can use the commands that you know from Unix in a Java program---you can pipe the results of one command to another as you know it from Unix.
