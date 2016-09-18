@@ -21,13 +21,13 @@
 					<dependency>
 						<groupId>org.unix4j</groupId>
 						<artifactId>unix4j-tools</artifactId>
-						<version>${project.parent.version}</version>
+						<version>${project.version}</version>
 						<optional>true</optional>
 					</dependency>
 				</dependencies>
 				<configuration>
 					<cfgFile>src/main/resources/codegen/config.fmpp</cfgFile>
-					<outputDirectory>target/generated-sources/main/java</outputDirectory>
+					<outputDirectory>${build.directory}/generated-sources</outputDirectory>
 					<templateDirectory>src/main/resources/codegen/templates</templateDirectory>
 				</configuration>
 				<executions>
@@ -50,48 +50,13 @@
 						</goals>
 						<configuration>
 							<sources>
-								<source>src/main/generated</source>
+								<source>${build.directory}/generated-sources</source>
 							</sources>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 		</plugins>
-		<pluginManagement>
-			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
-											com.googlecode.fmpp-maven-plugin
-										</groupId>
-										<artifactId>
-											fmpp-maven-plugin
-										</artifactId>
-										<versionRange>
-											[1.0,)
-										</versionRange>
-										<goals>
-											<goal>generate</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 	</build>
 
 	<dependencies>
@@ -105,22 +70,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.10</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<profiles>
-		<profile>
-			<id>jdk16</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-		</profile>
-		<profile>
-			<id>jdk17</id>
-			<activation>
-				<jdk>1.7</jdk>
-			</activation>
-		</profile>
-	</profiles>
 </project>
