@@ -12,6 +12,15 @@ public class Java7Util {
 	public static final String JAVA7_CLASS_NAME_SUFFIX = "7";
 
 	/**
+	 * Returns true if the system property "java.version" starts with "1.7".
+	 *
+	 * @return true if the current java version is 1.7
+     */
+	public static final boolean isJava7() {
+		return System.getProperty("java.version").startsWith("1.7");
+	}
+
+	/**
 	 * Returns a new instance of the Java 7 version of the given class if it
 	 * exists and can be instantiated. Otherwise, the given
 	 * {@code defaultInstance} is returned.

@@ -372,4 +372,268 @@ public class SortTest {
 		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.r.u).toStringResult());
 		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort("-ru").toStringResult());
 	}
+
+	@Test
+	public void testSortNumeric() {
+		final MultilineString input = new MultilineString();
+		input
+				.appendLine("1111")
+				.appendLine("2222")
+				.appendLine("3333")
+				.appendLine("44")
+				.appendLine("555")
+				.appendLine("66666")
+				.appendLine("88")
+				.appendLine("9")
+				.appendLine("-1111")
+		;
+
+		final MultilineString expectedOutput = new MultilineString();
+		expectedOutput
+				.appendLine("-1111")
+				.appendLine("9")
+				.appendLine("44")
+				.appendLine("88")
+				.appendLine("555")
+				.appendLine("1111")
+				.appendLine("2222")
+				.appendLine("3333")
+				.appendLine("66666")
+		;
+
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.numericSort).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.n).toStringResult());
+	}
+
+	@Test
+	public void testSortNumericReverse() {
+		final MultilineString input = new MultilineString();
+		input
+				.appendLine("1111")
+				.appendLine("2222")
+				.appendLine("3333")
+				.appendLine("44")
+				.appendLine("555")
+				.appendLine("-1111")
+				.appendLine("66666")
+				.appendLine("88")
+				.appendLine("9")
+		;
+
+		final MultilineString expectedOutput = new MultilineString();
+		expectedOutput
+				.appendLine("66666")
+				.appendLine("3333")
+				.appendLine("2222")
+				.appendLine("1111")
+				.appendLine("555")
+				.appendLine("88")
+				.appendLine("44")
+				.appendLine("9")
+				.appendLine("-1111")
+		;
+
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.numericSort.reverse).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.n.r).toStringResult());
+	}
+
+	@Test
+	public void testSortGeneralNumeric() {
+		final MultilineString input = new MultilineString();
+		input
+				.appendLine("1111")
+				.appendLine("2222.234")
+				.appendLine("3333e-2")
+				.appendLine("44e7")
+				.appendLine("555e-127")
+				.appendLine("66666e7")
+				.appendLine("-88e10")
+				.appendLine("9e99")
+		;
+
+		final MultilineString expectedOutput = new MultilineString();
+		expectedOutput
+				.appendLine("-88e10")
+				.appendLine("555e-127")
+				.appendLine("3333e-2")
+				.appendLine("1111")
+				.appendLine("2222.234")
+				.appendLine("44e7")
+				.appendLine("66666e7")
+				.appendLine("9e99")
+		;
+
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.generalNumericSort).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.g).toStringResult());
+	}
+
+	@Test
+	public void testSortVersion() {
+		final MultilineString input = new MultilineString();
+		input
+				.appendLine("V1.23.78")
+				.appendLine("V1.24.03")
+				.appendLine("V1.23.77a")
+				.appendLine("V1.24.123")
+				.appendLine("V3.24.12")
+				.appendLine("V1.23.77")
+				.appendLine("V11.24.12")
+				.appendLine("V1.24.2")
+				.appendLine("V1.24.12")
+		;
+
+		final MultilineString expectedOutput = new MultilineString();
+		expectedOutput
+				.appendLine("V1.23.77")
+				.appendLine("V1.23.77a")
+				.appendLine("V1.23.78")
+				.appendLine("V1.24.2")
+				.appendLine("V1.24.03")
+				.appendLine("V1.24.12")
+				.appendLine("V1.24.123")
+				.appendLine("V3.24.12")
+				.appendLine("V11.24.12")
+		;
+
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.versionSort).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.V).toStringResult());
+	}
+
+	@Test
+	public void testSortMonth() {
+		final MultilineString input = new MultilineString();
+		input
+				.appendLine("JuL")
+				.appendLine("Jun")
+				.appendLine("Jan")
+				.appendLine("AAAA")
+				.appendLine("March")
+				.appendLine("ZZZZ")
+				.appendLine("dec")
+				.appendLine("FEB")
+				.appendLine("Apr")
+		;
+
+		final MultilineString expectedOutput = new MultilineString();
+		expectedOutput
+				.appendLine("AAAA")
+				.appendLine("ZZZZ")
+				.appendLine("Jan")
+				.appendLine("FEB")
+				.appendLine("March")
+				.appendLine("Apr")
+				.appendLine("Jun")
+				.appendLine("JuL")
+				.appendLine("dec")
+		;
+
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.monthSort).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.M).toStringResult());
+	}
+
+	@Test
+	public void testSortHuman() {
+		final MultilineString input = new MultilineString();
+		input
+				.appendLine("113")
+				.appendLine("1025")
+				.appendLine("-23234")
+				.appendLine("-2323423T")
+				.appendLine("1K")
+				.appendLine("-1K")
+				.appendLine("2.5M")
+				.appendLine("2.6M")
+				.appendLine("1G")
+				.appendLine("2G")
+				.appendLine("3T")
+				.appendLine("0.2G")
+		;
+
+		final MultilineString expectedOutput = new MultilineString();
+		expectedOutput
+				.appendLine("-2323423T")
+				.appendLine("-1K")
+				.appendLine("-23234")
+				.appendLine("113")
+				.appendLine("1025")
+				.appendLine("1K")
+				.appendLine("2.5M")
+				.appendLine("2.6M")
+				.appendLine("0.2G")
+				.appendLine("1G")
+				.appendLine("2G")
+				.appendLine("3T")
+		;
+
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.humanNumericSort).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.h).toStringResult());
+	}
+
+	@Test
+	public void testSortDictionary() {
+		final MultilineString input = new MultilineString();
+		input
+				.appendLine("AAA $$$_777 $$$_ZZZ")
+				.appendLine("AAA 777 BBB")
+				.appendLine("AAA $$$_777 $$$_111")
+				.appendLine("aaa 777 bbb")
+				.appendLine("AA $_4 $&$%@##(*_)@(#$_1")
+				.appendLine("AA $_6 $&$%@##(*_)@(#$_1")
+				.appendLine("AA $_8 $&$%@##(*_)@(#$_1")
+				.appendLine("AA 9 1")
+				.appendLine("AA 7 1")
+				.appendLine("AA 5 1")
+		;
+
+		final MultilineString expectedOutput = new MultilineString();
+		expectedOutput
+				.appendLine("AA $_4 $&$%@##(*_)@(#$_1")
+				.appendLine("AA 5 1")
+				.appendLine("AA $_6 $&$%@##(*_)@(#$_1")
+				.appendLine("AA 7 1")
+				.appendLine("AA $_8 $&$%@##(*_)@(#$_1")
+				.appendLine("AA 9 1")
+				.appendLine("AAA $$$_777 $$$_111")
+				.appendLine("aaa 777 bbb")
+				.appendLine("AAA 777 BBB")
+				.appendLine("AAA $$$_777 $$$_ZZZ")
+		;
+
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.dictionaryOrder).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.d).toStringResult());
+	}
+
+	@Test
+	public void testSortDictionaryIgnoreCase() {
+		final MultilineString input = new MultilineString();
+		input
+				.appendLine("AAA $$$_777 $$$_ZZZ")
+				.appendLine("AAA 777 BBB")
+				.appendLine("AAA $$$_777 $$$_111")
+				.appendLine("aaa 777 bbb")
+				.appendLine("AA $_4 $&$%@##(*_)@(#$_1")
+				.appendLine("AA $_6 $&$%@##(*_)@(#$_1")
+				.appendLine("AA $_8 $&$%@##(*_)@(#$_1")
+				.appendLine("AA 9 1")
+				.appendLine("AA 7 1")
+				.appendLine("AA 5 1")
+		;
+
+		final MultilineString expectedOutput = new MultilineString();
+		expectedOutput
+				.appendLine("AA $_4 $&$%@##(*_)@(#$_1")
+				.appendLine("AA 5 1")
+				.appendLine("AA $_6 $&$%@##(*_)@(#$_1")
+				.appendLine("AA 7 1")
+				.appendLine("AA $_8 $&$%@##(*_)@(#$_1")
+				.appendLine("AA 9 1")
+				.appendLine("AAA $$$_777 $$$_111")
+				.appendLine("AAA 777 BBB")
+				.appendLine("aaa 777 bbb")
+				.appendLine("AAA $$$_777 $$$_ZZZ")
+		;
+
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.dictionaryOrder.ignoreCase).toStringResult());
+		assertEquals(expectedOutput.toString(), Unix4j.fromString(input.toString()).sort(Sort.Options.d.f).toStringResult());
+	}
 }

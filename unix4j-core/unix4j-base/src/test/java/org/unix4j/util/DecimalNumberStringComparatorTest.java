@@ -92,6 +92,7 @@ public class DecimalNumberStringComparatorTest extends AbstractNumberStringCompa
 		assertGreater("" + Double.NaN, "Na");
 		assertSmaller("" + Double.NaN, "NaNa");
 		assertGreater("ReallyNotANumber", "ReallyNotANumbaaaaaaaaaa");
+		assertGreater("2.00ReallyNotANumber", "2.00ReallyNotANumbaaaaaaaaaa");
 	}
 	@Test
 	public void testLargeIntegers() {

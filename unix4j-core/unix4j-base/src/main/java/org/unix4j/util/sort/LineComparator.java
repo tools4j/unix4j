@@ -1,10 +1,11 @@
 package org.unix4j.util.sort;
 
-import java.text.Collator;
-import java.util.Comparator;
-
 import org.unix4j.line.Line;
 import org.unix4j.util.sort.TrimBlanksStringComparator.Mode;
+
+import java.text.Collator;
+import java.util.Comparator;
+import java.util.Objects;
 
 /**
  * Comparator for a {@link Line} without line ending; forwards the comparison of
@@ -23,49 +24,38 @@ public class LineComparator implements Comparator<Line> {
 	 * @param comparator
 	 *            the comparator used to compare the line content string
 	 */
-	private LineComparator(Comparator<? super String> comparator) {
-		this.comparator = comparator;
+	public LineComparator(Comparator<? super String> comparator) {
+		this.comparator = Objects.requireNonNull(comparator);
+	}
+
+	/**
+	 * Constructor with options for line comparision.
+	 *
+	 * @param ignoreCase			true to ignore case, false for case sensitive comparison
+	 * @param ignoreLeadingBlanks	true if leading blanks shall be trimmed before the comparison
+	 * @param onlyDictionaryChars	true if only blanks and alphanumeric characters shall be considered
+     */
+	public LineComparator(boolean ignoreCase, boolean ignoreLeadingBlanks, boolean onlyDictionaryChars) {
+		this(getCollator(ignoreCase, ignoreLeadingBlanks, onlyDictionaryChars));
 	}
 
 	@Override
 	public int compare(Line line1, Line line2) {
 		return comparator.compare(line1.getContent(), line2.getContent());
 	}
-	
-	/**
-	 * Line comparator using case sensitive comparison based on the current
-	 * local's collation order.
-	 */
-	public static final LineComparator COLLATOR = new LineComparator(getCollator(false, false));
 
-	/**
-	 * Line comparator using case insensitive comparison based on the current
-	 * local's collation order.
-	 */
-	public static final LineComparator COLLATOR_IGNORE_CASE = new LineComparator(getCollator(true, false));
-
-	/**
-	 * Line comparator using case sensitive comparison based on the current
-	 * local's collation order, ignoring leading blanks (spaces and tabs) in the
-	 * content string of the line.
-	 */
-	public static final LineComparator COLLATOR_IGNORE_LEADING_BLANKS = new LineComparator(getCollator(false, true));
-
-	/**
-	 * Line comparator using case insensitive comparison based on the current
-	 * local's collation order, ignoring leading blanks (spaces and tabs) in the
-	 * content string of the line.
-	 */
-	public static final LineComparator COLLATOR_IGNORE_CASE_AND_LEADING_BLANKS = new LineComparator(getCollator(true, true));
-
-	private static Comparator<? super String> getCollator(boolean ignoreCase, boolean ignoreLeadingBlanks) {
+	private static Comparator<? super String> getCollator(boolean ignoreCase, boolean ignoreLeadingBlanks, boolean onlyDictionaryChars) {
 		final Collator collator = Collator.getInstance();
-		if (ignoreCase) {
-			collator.setStrength(Collator.SECONDARY);
-		}
+		collator.setStrength(ignoreCase ? Collator.SECONDARY : Math.max(Collator.TERTIARY, collator.getStrength()));
+		final Comparator<? super String> comparator;
 		if (ignoreLeadingBlanks) {
-			return new TrimBlanksStringComparator(Mode.Leading, collator);
+			comparator = new TrimBlanksStringComparator(Mode.Leading, collator);
+		} else {
+			comparator = collator;
 		}
-		return collator;
+		if (onlyDictionaryChars) {
+			return new DictionaryStringComparator(comparator);
+		}
+		return comparator;
 	};
 }

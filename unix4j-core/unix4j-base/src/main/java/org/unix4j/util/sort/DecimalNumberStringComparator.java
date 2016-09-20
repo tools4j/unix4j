@@ -3,6 +3,7 @@ package org.unix4j.util.sort;
 import java.text.DecimalFormatSymbols;
 import java.util.Comparator;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * A comparator for decimal strings consisting of optional blanks, an optional
@@ -56,7 +57,7 @@ public class DecimalNumberStringComparator implements Comparator<CharSequence> {
 	 *            the decimal symbols
 	 */
 	public DecimalNumberStringComparator(DecimalFormatSymbols symbols) {
-		this.symbols = symbols;
+		this.symbols = Objects.requireNonNull(symbols);
 	}
 
 	@Override
@@ -66,7 +67,7 @@ public class DecimalNumberStringComparator implements Comparator<CharSequence> {
 		return compare(s1, start1, s1.length(), s2, start2, s2.length());
 	}
 
-	private int compare(CharSequence s1, int start1, int end1, CharSequence s2, int start2, int end2) {
+	int compare(CharSequence s1, int start1, int end1, CharSequence s2, int start2, int end2) {
 		final char decimalSeparator = symbols.getDecimalSeparator();
 		final char groupingSeparator = symbols.getGroupingSeparator();
 		final char zeroDigit = symbols.getZeroDigit();

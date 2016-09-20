@@ -1,23 +1,19 @@
 package org.unix4j.util;
 
+import org.junit.Test;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Comparator;
 import java.util.Random;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.unix4j.util.sort.DecimalNumberStringComparator;
+import static java.lang.Long.compare;
 
 /**
- * Unit test for {@link DecimalNumberStringComparator}.
+ * Base class for number comparator tests.
  */
-abstract public class AbstractNumberStringComparatorTest {
+abstract public class AbstractNumberStringComparatorTest extends AbstractStringComparatorTest {
 
 	private final Random rnd = new Random();
-	private final Comparator<? super String> comparator = initComparator();
-	
-	abstract protected Comparator<? super String> initComparator(); 
 
 	@Test
 	public void testSmallIntegers() {
@@ -274,30 +270,6 @@ abstract public class AbstractNumberStringComparatorTest {
 		assertEqual("-00", "-00000");
 	}
 	
-	protected void assertSmaller(String s1, String s2) {
-		assertCompare(s1, s2, -1);
-		assertCompare(s2, s1, 1);
-	}
-	protected void assertGreater(String s1, String s2) {
-		assertCompare(s1, s2, 1);
-		assertCompare(s2, s1, -1);
-	}
-	protected void assertEqual(String s1, String s2) {
-		assertCompare(s1, s2, 0);
-		assertCompare(s2, s1, 0);
-	}
-	protected void assertCompare(String s1, String s2, int expectedCompare) {
-		final String msg = "Expected: " + s1 + comparator(expectedCompare) + s2;
-		Assert.assertEquals(msg, signum(expectedCompare), signum(comparator.compare(s1, s2)));
-	}
-
-	protected int signum(int value) {
-		return value < 0 ? -1 : value > 0 ? 1 : 0;
-	}
-
-	protected String comparator(int cmp) {
-		return cmp < 0 ? "<" : cmp > 0 ? ">" : "==";
-	}
 	protected String decimal(double value) {
 		return new BigDecimal(value).toPlainString();
 	}
@@ -339,23 +311,4 @@ abstract public class AbstractNumberStringComparatorTest {
 			sb.append(rnd.nextInt(10));
 		}
 	}
-	
-	//copied from Long.compare JDK 1.7
-    /**
-     * Compares two {@code long} values numerically.
-     * The value returned is identical to what would be returned by:
-     * <pre>
-     *    Long.valueOf(x).compareTo(Long.valueOf(y))
-     * </pre>
-     *
-     * @param  x the first {@code long} to compare
-     * @param  y the second {@code long} to compare
-     * @return the value {@code 0} if {@code x == y};
-     *         a value less than {@code 0} if {@code x < y}; and
-     *         a value greater than {@code 0} if {@code x > y}
-     * @since 1.7
-     */
-    public static int compare(long x, long y) {
-        return (x < y) ? -1 : ((x == y) ? 0 : 1);
-    }
 }

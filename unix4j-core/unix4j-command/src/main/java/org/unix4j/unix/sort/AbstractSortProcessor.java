@@ -1,15 +1,12 @@
 package org.unix4j.unix.sort;
 
-import java.util.Comparator;
-
 import org.unix4j.context.ExecutionContext;
 import org.unix4j.line.Line;
 import org.unix4j.processor.AbstractLineProcessor;
 import org.unix4j.processor.LineProcessor;
-import org.unix4j.util.sort.DecimalNumberStringComparator;
-import org.unix4j.util.sort.LineComparator;
-import org.unix4j.util.sort.ReverseOrderComparator;
-import org.unix4j.util.sort.ScientificNumberStringComparator;
+import org.unix4j.util.sort.*;
+
+import java.util.Comparator;
 
 abstract class AbstractSortProcessor extends AbstractLineProcessor<SortArguments> {
 	
@@ -35,19 +32,13 @@ abstract class AbstractSortProcessor extends AbstractLineProcessor<SortArguments
 			} else if (args.isGeneralNumericSort()) {
 				comparator = ScientificNumberStringComparator.INSTANCE;
 			} else if (args.isHumanNumericSort()) {
-				throw new RuntimeException("option " + SortOption.humanNumericSort + " is not implemented");
-			} else if (args.isDictionaryOrder()) {
-				throw new RuntimeException("option " + SortOption.dictionaryOrder + " is not implemented");
+				comparator = UnitsNumberStringComparator.getInstance(getContext().getLocale());
 			} else if (args.isMonthSort()) {
-				throw new RuntimeException("option " + SortOption.monthSort + " is not implemented");
+				comparator = MonthStringComparator.getInstance(getContext().getLocale());
 			} else if (args.isVersionSort()) {
-				throw new RuntimeException("option " + SortOption.versionSort + " is not implemented");
-			} else { 
-				if (args.isIgnoreLeadingBlanks()) {
-					comparator = args.isIgnoreCase() ? LineComparator.COLLATOR_IGNORE_CASE_AND_LEADING_BLANKS : LineComparator.COLLATOR_IGNORE_LEADING_BLANKS;
-				} else {
-					comparator = args.isIgnoreCase() ? LineComparator.COLLATOR_IGNORE_CASE : LineComparator.COLLATOR;
-				}
+				comparator = VersionStringComparator.INSTANCE;
+			} else {
+				comparator = new LineComparator(args.isIgnoreCase(), args.isIgnoreLeadingBlanks(), args.isDictionaryOrder());
 			}
 		}
 		if (args.isReverse()) {
