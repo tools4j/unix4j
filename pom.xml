@@ -20,14 +20,6 @@
 		<module>unix4j-perf</module>
     </modules>
 
-	<licenses>
-		<license>
-			<name>New BSD License</name>
-			<url>http://www.opensource.org/licenses/BSD-3-Clause</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
-
 	<scm>
 		<url>https://github.com/tools4j/unix4j</url>
 		<connection>scm:git:https://github.com/tools4j/unix4j.git</connection>
@@ -51,6 +43,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
@@ -89,6 +82,27 @@
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.7.9</version>
+				<executions>
+					<execution>
+						<id>prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.eluder.coveralls</groupId>
+				<artifactId>coveralls-maven-plugin</artifactId>
+				<version>4.3.0</version>
+				<configuration>
+					<repoToken>yourcoverallsprojectrepositorytoken</repoToken>
 				</configuration>
 			</plugin>
 			<plugin>
