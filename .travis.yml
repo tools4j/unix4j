@@ -3,5 +3,7 @@ jdk:
   - oraclejdk8
   - openjdk7
 
+sudo: true
+
 after_success:
   - mvn clean test jacoco:report coveralls:report
