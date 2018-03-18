@@ -1,8 +1,5 @@
 package org.unix4j.unix.grep;
 
-import java.io.File;
-import java.util.List;
-
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.context.ExecutionContext;
 import org.unix4j.io.FileInput;
@@ -12,6 +9,9 @@ import org.unix4j.processor.MultipleInputLineProcessor;
 import org.unix4j.processor.RedirectInputLineProcessor;
 import org.unix4j.unix.Grep;
 import org.unix4j.util.FileUtil;
+
+import java.io.File;
+import java.util.List;
 
 /**
  * Implementation of the {@link Grep grep} command.
@@ -59,6 +59,8 @@ class GrepCommand extends AbstractCommand<GrepArguments> {
 			return new CountMatchingLinesProcessor(this, context, output, matcher);
 		} else if (args.isMatchingFiles()) {
 			return new WriteFilesWithMatchingLinesProcessor(this, context, output, matcher);
+		} else if (args.isLineNumber()) {
+			return new WriteMatchingLinesWithLineNumberProcessor(this, context, output, matcher);
 		}
 		return new WriteMatchingLinesProcessor(this, context, output, matcher);
 	}

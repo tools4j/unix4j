@@ -1,0 +1,5 @@
+INFO should match
+DEBUG should not match
+INFO should match again
+DEBUG should not match again
+INFO final match

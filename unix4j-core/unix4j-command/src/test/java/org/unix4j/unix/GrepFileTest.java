@@ -116,6 +116,12 @@ public class GrepFileTest {
         tester.runAndAssert(Unix4j.fromFile(tester.getInputFile()).grep(Grep.Options.count, "test"));
     }
 
+    @Test
+	public void testGrep_lineNumber() {
+		final CommandFileTest tester = new CommandFileTest(this.getClass());
+		tester.runAndAssert(Unix4j.fromFile(tester.getInputFile()).grep(Grep.Options.lineNumber, "INFO"));
+	}
+
 	@Test
 	public void testGrep_usingRegexCharactersToFindLiteralTextWithoutEscapingButWithFixedStringOptionSet() {
 		final CommandFileTest tester = new CommandFileTest(this.getClass());
