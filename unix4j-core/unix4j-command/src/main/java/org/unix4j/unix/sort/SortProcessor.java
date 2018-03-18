@@ -1,11 +1,11 @@
 package org.unix4j.unix.sort;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 import org.unix4j.context.ExecutionContext;
 import org.unix4j.line.Line;
 import org.unix4j.processor.LineProcessor;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Line processor for normal in-memory sort using an {@link ArrayList} to cache
@@ -13,7 +13,7 @@ import org.unix4j.processor.LineProcessor;
  */
 class SortProcessor extends AbstractSortProcessor {
 	
-	private ArrayList<Line> lineBuffer = new ArrayList<Line>();
+	private final ArrayList<Line> lineBuffer = new ArrayList<Line>();
 
 	public SortProcessor(SortCommand command, ExecutionContext context, LineProcessor output) {
 		super(command, context, output);
@@ -36,7 +36,7 @@ class SortProcessor extends AbstractSortProcessor {
 				break;//they want no more lines
 			}
 		}
-		lineBuffer = null;//free for gc
+		lineBuffer.clear();
 		output.finish();
 	}
 

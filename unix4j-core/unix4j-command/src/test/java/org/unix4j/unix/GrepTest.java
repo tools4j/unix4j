@@ -1,3 +1,4 @@
+
 package org.unix4j.unix;
 
 import java.io.File;
@@ -68,14 +69,23 @@ public class GrepTest {
 
     @Test
     public void testCountOnRelativeFiles(){
-    	assertEquals2("118: commuting.txt", "7: commuting2.txt", Unix4j.use(contextFactory).grep(Grep.Options.count, "the", "*.txt"));
+    	assertEquals2("118: commuting.txt", "7: commuting2.txt", Unix4j.use(contextFactory).grep(Grep.Options.count, "the", "*.txt").sort());
     }
 
     @Test
     public void testCountOnRelativeFilesWithCd(){
-    	assertEquals2("118: commuting.txt", "7: commuting2.txt", Unix4j.cd(outputDir).grep(Grep.Options.count, "the", "*.txt"));
+        assertEquals2("118: commuting.txt", "7: commuting2.txt", Unix4j.cd(outputDir).grep(Grep.Options.count, "the", "*.txt").sort());
     }
-    
+
+    @Test
+    public void testLineNumberOnRelativeFiles(){
+        final File testFile = new File(outputDir.getPath() + "/commuting.txt" );
+        assertEquals2(
+                "commuting.txt:3:Subject: Commuting for beginners.",
+                "commuting2.txt:3:Subject: Commuting for beginners.",
+                Unix4j.use(contextFactory).grep(Grep.Options.lineNumber, "Subject", "*.txt").sort());
+    }
+
     private static void assertEquals2(String line1, String line2, Unix4jCommandBuilder actual) {
     	assertEquals(Arrays.asList(line1, line2), actual.toStringList());
     }

@@ -56,7 +56,7 @@ class GrepCommand extends AbstractCommand<GrepArguments> {
 	private LineProcessor getStandardInputProcessor(ExecutionContext context, LineProcessor output, GrepArguments args) {
 		final LineMatcher matcher = getMatcher(args);
 		if (args.isCount()) {
-			return new CountMatchingLinesProcessor(this, context, output, matcher);
+			return new CountMatchingLinesInputProcessor(this, context, output, matcher);
 		} else if (args.isMatchingFiles()) {
 			return new WriteFilesWithMatchingLinesProcessor(this, context, output, matcher);
 		} else if (args.isLineNumber()) {
@@ -67,15 +67,19 @@ class GrepCommand extends AbstractCommand<GrepArguments> {
 	private LineProcessor getFileInputProcessor(List<FileInput> inputs, ExecutionContext context, LineProcessor output, GrepArguments args) {
 		if (args.isCount()) {
 			final LineMatcher matcher = getMatcher(args);
-			final InputProcessor processor = new CountMatchingLinesProcessor(this, context, output, matcher);
+			final InputProcessor processor = new CountMatchingLinesInputProcessor(this, context, output, matcher);
 			return new MultipleInputLineProcessor(inputs, processor, output);
 		} else if (args.isMatchingFiles()) {
 			final LineMatcher matcher = getMatcher(args);
 			final InputProcessor processor = new WriteFilesWithMatchingLinesProcessor(this, context, output, matcher);
 			return new MultipleInputLineProcessor(inputs, processor, output);
+		} else if (args.isLineNumber()) {
+			final LineMatcher matcher = getMatcher(args);
+			final LineProcessor processor = new WriteMatchingLinesProcessor(this, context, output, matcher);
+			return new MultipleInputLineProcessor(inputs,
+					new WriteMatchingLinesInputProcessor(this, context, matcher), processor);
 		}
-
-		//standard grep output
+		//standard input
 		final LineProcessor standardInputProcessor = getStandardInputProcessor(context, output, args);
 		return new RedirectInputLineProcessor(inputs, standardInputProcessor);
 	}

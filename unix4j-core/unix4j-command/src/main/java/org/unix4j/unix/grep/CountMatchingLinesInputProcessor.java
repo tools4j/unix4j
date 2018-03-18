@@ -14,14 +14,14 @@ import org.unix4j.util.Counter;
  * output. The matching operation is delegated to the {@link LineMatcher} passed
  * to the constructor.
  */
-final class CountMatchingLinesProcessor extends DefaultInputProcessor implements LineProcessor {
+final class CountMatchingLinesInputProcessor extends DefaultInputProcessor implements LineProcessor {
 	
 	private final ExecutionContext context;
 	private final LineMatcher matcher;
 	private final Counter counter = new Counter();
 	private final LineProcessor output;
 
-	public CountMatchingLinesProcessor(GrepCommand command, ExecutionContext context, LineProcessor output, LineMatcher matcher) {
+	public CountMatchingLinesInputProcessor(GrepCommand command, ExecutionContext context, LineProcessor output, LineMatcher matcher) {
 		this.context = context;
 		this.matcher = matcher;
 		this.output = output;

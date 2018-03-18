@@ -4,6 +4,7 @@ import org.unix4j.context.ExecutionContext;
 import org.unix4j.line.Line;
 import org.unix4j.line.SimpleLine;
 import org.unix4j.processor.LineProcessor;
+import org.unix4j.util.Counter;
 
 /**
  * Writes all matching lines to the output. The matching operation is delegated
@@ -11,7 +12,7 @@ import org.unix4j.processor.LineProcessor;
  */
 final class WriteMatchingLinesWithLineNumberProcessor extends AbstractGrepProcessor {
 
-	private int lineNumber = 0;
+	private final Counter lineCounter = new Counter();
 
 	public WriteMatchingLinesWithLineNumberProcessor(GrepCommand command, ExecutionContext context, LineProcessor output, LineMatcher matcher) {
 		super(command, context, output, matcher);
@@ -19,10 +20,10 @@ final class WriteMatchingLinesWithLineNumberProcessor extends AbstractGrepProces
 
 	@Override
 	protected boolean processLine(Line line, boolean isMatch) {
-		lineNumber++;
+		lineCounter.increment();
 		if (isMatch) {
 			return getOutput().processLine(new SimpleLine(
-					lineNumber + ":" + line.getContent(), line.getLineEnding()
+					lineCounter.getCount() + ":" + line.getContent(), line.getLineEnding()
 			));
 		}
 		return true;//this line is not a match, but we still want the next line
