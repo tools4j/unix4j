@@ -38,11 +38,12 @@
 			Substitutes the replacement string for instances of the regexp in 
 			the matched line.
 			
-			An ampersand ('&amp;') appearing in the replacement is be replaced 
-			by the line matching the regexp. The characters "\n", where n is a 
-			digit, are replaced by the text matched by the corresponding 
-			backreference expression.  The special meaning of '&amp;' and "\n" 
-			in this context can be suppressed by preceding it by a backslash. 
+			The characters "$0" appearing in the replacement are replaced
+			by the line matching the regexp.  The characters "$n", where n is a
+			digit other than zero, are replaced by the text matched by the
+			corresponding backreference expression (aka group).  The special
+			meaning of "$n" in this context can be suppressed by preceding it
+			by a backslash.
 
 			A line can be split by substituting a newline ('\n') into it. 
 			
@@ -52,13 +53,14 @@
 		<method args="regexp,replacement,occurrence" usesStandardInput="false">
 			Substitutes the replacement string for instances of the regexp in 
 			the matched line. Only the given occurrences of the regexp found 
-			within the matched string are substituted. 
-			
-			An ampersand ('&amp;') appearing in the replacement is be replaced 
-			by the line matching the regexp. The characters "\n", where n is a 
-			digit, are replaced by the text matched by the corresponding 
-			backreference expression.  The special meaning of '&amp;' and "\n" 
-			in this context can be suppressed by preceding it by a backslash. 
+			within the matched string are substituted.
+
+			The characters "$0" appearing in the replacement are replaced
+			by the line matching the regexp.  The characters "$n", where n is a
+			digit other than zero, are replaced by the text matched by the
+			corresponding backreference expression (aka group).  The special
+			meaning of "$n" in this context can be suppressed by preceding it
+			by a backslash.
 
 			A line can be split by substituting a newline ('\n') into it. 
 			
@@ -113,12 +115,13 @@
 		<option acronym="s" name="substitute" exclusiveGroup="command">
 			Substitutes the replacement string for instances of the regexp in 
 			the matched line.
-			
-			An ampersand ('&amp;') appearing in the replacement is be replaced 
-			by the line matching the regexp. The characters "\n", where n is a 
-			digit, are replaced by the text matched by the corresponding 
-			backreference expression.  The special meaning of '&amp;' and "\n" 
-			in this context can be suppressed by preceding it by a backslash. 
+
+			The characters "$0" appearing in the replacement are replaced
+			by the line matching the regexp.  The characters "$n", where n is a
+			digit other than zero, are replaced by the text matched by the
+			corresponding backreference expression (aka group).  The special
+			meaning of "$n" in this context can be suppressed by preceding it
+			by a backslash.
 
 			A line can be split by substituting a newline ('\n') into it. 
 			
@@ -157,24 +160,24 @@
 			translation.
 		</operand>
 		<operand name="replacement" type="String">
-			Replacement string for substitute command. An ampersand ('&amp;') 
-			appearing in the replacement string is replaced by the string 
-			matching the regular expression. The characters "\n", where n is a 
-			digit, are replaced by the text matched by the corresponding 
-			backreference expression. The special meaning of '&amp;' and "\n" in 
-			this context can be suppressed by preceding it by a backslash.  
+			Replacement string for substitute command. The characters "$0"
+			appearing in the replacement are replaced by the line matching
+			the regexp.  The characters "$n", where n is a digit other than zero,
+			are replaced by the text matched by the corresponding backreference
+			expression (aka group).  The special meaning of "$n" in this context
+			can be suppressed by preceding it by a backslash.
 		</operand>
 		<operand name="string2" type="String">
 			Replacement string for substitute command s; appended, inserted or
 			changed text for a, i and c command; destination characters for
 			translate command y; ignored by all other commands.
 			
-			If string2 is a replacement string for the substitute command: an 
-			ampersand ('&amp;') appearing in the replacement string is replaced 
-			by the string matching the regular expression; the characters "\n", 
-			where n is a digit, are replaced by the text matched by the 
-			corresponding backreference expression. The special meaning of 
-			'&amp;' and "\n" in this context can be suppressed by preceding it 
+			If string2 is a replacement string for the substitute command: the
+			characters "$0" appearing in the replacement are replaced
+			by the line matching the regexp; the characters "$n", where n is a
+			digit other than zero, are replaced by the text matched by the
+			corresponding backreference expression (aka group).  The special
+			meaning of "$n" in this context can be suppressed by preceding it
 			by a backslash.
 
 			(This operand only applies to the commands s, a, i, c and y and is 

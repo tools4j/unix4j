@@ -353,6 +353,23 @@ public class SedTest {
 	}
 
 	@Test
+	public void testSed_searchAndReplaceWithZeroGroupAndEscapedGroupSymbol() {
+		final MultilineString expectedOutput = new MultilineString();
+		expectedOutput
+				.appendLine("test $3 $2 This is a test This blah blah blah")
+				.appendLine("test $3 $2 This is a test This blah blah")
+				.appendLine("test $3 $2 This is a test This one two three")
+				.appendLine("one")
+				.appendLine("a")
+				.appendLine("")
+				.appendLine("two")
+				.appendLine("def\\d123");
+
+		assertSubstitute(input, "(This) (is) (a) (test)", "$4 \\$3 \\$2 $0 $1", expectedOutput);
+		assertScript( input, "s/(This) (is) (a) (test)/$4 \\$3 \\$2 $0 $1/", expectedOutput );
+	}
+
+	@Test
 	public void testSed_print() {
 		final MultilineString expectedOutput = new MultilineString();
 		expectedOutput
