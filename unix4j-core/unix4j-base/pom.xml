@@ -17,4 +17,19 @@
 		</dependency>
 	</dependencies>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<linksource>true</linksource>
+					<javadocVersion>1.7</javadocVersion>
+					<aggregate>false</aggregate>
+					<show>package</show>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>

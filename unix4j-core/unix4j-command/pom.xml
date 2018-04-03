@@ -56,12 +56,20 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<linksource>true</linksource>
+					<javadocVersion>1.7</javadocVersion>
+					<aggregate>false</aggregate>
+					<show>package</show>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
 	<dependencies>
-		<!-- <dependency> <groupId>org.unix4j</groupId> <artifactId>unix4j-tools</artifactId>
-			<version>0.1-SNAPSHOT</version> <optional>true</optional> </dependency> -->
 		<dependency>
 			<groupId>org.unix4j</groupId>
 			<artifactId>unix4j-base</artifactId>
@@ -73,4 +81,5 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
 </project>
