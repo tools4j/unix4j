@@ -73,7 +73,17 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
 	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>2.10.3</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -102,37 +112,70 @@
 				<artifactId>coveralls-maven-plugin</artifactId>
 				<version>4.3.0</version>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.3</version>
-				<configuration>
-					<linksource>true</linksource>
-					<javadocVersion>1.7</javadocVersion>
-					<aggregate>true</aggregate>
-					<show>package</show>
-					<sourcepath>
-						${project.basedir}/unix4j-core/unix4j-base/src/main/java;
-						${project.basedir}/unix4j-core/unix4j-command/src/main/java;
-						${project.basedir}/unix4j-core/unix4j-command/target/generated-sources;
-						${project.basedir}/unix4j-tools/src/main/java
-					</sourcepath>
-					<groups>
-						<group>
-							<title>unix4j-core</title>
-							<packages>org.unix4j:org.unix4j.builder:org.unix4j.command:org.unix4j.context:org.unix4j.convert:org.unix4j.io:org.unix4j.line:org.unix4j.operation:org.unix4j.option:org.unix4j.processor:org.unix4j.util*:org.unix4j.variable</packages>
-						</group>
-						<group>
-							<title>unix4j-commands</title>
-							<packages>org.unix4j.unix*</packages>
-						</group>
-						<group>
-							<title>unix4j-tools</title>
-							<packages>org.unix4j.compiler*:org.unix4j.codegen*</packages>
-						</group>
-					</groups>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>module-javadoc</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<configuration>
+							<linksource>true</linksource>
+							<javadocVersion>1.7</javadocVersion>
+							<aggregate>false</aggregate>
+							<show>package</show>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>aggregate-javadoc</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<configuration>
+							<linksource>true</linksource>
+							<javadocVersion>1.7</javadocVersion>
+							<aggregate>true</aggregate>
+							<show>package</show>
+							<sourcepath>
+								${project.basedir}/unix4j-core/unix4j-base/src/main/java;
+								${project.basedir}/unix4j-core/unix4j-command/src/main/java;
+								${project.basedir}/unix4j-core/unix4j-command/target/generated-sources;
+								${project.basedir}/unix4j-tools/src/main/java
+							</sourcepath>
+							<groups>
+								<group>
+									<title>unix4j-core</title>
+									<packages>org.unix4j:org.unix4j.builder:org.unix4j.command:org.unix4j.context:org.unix4j.convert:org.unix4j.io:org.unix4j.line:org.unix4j.operation:org.unix4j.option:org.unix4j.processor:org.unix4j.util*:org.unix4j.variable</packages>
+								</group>
+								<group>
+									<title>unix4j-commands</title>
+									<packages>org.unix4j.unix*</packages>
+								</group>
+								<group>
+									<title>unix4j-tools</title>
+									<packages>org.unix4j.compiler*:org.unix4j.codegen*</packages>
+								</group>
+							</groups>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 </project>
