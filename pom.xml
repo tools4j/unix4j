@@ -118,7 +118,6 @@
 				<inherited>false</inherited>
 				<configuration>
 					<linksource>true</linksource>
-					<javadocVersion>1.7</javadocVersion>
 					<aggregate>true</aggregate>
 					<show>package</show>
 					<sourcepath>
@@ -154,4 +153,16 @@
 		</plugins>
 	</build>
 
+	<profiles>
+		<profile>
+			<id>disable-java8-doclint</id>
+			<activation>
+				<jdk>[1.8,)</jdk>
+			</activation>
+			<properties>
+				<additionalparam>-Xdoclint:none</additionalparam>
+			</properties>
+		</profile>
+	</profiles>
+	
 </project>

@@ -61,7 +61,6 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<configuration>
 					<linksource>true</linksource>
-					<javadocVersion>1.7</javadocVersion>
 					<aggregate>false</aggregate>
 					<show>package</show>
 				</configuration>
