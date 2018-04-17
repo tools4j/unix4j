@@ -38,7 +38,7 @@ Currently supported commands are:
 <dependency>
 	<groupId>org.unix4j</groupId>
 	<artifactId>unix4j-command</artifactId>
-	<version>0.4</version>
+	<version>0.5</version>
 </dependency>
 ```
 
@@ -80,6 +80,6 @@ Unix4j.grep(Grep.Options.v, "apple", "fruitlist.txt").toStdOut();
 [Questions & Answers](https://github.com/tools4j/unix4j/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3Aquestion)
 
 ##### API Javadoc
-[Newest Version](http://www.unix4j.org/javadoc/index.html)
+[Latest Version](http://www.unix4j.org/javadoc/index.html)
 
-[Latest Snapshot](http://www.unix4j.org/javadoc/latest/index.html)
+[Newest Snapshot](http://www.unix4j.org/javadoc/latest/index.html)
