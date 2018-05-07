@@ -1,15 +1,10 @@
 package org.unix4j.io;
 
-import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.InputStreamReader;
+import org.unix4j.util.FileUtil;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.unix4j.util.FileUtil;
 
 /**
  * Input device reading from a {@link File}.
@@ -19,27 +14,27 @@ public class FileInput extends ReaderInput {
 	private final String fileInfo;
 
 	public FileInput(FileReader fileReader) {
-		super(fileReader);
+		super(fileReader, false);
 		this.fileInfo = fileReader.toString();
 	}
 
 	public FileInput(File currentDirectory, File file) {
-		super(createFileReader(currentDirectory, file));
+		super(createFileReader(currentDirectory, file), true);
 		this.fileInfo = file.toString();
 	}
 
 	public FileInput(File file) {
-		super(createFileReader(file));
+		super(createFileReader(file), true);
 		this.fileInfo = file.toString();
 	}
 
 	public FileInput(FileInputStream fileStream) {
-		super(new InputStreamReader(fileStream));
+		super(new InputStreamReader(fileStream), false);
 		this.fileInfo = fileStream.toString();
 	}
 
 	public FileInput(FileDescriptor fileDesc) {
-		super(new FileReader(fileDesc));
+		super(new FileReader(fileDesc), true);
 		this.fileInfo = fileDesc.toString();
 	}
 

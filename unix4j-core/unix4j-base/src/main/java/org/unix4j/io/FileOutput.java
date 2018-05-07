@@ -14,22 +14,22 @@ public class FileOutput extends WriterOutput {
 	private final String fileInfo;
 
 	public FileOutput(FileWriter fileWriter) {
-		super(fileWriter);
+		super(fileWriter, false);
 		this.fileInfo = fileWriter.toString();
 	}
 
 	public FileOutput(File file) {
-		super(createFileWriter(file));
+		super(createFileWriter(file), true);
 		this.fileInfo = file.toString();
 	}
 
 	public FileOutput(FileOutputStream fileStream) {
-		super(new OutputStreamWriter(fileStream));
+		super(new OutputStreamWriter(fileStream), false);
 		this.fileInfo = fileStream.toString();
 	}
 
 	public FileOutput(FileDescriptor fileDesc) {
-		super(new FileWriter(fileDesc));
+		super(new FileWriter(fileDesc), true);
 		this.fileInfo = fileDesc.toString();
 	}
 

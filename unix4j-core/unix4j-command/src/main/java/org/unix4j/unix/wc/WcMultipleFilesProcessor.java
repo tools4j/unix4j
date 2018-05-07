@@ -1,14 +1,14 @@
 package org.unix4j.unix.wc;
 
-import java.util.List;
-import java.util.NavigableMap;
-import java.util.TreeMap;
-
 import org.unix4j.context.ExecutionContext;
 import org.unix4j.io.FileInput;
 import org.unix4j.io.Input;
 import org.unix4j.line.Line;
 import org.unix4j.processor.LineProcessor;
+
+import java.util.List;
+import java.util.NavigableMap;
+import java.util.TreeMap;
 
 /**
  * Input processor for line, word and char count for multiple input files.
@@ -46,6 +46,7 @@ class WcMultipleFilesProcessor implements LineProcessor {
             finishSingleInput(input);
         }
         writeOutput();
+        closeInputs();
     }
 
 	private void finishSingleInput(Input input) {
@@ -63,4 +64,10 @@ class WcMultipleFilesProcessor implements LineProcessor {
         }
         totals.writeCountsLineWithFileInfo(output, "total", fixedWidthOfColumnsInOutput);
 	}
+
+	private void closeInputs() {
+        for (final Input input : inputs) {
+            input.close();
+        }
+    }
 }

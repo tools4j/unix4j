@@ -18,9 +18,18 @@ public class NullInput extends AbstractInput {
 	public Line readLine() {
 		return null;
 	}
-	
+
+	/**
+	 * Performs a no-op as there are no underlying resources
+	 */
+	@Override
+	public void close() {
+		//nothing to do
+	}
+
 	@Override
 	public String toString() {
 		return getClass().getSimpleName();
 	}
+
 }

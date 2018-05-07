@@ -27,7 +27,7 @@ public class StringOutput extends WriterOutput {
 	 *            output
 	 */
 	public StringOutput(boolean writeLastLineEnding) {
-		super(new StringWriter());
+		super(new StringWriter(), true);
 		this.writeLastLineEnding = writeLastLineEnding;
 	}
 

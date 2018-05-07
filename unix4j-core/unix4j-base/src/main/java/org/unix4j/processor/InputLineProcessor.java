@@ -33,6 +33,7 @@ public class InputLineProcessor implements LineProcessor {
                 }
             }
             processor.finish(input, output);
+            input.close();
         } catch (ExitValueException e) {
             e.setInput(input);
             throw e;

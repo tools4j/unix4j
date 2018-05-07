@@ -1,12 +1,11 @@
 package org.unix4j.io;
 
-import java.io.StringReader;
-
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 import org.unix4j.line.Line;
 import org.unix4j.line.SimpleLine;
+
+import java.io.StringReader;
 
 public class ReaderInputTest {
 	private final String[] input = {

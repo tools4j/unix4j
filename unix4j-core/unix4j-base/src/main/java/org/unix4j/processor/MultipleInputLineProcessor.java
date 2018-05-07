@@ -1,10 +1,10 @@
 package org.unix4j.processor;
 
-import java.util.List;
-
 import org.unix4j.command.ExitValueException;
 import org.unix4j.io.Input;
 import org.unix4j.line.Line;
+
+import java.util.List;
 
 /**
  * A line processor for multiple inputs processing the same operation for each
@@ -99,7 +99,7 @@ public class MultipleInputLineProcessor implements LineProcessor {
 	 * the given {@code inputs} list.
 	 * <p>
 	 * The DEFAULT implementation calls {@link LineProcessor#finish()
-	 * output.finish()}.
+	 * output.finish()} and closes all input objects.
 	 * 
 	 * @param inputs
 	 *            the input object being iterated next
@@ -108,6 +108,9 @@ public class MultipleInputLineProcessor implements LineProcessor {
 	 */
 	protected void finishMultiple(List<? extends Input> inputs, LineProcessor output) {
 		output.finish();
+		for (final Input input : inputs) {
+			input.close();
+		}
 	}
 
 }

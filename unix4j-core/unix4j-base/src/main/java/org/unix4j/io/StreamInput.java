@@ -14,6 +14,6 @@ public class StreamInput extends ReaderInput {
 	 *            the input stream to read from
 	 */
 	public StreamInput(InputStream in) {
-		super(new InputStreamReader(in));
+		super(new InputStreamReader(in), false);
 	}
 }

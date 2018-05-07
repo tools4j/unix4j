@@ -14,6 +14,6 @@ public class StreamOutput extends WriterOutput {
 	 *            the output stream to write to
 	 */
 	public StreamOutput(OutputStream out) {
-		super(new OutputStreamWriter(out));
+		super(new OutputStreamWriter(out), false);
 	}
 }

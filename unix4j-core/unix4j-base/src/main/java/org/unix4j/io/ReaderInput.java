@@ -1,10 +1,10 @@
 package org.unix4j.io;
 
-import java.io.IOException;
-import java.io.Reader;
-
 import org.unix4j.line.Line;
 import org.unix4j.line.SingleCharSequenceLine;
+
+import java.io.IOException;
+import java.io.Reader;
 
 /**
  * Input device based on a {@link Reader} forming the base for most input
@@ -13,18 +13,32 @@ import org.unix4j.line.SingleCharSequenceLine;
 public class ReaderInput extends AbstractInput {
 
 	private final Reader reader;
+	private final boolean closeReaderOnClose;
 	private final char[] buffer = new char[1024];
 	private int length;
 	private int offset;
 
 	/**
 	 * Constructor with reader.
-	 * 
+	 *
 	 * @param reader
 	 *            the reader forming the basis of this input device.
 	 */
 	public ReaderInput(Reader reader) {
+		this(reader, false);
+	}
+	
+	/**
+	 * Constructor with reader.
+	 * 
+	 * @param reader
+	 *            the reader forming the basis of this input device.
+	 * @param closeReaderOnClose
+	 * 			  if true the reader will be closed when {@link #close()} is invoked
+	 */
+	protected ReaderInput(Reader reader, boolean closeReaderOnClose) {
 		this.reader = reader;
+		this.closeReaderOnClose = closeReaderOnClose;
 		readBuffer();
 	}
 
@@ -118,4 +132,14 @@ public class ReaderInput extends AbstractInput {
 		}
 	}
 
+	@Override
+	public void close() {
+		if (closeReaderOnClose) {
+			try {
+				reader.close();
+			} catch (final IOException e) {
+				throw new RuntimeException("Could not close underlying reader, e=" + e, e);
+			}
+		}
+	}
 }

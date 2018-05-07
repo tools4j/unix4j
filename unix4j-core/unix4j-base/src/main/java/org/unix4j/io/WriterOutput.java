@@ -1,9 +1,9 @@
 package org.unix4j.io;
 
+import org.unix4j.line.Line;
+
 import java.io.IOException;
 import java.io.Writer;
-
-import org.unix4j.line.Line;
 
 /**
  * Output device based on a {@link Writer}.
@@ -11,12 +11,18 @@ import org.unix4j.line.Line;
 public class WriterOutput implements Output {
 
 	private final Writer writer;
+	private final boolean closeWriterOnFinish;
 
 	private Line lastTerminatedLine;
 	private Line lastLine;
 
 	public WriterOutput(Writer writer) {
+		this(writer, false);
+	}
+
+	protected WriterOutput(Writer writer, boolean closeWriterOnFinish) {
 		this.writer = writer;
+		this.closeWriterOnFinish = closeWriterOnFinish;
 		init();
 	}
 
@@ -57,7 +63,11 @@ public class WriterOutput implements Output {
 			if (lastLine != null && writeLastLineEnding()) {
 				writer.write(lastLine.getLineEnding());
 			}
-			writer.flush();
+			if (closeWriterOnFinish) {
+				writer.close();
+			} else {
+				writer.flush();
+			}
 			init();
 		} catch (IOException e) {
 			throw new RuntimeException(e);

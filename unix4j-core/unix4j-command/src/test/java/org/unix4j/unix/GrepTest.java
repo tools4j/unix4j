@@ -1,11 +1,6 @@
 
 package org.unix4j.unix;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.regex.Pattern;
-
-import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.builder.Unix4jCommandBuilder;
@@ -13,6 +8,14 @@ import org.unix4j.context.DefaultExecutionContext;
 import org.unix4j.context.ExecutionContext;
 import org.unix4j.context.ExecutionContextFactory;
 import org.unix4j.util.FileUtil;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.regex.Pattern;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Unit test for simple App.
@@ -84,6 +87,29 @@ public class GrepTest {
                 "commuting.txt:3:Subject: Commuting for beginners.",
                 "commuting2.txt:3:Subject: Commuting for beginners.",
                 Unix4j.use(contextFactory).grep(Grep.Options.lineNumber, "Subject", "*.txt").sort());
+    }
+
+    /**
+     * Issue #53: The process cannot access the file because it is being used by another process
+     *
+     * NOTE: cannot reproduce on mac or unix, needs to be windows.
+     */
+    @Test
+    public void testGrepFileThenDelete() throws IOException {
+        //given
+        final String[] lines = {"Hello", "World", "These are 3 lines"};
+        final String outputDirPath = outputDir.getPath();
+        final File file = new File(outputDirPath, "testGrepFileThenDelete.txt");
+        Unix4j.fromStrings(lines).toFile(file);
+        assertEquals(true, file.exists());
+
+        //when
+        final String output = Unix4j.cat(file).grep(Grep.Options.count, ".*").toStringResult();
+        Files.delete(file.toPath());
+
+        //then
+        assertEquals("3", output);
+        assertEquals(false, file.exists());
     }
 
     private static void assertEquals2(String line1, String line2, Unix4jCommandBuilder actual) {

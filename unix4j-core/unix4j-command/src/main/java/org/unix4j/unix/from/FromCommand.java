@@ -54,6 +54,7 @@ class FromCommand extends AbstractCommand<FromArguments> {
 					}
 				}
 				output.finish();
+				input.close();
 			}
 		};
 	}

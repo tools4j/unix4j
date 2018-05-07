@@ -1,12 +1,12 @@
 package org.unix4j.unix;
 
-import static junit.framework.Assert.assertEquals;
-
-import java.io.StringWriter;
-
 import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.util.MultilineString;
+
+import java.io.StringWriter;
+
+import static org.junit.Assert.assertEquals;
 
 public class HeadTest {
 	private final static String LINE1 = "This is a test blah blah blah";

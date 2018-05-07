@@ -122,4 +122,9 @@ public class IoTestStub extends AbstractInput implements Output {
 	public void finish() {
 		//Do nothing
 	}
+
+	@Override
+	public void close() {
+		//Do nothing
+	}
 }

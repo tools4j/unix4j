@@ -1,9 +1,9 @@
 package org.unix4j.io;
 
+import org.unix4j.line.Line;
+
 import java.util.Arrays;
 import java.util.List;
-
-import org.unix4j.line.Line;
 
 /**
  * An input composed from multiple other inputs returning all lines of the first
@@ -51,6 +51,16 @@ public class CompositeInput extends AbstractInput {
 			return inputs.get(index).readLine();
 		}
 		return null;
+	}
+
+	/**
+	 * Invokes close of all component input objects.
+	 */
+	@Override
+	public void close() {
+		for (final Input input : inputs) {
+			input.close();
+		}
 	}
 
 	@Override

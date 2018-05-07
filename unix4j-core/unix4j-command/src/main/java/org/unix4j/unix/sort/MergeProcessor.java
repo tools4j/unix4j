@@ -49,6 +49,7 @@ class MergeProcessor extends AbstractSortProcessor {
 				//write the winner line
 				if (!output.processLine(line)) {
 					output.finish();
+					closeInputs();
 					return;
 				}
 				//move to next line for winner input
@@ -57,8 +58,15 @@ class MergeProcessor extends AbstractSortProcessor {
 			} else {
 				//no more lines
 				output.finish();
+				closeInputs();
 				return;
 			}
+		}
+	}
+
+	private void closeInputs() {
+		for (final Input input : inputs) {
+			input.close();
 		}
 	}
 

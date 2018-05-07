@@ -1,13 +1,13 @@
 package org.unix4j.io;
 
-import java.util.Iterator;
-
 import org.unix4j.line.Line;
+
+import java.util.Iterator;
 
 /**
  * Represents a line-by-line input device.
  */
-public interface Input extends Iterable<Line> {
+public interface Input extends Iterable<Line>, AutoCloseable {
 	/**
 	 * Returns true if there are more lines to be read.
 	 * 
@@ -29,5 +29,11 @@ public interface Input extends Iterable<Line> {
 	 * @return an immutable line iterator
 	 */
 	@Override
-	public Iterator<Line> iterator();
+	Iterator<Line> iterator();
+
+	/**
+	 * Close underlying resources if any, as for instance the source file.
+	 */
+	@Override
+	void close();
 }

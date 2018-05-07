@@ -65,4 +65,12 @@ public class BufferedInput extends AbstractInput {
 	public String toMultiLineString() {
 		return LineUtil.toMultiLineString(buffer);
 	}
+
+	/**
+	 * Performs a no-op as there are no underlying resources
+	 */
+	@Override
+	public void close() {
+		//nothing to do
+	}
 }

@@ -1,27 +1,20 @@
 package org.unix4j.builder;
 
-import java.io.File;
-import java.io.OutputStream;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.unix4j.command.Command;
 import org.unix4j.command.ExitValueException;
 import org.unix4j.command.NoOp;
 import org.unix4j.context.DefaultExecutionContext;
 import org.unix4j.context.ExecutionContextFactory;
-import org.unix4j.io.BufferedOutput;
-import org.unix4j.io.FileOutput;
-import org.unix4j.io.NullOutput;
-import org.unix4j.io.Output;
-import org.unix4j.io.StdOutput;
-import org.unix4j.io.StreamOutput;
-import org.unix4j.io.StringOutput;
-import org.unix4j.io.WriterOutput;
+import org.unix4j.io.*;
 import org.unix4j.line.Line;
-import org.unix4j.operation.LineOperation;
 import org.unix4j.operation.AdHocCommand;
+import org.unix4j.operation.LineOperation;
+
+import java.io.File;
+import java.io.OutputStream;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Default implementation for a {@link CommandBuilder}. Builds a {@link NoOp}
