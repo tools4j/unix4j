@@ -3,10 +3,9 @@ package org.unix4j.unix.grep;
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.context.ExecutionContext;
 import org.unix4j.io.FileInput;
-import org.unix4j.processor.InputProcessor;
-import org.unix4j.processor.LineProcessor;
-import org.unix4j.processor.MultipleInputLineProcessor;
-import org.unix4j.processor.RedirectInputLineProcessor;
+import org.unix4j.io.Input;
+import org.unix4j.io.NullInput;
+import org.unix4j.processor.*;
 import org.unix4j.unix.Grep;
 import org.unix4j.util.FileUtil;
 
@@ -64,23 +63,56 @@ class GrepCommand extends AbstractCommand<GrepArguments> {
 		}
 		return new WriteMatchingLinesProcessor(this, context, output, matcher);
 	}
+
 	private LineProcessor getFileInputProcessor(List<FileInput> inputs, ExecutionContext context, LineProcessor output, GrepArguments args) {
+		switch (inputs.size()) {
+			case 0:
+				return getInputProcessor(NullInput.INSTANCE, context, output, args);
+			case 1:
+				return getInputProcessor(inputs.get(0), context, output, args);
+			default:
+				return getMultipleFilesInputProcessor(inputs, context, output, args);
+		}
+	}
+
+	private LineProcessor getInputProcessor(Input input, ExecutionContext context, LineProcessor output, GrepArguments args) {
 		if (args.isCount()) {
 			final LineMatcher matcher = getMatcher(args);
-			final InputProcessor processor = new CountMatchingLinesInputProcessor(this, context, output, matcher);
-			return new MultipleInputLineProcessor(inputs, processor, output);
+			final LineProcessor lineProcessor = new CountMatchingLinesProcessor(this, context, output, matcher);
+			return new InputLineProcessor(input, new DefaultInputProcessor(), lineProcessor);
 		} else if (args.isMatchingFiles()) {
 			final LineMatcher matcher = getMatcher(args);
-			final InputProcessor processor = new WriteFilesWithMatchingLinesProcessor(this, context, output, matcher);
-			return new MultipleInputLineProcessor(inputs, processor, output);
+			final InputProcessor inputProcessor = new WriteFilesWithMatchingLinesProcessor(this, context, output, matcher);
+			return new InputLineProcessor(input, inputProcessor, output);
 		} else if (args.isLineNumber()) {
 			final LineMatcher matcher = getMatcher(args);
-			final LineProcessor processor = new WriteMatchingLinesProcessor(this, context, output, matcher);
-			return new MultipleInputLineProcessor(inputs,
-					new WriteMatchingLinesInputProcessor(this, context, matcher), processor);
+			final LineProcessor lineProcessor = new WriteMatchingLinesWithLineNumberProcessor(this, context, output, matcher);
+			return new InputLineProcessor(input, new DefaultInputProcessor(), lineProcessor);
+		} else {
+			final LineMatcher matcher = getMatcher(args);
+			final LineProcessor lineProcessor = new WriteMatchingLinesProcessor(this, context, output, matcher);
+			return new InputLineProcessor(input, new DefaultInputProcessor(), lineProcessor);
 		}
-		//standard input
-		final LineProcessor standardInputProcessor = getStandardInputProcessor(context, output, args);
-		return new RedirectInputLineProcessor(inputs, standardInputProcessor);
+	}
+
+	private LineProcessor getMultipleFilesInputProcessor(List<FileInput> inputs, ExecutionContext context, LineProcessor output, GrepArguments args) {
+		if (args.isCount()) {
+			final LineMatcher matcher = getMatcher(args);
+			final InputProcessor inputProcessor = new CountMatchingLinesInputProcessor(this, context, output, matcher);
+			return new MultipleInputLineProcessor(inputs, inputProcessor, output);
+		} else if (args.isMatchingFiles()) {
+			final LineMatcher matcher = getMatcher(args);
+			final InputProcessor inputProcessor = new WriteFilesWithMatchingLinesProcessor(this, context, output, matcher);
+			return new MultipleInputLineProcessor(inputs, inputProcessor, output);
+		} else if (args.isLineNumber()) {
+			final LineMatcher matcher = getMatcher(args);
+			final LineProcessor inputProcessor = new WriteMatchingLinesProcessor(this, context, output, matcher);
+			return new MultipleInputLineProcessor(inputs,
+					new WriteMatchingLinesInputProcessor(this, context, matcher), inputProcessor);
+		} else {
+			final LineMatcher matcher = getMatcher(args);
+			final InputProcessor inputProcessor = new WriteMatchingLinesInputProcessor(this, context, matcher);
+			return new MultipleInputLineProcessor(inputs, inputProcessor, output);
+		}
 	}
 }

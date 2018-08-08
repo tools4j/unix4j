@@ -24,7 +24,7 @@ public class DefaultInputProcessor implements InputProcessor {
 
 	@Override
 	public void finish(Input input, LineProcessor output) {
-		//default: no op
+		output.finish();
 	}
 
 }

@@ -22,6 +22,7 @@ public class MultipleInputLineProcessor implements LineProcessor {
 	private final List<? extends Input> inputs;
 	private final InputProcessor processor;
 	private final LineProcessor output;
+	private final LineProcessor nonFinishingOutput;
 
 	/**
 	 * Constructor with input objects (usually file operands of the command) and
@@ -33,10 +34,21 @@ public class MultipleInputLineProcessor implements LineProcessor {
 	 *            the operation applied to every input in the given
 	 *            {@code inputs} list
 	 */
-	public MultipleInputLineProcessor(List<? extends Input> inputs, InputProcessor processor, LineProcessor output) {
+	public MultipleInputLineProcessor(List<? extends Input> inputs, InputProcessor processor, final LineProcessor output) {
 		this.inputs = inputs;
 		this.processor = processor;
 		this.output = output;
+		this.nonFinishingOutput = new LineProcessor() {
+			@Override
+			public boolean processLine(final Line line) {
+				return output.processLine(line);
+			}
+
+			@Override
+			public void finish() {
+				//ignore, we finish only at the very end of all files
+			}
+		};
 	}
 
 	@Override
@@ -70,7 +82,7 @@ public class MultipleInputLineProcessor implements LineProcessor {
 						break;// wants no more lines
 					}
 				}
-				processor.finish(input, output);
+				processor.finish(input, nonFinishingOutput);
 			} catch (ExitValueException e) {
 				e.setInput(input);
 				throw e;

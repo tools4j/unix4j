@@ -34,7 +34,7 @@ public class GrepTest {
     @Test
     public void testCountOnRelativeFile(){
         final File testFile = new File(outputDir.getPath() + "/commuting.txt" );
-        assertEquals("118: commuting.txt", Unix4j.use(contextFactory).grep(Grep.Options.count, "the", testFile).toStringResult());
+        assertEquals("118", Unix4j.use(contextFactory).grep(Grep.Options.count, "the", testFile).toStringResult());
     }
 
     @Test
@@ -48,9 +48,11 @@ public class GrepTest {
         final String outputDirPath = outputDir.getPath();
         final String path1 = outputDirPath + "/org-unix4j-unix/GrepTest/bb.txt";
         final String path2 = outputDirPath + "/org-unix4j-unix/GrepTest/folder/bb.txt";
+        //Unix4j.use(contextFactory).grep("everything", path1, path2).toStdOut();
+        assertEquals("2", Unix4j.use(contextFactory).grep("everything", path1, path2).grep(Grep.Options.count, ".*").toStringResult());
         assertEquals("2", Unix4j.use(contextFactory).grep("everything", path1, path2).wc(Wc.Options.l).toStringResult());
         assertEquals("2", Unix4j.use(contextFactory).grep(Pattern.compile(".*everything.*"), path1, path2).wc(Wc.Options.l).toStringResult());
-        assertEquals2(	"1: ./org-unix4j-unix/GrepTest/bb.txt", 
+        assertEquals2(	"1: ./org-unix4j-unix/GrepTest/bb.txt",
         				"1: ./org-unix4j-unix/GrepTest/folder/bb.txt", Unix4j.use(contextFactory).grep(Grep.Options.count, "everything", path1, path2));
     }
 
@@ -81,12 +83,46 @@ public class GrepTest {
     }
 
     @Test
-    public void testLineNumberOnRelativeFiles(){
+    public void testLineNumber(){
         final File testFile = new File(outputDir.getPath() + "/commuting.txt" );
+        assertEquals("3:Subject: Commuting for beginners.",
+                Unix4j.use(contextFactory).grep(Grep.Options.lineNumber, "Subject", testFile).toStringResult());
+        assertEquals("3:Subject: Commuting for beginners.",
+                Unix4j.use(contextFactory).grep(Grep.Options.lineNumber, "Subject", testFile.getPath()).toStringResult());
+        assertEquals("3:Subject: Commuting for beginners.",
+                Unix4j.use(contextFactory).grep(Grep.Options.lineNumber, "Subject", testFile.getAbsoluteFile()).toStringResult());
+        assertEquals("3:Subject: Commuting for beginners.",
+                Unix4j.use(contextFactory).grep(Grep.Options.lineNumber, "Subject", testFile.getAbsolutePath()).toStringResult());
+    }
+
+    @Test
+    public void testLineNumberOnRelativeFiles(){
         assertEquals2(
                 "commuting.txt:3:Subject: Commuting for beginners.",
                 "commuting2.txt:3:Subject: Commuting for beginners.",
                 Unix4j.use(contextFactory).grep(Grep.Options.lineNumber, "Subject", "*.txt").sort());
+        final File[] testFiles = new File[] {
+                new File(outputDir.getPath() + "/commuting.txt" ),
+                new File(outputDir.getPath() + "/commuting2.txt" ),
+        };
+        assertEquals2(
+                "commuting.txt:3:Subject: Commuting for beginners.",
+                "commuting2.txt:3:Subject: Commuting for beginners.",
+                Unix4j.use(contextFactory).grep(Grep.Options.lineNumber, "Subject", testFiles).sort()
+        );
+    }
+
+    /**
+     * Unit test for Issue #58.
+     * <p>
+     * See <a href="https://github.com/tools4j/unix4j/issues/58">Issue 58</a>
+     */
+    @Test
+    public void testLineNumberWithRegex() {
+        final String inputPath = new File(outputDir, "theFileName.theFileExtension").getAbsolutePath();
+        final String evilRegex = "anyStringOrRegexpITried";
+        //Unix4j.fromFile(inputPath).grep(Grep.Options.lineNumber, evilRegex).toStdOut();
+        assertEquals("1:anyStringOrRegexpITried", Unix4j.fromFile(inputPath).grep(Grep.Options.lineNumber, evilRegex).toStringResult());
     }
 
     /**
