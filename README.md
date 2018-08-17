@@ -1,7 +1,7 @@
 ![unix4j](https://github.com/tools4j/unix4j/blob/master/unix4j.png)
 [![Build Status](https://travis-ci.org/tools4j/unix4j.svg?branch=master)](https://travis-ci.org/tools4j/unix4j)
 [![Coverage Status](https://coveralls.io/repos/github/tools4j/unix4j/badge.svg?branch=master)](https://coveralls.io/github/tools4j/unix4j?branch=master)
-[![Maven Central](https://img.shields.io/maven-central/v/org.unix4j/unix4j-command.svg)](https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22unix4j-command%22)
+[![Maven Central](https://img.shields.io/maven-central/v/org.unix4j/unix4j-command.svg)](https://search.maven.org/search?q=a:unix4j-command)
 
 <b>Unix4j</b> is an implementation of Unix command line tools in Java. You can use the commands that you know from Unix in a Java program---you can pipe the results of one command to another as you know it from Unix.
 
@@ -78,6 +78,10 @@ Unix4j.grep(Grep.Options.v, "apple", "fruitlist.txt").toStdOut();
 
 ##### FAQ
 [Questions & Answers](https://github.com/tools4j/unix4j/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3Aquestion)
+
+##### Download
+Sources and binaries can be downloaded from maven central:
+https://search.maven.org/search?q=g:unix4j
 
 ##### API Javadoc
 [Latest Version](http://www.unix4j.org/javadoc/index.html)
