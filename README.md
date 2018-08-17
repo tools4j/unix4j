@@ -82,7 +82,7 @@ Unix4j.grep(Grep.Options.v, "apple", "fruitlist.txt").toStdOut();
 ##### Download
 Sources and binaries can be downloaded from maven central:
 
-https://search.maven.org/search?q=g:unix4j
+https://search.maven.org/search?q=g:org.unix4j
 
 ##### API Javadoc
 [Latest Version](http://www.unix4j.org/javadoc/index.html)
