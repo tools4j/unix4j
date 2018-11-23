@@ -1,6 +1,12 @@
 
 package org.unix4j.unix;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.regex.Pattern;
+
 import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.builder.Unix4jCommandBuilder;
@@ -8,12 +14,6 @@ import org.unix4j.context.DefaultExecutionContext;
 import org.unix4j.context.ExecutionContext;
 import org.unix4j.context.ExecutionContextFactory;
 import org.unix4j.util.FileUtil;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertEquals;
 
@@ -123,6 +123,30 @@ public class GrepTest {
         final String evilRegex = "anyStringOrRegexpITried";
         //Unix4j.fromFile(inputPath).grep(Grep.Options.lineNumber, evilRegex).toStdOut();
         assertEquals("1:anyStringOrRegexpITried", Unix4j.fromFile(inputPath).grep(Grep.Options.lineNumber, evilRegex).toStringResult());
+    }
+
+    /**
+     * Unit test for Issue #59.
+     * <p>
+     * See <a href="https://github.com/tools4j/unix4j/issues/59">Issue 59</a>
+     */
+    @Test
+    public void testFixedStringWithIgnoreCase() {
+        //given
+        final String[] lines = {"Hello", "World", "HELLO", "WORLD", "Hello world", "HELLO WORLD"};
+        final String outputDirPath = outputDir.getPath();
+        final File file = new File(outputDirPath, "testFixedStringWithIgnoreCase.txt");
+        Unix4j.fromStrings(lines).toFile(file);
+
+        //when + then
+        assertEquals2(	"Hello world", "HELLO WORLD",
+                Unix4j.fromStrings(lines).grep(Grep.Options.F.i, "hEllO wORLd"));
+        assertEquals2(	"Hello world", "HELLO WORLD",
+                Unix4j.grep(Grep.Options.F.i, "hEllO wORLd", file));
+        assertEquals2(	"Hello world", "HELLO WORLD",
+                Unix4j.grep(Grep.Options.F.i, "hEllO wORLd", file.getPath()));
+        assertEquals2(	"Hello world", "HELLO WORLD",
+                Unix4j.grep(Grep.Options.F.i, "hEllO wORLd", outputDir.getPath() + "/testFixedStringWithIgnoreCase.*"));
     }
 
     /**
