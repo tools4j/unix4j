@@ -135,7 +135,7 @@ public class GrepTest {
         //given
         final String[] lines = {"Hello", "World", "HELLO", "WORLD", "Hello world", "HELLO WORLD"};
         final String outputDirPath = outputDir.getPath();
-        final File file = new File(outputDirPath, "testFixedStringWithIgnoreCase.txt");
+        final File file = new File(outputDirPath, "testFixedStringWithIgnoreCase.text");
         Unix4j.fromStrings(lines).toFile(file);
 
         //when + then
@@ -159,7 +159,7 @@ public class GrepTest {
         //given
         final String[] lines = {"Hello", "World", "These are 3 lines"};
         final String outputDirPath = outputDir.getPath();
-        final File file = new File(outputDirPath, "testGrepFileThenDelete.txt");
+        final File file = new File(outputDirPath, "testGrepFileThenDelete.text");
         Unix4j.fromStrings(lines).toFile(file);
         assertEquals(true, file.exists());
 
