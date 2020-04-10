@@ -13,19 +13,19 @@ class TimeFilter implements FileFilter {
 		Create(FindOption.timeCreate) {
 			@Override
 			public long getTime(File file) {
-				return FileAttributes.INSTANCE.getCreationTime(file);
+				return FileAttributes.getCreationTime(file);
 			}
 		},
 		Access(FindOption.timeAccess) {
 			@Override
 			public long getTime(File file) {
-				return FileAttributes.INSTANCE.getLastAccessedTime(file);
+				return FileAttributes.getLastAccessedTime(file);
 			}
 		},
 		Modified(FindOption.timeModified) {
 			@Override
 			public long getTime(File file) {
-				return FileAttributes.INSTANCE.getLastModifiedTime(file);
+				return FileAttributes.getLastModifiedTime(file);
 			}
 		};
 		abstract public long getTime(File file);

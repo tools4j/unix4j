@@ -1,51 +1,56 @@
 package org.unix4j.unix.find;
 
 import java.io.File;
-
-import org.unix4j.util.Java7Util;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
 
 /**
- * Helper to access file attributes if compiled and run with Java 6 or older. 
- * Supports only last modified time and some basic attributes.
- * <p>
- * Use the singleton {@link #INSTANCE} which loads the Java7 version if possible
- * with support for more file attributes.
+ * Helper to access file attributes.
  */
-class FileAttributes {
-	
-	/**
-	 * Singleton instance loading the Java7 version if possible with support for
-	 * more file attributes.
-	 */
-	public static final FileAttributes INSTANCE = Java7Util.newInstance(FileAttributes.class, new FileAttributes());
-	
-	/**
-	 * For subclass only, use {@link #INSTANCE} instead.
-	 */
-	protected FileAttributes() {
-		super();
+enum FileAttributes {
+	;
+
+	private static BasicFileAttributes getBasicFileAttributes(File file) {
+		try {
+			return Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+		} catch (IOException e) {
+			return null;
+		}
+	}
+
+	static long getLastModifiedTime(File file) {
+		final BasicFileAttributes atts = getBasicFileAttributes(file);
+		return atts != null ? atts.lastModifiedTime().toMillis() : file.lastModified();
+	}
+
+	static long getCreationTime(File file) {
+		final BasicFileAttributes atts = getBasicFileAttributes(file);
+		return atts != null ? atts.creationTime().toMillis() : file.lastModified();
 	}
 	
-	public long getLastModifiedTime(File file) {
-		return file.lastModified();
-	}
-	public long getLastAccessedTime(File file) {
-		return file.lastModified();//fallback if no Java7
-	}
-	public long getCreationTime(File file) {
-		return file.lastModified();//fallback if no Java7
+	static long getLastAccessedTime(File file) {
+		final BasicFileAttributes atts = getBasicFileAttributes(file);
+		return atts != null ? atts.lastAccessTime().toMillis() : file.lastModified();
 	}
 	
-	public boolean isDirectory(File file) {
-		return file.isDirectory();
+	static boolean isDirectory(File file) {
+		final BasicFileAttributes atts = getBasicFileAttributes(file);
+		return atts != null ? atts.isDirectory() : file.isDirectory();
 	}
-	public boolean isRegularFile(File file) {
-		return file.isFile();
+	
+	static boolean isRegularFile(File file) {
+		final BasicFileAttributes atts = getBasicFileAttributes(file);
+		return atts != null ? atts.isRegularFile() : file.isFile();
 	}
-	public boolean isSymbolicLink(File file) {
-		return false;
+	
+	static boolean isSymbolicLink(File file) {
+		final BasicFileAttributes atts = getBasicFileAttributes(file);
+		return atts != null ? atts.isSymbolicLink() : false;
 	}
-	public boolean isOther(File file) {
-		return !isDirectory(file) && !isRegularFile(file) && !isSymbolicLink(file);
+	
+	static boolean isOther(File file) {
+		final BasicFileAttributes atts = getBasicFileAttributes(file);
+		return atts != null ? atts.isOther() : !isDirectory(file) && !isRegularFile(file) && !isSymbolicLink(file);
 	}
 }

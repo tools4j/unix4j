@@ -62,14 +62,11 @@ public class MonthStringComparatorTest extends AbstractStringComparatorTest {
 
 	@Test
 	public void testCompareGerman() {
-		final boolean isJava7 = Java7Util.isJava7();
 		final int EQUAL = 0;
 		final int GREATER = 1;
 		final MonthStringComparator c = MonthStringComparator.getInstance(Locale.GERMAN);
 		final String[] lMonths = {"Januar", "Februar", "M\u00C4rz", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"};
-		final String[] sMonths = isJava7 ?
-				new String[]{"JAN", "FEB", "Mrz", "APR", "MAI", "JUN", "JUL", "AUG", "SEP", "OKT", "NOV", "DEZ"} :
-				new String[]{"JAN", "FEB", "M\u00E4R", "APR", "MAI", "JUN", "JUL", "AUG", "SEP", "OKT", "NOV", "DEZ"};
+		final String[] sMonths = {"JAN", "FEB", "M\u00E4R", "APR", "MAI", "JUN", "JUL", "AUG", "SEP", "OKT", "NOV", "DEZ"};
 		for (int i = 0; i < 12; i++) {
 			assertCompare(c, lMonths[i], lMonths[i], EQUAL);
 			assertCompare(c, sMonths[i], sMonths[i], EQUAL);

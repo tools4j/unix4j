@@ -1,12 +1,5 @@
 package org.unix4j.unix.ls;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.context.ExecutionContext;
 import org.unix4j.line.Line;
@@ -14,6 +7,13 @@ import org.unix4j.processor.LineProcessor;
 import org.unix4j.unix.Ls;
 import org.unix4j.util.FileUtil;
 import org.unix4j.util.sort.ReverseOrderComparator;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Implementation of the {@link Ls ls} command.
@@ -76,7 +76,7 @@ class LsCommand extends AbstractCommand<LsArguments> {
 		final Comparator<File> comparator = getComparator(parent == null ? relativeTo : parent, args);
 		final boolean allFiles = args.isAllFiles();
 		final boolean longFormat = args.isLongFormat();
-		final LsFormatter formatter = longFormat ? LsFormatterLong.FACTORY.create(relativeTo, parent, files, args) : LsFormatterShort.INSTANCE;
+		final LsFormatter formatter = longFormat ? new LsFormatterLong(files, args) : LsFormatterShort.INSTANCE;
 
 		//add special directories . and ..
 		if (parent != null && allFiles) {

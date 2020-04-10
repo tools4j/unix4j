@@ -1,20 +1,24 @@
 package org.unix4j.unix.ls;
 
-import java.io.File;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
-
 import org.unix4j.line.SimpleLine;
 import org.unix4j.processor.LineProcessor;
 import org.unix4j.util.FileUtil;
-import org.unix4j.util.Java7Util;
 import org.unix4j.util.StringUtil;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.attribute.PosixFileAttributeView;
+import java.nio.file.attribute.PosixFilePermission;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 /**
  * Formatter for long file output including permissions, owner, size etc. An
  * example output with long format looks like this:
- * 
+ *
  * <pre>
  * -rw-r--r--@  1 myself  geeks   1.6K May  8 23:20 EFMTool Test Case.zip
  * -rw-r--r--   1 myself  myself  2.6M May  5  2011 EM_FX_RANK_2011-1.pages
@@ -30,24 +34,10 @@ import org.unix4j.util.StringUtil;
  * drwxrwxrwx  17 myself  geeks   578B Jun 15 11:21 cv
  * </pre>
  */
-class LsFormatterLong implements LsFormatter {
+final class LsFormatterLong implements LsFormatter {
 
-	protected final ThreadLocal<Calendar> calendar = new ThreadLocal<Calendar>() {
-		@Override
-		protected Calendar initialValue() {
-			return Calendar.getInstance();
-		}
-	};
-	protected final ThreadLocal<Integer> maxSizeStringLength = new ThreadLocal<Integer>() {
-		@Override
-		protected Integer initialValue() {
-			return Integer.valueOf(0);
-		}
-	};
-
-	protected Calendar getCalendar() {
-		return calendar.get();
-	}
+	private final ThreadLocal<Calendar> calendar = ThreadLocal.withInitial(Calendar::getInstance);
+	private final ThreadLocal<Integer> maxSizeStringLength = ThreadLocal.withInitial(() -> Integer.valueOf(0));
 
 	@Override
 	public boolean writeFormatted(File relativeTo, File file, LsArguments args, LineProcessor output) {
@@ -59,47 +49,75 @@ class LsFormatterLong implements LsFormatter {
 								getSize(file, args) + ' ' +
 								getDateTime(file, args) + ' ' +
 								getName(relativeTo, file, args)
-					)
-				);
+				)
+		);
 	}
 
-	protected String getFilePermissions(File file, LsArguments args) {
-		final boolean r = file.canRead();
-		final boolean w = file.canWrite();
-		final boolean x = file.canExecute();
-		return (file.isDirectory() ? "d" : "-") +
-				//owner
-				(r ? 'r' : '-') +
-				(w ? 'w' : '-') +
-				(x ? 'x' : '-') +
-				//group
-				(r ? '.' : '-') +
-				(w ? '.' : '-') +
-				(x ? '.' : '-') +
-				//other
-				(r ? '.' : '-') +
-				(w ? '.' : '-') +
-				(x ? '.' : '-');
+	LsFormatterLong(List<File> directoryFiles, LsArguments args) {
+		maxSizeStringLength.set(calculateMaxSizeStringLength(directoryFiles, args));
 	}
 
-	protected String getOwner(File file, LsArguments args) {
-		return StringUtil.fixSizeString(7, true, "???");
+	private String getOwner(File file, LsArguments args) {
+		try {
+			final String owner = Files.getOwner(file.toPath()).getName();
+			return StringUtil.fixSizeString(7, true, owner);
+		} catch (IOException e) {
+			return StringUtil.fixSizeString(7, true, "???");
+		}
 	}
 
-	protected String getGroup(File file, LsArguments args) {
-		return StringUtil.fixSizeString(7, true, "???");
+	private String getGroup(File file, LsArguments args) {
+		try {
+			final PosixFileAttributeView view = Files.getFileAttributeView(file.toPath(), PosixFileAttributeView.class);
+			final String group = view.readAttributes().group().getName();
+			return StringUtil.fixSizeString(7, true, group);
+		} catch (Exception e) {
+			return StringUtil.fixSizeString(7, true, "???");
+		}
 	}
 
-	protected String getSize(File file, LsArguments args) {
-		final String sizeString = LsCommand.getSizeString(args, file.length());
-		return StringUtil.fixSizeString(maxSizeStringLength.get(), false, sizeString);
+	private String getFilePermissions(File file, LsArguments args) {
+		try {
+			final Set<PosixFilePermission> perms = Files.getPosixFilePermissions(file.toPath());
+			return (file.isDirectory() ? "d" : "-") +
+				(perms.contains(PosixFilePermission.OWNER_READ) ? 'r' : '-') +
+				(perms.contains(PosixFilePermission.OWNER_WRITE) ? 'w' : '-') +
+				(perms.contains(PosixFilePermission.OWNER_EXECUTE) ? 'x' : '-') +
+				(perms.contains(PosixFilePermission.GROUP_READ) ? 'r' : '-') +
+				(perms.contains(PosixFilePermission.GROUP_WRITE) ? 'w' : '-') +
+				(perms.contains(PosixFilePermission.GROUP_EXECUTE) ? 'x' : '-') +
+				(perms.contains(PosixFilePermission.OTHERS_READ) ? 'r' : '-') +
+				(perms.contains(PosixFilePermission.OTHERS_WRITE) ? 'w' : '-') +
+				(perms.contains(PosixFilePermission.OTHERS_EXECUTE) ? 'x' : '-');
+		} catch (Exception e) {
+			final boolean r = file.canRead();
+			final boolean w = file.canWrite();
+			final boolean x = file.canExecute();
+			return (file.isDirectory() ? "d" : "-") +
+					//owner
+					(r ? 'r' : '-') +
+					(w ? 'w' : '-') +
+					(x ? 'x' : '-') +
+					//group
+					(r ? '.' : '-') +
+					(w ? '.' : '-') +
+					(x ? '.' : '-') +
+					//other
+					(r ? '.' : '-') +
+					(w ? '.' : '-') +
+					(x ? '.' : '-');
+		}
 	}
 
-	protected long getLastModifiedMS(File file, LsArguments args) {
-		return file.lastModified();
+	private long getLastModifiedMS(File file, LsArguments args) {
+		try {
+			return Files.getLastModifiedTime(file.toPath()).toMillis();
+		} catch (Exception e) {
+			return file.lastModified();
+		}
 	}
 
-	protected String getDateTime(File file, LsArguments args) {
+	private String getDateTime(File file, LsArguments args) {
 		final Calendar cal = calendar.get();
 		cal.setTimeInMillis(System.currentTimeMillis());//set current date to get current year below
 		final int curYear = cal.get(Calendar.YEAR);
@@ -123,26 +141,27 @@ class LsFormatterLong implements LsFormatter {
 		return FileUtil.getRelativePath(relativeTo, file);
 	}
 
-	static Factory FACTORY = new Factory() {
-		@Override
-		public LsFormatter create(File relativeTo, File directory, List<File> directoryFiles, LsArguments args) {
-			final LsFormatterLong fmt = Java7Util.newInstance(LsFormatterLong.class, new LsFormatterLong());
-			fmt.maxSizeStringLength.set(calculateMaxSizeStringLength(directoryFiles, args));
-			return fmt;
+	private String getSize(File file, LsArguments args) {
+		long size;
+		try {
+			size = Files.size(file.toPath());
+		} catch (Exception e) {
+			size = file.length();
 		}
+		final String sizeString = LsCommand.getSizeString(args, size);
+		return StringUtil.fixSizeString(maxSizeStringLength.get(), false, sizeString);
+	}
 
-		private int calculateMaxSizeStringLength(List<File> directoryFiles, LsArguments args) {
-			int maxSizeStringLength = 0;
-			for (final File f : directoryFiles) {
+	private static int calculateMaxSizeStringLength(List<File> directoryFiles, LsArguments args) {
+		int maxSizeStringLength = 0;
+		for (final File f : directoryFiles) {
+			if (f.isFile()) {
 				if (f.isFile()) {
-					if (f.isFile()) {
-						final String sizeString = LsCommand.getSizeString(args, f.length());
-						maxSizeStringLength = Math.max(maxSizeStringLength, sizeString.length());
-					}
+					final String sizeString = LsCommand.getSizeString(args, f.length());
+					maxSizeStringLength = Math.max(maxSizeStringLength, sizeString.length());
 				}
 			}
-			return maxSizeStringLength;
 		}
-	};
-
+		return maxSizeStringLength;
+	}
 }

@@ -10,30 +10,30 @@ enum TypeFilter implements FileFilter, Optionable<FindOption> {
 	Directory(FindOption.typeDirectory) {
 		@Override
 		public boolean accept(File file) {
-			return FileAttributes.INSTANCE.isDirectory(file);
+			return FileAttributes.isDirectory(file);
 		}
 	},
 	RegularFile(FindOption.typeFile) {
 		@Override
 		public boolean accept(File file) {
-			return FileAttributes.INSTANCE.isRegularFile(file);
+			return FileAttributes.isRegularFile(file);
 		}
 	},
 	SymbolicLink(FindOption.typeSymlink) {
 		@Override
 		public boolean accept(File file) {
-			return FileAttributes.INSTANCE.isSymbolicLink(file);
+			return FileAttributes.isSymbolicLink(file);
 		}
 	},
 	Other(FindOption.typeOther) {
 		@Override
 		public boolean accept(File file) {
-			return FileAttributes.INSTANCE.isOther(file);
+			return FileAttributes.isOther(file);
 		}
 	};
 	private final FindOption option;
 
-	private TypeFilter(FindOption option) {
+	TypeFilter(FindOption option) {
 		this.option = option;
 	}
 
