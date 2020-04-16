@@ -1,14 +1,15 @@
 package org.unix4j.builder;
 
-import java.io.File;
-import java.io.OutputStream;
-import java.io.Writer;
-import java.util.List;
-
 import org.unix4j.command.Command;
 import org.unix4j.command.ExitValueException;
 import org.unix4j.io.Output;
 import org.unix4j.line.Line;
+
+import java.io.File;
+import java.io.OutputStream;
+import java.io.Writer;
+import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Interface defining command execution and output redirection methods.
@@ -39,7 +40,7 @@ public interface To {
 	 * Executes the composite command and returns the result as a list
 	 * containing the output lines.
 	 * 
-	 * @return the result as a list of line strings
+	 * @return the result as a list of lines
 	 */
 	List<Line> toLineList();
 
@@ -50,6 +51,22 @@ public interface To {
 	 * @return the result as a list of line strings
 	 */
 	List<String> toStringList();
+
+	/**
+	 * Executes the composite command and returns the result as a stream
+	 * containing the output lines.
+	 *
+	 * @return the result as a stream of lines
+	 */
+	Stream<Line> toLineStream();
+
+	/**
+	 * Executes the composite command and returns the result as a stream
+	 * containing the output lines without line endings.
+	 *
+	 * @return the result as a stream of line strings
+	 */
+	Stream<String> toStringStream();
 
 	/**
 	 * Executes the composite command and writes the result to the given file.

@@ -12,6 +12,11 @@ public class FromFileOnClasspathTest {
 		assertThat(Unix4j.fromResource("/commuting.txt").grep("from").head(4).tail(1).wc(Wc.Options.words).toStringResult(), is("13"));
 	}
 
+	@Test
+	public void testFromFileOnClasspath_fileInRootPackage_omitLeadingSlash() {
+		assertThat(Unix4j.fromResource("commuting.txt").grep("from").head(4).tail(1).wc(Wc.Options.words).toStringResult(), is("13"));
+	}
+
 	@Test(expected = IllegalArgumentException.class)
 	public void testFromFileOnClasspath_fileNotFound() {
 		Unix4j.fromResource("/asdfasfdasfd").grep("asfdasfdasfd").toStdOut();
@@ -24,7 +29,13 @@ public class FromFileOnClasspathTest {
 
 	@Test
 	public void testFromFileOnClasspath_fileInPackage() {
-		assertThat(Unix4j.fromResource("/my/package/redneck.txt").grep("for").grep("ask").wc(Wc.Options.lines).toStringResult(), is("15"));
-		assertThat(Unix4j.fromResource("/my/package/redneck.txt").grep("for").grep("ask").wc(Wc.Options.words).wc(Wc.Options.lines).toStringResult(), is("1"));
+		assertThat(Unix4j.fromResource("/my/pkg/redneck.txt").grep("for").grep("ask").wc(Wc.Options.lines).toStringResult(), is("15"));
+		assertThat(Unix4j.fromResource("/my/pkg/redneck.txt").grep("for").grep("ask").wc(Wc.Options.words).wc(Wc.Options.lines).toStringResult(), is("1"));
+	}
+
+	@Test
+	public void testRelativePath() {
+		assertThat(Unix4j.fromResource(FromFileOnClasspathTest.class, "redneck-unix.txt").grep("for").grep("ask").wc(Wc.Options.lines).toStringResult(), is("15"));
+		assertThat(Unix4j.fromResource(FromFileOnClasspathTest.class, "redneck-unix.txt").grep("for").grep("ask").wc(Wc.Options.words).wc(Wc.Options.lines).toStringResult(), is("1"));
 	}
 }

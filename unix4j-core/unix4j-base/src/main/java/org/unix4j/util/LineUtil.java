@@ -1,8 +1,8 @@
 package org.unix4j.util;
 
-import java.util.List;
-
 import org.unix4j.line.Line;
+
+import java.util.List;
 
 /**
  * Contains static utility methods related to {@link Line} objects.

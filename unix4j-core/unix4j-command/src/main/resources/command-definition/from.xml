@@ -25,10 +25,24 @@
 			the host operating system), it is split into multiple lines.  
 		</method>
 		<method name="from" args="lines" usesStandardInput="false">
-			Uses the strings in the specified {@code input} collection as input
+			Uses the strings in the specified {@code input} iterable as input
 			lines for the next command. Each string usually represents a single
 			line of the input; however, if any of the strings contains line
-			ending codes (UNIX or DOS independent from the host operating 
+			ending codes (UNIX or DOS independent from the host operating
+			system), it is split into multiple lines.
+		</method>
+		<method name="from" args="iterator" usesStandardInput="false">
+			Uses the strings returned by the specified iterator as input
+			lines for the next command. Each string usually represents a single
+			line of the input; however, if any of the strings contains line
+			ending codes (UNIX or DOS independent from the host operating
+			system), it is split into multiple lines.
+		</method>
+		<method name="from" args="stream" usesStandardInput="false">
+			Uses the strings returned by the specified stream as input
+			lines for the next command. Each string usually represents a single
+			line of the input; however, if any of the strings contains line
+			ending codes (UNIX or DOS independent from the host operating
 			system), it is split into multiple lines.
 		</method>
 		<method name="fromFile" args="path" usesStandardInput="false">
@@ -42,13 +56,19 @@
 			shell: {@code file > ...} 
 		</method>
 		<method name="fromResource" args="resource" usesStandardInput="false">
-			Reads from the given resource relative to the classpath and 
-			redirects the contents into the next command. The resource is 
+			Reads from the given resource relative to the classpath and
+			redirects the contents into the next command. The resource is
 			usually a file or URL on the classpath. The resource is read using
 			{@link Class#getResourceAsStream(String)}.
 		</method>
-		<method name="from" args="stream" usesStandardInput="false">
-			Reads from the given input stream and redirects the contents into 
+		<method name="fromResource" args="base,resource" usesStandardInput="false">
+			Reads from the given resource relative to the classpath and
+			redirects the contents into the next command. The resource is
+			usually a file or URL on the classpath. The resource is read using
+			{@link Class#getResourceAsStream(String)}.
+		</method>
+		<method name="from" args="in" usesStandardInput="false">
+			Reads from the given input stream and redirects the contents into
 			the next command.
 		</method>
 		<method name="from" args="reader" usesStandardInput="false">
@@ -72,8 +92,14 @@
 		<operand name="strings" type="String..." redirection="setInput(new org.unix4j.io.StringInput(${value}))">
 			the input lines  
 		</operand>
-		<operand name="lines" type="java.util.Collection&lt;? extends String>" redirection="setInput(new org.unix4j.io.StringInput(${value}))">
-			collection with input lines 
+		<operand name="lines" type="Iterable&lt;? extends String>" redirection="setInput(new org.unix4j.io.StringInput(${value}))">
+			collection with input lines
+		</operand>
+		<operand name="iterator" type="java.util.Iterator&lt;? extends String>" redirection="setInput(new org.unix4j.io.StringInput(${value}))">
+			iterator returning input lines
+		</operand>
+		<operand name="stream" type="java.util.stream.Stream&lt;? extends String>" redirection="setInput(new org.unix4j.io.StringInput(${value}))">
+			stream of input lines
 		</operand>
 		<operand name="path" type="String">
 			the file to use as input; wildcards * and ? are supported; relative 
@@ -84,18 +110,24 @@
 			string path argument to enable relative path resolving based on the
 			current working directory).
 		</operand>
-		<operand name="resource" type="String" redirection="setInput(new org.unix4j.io.ResourceInput(${value}))">
-			a path to the file to redirect to the next command. The will need
+		<operand name="base" type="Class&lt;?>">
+			base class for subsequent {@code resource} operand if relative paths are used.
+		</operand>
+		<operand name="resource" type="String">
+			a path to the file to redirect to the next command. The resource needs
 			to be on the classpath. If the file is in the root directory, the 
 			filename should be prefixed with a forward slash. e.g.:
-		 	{@code "/test-file.txt"}
+		 	{@code "/test-file.txt"}.
 		 	
 		 	If the file is in a package, then the package should be specified
 		 	prefixed with a forward slash, and with each dot "." replaced with a
 		 	forward slash. e.g.:
-			{@code "/org/company/mypackage/test-file.txt"}
+			{@code "/org/company/mypackage/test-file.txt"}.
+			A {@code base} class operand can be provided for relative paths; see
+			{@link java.lang.Class#getResourceAsStream(String)} for details about
+			resource loading.
 		</operand>
-		<operand name="stream" type="java.io.InputStream" redirection="setInput(new org.unix4j.io.StreamInput(${value}))">
+		<operand name="in" type="java.io.InputStream" redirection="setInput(new org.unix4j.io.StreamInput(${value}))">
 			the input stream to read from
 		</operand>
 		<operand name="reader" type="java.io.Reader" redirection="setInput(new org.unix4j.io.ReaderInput(${value}))">

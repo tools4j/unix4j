@@ -7,6 +7,7 @@ import org.unix4j.command.AbstractCommand;
 import org.unix4j.context.ExecutionContext;
 import org.unix4j.io.FileInput;
 import org.unix4j.io.Input;
+import org.unix4j.io.ResourceInput;
 import org.unix4j.line.Line;
 import org.unix4j.processor.LineProcessor;
 import org.unix4j.unix.From;
@@ -36,6 +37,12 @@ class FromCommand extends AbstractCommand<FromArguments> {
 			}
 		} else if (args.isInputSet()) {
 			input = args.getInput();
+		} else if (args.isResourceSet()) {
+			if (args.isBaseSet()) {
+				input = new ResourceInput(args.getBase(), args.getResource());
+			} else {
+				input = new ResourceInput(args.getResource());
+			}
 		} else {
 			throw new IllegalStateException("neither path nor input argument has been specified");
 		}
