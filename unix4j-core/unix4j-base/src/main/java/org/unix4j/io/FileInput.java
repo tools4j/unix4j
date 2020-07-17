@@ -3,8 +3,9 @@ package org.unix4j.io;
 import org.unix4j.util.FileUtil;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Input device reading from a {@link File}.
@@ -53,11 +54,7 @@ public class FileInput extends ReaderInput {
 	 *            the files for whose to create a {@code FileInput} object
 	 */
 	public static List<FileInput> multiple(File... files) {
-		final List<FileInput> inputs = new ArrayList<FileInput>(files.length);
-		for (int i = 0; i < files.length; i++) {
-			inputs.add(new FileInput(files[i]));
-		}
-		return inputs;
+		return multiple(Stream.of(files));
 	}
 
 	/**
@@ -68,12 +65,12 @@ public class FileInput extends ReaderInput {
 	 *            the files for whose to create a {@code FileInput} object
 	 */
 	public static List<FileInput> multiple(List<File> files) {
-		final List<FileInput> inputs = new ArrayList<FileInput>(files.size());
-		for (int i = 0; i < files.size(); i++) {
-			inputs.add(new FileInput(files.get(i)));
-		}
-		return inputs;
+		return multiple(files.stream());
 	}
+
+	private static List<FileInput> multiple(Stream<File> files) {
+        return files.map(FileInput::new).collect(Collectors.toList());
+    }
 
 	/**
 	 * Creates and returns an input composed from the specified files
