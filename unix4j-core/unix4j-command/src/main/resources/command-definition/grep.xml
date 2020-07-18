@@ -31,6 +31,9 @@
 			the given {@code regexp} string using case-sensitive comparison. 
 			Line endings are not relevant for the comparison.
 		</method>
+		<method args="regexp,streams" usesStandardInput="false">
+			TBD
+		</method>
 		<method args="pattern" usesStandardInput="true">
 			Filters the input lines from the standard input and writes the
 			matching lines to the standard output. Every line is matched against
@@ -147,6 +150,9 @@
 			The input files to be searched for the pattern; relative paths are 
 			not resolved (use the string paths argument to enable relative path 
 			resolving based on the current working directory).
+		</operand>
+		<operand name="streams" type="java.io.InputStream...">
+			TBD
 		</operand>
 		<operand name="args" type="String...">
 			String arguments defining the options and operands for the command. 

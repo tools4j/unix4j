@@ -34,6 +34,11 @@ public class FileInput extends ReaderInput {
 		this.fileInfo = fileStream.toString();
 	}
 
+	public FileInput(InputStream inputStream) {
+	    super(new InputStreamReader(inputStream), false);
+	    this.fileInfo = inputStream.toString();
+	}
+
 	public FileInput(FileDescriptor fileDesc) {
 		super(new FileReader(fileDesc), true);
 		this.fileInfo = fileDesc.toString();
@@ -66,6 +71,10 @@ public class FileInput extends ReaderInput {
 	 */
 	public static List<FileInput> multiple(List<File> files) {
 		return multiple(files.stream());
+	}
+
+	public static List<FileInput> multiple(InputStream... streams) {
+	    return Stream.of(streams).map(FileInput::new).collect(Collectors.toList());
 	}
 
 	private static List<FileInput> multiple(Stream<File> files) {

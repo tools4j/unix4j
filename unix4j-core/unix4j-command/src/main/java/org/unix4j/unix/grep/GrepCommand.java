@@ -32,6 +32,9 @@ class GrepCommand extends AbstractCommand<GrepArguments> {
 			final List<File> files = FileUtil.expandFiles(context.getCurrentDirectory(), args.getPaths());
 			final List<FileInput> inputs = FileInput.multiple(files);
 			return getFileInputProcessor(inputs, context, output, args);
+		} else if (args.isStreamsSet()) {
+		    final List<FileInput> inputs = FileInput.multiple(args.getStreams());
+		    return getFileInputProcessor(inputs, context, output, args);
 		}
 
 		//from standard input
