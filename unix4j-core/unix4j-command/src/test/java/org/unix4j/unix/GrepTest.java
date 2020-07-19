@@ -1,8 +1,11 @@
 
 package org.unix4j.unix;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.regex.Pattern;
@@ -170,6 +173,18 @@ public class GrepTest {
         //then
         assertEquals("3", output);
         assertEquals(false, file.exists());
+    }
+
+    //Added in response to https://github.com/tools4j/unix4j/pull/65
+    @Test
+    public void testFromInputStream() throws IOException {
+        //given
+        final File testFile = new File(outputDir.getPath() + "/commuting.txt" );
+        final InputStream inputStream = new BufferedInputStream(new FileInputStream(testFile));
+
+        //when + then
+        assertEquals("Subject: Commuting for beginners.",
+                Unix4j.from(inputStream).grep("Subject", testFile).toStringResult());
     }
 
     private static void assertEquals2(String line1, String line2, Unix4jCommandBuilder actual) {
