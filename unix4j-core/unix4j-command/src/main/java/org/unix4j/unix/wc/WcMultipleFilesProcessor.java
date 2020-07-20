@@ -18,13 +18,13 @@ class WcMultipleFilesProcessor implements LineProcessor {
 	private final NavigableMap<String, Counters> inputCounters;
 	private final Counters totals;
     private final WcArguments args;
-    private final List<FileInput> inputs;
+    private final List<? extends Input> inputs;
     private final LineProcessor output;
     private Counters currentInputCounter;
 
-    public WcMultipleFilesProcessor(final ExecutionContext context, final List<FileInput> inputs, final LineProcessor output, WcArguments args) {
+    public WcMultipleFilesProcessor(final ExecutionContext context, final List<? extends Input> inputs, final LineProcessor output, WcArguments args) {
     	this.context = context;
-    	this.inputCounters = new TreeMap<String, Counters>();
+    	this.inputCounters = new TreeMap<>();
     	this.currentInputCounter = new Counters(args);
     	this.totals = new Counters(args);
         this.args = args;

@@ -62,7 +62,7 @@
 			The input files to be printed.
 		</operand>
 		<operand name="paths" type="String...">
-			Pathnames of the input files to be printed; wildcards * and ? are
+			Path names of the input files to be printed; wildcards * and ? are
 			supported.  
 		</operand>
 		<operand name="options" type="CatOptions">

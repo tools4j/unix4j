@@ -5,21 +5,21 @@ import java.io.File;
 import java.net.URL;
 
 public class FileTestUtils {
-    public static final File getTestFile(Class<?> testClass, String fileName) {
+    public static File getTestFile(Class<?> testClass, String fileName) {
         final StackTraceElement stackTraceElement = StackTraceUtil.getCurrentMethodStackTraceElement(1);
         return getTestFile(testClass, stackTraceElement.getMethodName(), fileName);
 
     }
 
-    public static final File getTestFile(Class<?> testClass, String testMethod, String fileName) {
+    public static File getTestFile(Class<?> testClass, String testMethod, String fileName) {
         return getTestFile(testClass, testMethod, fileName, null);
     }
 
-    public static final File getTestFile(Class<?> testClass, String testMethod, String fileName, String defaultFileName) {
+    public static File getTestFile(Class<?> testClass, String testMethod, String fileName, String defaultFileName) {
         return(getTestFile(getTestDir(testClass), testMethod, fileName, defaultFileName));
     }
 
-    public static final File getTestFile(File parentDir, String testMethod, String fileName, String defaultFileName) {
+    public static File getTestFile(File parentDir, String testMethod, String fileName, String defaultFileName) {
         File file = new File(parentDir, fileName);
         if (!file.exists()) {
             if (defaultFileName == null) {

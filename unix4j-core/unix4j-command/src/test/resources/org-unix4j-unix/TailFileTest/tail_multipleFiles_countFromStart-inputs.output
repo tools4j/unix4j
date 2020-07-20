@@ -1,0 +1,23 @@
+==> file:{{TEST_DIR}}/tail_multipleFiles_countFromStart.input.1 <==
+aaaaaaaaaa
+aaaaaaaaa
+aaaaaaaa
+aaaaaaa
+aaaaaa
+aaaaa
+aaaa
+aaa
+aa
+a
+
+==> file:{{TEST_DIR}}/tail_multipleFiles_countFromStart.input.2 <==
+xxxxxxxxxx
+xxxxxxxxx
+xxxxxxxx
+xxxxxxx
+xxxxxx
+xxxxx
+xxxx
+xxx
+xx
+x

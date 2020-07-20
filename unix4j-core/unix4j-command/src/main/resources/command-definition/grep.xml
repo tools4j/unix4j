@@ -28,7 +28,13 @@
 		<method args="regexp,files" usesStandardInput="false">
 			Filters the lines from the specified input files and writes the
 			matching lines to the standard output. Every line is matched against
-			the given {@code regexp} string using case-sensitive comparison. 
+			the given {@code regexp} string using case-sensitive comparison.
+			Line endings are not relevant for the comparison.
+		</method>
+		<method args="regexp,inputs" usesStandardInput="false">
+			Filters the lines from the specified inputs and writes the
+			matching lines to the standard output. Every line is matched against
+			the given {@code regexp} string using case-sensitive comparison.
 			Line endings are not relevant for the comparison.
 		</method>
 		<method args="pattern" usesStandardInput="true">
@@ -46,7 +52,13 @@
 		<method args="pattern,paths" usesStandardInput="false">
 			Filters the lines from the specified input files and writes the
 			matching lines to the standard output. Every line is matched against
-			the given regular expression {@code pattern} using case-sensitive 
+			the given regular expression {@code pattern} using case-sensitive
+			comparison. Line endings are not relevant for the comparison.
+		</method>
+		<method args="pattern,inputs" usesStandardInput="false">
+			Filters the lines from the specified inputs and writes the
+			matching lines to the standard output. Every line is matched against
+			the given regular expression {@code pattern} using case-sensitive
 			comparison. Line endings are not relevant for the comparison.
 		</method>
 		<method args="options,regexp" usesStandardInput="true">
@@ -69,8 +81,14 @@
 		</method>
 		<method args="options,regexp,paths" usesStandardInput="false">
 			Filters the input lines from the specified input files and writes
-			the matching lines to the standard output. Every line is matched 
-			against the given {@code regexp} string; the exact comparison rules 
+			the matching lines to the standard output. Every line is matched
+			against the given {@code regexp} string; the exact comparison rules
+			are defined by the specified matching {@code options}.
+		</method>
+		<method args="options,regexp,inputs" usesStandardInput="false">
+			Filters the input lines from the specified inputs and writes
+			the matching lines to the standard output. Every line is matched
+			against the given {@code regexp} string; the exact comparison rules
 			are defined by the specified matching {@code options}.
 		</method>
 		<method args="options,pattern,files" usesStandardInput="false" >
@@ -82,9 +100,16 @@
 		</method>
 		<method args="options,pattern,paths" usesStandardInput="false">
 			Filters the input lines from the specified input files and writes
-			the matching lines to the standard output. Every line is matched 
-			against the given regular expression {@code pattern}; the exact 
-			comparison rules are defined by the specified matching 
+			the matching lines to the standard output. Every line is matched
+			against the given regular expression {@code pattern}; the exact
+			comparison rules are defined by the specified matching
+			{@code options}.
+		</method>
+		<method args="options,pattern,inputs" usesStandardInput="false">
+			Filters the input lines from the specified inputs and writes
+			the matching lines to the standard output. Every line is matched
+			against the given regular expression {@code pattern}; the exact
+			comparison rules are defined by the specified matching
 			{@code options}.
 		</method>
 	</methods>
@@ -139,14 +164,17 @@
 			Lines will be printed which match the given pattern.
 		</operand>
 		<operand name="paths" type="String...">
-			Pathnames of the input files to be searched for the pattern;
+			Path names of the input files to be searched for the pattern;
 			wildcards * and ? are supported; relative paths are resolved on the
             basis of the current working directory.
 		</operand>
 		<operand name="files" type="java.io.File...">
-			The input files to be searched for the pattern; relative paths are 
-			not resolved (use the string paths argument to enable relative path 
+			The input files to be searched for the pattern; relative paths are
+			not resolved (use the string paths argument to enable relative path
 			resolving based on the current working directory).
+		</operand>
+		<operand name="inputs" type="org.unix4j.io.Input...">
+			The inputs to be searched for the pattern.
 		</operand>
 		<operand name="args" type="String...">
 			String arguments defining the options and operands for the command. 

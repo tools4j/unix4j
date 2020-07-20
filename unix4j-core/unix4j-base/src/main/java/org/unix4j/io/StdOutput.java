@@ -16,4 +16,9 @@ public class StdOutput extends StreamOutput {
 	public StdOutput() {
 		super(System.out);
 	}
+
+	@Override
+	public String toString() {
+		return "/dev/stdout";
+	}
 }

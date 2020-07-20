@@ -1,6 +1,7 @@
 package org.unix4j.unix.head;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 import org.unix4j.command.AbstractCommand;
@@ -40,6 +41,9 @@ class HeadCommand extends AbstractCommand<HeadArguments> {
 			final List<File> files = FileUtil.expandFiles(context.getCurrentDirectory(), args.getPaths());
 			final List<FileInput> inputs = FileInput.multiple(files);
 			return getFileInputProcessor(inputs, context, output, args);
+		} else if (args.isInputsSet()) {
+			final List<Input> inputs = Arrays.asList(args.getInputs());
+			return getFileInputProcessor(inputs, context, output, args);
 		}
 		
 		//read from standard input
@@ -56,7 +60,7 @@ class HeadCommand extends AbstractCommand<HeadArguments> {
 		}
 	}
 	
-	private LineProcessor getFileInputProcessor(List<FileInput> inputs, final ExecutionContext context, final LineProcessor output, HeadArguments args) {
+	private LineProcessor getFileInputProcessor(List<? extends Input> inputs, final ExecutionContext context, final LineProcessor output, HeadArguments args) {
 		final AbstractHeadProcessor headProcessor = getStandardInputProcessor(context, output, args);
 		if (inputs.size() <= 1 || args.isSuppressHeaders()) {
 			return new RedirectInputLineProcessor(inputs, headProcessor);

@@ -30,6 +30,10 @@
 			Reads the lines from the specified files and writes them to the
 			standard output. The files are processed in command-argument order.
 		</method>
+		<method args="inputs" usesStandardInput="false">
+			Reads the lines from the specified inputs and writes them to the
+			standard output. The inputs are processed in command-argument order.
+		</method>
 		<method args="options" usesStandardInput="true">
 			Reads the lines from the standard input and writes them to the
 			standard output; the given options define the details of the output
@@ -45,6 +49,11 @@
 			standard output; the given options define the details of the output
 			format. The path arguments are expanded if wildcards are used and
 			processed in command-argument order.
+		</method>
+		<method args="options,inputs" usesStandardInput="false">
+			Reads the lines from the specified inputs and writes them to the
+			standard output; the given options define the details of the output
+			format. The inputs are processed in command-argument order.
 		</method>
 	</methods>
 	<options>
@@ -66,9 +75,12 @@
 			the current working directory).
 		</operand>
 		<operand name="paths" type="String...">
-			Pathnames of the input files to be printed; wildcards * and ? are
+			Path names of the input files to be printed; wildcards * and ? are
 			supported; relative paths are resolved on the basis of the current 
 			working directory.
+		</operand>
+		<operand name="inputs" type="org.unix4j.io.Input...">
+			The inputs to be printed.
 		</operand>
 		<operand name="args" type="String...">
 			String arguments defining the options and file operands for the 

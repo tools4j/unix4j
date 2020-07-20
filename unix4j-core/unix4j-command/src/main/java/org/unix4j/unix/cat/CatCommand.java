@@ -1,15 +1,17 @@
 package org.unix4j.unix.cat;
 
-import java.io.File;
-import java.util.List;
-
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.context.ExecutionContext;
 import org.unix4j.io.FileInput;
+import org.unix4j.io.Input;
 import org.unix4j.processor.LineProcessor;
 import org.unix4j.processor.RedirectInputLineProcessor;
 import org.unix4j.unix.Cat;
 import org.unix4j.util.FileUtil;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Implementation of the {@link Cat cat} command.
@@ -31,6 +33,9 @@ class CatCommand extends AbstractCommand<CatArguments> {
 			final List<File> files = FileUtil.expandFiles(context.getCurrentDirectory(), args.getPaths());
 			final List<FileInput> inputs = FileInput.multiple(files);
 			return getFileInputProcessor(inputs, context, output, args);
+		} else if (args.isInputsSet()) {
+			final List<Input> inputs = Arrays.asList(args.getInputs());
+			return getFileInputProcessor(inputs, context, output, args);
 		}
 
 		// standard input
@@ -50,7 +55,7 @@ class CatCommand extends AbstractCommand<CatArguments> {
 		return new CatProcessor(this, context, printer);
 	}
 
-	private LineProcessor getFileInputProcessor(List<FileInput> inputs, ExecutionContext context, LineProcessor output, CatArguments args) {
+	private LineProcessor getFileInputProcessor(List<? extends Input> inputs, ExecutionContext context, LineProcessor output, CatArguments args) {
 		final LineProcessor standardInputProcessor = getStandardInputProcessor(context, output, args); 
 		return new RedirectInputLineProcessor(inputs, standardInputProcessor);
 	}

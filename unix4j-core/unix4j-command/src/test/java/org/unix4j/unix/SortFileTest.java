@@ -54,6 +54,7 @@ public class SortFileTest {
 	public void sortNumericIntegers() {
 		final CommandFileTest tester = new CommandFileTest(this.getClass());
 		tester.runAndAssert(Unix4j.builder().sort(Sort.Options.numericSort, tester.getInputFiles()));
+		tester.runAndAssert(Unix4j.builder().sort(Sort.Options.numericSort, tester.getInputs()));
 		tester.runAndAssert(Unix4j.builder().sort(combine(tester.getInputFileNames(), "-n")));
 		tester.runAndAssert(Unix4j.builder().sort(combine(arr("--numericSort", "--paths"), tester.getInputFileNames())));
 	}
@@ -62,6 +63,7 @@ public class SortFileTest {
 	public void sortMerge() {
 		final CommandFileTest tester = new CommandFileTest(this.getClass(), 3);
 		tester.runAndAssert(Unix4j.builder().sort(Sort.Options.merge, tester.getInputFiles()));
+		tester.runAndAssert(Unix4j.builder().sort(Sort.Options.merge, tester.getInputs()));
 		tester.runAndAssert(Unix4j.builder().sort(combine(arr("--merge", "--paths"), tester.getInputFileNames())));
 		tester.runAndAssert(Unix4j.builder().sort(combine(tester.getInputFileNames(), "-m")));
 	}
@@ -70,6 +72,7 @@ public class SortFileTest {
 	public void sortCheck() {
 		final CommandFileTest tester = new CommandFileTest(this.getClass(), 2);
 		tester.runAndAssert(Unix4j.builder().sort(Sort.Options.check, tester.getInputFiles()));
+		tester.runAndAssert(Unix4j.builder().sort(Sort.Options.check, tester.getInputs()));
 		tester.runAndAssert(Unix4j.builder().sort(combine(arr("--check", "--paths"), tester.getInputFileNames())));
 		tester.runAndAssert(Unix4j.builder().sort(combine(tester.getInputFileNames(), "-c")));
 	}

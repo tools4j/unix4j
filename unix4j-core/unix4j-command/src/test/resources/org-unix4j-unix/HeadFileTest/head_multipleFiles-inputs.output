@@ -1,0 +1,23 @@
+==> file:{{TEST_DIR}}/head_multipleFiles.input.1 <==
+a
+aa
+aaa
+aaaa
+aaaaa
+aaaaaa
+aaaaaaa
+aaaaaaaa
+aaaaaaaaa
+aaaaaaaaaa
+
+==> file:{{TEST_DIR}}/head_multipleFiles.input.2 <==
+x
+xx
+xxx
+xxxx
+xxxxx
+xxxxxx
+xxxxxxx
+xxxxxxxx
+xxxxxxxxx
+xxxxxxxxxx

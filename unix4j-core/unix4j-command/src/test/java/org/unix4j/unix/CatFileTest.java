@@ -63,12 +63,14 @@ public class CatFileTest {
     @Test
     public void cat_multipleFiles() {
         final CommandFileTest tester = new CommandFileTest(this.getClass(), 2);
-		final Config config = new Config(tester);
+        final Config config = new Config(tester);
         tester.runAndAssert(Unix4j.use(config).cat(tester.getInputFiles()));
         tester.runAndAssert(Unix4j.use(config).cat(tester.getInputFileNames()));
         tester.runAndAssert(Unix4j.use(config).cat(tester.getInputFiles()));
+        tester.runAndAssert(Unix4j.use(config).cat(tester.getInputs()));
         tester.runAndAssert(Unix4j.use(config).cat(combine(arr("--paths"), tester.getInputFileNames())));
         tester.runAndAssert(Unix4j.use(config).cat(Cat.Options.squeezeEmptyLines, tester.getInputFiles()));
+        tester.runAndAssert(Unix4j.use(config).cat(Cat.Options.squeezeEmptyLines, tester.getInputs()));
     }
 
     @Test

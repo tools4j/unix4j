@@ -45,11 +45,18 @@
 			string {@code "==&gt; XXX &lt;=="} where {@code "XXX"} is the name 
 			of the file.
 		</method>
+		<method args="inputs" usesStandardInput="false">
+			Reads the first 10 lines from each of the specified inputs and writes
+			them to the standard output. If more than a input is
+			specified, each file is preceded by a header consisting of the
+			string {@code "==&gt; XXX &lt;=="} where {@code "XXX"} is the input's
+			string representation.
+		</method>
 		<method args="count,files" usesStandardInput="false">
 			Reads the first {@code count} lines from each of the specified files
-			and writes them to the standard output. If more than a single file 
-			is specified, each file is preceded by a header consisting of the 
-			string {@code "==&gt; XXX &lt;=="} where {@code "XXX"} is the name 
+			and writes them to the standard output. If more than a single file
+			is specified, each file is preceded by a header consisting of the
+			string {@code "==&gt; XXX &lt;=="} where {@code "XXX"} is the name
 			of the file.
 		</method>
 		<method args="count,paths" usesStandardInput="false">
@@ -59,12 +66,19 @@
 			string {@code "==&gt; XXX &lt;=="} where {@code "XXX"} is the name 
 			of the file.
 		</method>
+		<method args="count,inputs" usesStandardInput="false">
+			Reads the first {@code count} lines from each of the specified inputs
+			and writes them to the standard output. If more than a single input
+			is specified, each file is preceded by a header consisting of the
+			string {@code "==&gt; XXX &lt;=="} where {@code "XXX"} is the input's
+			string representation.
+		</method>
 		<method args="options,count,files" usesStandardInput="false">
 			Reads the first {@code count} lines or characters from each of the
 			specified files and writes them to the standard output. If more than
-			a single file is specified and the {@code -q} option is not 
-			specified, each file is preceded by a header consisting of the 
-			string {@code "==&gt; XXX &lt;=="} where {@code "XXX"} is the name 
+			a single file is specified and the {@code -q} option is not
+			specified, each file is preceded by a header consisting of the
+			string {@code "==&gt; XXX &lt;=="} where {@code "XXX"} is the name
 			of the file.
 		</method>
 		<method args="options,count,paths" usesStandardInput="false">
@@ -74,6 +88,14 @@
 			specified, each file is preceded by a header consisting of the 
 			string {@code "==&gt; XXX &lt;=="} where {@code "XXX"} is the name 
 			of the file.
+		</method>
+		<method args="options,count,inputs" usesStandardInput="false">
+			Reads the first {@code count} lines or characters from each of the
+			specified inputs and writes them to the standard output. If more than
+			a single input is specified and the {@code -q} option is not
+			specified, each file is preceded by a header consisting of the
+			string {@code "==&gt; XXX &lt;=="} where {@code "XXX"} is the input's
+			string representation.
 		</method>
 	</methods>
 	<options>
@@ -96,7 +118,7 @@
 			application will not error and send the whole file to the output.
 		</operand>
 		<operand name="paths" type="String...">
-			Pathnames of the input files to be filtered; wildcards * and ? are 
+			Path names of the input files to be filtered; wildcards * and ? are
 			supported; relative paths are resolved on the basis of the current 
 			working directory.
 		</operand>
@@ -104,6 +126,9 @@
 			The input files to be filtered; relative paths are not resolved (use 
 			the string paths argument to enable relative path resolving based on 
 			the current working directory).
+		</operand>
+		<operand name="inputs" type="org.unix4j.io.Input...">
+			The inputs to be filtered.
 		</operand>
 		<operand name="args" type="String...">
 			String arguments defining the options and operands for the command. 

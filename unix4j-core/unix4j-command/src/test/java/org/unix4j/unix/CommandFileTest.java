@@ -1,16 +1,21 @@
 package org.unix4j.unix;
 
+import junit.framework.ComparisonFailure;
+import org.unix4j.Unix4j;
+import org.unix4j.builder.Unix4jCommandBuilder;
+import org.unix4j.io.Input;
+import org.unix4j.io.URLInput;
+import org.unix4j.util.FileTestUtils;
+import org.unix4j.util.StackTraceUtil;
+
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import junit.framework.ComparisonFailure;
-
-import org.unix4j.Unix4j;
-import org.unix4j.builder.Unix4jCommandBuilder;
-import org.unix4j.util.FileTestUtils;
-import org.unix4j.util.StackTraceUtil;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Reads input and expected output for a command unit test from files. For a 
@@ -25,6 +30,7 @@ import org.unix4j.util.StackTraceUtil;
  * does not exist.
  */
 class CommandFileTest {
+	private static final String TEST_DIR_TOKEN = "\\{\\{TEST_DIR\\}\\}";
 	public enum MatchMode {
 		Exact {
 			@Override
@@ -40,7 +46,9 @@ class CommandFileTest {
 		};
 		abstract public boolean matches(String expected, String actual);
 	}
-	
+
+	private final Class<?> testClass;
+	private final String testMethodName;
 	private final List<File> inputFiles;
 	private final List<String> expectedOutputLines;
 	private final MatchMode matchMode;
@@ -62,8 +70,9 @@ class CommandFileTest {
 	private CommandFileTest(final Class<?> testClass, int inputFileCount, MatchMode matchMode, StackTraceElement stackTraceElement) {
 
         this.testDir = FileTestUtils.getTestDir(testClass);
-        this.inputFiles = new ArrayList<File>(inputFileCount);
-		final String testMethodName = stackTraceElement.getMethodName();
+        this.inputFiles = new ArrayList<>(inputFileCount);
+        this.testClass = requireNonNull(testClass);
+		this.testMethodName = stackTraceElement.getMethodName();
 		final File outputFile = FileTestUtils.getTestFile(testClass, testMethodName, testMethodName + ".output");
 		if (inputFileCount == 1) {
 			final File inputFile = FileTestUtils.getTestFile(testClass, testMethodName, testMethodName + ".input", "default.input");
@@ -74,7 +83,7 @@ class CommandFileTest {
 				inputFiles.add(inputFile);
 			}
 		}
-		this.expectedOutputLines = Unix4j.fromFile(outputFile).toStringList();
+		this.expectedOutputLines = getExpectedOutputLines(outputFile);
 		this.matchMode = matchMode;
 	}
 
@@ -97,12 +106,38 @@ class CommandFileTest {
 		}
 		return names;
 	}
+	public Input[] getInputs() {
+		return inputFiles.stream()
+				.map(f -> {
+					try {
+						return new URL("file:" + f);
+					} catch (final IOException e) {
+						throw new RuntimeException(e);
+					}
+				})
+				.map(URLInput::new)
+				.toArray(Input[]::new);
+	}
 
     public File getTestDir() {
         return testDir;
     }
 
+    private List<String> getExpectedOutputLines(final File outputFile) {
+		return Unix4j.fromFile(outputFile).sed(TEST_DIR_TOKEN, getTestDir().getAbsolutePath()).toStringList();
+	}
+
     public void runAndAssert(final Unix4jCommandBuilder command){
+		runAndAssert(command, expectedOutputLines);
+	}
+
+	public void runAndAssert(final Unix4jCommandBuilder command, final String outputFilePostfix) {
+		final File outputFile = FileTestUtils.getTestFile(testClass, testMethodName, testMethodName + outputFilePostfix);
+		final List<String> expectedOutputLines = getExpectedOutputLines(outputFile);
+		runAndAssert(command, expectedOutputLines);
+	}
+
+    private void runAndAssert(final Unix4jCommandBuilder command, final List<String> expectedOutputLines){
         final List<String> actualOutputLines = command.toStringList();
         boolean ok = expectedOutputLines.size() == actualOutputLines.size();
         for (int i = 0; ok && i < expectedOutputLines.size(); i++) {
@@ -115,7 +150,7 @@ class CommandFileTest {
             for(final String line: actualOutputLines){
                 System.out.println(line);
             }
-            throw printFailureCommandToStandardErr(command, actualOutputLines);
+            throw printFailureCommandToStandardErr(command, expectedOutputLines, actualOutputLines);
         }
     }
 
@@ -139,11 +174,13 @@ class CommandFileTest {
             for(final String line: actualOutputLinesSorted){
                 System.out.println(line);
             }
-			throw printFailureCommandToStandardErr(command, actualOutputLinesSorted);
+			throw printFailureCommandToStandardErr(command, expectedOutputLines, actualOutputLinesSorted);
 		}
 	}
 
-	private AssertionError printFailureCommandToStandardErr(Unix4jCommandBuilder command, List<String> actualOutputLines) {
+	private AssertionError printFailureCommandToStandardErr(Unix4jCommandBuilder command,
+															List<String> expectedOutputLines,
+															List<String> actualOutputLines) {
 		AssertionError error = null;
 		System.err.println("===============================================================");
 		System.err.println("FAILED testing command: " + command.toString());

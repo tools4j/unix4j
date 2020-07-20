@@ -1,9 +1,5 @@
 package org.unix4j.unix.sort;
 
-import java.io.File;
-import java.util.Collections;
-import java.util.List;
-
 import org.unix4j.command.AbstractCommand;
 import org.unix4j.context.ExecutionContext;
 import org.unix4j.io.FileInput;
@@ -15,6 +11,11 @@ import org.unix4j.processor.MultipleInputLineProcessor;
 import org.unix4j.processor.RedirectInputLineProcessor;
 import org.unix4j.unix.Sort;
 import org.unix4j.util.FileUtil;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Implementation of the {@link Sort sort} command.
@@ -53,6 +54,9 @@ class SortCommand extends AbstractCommand<SortArguments> {
 			final List<File> files = FileUtil.expandFiles(context.getCurrentDirectory(), args.getPaths());
 			final List<FileInput> inputs = FileInput.multiple(files);
 			return new RedirectInputLineProcessor(inputs, standardInputProcessor);
+		} else if (args.isInputsSet()) {
+			final List<Input> inputs = Arrays.asList(args.getInputs());
+			return new RedirectInputLineProcessor(inputs, standardInputProcessor);
 		}
 		return standardInputProcessor;
 	}
@@ -66,6 +70,9 @@ class SortCommand extends AbstractCommand<SortArguments> {
 			final List<File> files = FileUtil.expandFiles(context.getCurrentDirectory(), args.getPaths());
 			final List<FileInput> inputs = FileInput.multiple(files);
 			return new MergeProcessor(this, context, output, inputs);
+		} else if (args.isInputsSet()) {
+			final List<Input> inputs = Arrays.asList(args.getInputs());
+			return new MergeProcessor(this, context, output, inputs);
 		} else {
 			final List<Input> empty = Collections.emptyList();
 			return new MergeProcessor(this, context, output, empty);
@@ -75,12 +82,14 @@ class SortCommand extends AbstractCommand<SortArguments> {
 	private LineProcessor getCheckProcessor(ExecutionContext context, LineProcessor output, SortArguments args) {
 		final CheckProcessor standardInputProcessor = new CheckProcessor(this, context, output);
 		//input from file?
-		List<FileInput> inputs = null; 
+		List<? extends Input> inputs = null;
 		if (args.isFilesSet()) {
 			inputs = FileInput.multiple(args.getFiles());
 		} else if (args.isPathsSet()) {
 			final List<File> files = FileUtil.expandFiles(context.getCurrentDirectory(), args.getPaths());
 			inputs = FileInput.multiple(files);
+		} else if (args.isInputsSet()) {
+			inputs = Arrays.asList(args.getInputs());
 		}
 		if (inputs != null) {
 			if (inputs.size() < 2) {

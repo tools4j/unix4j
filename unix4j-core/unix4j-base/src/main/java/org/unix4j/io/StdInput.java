@@ -16,4 +16,9 @@ public class StdInput extends StreamInput {
 	public StdInput() {
 		super(System.in);
 	}
+
+	@Override
+	public String toString() {
+		return "/std/stdin";
+	}
 }

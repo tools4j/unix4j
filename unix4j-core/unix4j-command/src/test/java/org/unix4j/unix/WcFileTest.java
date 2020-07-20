@@ -45,5 +45,6 @@ public class WcFileTest {
         final Config config = new Config(tester);
         tester.runAndAssert(Unix4j.use(config).wc(tester.getInputFiles()));
         tester.runAndAssert(Unix4j.use(config).wc(tester.getInputFileNames()));
+        tester.runAndAssert(Unix4j.use(config).wc(tester.getInputs()), "-inputs.output");
     }
 }

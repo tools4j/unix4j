@@ -8,9 +8,12 @@ import java.net.URL;
  * Input device based on a {@link URL}.
  */
 public class URLInput extends StreamInput {
-	
+
+	private final String urlInfo;
+
 	public URLInput(URL url) {
 		super(openStream(url));
+		this.urlInfo = url.toExternalForm();
 	}
 
 	private static InputStream openStream(URL url) {
@@ -19,5 +22,10 @@ public class URLInput extends StreamInput {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	@Override
+	public String toString() {
+		return urlInfo;
 	}
 }

@@ -28,9 +28,15 @@
 		</method>
 		<method args="files" usesStandardInput="false">
 			Executes a count of lines, words and chars contained in each input
-			file and writes them to the standard output. If more than one input 
-			file is specified, a line of cumulative counts for all the files is 
+			file and writes them to the standard output. If more than one input
+			file is specified, a line of cumulative counts for all the files is
 			displayed on a separate line after the output for the last file.
+		</method>
+		<method args="inputs" usesStandardInput="false">
+			Executes a count of lines, words and chars contained in each input
+			and writes them to the standard output. If more than one input
+			is specified, a line of cumulative counts for all the inputs is
+			displayed on a separate line after the output for the last input.
 		</method>
 		<method args="options" usesStandardInput="true">
 			Executes a one or more counts, depending on the given options, in
@@ -50,7 +56,14 @@
 			cumulative counts for all the files is displayed on a separate line
 			after the output for the last file.
 		</method>
-		<!-- NOTES: 
+		<method args="options,inputs" usesStandardInput="false">
+			Executes a one or more counts, depending on the given options, in
+			each of the given inputs and writes them to the standard
+			output. If more than one inputs is specified, a line of
+			cumulative counts for all the inputs is displayed on a separate line
+			after the output for the last input.
+		</method>
+		<!-- NOTES:
 				(a) we can only support this with a new "option" attribute 
 					selecting the appropriate option
 				(b) do we really still need this?
@@ -84,14 +97,17 @@
 	</options>
 	<operands default="paths">
 		<operand name="paths" type="String[]">
-			Pathnames of the input files; wildcards * and ? are supported;
+			Path names of the input files; wildcards * and ? are supported;
 			relative paths are resolved on the basis of the current working 
 			directory.
 		</operand>
 		<operand name="files" type="java.io.File...">
-			The input files; relative paths are not resolved (use the string 
+			The input files; relative paths are not resolved (use the string
 			paths argument to enable relative path resolving based on the
 			current working directory).
+		</operand>
+		<operand name="inputs" type="org.unix4j.io.Input...">
+			The inputs.
 		</operand>
 		<operand name="args" type="String...">
 			String arguments defining the options and operands for the command. 

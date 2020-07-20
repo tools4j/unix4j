@@ -263,7 +263,7 @@
 	</options>
 	<operands default="paths">
 		<operand name="paths" type="String...">
-			Pathnames of the files to be sorted, merged, or checked; wildcards * 
+			Path names of the files to be sorted, merged, or checked; wildcards *
 			and ? are supported.
 		</operand>
 		<operand name="files" type="java.io.File...">

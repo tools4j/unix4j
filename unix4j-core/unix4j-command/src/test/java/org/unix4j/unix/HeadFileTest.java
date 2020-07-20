@@ -51,7 +51,9 @@ public class HeadFileTest {
 		final Config config = new Config(tester);
         tester.runAndAssert(Unix4j.use(config).head(10, tester.getInputFiles()));
         tester.runAndAssert(Unix4j.use(config).head(10, tester.getInputFileNames()));
+        tester.runAndAssert(Unix4j.use(config).head(10, tester.getInputs()), "-inputs.output");
         tester.runAndAssert(Unix4j.use(config).head(tester.getInputFiles())); //By default, head returns top 10 lines
+        tester.runAndAssert(Unix4j.use(config).head(tester.getInputs()), "-inputs.output"); //By default, head returns top 10 lines
         tester.runAndAssert(Unix4j.use(config).head(combine(arr("--count", "10", "--paths"), tester.getInputFileNames())));
         tester.runAndAssert(Unix4j.use(config).head(combine(arr("--paths"), tester.getInputFileNames())));
     }

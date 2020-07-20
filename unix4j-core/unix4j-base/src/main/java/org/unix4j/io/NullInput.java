@@ -29,7 +29,6 @@ public class NullInput extends AbstractInput {
 
 	@Override
 	public String toString() {
-		return getClass().getSimpleName();
+		return "/dev/null";
 	}
-
 }

@@ -44,7 +44,9 @@ public class TailFileTest {
         final Config config = new Config(tester);
         tester.runAndAssert(Unix4j.use(config).tail(10, tester.getInputFiles()));
         tester.runAndAssert(Unix4j.use(config).tail(10, tester.getInputFileNames()));
+        tester.runAndAssert(Unix4j.use(config).tail(10, tester.getInputs()), "-inputs.output");
         tester.runAndAssert(Unix4j.use(config).tail(tester.getInputFiles())); //By default, tail returns top 10 lines
+        tester.runAndAssert(Unix4j.use(config).tail(tester.getInputs()), "-inputs.output"); //By default, tail returns top 10 lines
         tester.runAndAssert(Unix4j.use(config).tail(combine(arr("--count", "10", "--paths"), tester.getInputFileNames())));
         tester.runAndAssert(Unix4j.use(config).tail(combine(arr("--paths"), tester.getInputFileNames())));
     }
@@ -69,7 +71,9 @@ public class TailFileTest {
         final Config config = new Config(tester);
         tester.runAndAssert(Unix4j.use(config).tail(10, tester.getInputFiles()));
         tester.runAndAssert(Unix4j.use(config).tail(10, tester.getInputFileNames()));
+        tester.runAndAssert(Unix4j.use(config).tail(10, tester.getInputs()), "-inputs.output");
         tester.runAndAssert(Unix4j.use(config).tail(tester.getInputFiles())); //By default, tail returns top 10 lines
+        tester.runAndAssert(Unix4j.use(config).tail(tester.getInputs()), "-inputs.output"); //By default, tail returns top 10 lines
         tester.runAndAssert(Unix4j.use(config).tail(combine(arr("-s", "--count", "10", "--paths"), tester.getInputFileNames())));
         tester.runAndAssert(Unix4j.use(config).tail(combine(arr("-s", "--paths"), tester.getInputFileNames())));
     }

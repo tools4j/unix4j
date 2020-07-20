@@ -1,22 +1,27 @@
 
 package org.unix4j.unix;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.regex.Pattern;
-
 import org.junit.Test;
 import org.unix4j.Unix4j;
 import org.unix4j.builder.Unix4jCommandBuilder;
 import org.unix4j.context.DefaultExecutionContext;
 import org.unix4j.context.ExecutionContext;
 import org.unix4j.context.ExecutionContextFactory;
+import org.unix4j.io.FileInput;
+import org.unix4j.io.Input;
+import org.unix4j.io.URLInput;
 import org.unix4j.util.FileUtil;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.function.Supplier;
+import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertEquals;
 
@@ -49,14 +54,35 @@ public class GrepTest {
     @Test
     public void testCountMultipleAbsolutePaths(){
         final String outputDirPath = outputDir.getPath();
-        final String path1 = outputDirPath + "/org-unix4j-unix/GrepTest/bb.txt";
-        final String path2 = outputDirPath + "/org-unix4j-unix/GrepTest/folder/bb.txt";
-        //Unix4j.use(contextFactory).grep("everything", path1, path2).toStdOut();
+        final String file1 = "org-unix4j-unix/GrepTest/bb.txt";
+        final String file2 = "org-unix4j-unix/GrepTest/folder/bb.txt";
+        final String path1 = outputDirPath + "/" + file1;
+        final String path2 = outputDirPath + "/" + file2;
         assertEquals("2", Unix4j.use(contextFactory).grep("everything", path1, path2).grep(Grep.Options.count, ".*").toStringResult());
         assertEquals("2", Unix4j.use(contextFactory).grep("everything", path1, path2).wc(Wc.Options.l).toStringResult());
         assertEquals("2", Unix4j.use(contextFactory).grep(Pattern.compile(".*everything.*"), path1, path2).wc(Wc.Options.l).toStringResult());
-        assertEquals2(	"1: ./org-unix4j-unix/GrepTest/bb.txt",
-        				"1: ./org-unix4j-unix/GrepTest/folder/bb.txt", Unix4j.use(contextFactory).grep(Grep.Options.count, "everything", path1, path2));
+        assertEquals2(	"1: ./" + file1, "1: ./" + file2, Unix4j.use(contextFactory).grep(Grep.Options.count, "everything", path1, path2));
+    }
+
+    @Test
+    public void testCountMultipleInputs() throws Exception {
+        //given
+        final String outputDirPath = outputDir.getPath();
+        final String file1 = "org-unix4j-unix/GrepTest/bb.txt";
+        final String file2 = "org-unix4j-unix/GrepTest/folder/bb.txt";
+        final String path1 = outputDirPath + "/" + file1;
+        final String path2 = outputDirPath + "/" + file2;
+        final URL url2 = new URL("file:" + path2);
+        final Supplier<Input[]> inputs = () -> new Input[] {
+                new FileInput(path1),
+                new URLInput(url2)
+        };
+
+        //when + then
+        assertEquals("2", Unix4j.use(contextFactory).grep("everything", inputs.get()).grep(Grep.Options.count, ".*").toStringResult());
+        assertEquals("2", Unix4j.use(contextFactory).grep("everything", inputs.get()).wc(Wc.Options.l).toStringResult());
+        assertEquals("2", Unix4j.use(contextFactory).grep(Pattern.compile(".*everything.*"), inputs.get()).wc(Wc.Options.l).toStringResult());
+        assertEquals2(	"1: ./" + file1, "1: " + url2, Unix4j.use(contextFactory).grep(Grep.Options.count, "everything", inputs.get()));
     }
 
     @Test
@@ -99,7 +125,7 @@ public class GrepTest {
     }
 
     @Test
-    public void testLineNumberOnRelativeFiles(){
+    public void testLineNumberOnRelativeFiles() throws IOException {
         assertEquals2(
                 "commuting.txt:3:Subject: Commuting for beginners.",
                 "commuting2.txt:3:Subject: Commuting for beginners.",
@@ -112,6 +138,16 @@ public class GrepTest {
                 "commuting.txt:3:Subject: Commuting for beginners.",
                 "commuting2.txt:3:Subject: Commuting for beginners.",
                 Unix4j.use(contextFactory).grep(Grep.Options.lineNumber, "Subject", testFiles).sort()
+        );
+        final String urlPathPrefix = "file:" + outputDir.getPath();
+        final Input[] testInputs = new Input[] {
+                new URLInput(new URL(urlPathPrefix + "/commuting.txt" )),
+                new URLInput(new URL(urlPathPrefix + "/commuting2.txt" )),
+        };
+        assertEquals2(
+                urlPathPrefix + "/commuting.txt:3:Subject: Commuting for beginners.",
+                urlPathPrefix + "/commuting2.txt:3:Subject: Commuting for beginners.",
+                Unix4j.use(contextFactory).grep(Grep.Options.lineNumber, "Subject", testInputs).sort()
         );
     }
 
