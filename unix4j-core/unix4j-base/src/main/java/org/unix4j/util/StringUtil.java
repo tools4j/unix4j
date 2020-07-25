@@ -428,15 +428,11 @@ public class StringUtil {
 		final int sourceCount = source.length();
 		final int targetCount = target.length();
 		final char first = target.charAt(0);
-		int max = Math.min(maxIndex, sourceCount - targetCount);
+		final int max = Math.min(maxIndex, sourceCount - targetCount);
 
 		for (int i = 0; i <= max; i++) {
-			final char ch = source.charAt(i);
 			/* Look for first character. */
-			if (!equalsIgnoreCase(ch, first)) {
-				while (++i <= max && !equalsIgnoreCase(ch, first))
-					;
-			}
+			while (!equalsIgnoreCase(source.charAt(i), first) && ++i <= max);
 
 			/* Found first character, now look at the rest of v2 */
 			if (i <= max) {

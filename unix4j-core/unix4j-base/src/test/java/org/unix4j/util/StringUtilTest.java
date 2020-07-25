@@ -122,4 +122,10 @@ public class StringUtilTest {
 			Assert.assertEquals(expected, StringUtil.findWhitespace(s, i));
 		}
 	}
+	@Test
+	public void indexOfIgnoreCase() {
+	    String source = "abc ade";
+	    String target = "adE";
+	    Assert.assertEquals(4, StringUtil.indexOfIgnoreCase(source, target));
+	}
 }
