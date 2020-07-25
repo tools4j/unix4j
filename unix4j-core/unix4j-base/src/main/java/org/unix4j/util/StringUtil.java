@@ -44,7 +44,7 @@ public class StringUtil {
 	 * @return the value as a fixed size string, padded or truncated if
 	 *         necessary
 	 */
-	public static final String fixSizeString(int size, boolean alignLeft,
+	public static String fixSizeString(int size, boolean alignLeft,
 			char filler, long value) {
 		return fixSizeString(size, alignLeft, filler, String.valueOf(value));
 	}
@@ -78,7 +78,7 @@ public class StringUtil {
 	 * @return the string {@code s} as a fixed size string, padded or truncated
 	 *         if necessary
 	 */
-	public static final String fixSizeString(int size, boolean alignLeft,
+	public static String fixSizeString(int size, boolean alignLeft,
 			String s) {
 		return fixSizeString(size, alignLeft, ' ', s);
 	}
@@ -116,7 +116,7 @@ public class StringUtil {
 	 * @return the string {@code s} as a fixed size string, padded or truncated
 	 *         if necessary
 	 */
-	public static final String fixSizeString(int size, boolean alignLeft,
+	public static String fixSizeString(int size, boolean alignLeft,
 			char filler, String s) {
 		if (s.length() < size) {
 			final StringBuilder sb = new StringBuilder(size);
@@ -154,7 +154,7 @@ public class StringUtil {
 	 *            the string to split
 	 * @return a list with the lines found in {@code s}
 	 */
-	public static final List<Line> splitLines(String s) {
+	public static List<Line> splitLines(String s) {
 		final List<Line> lines = new ArrayList<Line>();
 		int start = 0;
 		int index = 0;
@@ -361,7 +361,7 @@ public class StringUtil {
 	/**
 	 * Tests if this string {@code s} starts with the specified prefix
 	 * performing case insensitive string comparison.
-	 * 
+	 *
 	 * @param s
 	 *            the string to search
 	 * @param prefix
@@ -405,7 +405,7 @@ public class StringUtil {
 	 *         (ignoring the case), or {@code -1} if there is no such
 	 *         occurrence.
 	 */
-	public static final int indexOfIgnoreCase(String source, String target) {
+	public static int indexOfIgnoreCase(String source, String target) {
 		return indexOfIgnoreCase(source, target, Integer.MAX_VALUE);
 	}
 
@@ -428,13 +428,12 @@ public class StringUtil {
 		final int sourceCount = source.length();
 		final int targetCount = target.length();
 		final char first = target.charAt(0);
-		int max = Math.min(maxIndex, sourceCount - targetCount);
+		final int max = Math.min(maxIndex, sourceCount - targetCount);
 
 		for (int i = 0; i <= max; i++) {
-			final char ch = source.charAt(i);
 			/* Look for first character. */
-			if (!equalsIgnoreCase(ch, first)) {
-				while (++i <= max && !equalsIgnoreCase(ch, first))
+			if (!equalsIgnoreCase(source.charAt(i), first)) {
+				while (++i <= max && !equalsIgnoreCase(source.charAt(i), first))
 					;
 			}
 

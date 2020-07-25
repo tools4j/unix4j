@@ -1,13 +1,12 @@
 package org.unix4j.util;
 
-import java.util.Arrays;
-import java.util.List;
-
 import junit.framework.Assert;
-
 import org.junit.Test;
 import org.unix4j.line.Line;
 import org.unix4j.line.SimpleLine;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Unit test for {@link StringUtil}.
@@ -121,5 +120,12 @@ public class StringUtilTest {
 			final int expected = i <= 3 ? 3 : i < 9 ? i : i < 14 ? 14 : i < s.length() - 6 ? i : s.length();
 			Assert.assertEquals(expected, StringUtil.findWhitespace(s, i));
 		}
+	}
+
+	@Test
+	public void indexOfIgnoreCase() {
+		String source = "abc ade";
+		String target = "adE";
+		Assert.assertEquals(4, StringUtil.indexOfIgnoreCase(source, target));
 	}
 }
