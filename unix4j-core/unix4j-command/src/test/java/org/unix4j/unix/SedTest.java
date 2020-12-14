@@ -2,6 +2,11 @@ package org.unix4j.unix;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.file.Files;
 import java.util.List;
@@ -640,7 +645,7 @@ public class SedTest {
 	 * See issue #71: How to replace with Regex that needs multiple lines
 	 */
 	@Test
-	public void testSed_regexWithMultipleLines() {
+	public void testSed_regexWithMultipleLines() throws IOException {
 		//prepare input file
 		final String inputFile = System.getProperty("java.io.tmpdir") + "/sed-issue.txt";
 		Unix4j.fromStrings(
@@ -666,6 +671,28 @@ public class SedTest {
 				"0003 another test";
 
 		assertEquals(expected, String.join("\n", result));
+
+		//alternative without unix4j:
+		final String outputFile = System.getProperty("java.io.tmpdir") + "/sed-issue-result.txt";
+		final BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+		final PrintWriter writer = new PrintWriter(new FileWriter(outputFile));
+		final StringBuilder lineBuffer = new StringBuilder(256);
+		String line;
+		while ((line = reader.readLine()) != null) {
+			if (line.matches("^\\d\\d\\d\\d.*")) {
+				if (lineBuffer.length() > 0) {
+					writer.println(lineBuffer);
+					lineBuffer.setLength(0);
+				}
+			}
+			lineBuffer.append(lineBuffer.length() > 0 ? " " : "").append(line);
+		}
+		if (lineBuffer.length() > 0) {
+			writer.println(lineBuffer);
+		}
+		writer.flush();
+		System.out.println("written: " + outputFile);
+		assertEquals(expected, String.join("\n", Unix4j.fromFile(outputFile).toStringList()));
 	}
 
 	private void assertSed(final MultilineString input, final String regexp, final MultilineString expectedOutput){
