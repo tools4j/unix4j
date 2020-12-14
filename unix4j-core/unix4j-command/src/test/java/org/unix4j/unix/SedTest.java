@@ -3,9 +3,14 @@ package org.unix4j.unix;
 import static org.junit.Assert.assertEquals;
 
 import java.io.StringWriter;
+import java.nio.file.Files;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.junit.Test;
 import org.unix4j.Unix4j;
+import org.unix4j.line.Line;
 import org.unix4j.unix.sed.SedOption;
 import org.unix4j.unix.sed.SedOptions;
 import org.unix4j.util.MultilineString;
@@ -629,6 +634,38 @@ public class SedTest {
 
 		final String actual = Unix4j.fromString(input.toString()).sed(Sed.Options.translate, src.toString(), dst.toString()).toStringResult();
 		assertEquals(output.toString(), actual);
+	}
+
+	/**
+	 * See issue #71: How to replace with Regex that needs multiple lines
+	 */
+	@Test
+	public void testSed_regexWithMultipleLines() {
+		//prepare input file
+		final String inputFile = System.getProperty("java.io.tmpdir") + "/sed-issue.txt";
+		Unix4j.fromStrings(
+				"0001 this is a test",
+				"0002 another test",
+				"with a new line",
+				"and maybe another",
+				"0003 another test").toFile(inputFile);
+
+		//step 1: replace new line chars
+		final String singleLine = Unix4j.fromFile(inputFile).toStringResult().replace("\n", "<NL>").replace("\r", "");
+
+		//step 2: perform actual sed
+		final List<String> result = Unix4j.fromString(singleLine)
+				.sed("s/<NL>(\\d\\d\\d\\d)/\n$1/g")
+				.sed("s/<NL>/ /g")
+				.toStringList();
+
+		//assert result
+		final String expected = "" +
+				"0001 this is a test\n" +
+				"0002 another test with a new line and maybe another\n" +
+				"0003 another test";
+
+		assertEquals(expected, String.join("\n", result));
 	}
 
 	private void assertSed(final MultilineString input, final String regexp, final MultilineString expectedOutput){
