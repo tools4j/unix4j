@@ -38,7 +38,7 @@ Currently supported commands are:
 <dependency>
 	<groupId>org.unix4j</groupId>
 	<artifactId>unix4j-command</artifactId>
-	<version>0.5</version>
+	<version>0.6</version>
 </dependency>
 ```
 
