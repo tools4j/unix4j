@@ -1,12 +1,8 @@
 language: java
 install: skip
 
-jobs:
-  include:
-    - os: linux
-      dist: trusty
-    - os: windows
-
+os: linux
+dist: trusty
 jdk: oraclejdk8
 
 script:
