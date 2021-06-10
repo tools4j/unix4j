@@ -1,13 +1,13 @@
 package org.unix4j.codegen.command.def;
 
+import org.unix4j.codegen.def.AbstractElementDef;
+import org.unix4j.codegen.def.PackageDef;
+import org.unix4j.codegen.def.TypeDef;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.unix4j.codegen.def.AbstractElementDef;
-import org.unix4j.codegen.def.PackageDef;
-import org.unix4j.codegen.def.TypeDef;
 
 public class CommandDef extends AbstractElementDef {
 	

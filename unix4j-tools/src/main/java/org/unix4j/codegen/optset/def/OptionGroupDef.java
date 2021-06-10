@@ -1,16 +1,12 @@
 package org.unix4j.codegen.optset.def;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.unix4j.codegen.command.def.CommandDef;
 import org.unix4j.codegen.command.def.OptionDef;
 import org.unix4j.codegen.def.AbstractElementDef;
 import org.unix4j.codegen.def.TypeDef;
 import org.unix4j.codegen.optset.OptionHelper;
+
+import java.util.*;
 
 public class OptionGroupDef extends AbstractElementDef {
 	

@@ -1,18 +1,10 @@
 package org.unix4j.codegen.optset;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.SortedSet;
-import java.util.TreeMap;
-import java.util.TreeSet;
-
 import org.unix4j.codegen.command.def.OptionDef;
 import org.unix4j.codegen.optset.constraint.OptionConstraint;
 import org.unix4j.codegen.optset.def.ActiveSetDef;
+
+import java.util.*;
 
 /**
  * Generates all "active option" permutations ignoring possible constraints on

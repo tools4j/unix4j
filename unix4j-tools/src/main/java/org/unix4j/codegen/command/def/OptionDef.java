@@ -1,9 +1,9 @@
 package org.unix4j.codegen.command.def;
 
+import org.unix4j.codegen.def.AbstractElementDef;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
-
-import org.unix4j.codegen.def.AbstractElementDef;
 
 public class OptionDef extends AbstractElementDef {
 	public OptionDef(String name, String acronym, String desc) {

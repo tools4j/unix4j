@@ -1,0 +1,5 @@
+include (
+    'unix4j-base',
+    'unix4j-command',
+    'unix4j-perf',
+    'unix4j-tools')

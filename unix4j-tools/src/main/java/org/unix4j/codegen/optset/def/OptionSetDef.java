@@ -1,11 +1,11 @@
 package org.unix4j.codegen.optset.def;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.unix4j.codegen.command.def.CommandDef;
 import org.unix4j.codegen.def.AbstractElementDef;
 import org.unix4j.codegen.def.TypeDef;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class OptionSetDef extends AbstractElementDef {
 	public <E extends Enum<?>> OptionSetDef(CommandDef command, TypeDef optionType) {

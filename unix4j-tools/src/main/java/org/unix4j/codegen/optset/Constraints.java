@@ -1,14 +1,14 @@
 package org.unix4j.codegen.optset;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import org.unix4j.codegen.command.def.CommandDef;
 import org.unix4j.codegen.command.def.OptionDef;
 import org.unix4j.codegen.optset.constraint.EnabledOptionConstraint;
 import org.unix4j.codegen.optset.constraint.ExclusiveOptionConstraint;
 import org.unix4j.codegen.optset.constraint.OptionConstraint;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class Constraints {
 	

@@ -1,8 +1,10 @@
 package org.unix4j.codegen;
 
-import java.net.URL;
-import java.util.List;
-
+import fmpp.Engine;
+import freemarker.template.ObjectWrapper;
+import freemarker.template.SimpleSequence;
+import freemarker.template.TemplateModel;
+import freemarker.template.TemplateModelException;
 import org.unix4j.codegen.command.CommandDefinitionLoader;
 import org.unix4j.codegen.command.def.CommandDef;
 import org.unix4j.codegen.loader.ResourceBasedDataLoader;
@@ -10,11 +12,8 @@ import org.unix4j.codegen.loader.ResourceDataLoader;
 import org.unix4j.codegen.optset.OptionSetDefinitionLoader;
 import org.unix4j.codegen.optset.def.OptionSetDef;
 
-import fmpp.Engine;
-import freemarker.template.ObjectWrapper;
-import freemarker.template.SimpleSequence;
-import freemarker.template.TemplateModel;
-import freemarker.template.TemplateModelException;
+import java.net.URL;
+import java.util.List;
 
 public class OptionSetDefinitionDataLoader extends ResourceDataLoader {
 	

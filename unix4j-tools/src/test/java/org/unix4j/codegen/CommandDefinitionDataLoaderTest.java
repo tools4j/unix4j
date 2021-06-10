@@ -1,8 +1,8 @@
 package org.unix4j.codegen;
 
-import java.util.Collections;
-
 import org.junit.Test;
+
+import java.util.Collections;
 
 public class CommandDefinitionDataLoaderTest {
 

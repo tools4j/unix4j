@@ -1,10 +1,10 @@
 package org.unix4j.codegen.xml;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class XmlUtil {
 	public static String getRequiredElementText(Element parent, Enum<?> child) {

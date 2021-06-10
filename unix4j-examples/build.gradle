@@ -1,0 +1,16 @@
+plugins {
+    id 'java'
+    id 'idea'
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    testImplementation "junit:junit:4.13.2"
+    testImplementation "org.slf4j:slf4j-api:1.7.30"
+    testImplementation "org.slf4j:slf4j-log4j12:1.7.30"
+    testImplementation 'org.unix4j:unix4j-command:0.6'
+}

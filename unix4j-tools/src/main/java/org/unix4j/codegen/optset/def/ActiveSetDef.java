@@ -1,14 +1,10 @@
 package org.unix4j.codegen.optset.def;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
 import org.unix4j.codegen.command.def.OptionDef;
 import org.unix4j.codegen.def.AbstractElementDef;
 import org.unix4j.codegen.optset.OptionHelper;
+
+import java.util.*;
 
 public class ActiveSetDef extends AbstractElementDef {
 	

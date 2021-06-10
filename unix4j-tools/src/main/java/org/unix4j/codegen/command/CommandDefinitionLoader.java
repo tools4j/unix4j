@@ -1,21 +1,5 @@
 package org.unix4j.codegen.command;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.unix4j.codegen.command.def.CommandDef;
 import org.unix4j.codegen.command.def.MethodDef;
 import org.unix4j.codegen.command.def.OperandDef;
@@ -23,6 +7,12 @@ import org.unix4j.codegen.command.def.OptionDef;
 import org.unix4j.codegen.xml.XmlUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.*;
+import java.net.URL;
+import java.util.*;
 
 /**
  * Loads the XML command definition file and returns the contents as an fmpp

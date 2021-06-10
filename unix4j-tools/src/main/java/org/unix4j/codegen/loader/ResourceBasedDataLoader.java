@@ -1,8 +1,8 @@
 package org.unix4j.codegen.loader;
 
-import java.net.URL;
-
 import freemarker.template.TemplateModel;
+
+import java.net.URL;
 
 /**
  * Loads and returns a {@link TemplateModel} based on a resource such as an XML

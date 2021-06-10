@@ -1,9 +1,9 @@
 package org.unix4j.codegen.optset;
 
+import org.unix4j.codegen.command.def.OptionDef;
+
 import java.util.Arrays;
 import java.util.Collection;
-
-import org.unix4j.codegen.command.def.OptionDef;
 
 public class OptionHelper {
 	
