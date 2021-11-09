@@ -31,6 +31,20 @@ public enum OS {
 		public boolean isCurrent(String osName) {
 			return osName.indexOf("sunos") >= 0;
 		}
+	},
+	/** IBM AIX */
+	AIX {
+		@Override
+		public boolean isCurrent(String osName) {
+			return osName.indexOf("aix") >= 0;
+		}
+	},
+	/** Other */
+	Other {
+		@Override
+		public boolean isCurrent(String osName) {
+			return false;
+		}
 	};
 	
 	public boolean isCurrent() {
@@ -43,6 +57,6 @@ public enum OS {
 		for (final OS os : values()) {
 			if (os.isCurrent()) return os;
 		}
-		throw new IllegalStateException("Cannot evaluate OS constant for current operating system: " + System.getProperty("os.name"));
+		return Other;
 	}
 }
