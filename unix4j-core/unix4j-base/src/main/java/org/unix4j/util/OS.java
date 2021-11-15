@@ -1,48 +1,48 @@
 package org.unix4j.util;
 
+import java.util.function.Predicate;
+
+import static java.util.Objects.requireNonNull;
+
 /**
  * Enum constants for operating systems.
  */
 public enum OS {
 	/** Windows, any version */
-	Windows {
-		@Override
-		public boolean isCurrent(String osName) {
-			return osName.indexOf("win") >= 0;
-		}
-	},
+	Windows(osName -> osName.contains("win")),
 	/** MAC */
-	Mac {
-		@Override
-		public boolean isCurrent(String osName) {
-			return osName.indexOf("mac") >= 0;
-		}
-	},
-	/** Linux or other Unix */
-	Unix {
-		@Override
-		public boolean isCurrent(String osName) {
-			return osName.indexOf("nix") >= 0 || osName.indexOf("nux") >= 0;
-		}
-	},
+	Mac(osName -> osName.contains("mac")),
+	/** Linux, AIX or other Unix */
+	Unix(osName -> osName.contains("nix") || osName.contains("nux") || osName.contains("aix")),
 	/** SUN Solaris */
-	Solaris {
-		@Override
-		public boolean isCurrent(String osName) {
-			return osName.indexOf("sunos") >= 0;
-		}
-	};
+	Solaris(osName -> osName.contains("sunos")),
+	/** Any other unrecognised OS */
+	Other(osName -> true);
+
+	private final Predicate<? super String> osNameMatcher;
 	
+	OS(final Predicate<? super String> osNameMatcher) {
+		this.osNameMatcher = requireNonNull(osNameMatcher);
+	}
+	
+	private static final OS CURRENT = initCurrent();
+
 	public boolean isCurrent() {
-		return isCurrent(System.getProperty("os.name").toLowerCase());
+		return this == CURRENT;
 	}
 
-	abstract protected boolean isCurrent(String osName);
-	
 	public static OS current() {
+		return CURRENT;
+	}
+
+	private static OS initCurrent() {
+		final String osName = System.getProperty("os.name").toLowerCase();
 		for (final OS os : values()) {
-			if (os.isCurrent()) return os;
+			if (os.osNameMatcher.test(osName)) {
+				return os;
+			}
 		}
-		throw new IllegalStateException("Cannot evaluate OS constant for current operating system: " + System.getProperty("os.name"));
+		//should not get here
+		return Other;
 	}
 }
