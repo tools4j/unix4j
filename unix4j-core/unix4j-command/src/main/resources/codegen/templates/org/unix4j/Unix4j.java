@@ -1,8 +1,8 @@
 <#include "/include/macros.fmpp">
 package org.unix4j;
 
-import org.unix4j.builder.Unix4jCommandBuilder;
-import org.unix4j.builder.DefaultUnix4jCommandBuilder;
+import org.unix4j.unix.Unix4jCommandBuilder;
+import org.unix4j.unix.DefaultUnix4jCommandBuilder;
 import org.unix4j.command.NoOp;
 import org.unix4j.context.ExecutionContextFactory;
 

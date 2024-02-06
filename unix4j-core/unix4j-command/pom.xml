@@ -27,7 +27,7 @@
 				</dependencies>
 				<configuration>
 					<cfgFile>src/main/resources/codegen/config.fmpp</cfgFile>
-					<outputDirectory>${build.directory}/generated-sources</outputDirectory>
+					<outputDirectory>${project.build.directory}/generated-sources</outputDirectory>
 					<templateDirectory>src/main/resources/codegen/templates</templateDirectory>
 				</configuration>
 				<executions>
@@ -50,7 +50,7 @@
 						</goals>
 						<configuration>
 							<sources>
-								<source>${build.directory}/generated-sources</source>
+								<source>${project.build.directory}/generated-sources</source>
 							</sources>
 						</configuration>
 					</execution>

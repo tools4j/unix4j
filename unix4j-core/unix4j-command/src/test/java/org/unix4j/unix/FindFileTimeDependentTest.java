@@ -1,8 +1,5 @@
 package org.unix4j.unix;
 
-import java.io.File;
-import java.util.Date;
-
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -11,6 +8,9 @@ import org.unix4j.Unix4j;
 import org.unix4j.context.DefaultExecutionContext;
 import org.unix4j.context.ExecutionContext;
 import org.unix4j.context.ExecutionContextFactory;
+
+import java.io.File;
+import java.util.Date;
 
 //@Ignore
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)

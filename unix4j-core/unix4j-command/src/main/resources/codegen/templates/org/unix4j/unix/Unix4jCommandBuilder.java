@@ -1,5 +1,5 @@
 <#include "/include/builder-method-javadoc.fmpp">
-package org.unix4j.builder;
+package org.unix4j.unix;
 
 import org.unix4j.builder.CommandBuilder;
 import org.unix4j.command.Command;

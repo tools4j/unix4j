@@ -1,7 +1,7 @@
 package org.unix4j;
 
 import org.junit.Before;
-import org.unix4j.builder.Unix4jCommandBuilder;
+import org.unix4j.unix.Unix4jCommandBuilder;
 import org.unix4j.util.StackTraceUtil;
 
 import java.util.Date;

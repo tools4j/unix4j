@@ -2,7 +2,6 @@ package org.unix4j.unix;
 
 import junit.framework.ComparisonFailure;
 import org.unix4j.Unix4j;
-import org.unix4j.builder.Unix4jCommandBuilder;
 import org.unix4j.io.Input;
 import org.unix4j.io.URLInput;
 import org.unix4j.util.FileTestUtils;

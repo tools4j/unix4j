@@ -19,6 +19,54 @@
         </dependency>
     </dependencies>
 
+    <properties>
+        <latest.version>LATEST</latest.version>
+        <release.version>RELEASE</release.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.12.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.16.2</version>
+                <configuration>
+                    <properties>
+                        <property>
+                            <name>latest.version</name>
+                            <dependencies>
+                                <dependency>
+                                    <groupId>org.unix4j</groupId>
+                                    <artifactId>unix4j-command</artifactId>
+                                    <version>latest</version>
+                                </dependency>
+                            </dependencies>
+                        </property>
+                        <property>
+                            <name>release.version</name>
+                            <dependencies>
+                                <dependency>
+                                    <groupId>org.unix4j</groupId>
+                                    <artifactId>unix4j-command</artifactId>
+                                    <version>release</version>
+                                </dependency>
+                            </dependencies>
+                        </property>
+                    </properties>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
     <profiles>
         <profile>
             <id>local</id>
@@ -50,7 +98,7 @@
                 <dependency>
                     <groupId>org.unix4j</groupId>
                     <artifactId>unix4j-command</artifactId>
-                    <version>LATEST</version>
+                    <version>${latest.version}</version>
                 </dependency>
             </dependencies>
             <repositories>
@@ -100,7 +148,7 @@
                 <dependency>
                     <groupId>org.unix4j</groupId>
                     <artifactId>unix4j-command</artifactId>
-                    <version>RELEASE</version>
+                    <version>${release.version}</version>
                 </dependency>
             </dependencies>
         </profile>

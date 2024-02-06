@@ -1,4 +1,4 @@
-package org.unix4j.builder;
+package org.unix4j.unix;
 
 import org.unix4j.builder.DefaultCommandBuilder;
 import org.unix4j.command.Command;

@@ -3,7 +3,6 @@ package org.unix4j.unix;
 
 import org.junit.Test;
 import org.unix4j.Unix4j;
-import org.unix4j.builder.Unix4jCommandBuilder;
 import org.unix4j.context.DefaultExecutionContext;
 import org.unix4j.context.ExecutionContext;
 import org.unix4j.context.ExecutionContextFactory;

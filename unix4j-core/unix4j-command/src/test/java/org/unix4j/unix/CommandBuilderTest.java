@@ -1,4 +1,4 @@
-package org.unix4j.builder;
+package org.unix4j.unix;
 
 import org.junit.After;
 import org.junit.Before;

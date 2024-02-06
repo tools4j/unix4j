@@ -4,7 +4,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.unix4j.Unix4j;
-import org.unix4j.builder.Unix4jCommandBuilder;
 import org.unix4j.util.FileUtil;
 
 public class LsTest {

@@ -4,7 +4,6 @@ import org.junit.Test;
 import org.unix4j.AbstractPerfTest;
 import org.unix4j.LargeTestFiles;
 import org.unix4j.Unix4j;
-import org.unix4j.builder.Unix4jCommandBuilder;
 
 public class SedPerfTest extends AbstractPerfTest {
 
