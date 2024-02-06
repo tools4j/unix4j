@@ -1,5 +1,5 @@
 ![unix4j](https://github.com/tools4j/unix4j/blob/master/unix4j.png)
-[![Build Status](https://travis-ci.org/tools4j/unix4j.svg?branch=master)](https://travis-ci.org/tools4j/unix4j)
+[![Continuous Integration](https://github.com/tools4j/unix4j/workflows/Continuous%20Integration/badge.svg)](https://github.com/tools4j/unix4j/actions?query=workflow%3A%22Continuous+Integration%22)
 [![Coverage Status](https://coveralls.io/repos/github/tools4j/unix4j/badge.svg?branch=master)](https://coveralls.io/github/tools4j/unix4j?branch=master)
 [![Maven Central](https://img.shields.io/maven-central/v/org.unix4j/unix4j-command.svg)](https://search.maven.org/search?q=a:unix4j-command)
 
