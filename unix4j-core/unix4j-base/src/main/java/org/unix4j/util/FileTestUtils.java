@@ -20,7 +20,12 @@ public class FileTestUtils {
     }
 
     public static File getTestFile(File parentDir, String testMethod, String fileName, String defaultFileName) {
-        File file = new File(parentDir, fileName);
+        File file;
+        if (OS.Windows.isCurrent()) {
+            file = (file = new File(parentDir, fileName + ".win")).exists() ? file : new File(parentDir, fileName);
+        } else {
+            file = new File(parentDir, fileName);
+        }
         if (!file.exists()) {
             if (defaultFileName == null) {
                 throw new IllegalArgumentException("test file for " + parentDir.getName() + "." + testMethod + " not found, expected file: " + fileName);

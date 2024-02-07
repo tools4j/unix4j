@@ -138,7 +138,7 @@ public class GrepTest {
                 "commuting2.txt:3:Subject: Commuting for beginners.",
                 Unix4j.use(contextFactory).grep(Grep.Options.lineNumber, "Subject", testFiles).sort()
         );
-        final String urlPathPrefix = "file:" + outputDir.getPath();
+        final String urlPathPrefix = "file:" + outputDir.getPath().replace('\\', '/');
         final Input[] testInputs = new Input[] {
                 new URLInput(new URL(urlPathPrefix + "/commuting.txt" )),
                 new URLInput(new URL(urlPathPrefix + "/commuting2.txt" )),
