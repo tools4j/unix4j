@@ -123,7 +123,7 @@ class CommandFileTest {
     }
 
     private List<String> getExpectedOutputLines(final File outputFile) {
-		return Unix4j.fromFile(outputFile).sed(TEST_DIR_TOKEN, getTestDir().getAbsolutePath()).toStringList();
+		return Unix4j.fromFile(outputFile).sed(TEST_DIR_TOKEN, getTestDir().getAbsolutePath().replace('\\', '/')).toStringList();
 	}
 
     public void runAndAssert(final Unix4jCommandBuilder command){
@@ -205,7 +205,7 @@ class CommandFileTest {
 				System.err.println("..ERR.[" + i + "].expected=" + exp);
 				System.err.println("..ERR.[" + i + "]...actual=" + act);
 				if (error == null) {
-					error = new ComparisonFailure(command.toString() + ", line[" + i + "] does not match (mode=" + matchMode + ")", exp, act); 
+					error = new ComparisonFailure(command + ", line[" + i + "] does not match (mode=" + matchMode + ")", exp, act);
 				}
 			}
 		}
