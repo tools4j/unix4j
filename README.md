@@ -2,6 +2,7 @@
 [![Continuous Integration](https://github.com/tools4j/unix4j/workflows/Continuous%20Integration/badge.svg)](https://github.com/tools4j/unix4j/actions?query=workflow%3A%22Continuous+Integration%22)
 [![Coverage Status](https://coveralls.io/repos/github/tools4j/unix4j/badge.svg?branch=master)](https://coveralls.io/github/tools4j/unix4j?branch=master)
 [![Maven Central](https://img.shields.io/maven-central/v/org.unix4j/unix4j-command.svg)](https://search.maven.org/search?q=a:unix4j-command)
+[![libs.tech recommends](https://libs.tech/project/41423327/badge.svg)](https://libs.tech/project/41423327/unix4j)
 
 <b>Unix4j</b> is an implementation of Unix command line tools in Java. You can use the commands that you know from Unix in a Java program---you can pipe the results of one command to another as you know it from Unix.
 
