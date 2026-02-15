@@ -1,6 +1,10 @@
 package org.unix4j.unix;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+import org.unix4j.Unix4j;
+import org.unix4j.unix.sed.SedOption;
+import org.unix4j.unix.sed.SedOptions;
+import org.unix4j.util.MultilineString;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -8,17 +12,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.nio.file.Files;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
-import org.junit.Test;
-import org.unix4j.Unix4j;
-import org.unix4j.line.Line;
-import org.unix4j.unix.sed.SedOption;
-import org.unix4j.unix.sed.SedOptions;
-import org.unix4j.util.MultilineString;
+import static org.junit.Assert.assertEquals;
 
 public class SedTest {
 	private final static MultilineString input;
@@ -694,6 +690,37 @@ public class SedTest {
 		System.out.println("written: " + outputFile);
 		assertEquals(expected, String.join("\n", Unix4j.fromFile(outputFile).toStringList()));
 	}
+
+    /**
+     * Unit test replicating the example given in Issue #82
+     * @see <a href="https://github.com/tools4j/unix4j/issues/82">Issue #82</a>
+     */
+    @Test
+    public void testStandAloneWord() {
+        final String programName = "cdoc_bound_script";
+        final String devProgramName = "cudev_cdoc_bound_script";
+        final String result = Unix4j.fromStrings(
+                "drop program cdoc_bound_script:dba go",
+                "create program cdoc_bound_script:dba",
+                "/**",
+                " This is a script that is bound to a transaction.",
+                " @boundTransaction 12349876",
+                " */")
+                .sed("s/(\\W)" + programName + "(\\W|$)/$1" + devProgramName + "$2/gI")
+                .sed("s/:dba//g")
+                .toStringResult();
+
+        //assert result
+        final String expected = "" +
+                "drop program cudev_cdoc_bound_script go\n" +
+                "create program cudev_cdoc_bound_script\n" +
+                "/**\n" +
+                " This is a script that is bound to a transaction.\n" +
+                " @boundTransaction 12349876\n" +
+                " */";
+
+        assertEquals(expected, String.join("\n", result));
+    }
 
 	private void assertSed(final MultilineString input, final String regexp, final MultilineString expectedOutput){
 		assertSed(input, regexp, expectedOutput, SedOption.EMPTY);
