@@ -2,6 +2,7 @@ package org.unix4j.unix;
 
 import org.junit.Test;
 import org.unix4j.Unix4j;
+import org.unix4j.line.Line;
 import org.unix4j.unix.sed.SedOption;
 import org.unix4j.unix.sed.SedOptions;
 import org.unix4j.util.MultilineString;
@@ -719,7 +720,7 @@ public class SedTest {
                 " @boundTransaction 12349876\n" +
                 " */";
 
-        assertEquals(expected, String.join("\n", result));
+        assertEquals(expected.replace("\n", Line.LINE_ENDING), result);
     }
 
 	private void assertSed(final MultilineString input, final String regexp, final MultilineString expectedOutput){
